@@ -162,6 +162,55 @@ Participles should use "-ing" forms to preserve their verbal noun quality:
 
 Use "the ones [verb]-ing" for participles functioning as nouns.
 
+**However**, prefer noun-like forms when available:
+- יִרְאֵי שְׁמֶךָ -> "the fearers of your name" (not "the ones fearing your name")
+
+Per psalms_reference.csv: Nominal adjectives like "the righteous," "the wicked," "the poor" do NOT need {ones}. Only add {ones} for participles when truly needed for grammar.
+
+#### F. Psalm Superscriptions
+
+| Hebrew | ULT Rendering |
+|--------|---------------|
+| לַמְנַצֵּחַ | "For the chief musician" (not "music director") |
+| עַל־נְגִינַת | "On a stringed instrument" (singular) |
+| לְדָוִד | "Of David" |
+| מִזְמוֹר | "A psalm" |
+| מַשְׂכִּיל | "A maskil" |
+| מִכְתָּם | "A miktam" |
+| שִׁיר | "A song" |
+
+Separate superscription elements with periods, not commas:
+- "For the chief musician. On a stringed instrument. Of David."
+
+#### G. Comparatives with מִן
+
+| Hebrew Pattern | ULT | NOT |
+|----------------|-----|-----|
+| יָרוּם מִמֶּנִּי | "higher than I" | "high away from me" |
+| גָּדוֹל מִמֶּנִּי | "greater than I" | "great from me" |
+| X + מִן comparative | "X-er than Y" | "X away from Y" |
+
+#### H. Context-Dependent Verbs
+
+| Hebrew | Context | ULT | NOT |
+|--------|---------|-----|-----|
+| יָשַׁב | permanent dwelling | "dwell" | "sit" |
+| יָשַׁב | temporary/literal | "sit" | - |
+| נָצַר | watch over/protect | "preserve" | "guard" |
+| שָׁלַם (Piel) | vows/debts | "pay" | "fulfill" |
+| שָׁמַע + לְ | listen to | "listen to" | "hear" |
+
+#### I. Connector Words
+
+| Hebrew | ULT |
+|--------|-----|
+| כֵּן (adverbial) | "Thus" (not "So") |
+
+#### J. Emphatic Doubling
+
+Preserve Hebrew doubling without adding words:
+- יוֹם יוֹם -> "day, day" (not "day {by} day")
+
 ### Step 4: Supply Words {in brackets}
 
 Brackets mark words added for English grammar not present in Hebrew.
@@ -183,6 +232,8 @@ Brackets mark words added for English grammar not present in Hebrew.
 - Participles with be-verbs: "Yahweh is giving" (not "Yahweh {is} giving")
 - Words within semantic range of Hebrew: "hill country" (not "hill {country}")
 - Articles: "the man" (not "{the} man")
+- Definite articles when Hebrew has them (even implied in construct): "the enemy" not "{the} enemy"
+- "the king" when מֶלֶךְ has article or is definite by context
 
 ### Step 5: Apply Style Rules
 
@@ -255,10 +306,27 @@ Hebrew vocatives at clause end should stay there:
 ```
 
 **Poetry markers:**
-- `\q1` - first level poetry
-- `\q2` - second level (indented)
+- `\q1` - first colon of a verse (the "A" line)
+- `\q2` - second/third colon of a verse (the "B" or "C" line in parallel structure)
 - `\qa` - acrostic heading
 - `\d` - superscription (Psalms)
+- `\qs ... \qs*` - Selah (use this, not plain "Selah")
+
+**Poetry indentation pattern:**
+Hebrew poetry uses parallelism. Use `\q1` for the first line of each verse, then `\q2` for continuation lines:
+
+```usfm
+\q1 \v 3 Because your covenant faithfulness {is} better than life,
+\q2 my lips will praise you.
+```
+
+For tricola (three-part verses), use `\q1` + `\q2` + `\q2`:
+
+```usfm
+\q1 \v 11 But the king will rejoice in God;
+\q2 everyone who swears by him will exult,
+\q2 for the mouth of the speakers of lies will be shut.
+```
 
 **Section breaks:**
 - `\ts\*` - chunk/section divider
@@ -356,9 +424,13 @@ Before finalizing ULT output, verify:
 - [ ] Project glossary checked for editorial decisions
 - [ ] Prepositions marked with brackets when implied
 - [ ] Literalness patterns applied (see reference/literalness_patterns.md)
-- [ ] Substantive participles use "the ones [verb]-ing"
+- [ ] Substantive participles use noun-like form when available ("fearers" not "the ones fearing")
 - [ ] Large numbers use numerals with commas (12,000)
 - [ ] Vocabulary scripts were run for key terms
+- [ ] Psalm superscriptions use "chief musician" and periods between elements
+- [ ] Comparatives with מִן use "-er than" form ("higher than I")
+- [ ] Selah uses `\qs ... \qs*` markers
+- [ ] Emphatic doubling preserved without adding words ("day, day" not "day {by} day")
 
 ---
 
