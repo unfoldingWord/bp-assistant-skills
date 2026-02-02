@@ -64,7 +64,7 @@ Apply rules in this order:
 - אֲדֹנָי (Adonai) = "Lord"
 - אֵל / אֱלֹהִים (El/Elohim) = "God"
 
-**Do NOT guess vocabulary translations. Search aggressively - tokens are cheap, mistakes are expensive.**
+**Do NOT guess vocabulary translations. You MUST run the lookup scripts below for every non-trivial word. Tokens are cheap, mistakes are expensive. If you skip lookups, the output will diverge from human ULT.**
 
 1. **First**: Check `data/issues_resolved.txt` for authoritative decisions
    ```bash
@@ -123,7 +123,15 @@ ULT keeps Hebrew idioms in their literal form. Do not substitute English equival
 
 Body-part idioms especially must stay literal - this is where Hebrew differs most from English and where translation notes will explain the meaning.
 
-#### D. Verb Forms
+#### D. Literalness Patterns
+
+Consult `reference/literalness_patterns.md` for these patterns:
+- **Word order**: Preserve Hebrew fronting ("To me {is} Gilead")
+- **Hiphil causatives**: Use "made [verb]" ("made see" not "showed")
+- **Construct chains**: Keep "X of Y" ("city of fortification")
+- **Verbal idioms**: Preserve noun ("do valor" not "do valiantly")
+
+#### E. Verb Forms
 
 | Hebrew Form | ULT Rendering |
 |-------------|---------------|
@@ -148,6 +156,11 @@ Participles should use "-ing" forms to preserve their verbal noun quality:
 - הַמִּתְקוֹמְמַי -> "the ones rising up against me" (not "who rise up")
 - מֹשֵׁל -> "is ruling" (not "rules")
 - שֹׁמֵעַ -> "Who is hearing?" (not "Who hears?")
+
+**Substantive participles:**
+- לִירֵאֶיךָ -> "to the ones fearing you" (not "to those who fear you")
+
+Use "the ones [verb]-ing" for participles functioning as nouns.
 
 ### Step 4: Supply Words {in brackets}
 
@@ -183,7 +196,7 @@ Reference `reference/gl_guidelines.md` for detailed style guidance. Key points:
 
 **Numbers:**
 - 1-10: Spell out ("one", "five")
-- 11+: Use numerals ("11", "150")
+- 11+: Use numerals with commas ("12,000")
 - Ranges: En-dash ("30-40 people")
 
 **Punctuation:**
@@ -205,6 +218,7 @@ Reference `reference/gl_guidelines.md` for detailed style guidance. Key points:
 When Hebrew repeats a pronoun for emphasis, preserve it:
 - וַאֲנִי אָשִׁיר -> "But I, I will sing"
 - הֵמָּה יְנִיעוּן -> "They, they wander"
+- וְהוּא יָבוּס -> "he, he will trample" (comma separates emphatic pronoun)
 
 **Vocative Position:**
 Hebrew vocatives at clause end should stay there:
@@ -341,6 +355,10 @@ Before finalizing ULT output, verify:
 - [ ] Vocative word order preserved
 - [ ] Project glossary checked for editorial decisions
 - [ ] Prepositions marked with brackets when implied
+- [ ] Literalness patterns applied (see reference/literalness_patterns.md)
+- [ ] Substantive participles use "the ones [verb]-ing"
+- [ ] Large numbers use numerals with commas (12,000)
+- [ ] Vocabulary scripts were run for key terms
 
 ---
 
