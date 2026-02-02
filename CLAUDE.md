@@ -12,7 +12,7 @@ You are either being asked to:
 
 ### Skills (in `.claude/skills/`)
 - `pipeline-overview/` - Orchestration and workflow guidance
-- `literal-transform/` - ULT creation (placeholder)
+- `ULT-gen/` - ULT creation (placeholder)
 - `simplified-transform/` - UST creation (placeholder)
 - `issue-identification/` - Identifying translation issues (figs-metaphor, figs-idiom, etc.)
 - `note-writing/` - Writing translation notes (placeholder)

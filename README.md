@@ -16,7 +16,7 @@ The book package creation process follows four stages:
 
 | Stage | Description | Skill Location | Status |
 |-------|-------------|----------------|--------|
-| 1. Literal Transform | Create ULT from source | `.claude/skills/literal-transform/` | Placeholder |
+| 1. Literal Transform | Create ULT from source | `.claude/skills/ULT-gen/` | Placeholder |
 | 2. Simplified Transform | Create UST from source | `.claude/skills/simplified-transform/` | Placeholder |
 | 3. Issue Identification | Find what needs notes | `.claude/skills/issue-identification/` | Active |
 | 4. Note Writing | Generate translation notes | `.claude/skills/note-writing/` | Placeholder |
@@ -55,9 +55,8 @@ Skills draw from these sources (in priority order):
 
 ## Roadmap
 
-- [ ] Human master data integration - grep pattern matching as fallback for issue identification
 - [ ] Literal-transform skill development
 - [ ] Simplified-transform skill development
 - [ ] Hebrew-reference skill development
 - [ ] Note-writing skill development
-- [ ] Additional figs-* skills (88+ remaining issue types)
+

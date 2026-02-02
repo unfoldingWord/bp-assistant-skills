@@ -8,7 +8,7 @@ This skill provides an overview of the unfoldingWord Book Package creation pipel
 ### Stage 1: Literal Transform (ULT)
 Transform source text into unfoldingWord Literal Text - a highly literal translation that preserves the form and structure of the original languages.
 
-**Skill**: `.claude\skills\literal-transform\SKILL.md`
+**Skill**: `.claude\skills\ULT-gen\SKILL.md`
 **Status**: To be developed
 
 ### Stage 2: Simplified Transform (UST)
@@ -33,7 +33,7 @@ Generate translation notes based on identified issues using the appropriate temp
 
 | Task | Stage | Skill Location |
 |------|-------|----------------|
-| Creating ULT text | 1 | literal-transform\ |
+| Creating ULT text | 1 | ULT-gen\ |
 | Creating UST text | 2 | simplified-transform\ |
 | Finding what needs notes | 3 | issue-identification\ |
 | Writing the actual notes | 4 | note-writing\ |
