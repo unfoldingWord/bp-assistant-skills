@@ -1,0 +1,14 @@
+{
+  "name": "usfm-parser-utility",
+  "version": "1.0.0",
+  "description": "Parse aligned USFM3 files into alignment JSON",
+  "main": "parse_usfm.js",
+  "type": "module",
+  "scripts": {
+    "test": "node parse_usfm.js --help"
+  },
+  "dependencies": {
+    "proskomma": "^0.9.3",
+    "usfm-js": "^3.4.3"
+  }
+}

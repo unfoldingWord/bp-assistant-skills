@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Grep(*)",
+      "Glob(*)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(findstr *)",
+      "Bash(dir *)",
+      "Bash(type *)",
+      "Bash(where *)",
+      "Bash(python .claude\\skills\\*\\scripts\\*.py*)",
+      "Bash(python tools\\*.py*)",
+      "Bash(python3 .claude/skills/*/*/scripts/*.py*)",
+      "Bash(python3 tools/*.py*)",
+      "Edit(data/translation-issues.csv)",
+      "Bash(wc:*)",
+      "Bash(python3:*)"
+    ]
+  }
+}
