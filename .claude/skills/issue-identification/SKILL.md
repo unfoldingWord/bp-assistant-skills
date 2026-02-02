@@ -414,6 +414,7 @@ gen	1:5	figs-infostructure	evening and morning			time phrase order
 | [translate-blessing](translate-blessing.md) | Short sayings asking God to do good for another person |
 | [translate-transliterate](translate-transliterate.md) | Non-name words ULT keeps in original form (Amen, Abba, Hosanna) |
 | [translate-unknown](translate-unknown.md) | Concepts/objects unfamiliar to target culture (animals, foods, practices) |
+| [translate-plural](translate-plural.md) | Number mismatches: plurals for singular (intensive plural, royal we) OR singulars for plural (representative singular) |
 
 #### Numbers & Measures
 | Issue | Description |

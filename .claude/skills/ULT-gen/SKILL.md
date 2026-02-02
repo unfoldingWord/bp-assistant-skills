@@ -64,24 +64,47 @@ Apply rules in this order:
 - אֲדֹנָי (Adonai) = "Lord"
 - אֵל / אֱלֹהִים (El/Elohim) = "God"
 
-**Do NOT guess vocabulary translations. Always search authoritative sources:**
+**Do NOT guess vocabulary translations. Search aggressively - tokens are cheap, mistakes are expensive.**
 
 1. **First**: Check `data/issues_resolved.txt` for authoritative decisions
    ```bash
    grep -i "chesed\|חֶסֶד" data/issues_resolved.txt
    ```
 
-2. **Second**: Check glossaries in `data/glossary/`
+2. **Second**: Search published ULT for how this exact word was rendered
+
+   Use Proskomma to find every occurrence of a Strong's number:
+   ```bash
+   # Find all renderings of a Hebrew word by Strong's number
+   node .claude/skills/utilities/scripts/proskomma/query_word.js H4869 --format table
+   ```
+
+   Or grep the aligned USFM for the Strong's number:
+   ```bash
+   grep -r "strong=\"H4869\"" data/published_ult/*.usfm | head -20
+   ```
+
+   Then extract how it was translated in context:
+   ```bash
+   # Parse a sample verse to see the English rendering
+   node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
+     data/published_ult/19-PSA.usfm --verse "PSA 9:9" --output-json /tmp/sample.json
+   ```
+
+3. **Third**: Check project glossary for editorial overrides
+   ```bash
+   grep -i "[term]" data/glossary/project_glossary.md
+   ```
+   Only add to project glossary when human review revealed a needed change from existing published patterns.
+
+4. **Fourth**: Check other glossaries in `data/glossary/`
    - `hebrew_ot_glossary.csv` - main vocabulary with ULT/UST glosses
    - `psalms_reference.csv` - Psalms-specific terms
    - `sacrifice_terminology.csv` - sacrificial vocabulary
    - `biblical_measurements.csv` - measurements and units
    - `biblical_phrases.csv` - common constructions
 
-3. **Third**: Search published ULT for parallel usage
-   ```bash
-   grep -r "covenant loyalty" data/published_ult_english/
-   ```
+**Search multiple times if needed.** For any word that appears more than once in a chapter, verify consistency by checking 3-5 published occurrences before settling on a rendering.
 
 #### C. Hebrew Idioms - Preserve Literally
 
@@ -113,6 +136,19 @@ Body-part idioms especially must stay literal - this is where Hebrew differs mos
 | Imperative | Command form |
 | Jussive/Cohortative | "Let him/me..." or subjunctive |
 
+#### Cohortative Recognition
+
+Hebrew cohortatives (1cs/1cp with ה- ending or lengthened form) express desire or resolve. Render as "Let me/us...":
+- אֶשְׁמֹרָה -> "Let me wait" (not "I will watch")
+- אֲזַמֵּרָה -> "Let me make music" (not "I will make music")
+
+#### Participle Handling
+
+Participles should use "-ing" forms to preserve their verbal noun quality:
+- הַמִּתְקוֹמְמַי -> "the ones rising up against me" (not "who rise up")
+- מֹשֵׁל -> "is ruling" (not "rules")
+- שֹׁמֵעַ -> "Who is hearing?" (not "Who hears?")
+
 ### Step 4: Supply Words {in brackets}
 
 Brackets mark words added for English grammar not present in Hebrew.
@@ -122,6 +158,13 @@ Brackets mark words added for English grammar not present in Hebrew.
 - Implied verbs: "she had been {living} there"
 - Genitive absolute constructions: "{while} they {were} eating"
 - Implied subjects when needed for clarity: "{it was} good"
+- Implied prepositions with verbs: "sing {about} your strength" (when Hebrew has no prep)
+- Implied prepositions in negation: "not {for} my transgression"
+- Purpose clause markers: "that they {may} not {be}"
+- Implied objects: "{to} any treacherous workers"
+
+**Pattern**: When "my [noun]" in Hebrew becomes "of [noun] to me" for literalness:
+- צַר־לִי -> "trouble to me" (not "my distress")
 
 **DO NOT use brackets for:**
 - Participles with be-verbs: "Yahweh is giving" (not "Yahweh {is} giving")
@@ -157,6 +200,23 @@ Reference `reference/gl_guidelines.md` for detailed style guidance. Key points:
 **Word Order:**
 - Preserve Hebrew order where possible while maintaining grammatical English
 - Wayyiqtol chains should show sequence
+
+**Emphatic Pronouns:**
+When Hebrew repeats a pronoun for emphasis, preserve it:
+- וַאֲנִי אָשִׁיר -> "But I, I will sing"
+- הֵמָּה יְנִיעוּן -> "They, they wander"
+
+**Vocative Position:**
+Hebrew vocatives at clause end should stay there:
+- מָגִנֵּנוּ אֲדֹנָי -> "Lord our shield" (not "our shield, Lord")
+
+**Preposition Precision:**
+
+| Hebrew | Context | ULT | Not |
+|--------|---------|-----|-----|
+| מִן + שָׂגַב | separation | "away from" | "from" |
+| עַל | governing | "over" | "on" |
+| לְ + infinitive | purpose | "to [verb]" | - |
 
 ### Step 6: Format as USFM
 
@@ -216,16 +276,37 @@ node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
   --output-json /tmp/alignments.json
 ```
 
-### Quick vocabulary lookup
+### Vocabulary lookup (search aggressively)
 ```bash
-# Check authoritative decisions first
+# 1. Check authoritative decisions
 grep -i "[hebrew term]\|[english term]" data/issues_resolved.txt
 
-# Then check glossary
-grep "[term]" data/glossary/hebrew_ot_glossary.csv
+# 2. Find all occurrences of a Hebrew word by Strong's number
+node .claude/skills/utilities/scripts/proskomma/query_word.js H4869 --format table
 
-# Find parallel usage in published ULT
-grep -r "[phrase]" data/published_ult_english/
+# 3. Or grep aligned USFM for Strong's number
+grep -r "strong=\"H4869\"" data/published_ult/*.usfm | head -20
+
+# 4. Parse specific verse to see full alignment
+node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
+  data/published_ult/19-PSA.usfm --verse "PSA 18:2" --output-json /tmp/sample.json
+
+# 5. Search plain English text for phrases
+grep -r "stronghold" data/published_ult_english/*.usfm | head -10
+
+# 6. Check project glossary for editorial overrides
+grep -i "[term]" data/glossary/project_glossary.md
+
+# 7. Check standard glossaries
+grep "[term]" data/glossary/hebrew_ot_glossary.csv
+```
+
+### Verify consistency before output
+For key terms appearing multiple times, check 3-5 published occurrences:
+```bash
+# Find all verses with a term
+grep -r "strong=\"H2617\"" data/published_ult/*.usfm | wc -l  # count occurrences
+grep -r "strong=\"H2617\"" data/published_ult/*.usfm | shuf | head -5  # random sample
 ```
 
 ### Extract plain USFM from aligned
@@ -254,6 +335,12 @@ Before finalizing ULT output, verify:
 - [ ] Numbers formatted correctly (1-10 spelled out)
 - [ ] Formal register maintained throughout
 - [ ] No split infinitives
+- [ ] Cohortatives rendered as "Let me/us..."
+- [ ] Participles use "-ing" forms consistently
+- [ ] Emphatic pronouns preserved ("I, I will...")
+- [ ] Vocative word order preserved
+- [ ] Project glossary checked for editorial decisions
+- [ ] Prepositions marked with brackets when implied
 
 ---
 
@@ -264,6 +351,7 @@ Before finalizing ULT output, verify:
 | Source | Path | Purpose |
 |--------|------|---------|
 | Issues Resolved | `data/issues_resolved.txt` | FINAL AUTHORITY - content team decisions |
+| Project Glossary | `data/glossary/project_glossary.md` | Editorial decisions from human review |
 | Hebrew Glossary | `data/glossary/hebrew_ot_glossary.csv` | Standard ULT/UST glosses |
 | Psalms Reference | `data/glossary/psalms_reference.csv` | Psalms-specific vocabulary |
 | Sacrifice Terms | `data/glossary/sacrifice_terminology.csv` | Sacrificial vocabulary |
