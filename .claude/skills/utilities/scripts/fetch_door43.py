@@ -35,6 +35,7 @@ import urllib.error
 
 # Book number mapping (Door43 USFM filename convention)
 # OT: 01-39, NT: 41-67 (40 skipped for intertestamental gap)
+# These abbreviations match the actual filenames on git.door43.org
 BOOK_NUMBERS = {
     # Old Testament
     'GEN': '01', 'EXO': '02', 'LEV': '03', 'NUM': '04', 'DEU': '05',
@@ -42,28 +43,28 @@ BOOK_NUMBERS = {
     '1KI': '11', '2KI': '12', '1CH': '13', '2CH': '14', 'EZR': '15',
     'NEH': '16', 'EST': '17', 'JOB': '18', 'PSA': '19', 'PRO': '20',
     'ECC': '21', 'SNG': '22', 'ISA': '23', 'JER': '24', 'LAM': '25',
-    'EZE': '26', 'DAN': '27', 'HOS': '28', 'JOL': '29', 'AMO': '30',
-    'OBA': '31', 'JON': '32', 'MIC': '33', 'NAH': '34', 'HAB': '35',
+    'EZK': '26', 'DAN': '27', 'HOS': '28', 'JOL': '29', 'AMO': '30',
+    'OBA': '31', 'JON': '32', 'MIC': '33', 'NAM': '34', 'HAB': '35',
     'ZEP': '36', 'HAG': '37', 'ZEC': '38', 'MAL': '39',
     # New Testament
     'MAT': '41', 'MRK': '42', 'LUK': '43', 'JHN': '44', 'ACT': '45',
     'ROM': '46', '1CO': '47', '2CO': '48', 'GAL': '49', 'EPH': '50',
     'PHP': '51', 'COL': '52', '1TH': '53', '2TH': '54', '1TI': '55',
-    '2TI': '56', 'TIT': '57', 'PHM': '58', 'HEB': '59', 'JAM': '60',
+    '2TI': '56', 'TIT': '57', 'PHM': '58', 'HEB': '59', 'JAS': '60',
     '1PE': '61', '2PE': '62', '1JN': '63', '2JN': '64', '3JN': '65',
     'JUD': '66', 'REV': '67'
 }
 
-# Alternative book names (aliases map to canonical abbreviations from books.txt)
+# Alternative book names (aliases map to Door43 canonical abbreviations)
 BOOK_ALIASES = {
     'PS': 'PSA', 'PSALM': 'PSA', 'PSALMS': 'PSA',
     'SONG': 'SNG', 'SONGS': 'SNG', 'SOS': 'SNG',
-    'EZK': 'EZE', 'EZEK': 'EZE', 'EZEKIEL': 'EZE',
+    'EZE': 'EZK', 'EZEK': 'EZK', 'EZEKIEL': 'EZK',
     'JOEL': 'JOL',
     'OBAD': 'OBA', 'OBADIAH': 'OBA',
     'JONAH': 'JON',
     'MICAH': 'MIC',
-    'NAM': 'NAH', 'NAHUM': 'NAH',
+    'NAH': 'NAM', 'NAHUM': 'NAM',
     'HABAKKUK': 'HAB', 'HABAK': 'HAB',
     'ZEPHANIAH': 'ZEP', 'ZEPH': 'ZEP',
     'HAGGAI': 'HAG',
@@ -74,7 +75,7 @@ BOOK_ALIASES = {
     'ACTS': 'ACT',
     'PHIL': 'PHP', 'PHILIPPIANS': 'PHP',
     'PHILEM': 'PHM', 'PHILEMON': 'PHM',
-    'JAS': 'JAM', 'JAMES': 'JAM',
+    'JAM': 'JAS', 'JAMES': 'JAS',
     'JUDE': 'JUD',
 }
 
