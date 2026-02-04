@@ -11,10 +11,22 @@ Identify translation issues in biblical text that require translation notes. Thi
 
 ## Arguments
 
-When invoked with arguments like `2sam 1`:
+When invoked with arguments like `2sam 1` or `psa 58 local`:
 - First argument: Book abbreviation (2sa, gen, psa, 1jn, etc.)
 - Second argument: Chapter number (optional, defaults to all)
+- Third argument: Source mode (optional) - `local` or `fetch` (default: `fetch`)
 - If no arguments: Expect text to be provided or prompt for book/chapter
+
+**Source modes:**
+- `fetch` (default): Grab editor-approved ULT/UST from unfoldingWord master
+- `local`: Look for local files in `data/published_ult/` and `data/published_ust/`
+
+Examples:
+```
+/issue-identification psa 58           # Fetch from master (default)
+/issue-identification psa 58 fetch     # Same as above, explicit
+/issue-identification psa 58 local     # Use local files
+```
 
 Book abbreviations follow standard 3-letter codes or common variants:
 - 2sam, 2sa -> 2SA (Second Samuel)
@@ -30,25 +42,64 @@ There are two ways to use this skill:
 
 ### Option A: Full Workflow (with aligned USFM)
 
-#### Step 1: Fetch USFM Text
-If no text is provided, fetch from git.door43.org master:
+#### Step 1: Fetch/Locate USFM Text
 
+**Fetch mode (default)** - Get from unfoldingWord master:
 ```bash
-python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> > /tmp/book.usfm
-# Example: python3 .claude/skills/utilities/scripts/fetch_door43.py 2SA > /tmp/2sa.usfm
+# Fetch ULT
+python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> > /tmp/book_ult.usfm
+# Fetch UST (may not exist for all books - continue if fails)
+python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> --type ust > /tmp/book_ust.usfm 2>/dev/null || true
 ```
 
-#### Step 2: Parse into Alignment JSON
-Extract alignment data using proskomma (the only USFM parser):
+**Local mode** - Use local files:
+```bash
+# Copy local files (NN is book number, e.g., 19 for PSA)
+cp data/published_ult/<NN>-<BOOK>.usfm /tmp/book_ult.usfm
+cp data/published_ust/<NN>-<BOOK>.usfm /tmp/book_ust.usfm 2>/dev/null || true
+```
+
+If UST is missing, continue without it (first pass, UST not generated yet).
+If ULT is missing, error (need at least ULT to identify issues).
+
+#### Step 2: Parse into Alignment JSON and Plain Text
+Extract alignment data and plain text using usfm-js:
 
 ```bash
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js /tmp/book.usfm \
+# Parse ULT - get alignments and plain text
+node .claude/skills/utilities/scripts/usfm/parse_usfm.js /tmp/book_ult.usfm \
   --chapter <N> \
   --output-json /tmp/alignments.json \
-  --output-plain /tmp/plain.usfm
+  --output-plain /tmp/ult_plain.usfm
+
+# Parse UST - get plain text only (if UST exists)
+node .claude/skills/utilities/scripts/usfm/parse_usfm.js /tmp/book_ust.usfm \
+  --plain-only > /tmp/ust_plain.usfm 2>/dev/null || true
 ```
 
-#### Step 3: Run Automated Detection Scripts
+#### Step 3: Compare ULT/UST (if UST available)
+Where UST diverges from ULT (beyond synonym/clarity changes), there may be a translation issue:
+
+```bash
+python3 .claude/skills/issue-identification/scripts/compare_ult_ust.py \
+  /tmp/ult_plain.usfm /tmp/ust_plain.usfm \
+  --chapter <N> --output /tmp/ult_ust_diff.tsv
+```
+
+Output shows verses where UST made significant changes, with suggested issue types:
+| Pattern | Suggested Issue |
+|---------|----------------|
+| UST adds clarifying words | figs-explicit |
+| UST removes repetition | figs-doublet, figs-parallelism |
+| UST restructures clause order | figs-infostructure |
+| UST replaces figurative language | figs-metaphor |
+| UST unpacks abstract noun | figs-abstractnouns |
+| UST changes passive to active | figs-activepassive |
+| UST expands/explains phrase | figs-idiom |
+
+Skip this step if UST file doesn't exist.
+
+#### Step 4: Run Automated Detection Scripts
 These scripts identify issues that should appear in output.
 
 Every passive construction needs a note. Every abstract noun should be evaluated.
@@ -81,7 +132,7 @@ python3 .claude/skills/issue-identification/scripts/detection/detect_abstract_no
 
 Output uses "text" as the reference since there's no verse structure. Source language fields (morph, lemma) will be empty.
 
-### Step 4: Check Names/Unknowns Against Translation Words
+### Step 5: Check Names/Unknowns Against Translation Words
 
 **IMPORTANT**: Before flagging any name or unknown concept for translate-names or translate-unknown, check if it has a tW article. If a tW article exists, generally NO note is needed.
 
@@ -103,9 +154,18 @@ The script returns JSON with `matches` (have tW articles) and `no_match` (may ne
 
 **Exception**: If a term with a tW article is used FIGURATIVELY, use the appropriate figurative note (figs-metaphor, figs-metonymy, etc.) instead of translate-names/translate-unknown.
 
-### Step 5: Manual Analysis - Three-Pass Workflow
+### Step 6: Manual Analysis - Four-Pass Workflow
 
-After running detection scripts, analyze the text systematically using this three-pass approach. This ensures thorough coverage while managing cognitive load.
+After running detection scripts, analyze the text systematically using this four-pass approach. This ensures thorough coverage while managing cognitive load.
+
+#### Pass 0: Review ULT/UST Differences (if UST available)
+If Step 3 produced `/tmp/ult_ust_diff.tsv`, review it first to prime your attention on verses where UST diverged:
+
+1. Read each row noting the `diff_type` and `suggested_issue`
+2. Mark divergent verses for closer inspection in later passes
+3. Note patterns - if UST consistently adds words, there may be implicit information throughout
+
+This gives you a head start on where translation issues likely exist.
 
 #### Pass 1: Chapter Overview
 Read through the entire chapter to understand the big picture:
@@ -187,6 +247,51 @@ Rule: Include enough text that a reader can see the logical relationship being i
 ### Quotations
 Make an extra pass looking for quotation marks, quotes-in-quotes, and indirect quotations that should be marked.
 
+## Verification and Quality Checks
+
+After completing issue identification, run these verification steps to catch misclassifications.
+
+### Keyword Triggers
+
+When you encounter these words, ALWAYS check the specific issue listed:
+
+| Keyword | Always Check |
+|---------|--------------|
+| man, men, brothers, sons, fathers | figs-gendernotations (generic masculine?) |
+| like, as, than | figs-simile before figs-metaphor |
+| hand, hands, eyes, heart, face | figs-metonymy or figs-synecdoche (body part for action/person?) |
+| all, every, never, always | figs-hyperbole (exaggeration for emphasis?) |
+| the righteous, the wicked, the poor | figs-nominaladj (adjective as noun?) |
+
+### Commonly Confused Issue Pairs
+
+Before finalizing a tag, check if a related issue fits better:
+
+| If considering... | Also check... | Key distinction |
+|-------------------|---------------|-----------------|
+| writing-pronouns | figs-gendernotations | Unclear referent vs. generic masculine |
+| figs-metaphor | figs-simile | No comparison word vs. explicit "like/as" |
+| figs-metonymy | figs-synecdoche | Associated thing vs. part/whole relationship |
+| figs-doublet | figs-parallelism | Word-level pair vs. clause-level repetition |
+| figs-doublet | figs-hendiadys | Synonyms for emphasis vs. one modifies other |
+| figs-idiom | figs-metaphor | Fixed expression vs. live comparison |
+| figs-hyperbole | figs-merism | General exaggeration vs. two extremes = whole |
+| figs-rquestion | figs-exclamations | Question form vs. exclamation form |
+| figs-explicit | figs-ellipsis | Adding background info vs. supplying omitted words |
+| grammar-connect-logic-goal | grammar-connect-logic-result | Intended outcome vs. unintended consequence |
+
+### Final Review Pass
+
+After completing all identification, review your output:
+
+1. **Tag verification**: For each issue tagged, can you point to specific criteria in the skill definition it meets? If unsure, re-read the skill file.
+
+2. **Duplicate check**: Did you tag the same phrase twice for issues that are really one? (e.g., tagging both figs-doublet and figs-parallelism for the same word pair)
+
+3. **Missing overlap check**: Are there phrases that genuinely need two tags? (e.g., a simile that also contains an abstract noun - both figs-simile AND figs-abstractnouns may apply)
+
+4. **Keyword sweep**: Scan output for any keyword triggers above that you may have tagged incorrectly.
+
 ## Authoritative Sources
 
 ### Final Authority: Issues Resolved
@@ -211,15 +316,82 @@ grep -i "fallen\|sword" data/published-tns/tn_*.tsv
 
 | Script | Location | Purpose |
 |--------|----------|---------|
-| fetch_door43.py | utilities/scripts/ | Fetch USFM from Door43 |
-| parse_usfm.js | utilities/scripts/usfm/ | Parse USFM, extract alignments (proskomma) |
+| fetch_door43.py | utilities/scripts/ | Fetch USFM from Door43 (supports `--type ust` for UST) |
+| parse_usfm.js | utilities/scripts/usfm/ | Parse USFM, extract alignments and plain text (usfm-js) |
+| compare_ult_ust.py | scripts/ | Compare ULT/UST plain text to identify divergences suggesting issues |
 | detect_activepassive.py | scripts/detection/ | Find ALL passive constructions. Use `--text "..."` for plain English |
 | detect_abstract_nouns.py | scripts/detection/ | Find abstract nouns (591 word list). Use `--text "..."` for plain English |
 | check_tw_headwords.py | scripts/ | Check names/unknowns against tW headwords - filters translate-names/translate-unknown |
 
+### Ambiguity Detection (Cross-Cutting Check)
+
+During verse-by-verse analysis, watch for passages where meaning is genuinely unclear:
+
+**Pronoun Reference Ambiguity** (tag: `writing-pronouns`)
+- Multiple possible antecedents for he/she/it/they
+- Possessive pronouns with unclear referent
+- "This/that" pointing to multiple possibilities
+
+**Lexical Polysemy** (tag: `figs-explicit` or existing figure type)
+- Words with established multiple meanings:
+  - "world" (kosmos) - earth, people, value system
+  - "love" (agape) - God's love, human love, both
+  - "know" - cognitive, relational, experiential
+- Hebrew words spanning multiple semantic domains
+
+**Idiomatic Uncertainty** (tag: `figs-idiom`)
+- Fixed expressions where meaning is disputed among scholars
+- Cultural phrases with uncertain referent
+
+**Ellipsis with Multiple Resolutions** (tag: `figs-ellipsis` or `figs-explicit`)
+- Missing subjects/objects fillable multiple ways
+- Implied information with more than one valid interpretation
+
+**Detection signals:**
+- English versions differ significantly on translation
+- Commentaries acknowledge uncertainty ("interpreters disagree")
+- The natural note format would be "This could mean: (1)... (2)..."
+
+**Explanation field format for TCM notes:**
+When flagging ambiguity that requires a "this could mean" note, use `TCM` keyword plus `i:` prefix with numbered options:
+
+Format: `TCM i:(1) [option A] (2) [option B]`
+
+Examples:
+```
+job	9:35	figs-idiom	I am not so with myself			TCM i:(1) I do not consider myself guilty (2) I am not in my right mind from fear
+job	9:3	writing-pronouns	he wished to contend			TCM i:(1) God (2) a person who wanted to contend with God
+1jn	4:3	figs-explicit	is not from God			TCM i:(1) sent by God (2) having God as its source
+```
+
+The `TCM` trigger tells the note writer to format using "This could mean (1)... or (2)..." structure while still using the issue type's template for context.
+
+**Web search as fallback:**
+When internal resources (Issues Resolved, published TNs, Translation Academy) don't clarify a potentially ambiguous passage:
+1. Search: `"[book] [chapter]:[verse] interpretation"` or `"[Greek/Hebrew term] meaning"`
+2. Look for scholarly disagreement as confirmation of genuine ambiguity
+3. If sources differ, include a "this could mean" note with options found
+
+**Fallback tag:** When ambiguity doesn't fit existing categories, use `figs-explicit` with note explaining the interpretive options.
+
+See `reference/ambiguity_patterns.md` for detailed examples from published notes.
+
 ## Output Format
 
-After identifying issues, output a tab-separated file to `output\book chapter.tsv`:
+After identifying issues, output a tab-separated file to `output/issues/`:
+
+```
+output/issues/[BOOK]-[CHAPTER].tsv
+```
+
+Examples:
+- `output/issues/PSA-063.tsv` - Psalm 63
+- `output/issues/GEN-01.tsv` - Genesis 1
+- `output/issues/2SA-01.tsv` - 2 Samuel 1
+
+Use three-letter book codes and three-digit chapter numbers (zero-padded).
+
+Format:
 
 ```
 [book]\t[chapter:verse]\t[supportreference]\t[ULT text]\t\t\t[explanation if needed]
