@@ -10,17 +10,40 @@
       "Bash(cat *)",
       "Bash(head *)",
       "Bash(tail *)",
-      "Bash(findstr *)",
-      "Bash(dir *)",
-      "Bash(type *)",
-      "Bash(where *)",
-      "Bash(python .claude\\skills\\*\\scripts\\*.py*)",
-      "Bash(python tools\\*.py*)",
+      "Bash(wc:*)",
+      "Bash(tree:*)",
+      "Bash(python3:*)",
       "Bash(python3 .claude/skills/*/*/scripts/*.py*)",
       "Bash(python3 tools/*.py*)",
+      "Bash(/home/bmw/Documents/dev/tnwriter-dev/venv/bin/python:*)",
+      "Bash(ssh:*)",
+      "Bash(scp:*)",
       "Edit(data/translation-issues.csv)",
-      "Bash(wc:*)",
-      "Bash(python3:*)"
+      "WebFetch(domain:gl-manual.readthedocs.io)",
+      "WebFetch(domain:git.door43.org)",
+      "WebFetch(domain:api.anthropic.com)"
+    ],
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/.ssh/**)",
+      "Read(**/secrets/**)",
+      "Bash(sudo:*)",
+      "Bash(su:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(rm -rf /*)"
+    ],
+    "additionalDirectories": [
+      "/home/bmw/Documents/dev/cSkillBP",
+      "/home/bmw/Documents/dev/tnwriter-dev",
+      "/home/bmw/Documents/dev/tsv-quote-converters"
     ]
+  },
+  "sandbox": {
+    "enabled": false,
+    "autoAllowBashIfSandboxed": false,
+    "allowUnsandboxedCommands": false,
+    "network": {}
   }
 }
