@@ -270,7 +270,8 @@ Reference `reference/gl_guidelines.md` for detailed style guidance. Key points:
 - "Scripture" capitalized for Bible; lowercase for passages
 
 **Word Order:**
-- Output English standard SVO order unless unusual Hebrew grammar (focus fronting etc) would more accurately translate to a different English grammar form; do not woodenly follow Hebrew word order
+- Use English standard SVO order; do not woodenly follow Hebrew word order
+- Prepositional phrases fronted in Hebrew (temporal, locative, source, indirect object, etc.) should go in their natural English position unless the fronting serves a clear discourse function (focus, contrast, topic shift)
 - Wayyiqtol chains should show sequence
 
 **Emphatic Pronouns:**
