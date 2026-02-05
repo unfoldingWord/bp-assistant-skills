@@ -11,6 +11,7 @@
  * Options:
  *   --hebrew <file>     Hebrew source USFM file
  *   --mapping <file>    Simple mapping JSON file from AI
+ *   --ult <file>        Source ULT file (to preserve poetry markers)
  *   --output <file>     Output aligned USFM file (default: stdout)
  *   --chapter <num>     Process only this chapter
  *   --verse <num>       Process only this verse (requires --chapter)
@@ -23,6 +24,7 @@ import usfm from 'usfm-js';
 const args = process.argv.slice(2);
 let hebrewFile = null;
 let mappingFile = null;
+let ultFile = null;
 let outputFile = null;
 let filterChapter = null;
 let filterVerse = null;
@@ -34,6 +36,9 @@ for (let i = 0; i < args.length; i++) {
       break;
     case '--mapping':
       mappingFile = args[++i];
+      break;
+    case '--ult':
+      ultFile = args[++i];
       break;
     case '--output':
       outputFile = args[++i];
@@ -52,6 +57,7 @@ Usage: node create_aligned_usfm.js --hebrew <hebrew.usfm> --mapping <mapping.jso
 Options:
   --hebrew <file>     Hebrew source USFM file (required)
   --mapping <file>    Simple mapping JSON file from AI (required)
+  --ult <file>        Source ULT file (to preserve poetry markers like \\q1, \\q2)
   --output <file>     Output aligned USFM file (default: stdout)
   --chapter <num>     Process only this chapter
   --verse <num>       Process only this verse (requires --chapter)
@@ -73,6 +79,7 @@ Example:
   node create_aligned_usfm.js \\
     --hebrew data/hebrew_bible/01-GEN.usfm \\
     --mapping /tmp/alignments/GEN-01-01.json \\
+    --ult output/AI-ULT/GEN-01.usfm \\
     --output /tmp/aligned.usfm \\
     --chapter 1 --verse 1
 `);
@@ -93,9 +100,71 @@ if (!hebrewFile || !mappingFile) {
 // Read inputs
 const hebrewContent = readFileSync(hebrewFile, 'utf8');
 const mappingData = JSON.parse(readFileSync(mappingFile, 'utf8'));
+const ultContent = ultFile ? readFileSync(ultFile, 'utf8') : null;
 
 // Parse Hebrew USFM
 const hebrewParsed = usfm.toJSON(hebrewContent);
+
+/**
+ * Extract poetry markers from source ULT for a specific verse
+ * Returns array of marker objects with the starting words of each poetry line:
+ * [{marker: 'q1', position: 0, startWords: ['And', 'he']},
+ *  {marker: 'q2', position: -1, startWords: ['and', 'their', 'streams']}]
+ * position 0 = before verse marker, position -1 = mid-verse (use startWords to match)
+ */
+function extractPoetryMarkers(ultContent, chapter, verse) {
+  if (!ultContent) return [];
+
+  const markers = [];
+
+  // Find this verse and subsequent lines until next verse
+  const chapterPattern = new RegExp(`\\\\c\\s+${chapter}[^\\d]`);
+  const chapterMatch = ultContent.match(chapterPattern);
+  if (!chapterMatch) return markers;
+
+  const chapterStart = chapterMatch.index;
+  const nextChapterMatch = ultContent.slice(chapterStart + 5).match(/\\c\s+\d/);
+  const chapterEnd = nextChapterMatch ? chapterStart + 5 + nextChapterMatch.index : ultContent.length;
+  const chapterContent = ultContent.slice(chapterStart, chapterEnd);
+
+  // Find this verse within the chapter
+  const versePattern = new RegExp(`((?:\\\\q[12]\\s+)?)\\\\v\\s+${verse}\\s+(.+?)(?=\\\\v\\s+\\d|\\\\c\\s+\\d|$)`, 's');
+  const verseMatch = chapterContent.match(versePattern);
+  if (!verseMatch) return markers;
+
+  const prefixMarker = verseMatch[1]?.trim();
+  const verseContent = verseMatch[2];
+
+  // Check for marker before \v
+  if (prefixMarker) {
+    markers.push({ marker: prefixMarker.replace('\\', ''), position: 0, startWords: [] });
+  }
+
+  // Look for \q1, \q2 markers within verse content
+  // Split by newlines and look for markers at start of continuation lines
+  const lines = verseContent.split('\n');
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+
+    // Check for poetry marker at start of line (continuation)
+    const lineMarkerMatch = line.match(/^\\(q[12])\s+(.+)/);
+    if (lineMarkerMatch && i > 0) {
+      // Extract first 3 words after the marker to use for matching
+      const textAfterMarker = lineMarkerMatch[2]
+        .replace(/\\[a-z0-9*]+\s*/g, '')  // Remove USFM markers
+        .replace(/[{}\[\]]/g, '')          // Remove brackets
+        .trim();
+      const startWords = textAfterMarker.split(/\s+/).slice(0, 3).map(w =>
+        w.replace(/[.,;:!?'"]/g, '').toLowerCase()
+      );
+      markers.push({ marker: lineMarkerMatch[1], position: -1, startWords });
+    }
+  }
+
+  return markers;
+}
 
 /**
  * Extract Hebrew word metadata from parsed Hebrew USFM
@@ -138,102 +207,244 @@ function countWordOccurrences(alignments) {
 }
 
 /**
+ * Reorder alignments to match English word order from english_text
+ * This ensures output follows English word order even if alignments were
+ * created in Hebrew word order.
+ */
+function reorderAlignmentsByEnglishText(alignments, englishText) {
+  // Tokenize english_text
+  const englishWords = englishText
+    .replace(/[.,;:!?"']/g, ' ')  // Remove punctuation
+    .replace(/[{}]/g, '')          // Remove brackets
+    .split(/\s+/)
+    .filter(w => w.length > 0)
+    .map(w => w.toLowerCase());
+
+  // Build position lookup: word -> [indices where it appears]
+  const wordPositions = {};
+  for (let i = 0; i < englishWords.length; i++) {
+    const word = englishWords[i];
+    if (!wordPositions[word]) {
+      wordPositions[word] = [];
+    }
+    wordPositions[word].push(i);
+  }
+
+  // Track which positions in englishWords have been claimed
+  const claimedPositions = new Set();
+
+  // For each alignment, find positions for ALL its words and use the minimum
+  // This handles cases where alignment words are not consecutive in english_text
+  const alignmentsWithPosition = alignments.map((align, originalIndex) => {
+    const alignWords = align.english.map(w => w.replace(/[{}]/g, '').toLowerCase());
+
+    if (alignWords.length === 0) {
+      return { align, position: -1, claimedPos: [] };
+    }
+
+    // Find unclaimed positions for each word in the alignment
+    const foundPositions = [];
+    for (const word of alignWords) {
+      const positions = wordPositions[word] || [];
+      // Find first unclaimed position for this word
+      const pos = positions.find(p => !claimedPositions.has(p));
+      if (pos !== undefined) {
+        foundPositions.push(pos);
+      }
+    }
+
+    if (foundPositions.length === 0) {
+      return { align, position: -1, claimedPos: [], originalIndex };
+    }
+
+    // Use minimum position as sort key
+    const minPosition = Math.min(...foundPositions);
+
+    return { align, position: minPosition, claimedPos: foundPositions, originalIndex };
+  });
+
+  // Now claim positions in sorted order to handle duplicates correctly
+  // First, sort by the tentative position, using original alignment index as tiebreaker
+  // This ensures that when duplicate words (e.g., "And" and "and") get the same position,
+  // the one from earlier in the alignment array claims the earlier english_text position
+  alignmentsWithPosition.sort((a, b) => {
+    if (a.position === -1 && b.position === -1) return 0;
+    if (a.position === -1) return 1;
+    if (b.position === -1) return -1;
+    if (a.position !== b.position) return a.position - b.position;
+    return a.originalIndex - b.originalIndex;
+  });
+
+  // Re-process in sorted order to correctly assign positions for duplicates
+  claimedPositions.clear();
+  for (const item of alignmentsWithPosition) {
+    if (item.position === -1) continue;
+
+    const alignWords = item.align.english.map(w => w.replace(/[{}]/g, '').toLowerCase());
+    const newPositions = [];
+
+    for (const word of alignWords) {
+      const positions = wordPositions[word] || [];
+      const pos = positions.find(p => !claimedPositions.has(p));
+      if (pos !== undefined) {
+        newPositions.push(pos);
+        claimedPositions.add(pos);
+      }
+    }
+
+    if (newPositions.length > 0) {
+      item.position = Math.min(...newPositions);
+    }
+  }
+
+  // Final sort by recalculated positions
+  alignmentsWithPosition.sort((a, b) => {
+    if (a.position === -1 && b.position === -1) return 0;
+    if (a.position === -1) return 1;
+    if (b.position === -1) return -1;
+    if (a.position !== b.position) return a.position - b.position;
+    return a.originalIndex - b.originalIndex;
+  });
+
+  return alignmentsWithPosition.map(item => item.align);
+}
+
+/**
  * Build aligned verse objects from mapping data
+ *
+ * This function outputs English words in the exact order they appear in english_text,
+ * wrapping each word (or group of consecutive aligned words) in appropriate zaln milestones.
  */
 function buildAlignedVerseObjects(mapping, hebrewWords) {
-  const verseObjects = [];
-  const wordOccurrences = countWordOccurrences(mapping.alignments);
+  // Normalize a word for matching: strip brackets and punctuation, lowercase
+  const normalizeWord = (w) => w.replace(/[{}.,;:!?"']/g, '').toLowerCase();
+
+  // Tokenize english_text to get the authoritative word order
+  // Keep original words with punctuation for output
+  const englishTextWordsRaw = mapping.english_text
+    .split(/\s+/)
+    .filter(w => w.length > 0);
+  const englishTextWords = englishTextWordsRaw.map(normalizeWord);
+
+  // Build a map: normalized word -> alignment info
+  // Handle duplicates by tracking which occurrence we're on
+  const wordToAlignments = {};
+  for (const align of mapping.alignments) {
+    for (const word of align.english) {
+      const normalized = normalizeWord(word);
+      if (!wordToAlignments[normalized]) {
+        wordToAlignments[normalized] = [];
+      }
+      wordToAlignments[normalized].push({
+        align,
+        originalWord: word,
+        hebrewIndices: align.hebrew_indices
+      });
+    }
+  }
+
+  // Track which occurrence of each word we're processing
+  const wordOccurrenceIndex = {};
+
+  // Count total occurrences of each normalized word for x-occurrences attribute
+  const wordTotalOccurrences = {};
+  for (const word of englishTextWords) {
+    wordTotalOccurrences[word] = (wordTotalOccurrences[word] || 0) + 1;
+  }
+
+  // Track current occurrence for x-occurrence attribute
   const currentOccurrence = {};
 
-  for (const align of mapping.alignments) {
-    // Get Hebrew word metadata for this alignment
-    const hebrewMeta = [];
-    for (const idx of align.hebrew_indices) {
-      const hw = hebrewWords[idx] || mapping.hebrew_words[idx];
-      if (hw) {
-        hebrewMeta.push(hw);
+  const buildWordObject = (text, occurrence, occurrences) => ({
+    text: text.replace(/[{}]/g, ''),
+    tag: 'w',
+    type: 'word',
+    occurrence: occurrence.toString(),
+    occurrences: occurrences.toString()
+  });
+
+  const buildZalnMilestone = (hw, sourceWord, children) => ({
+    tag: 'zaln',
+    type: 'milestone',
+    strong: hw.strong,
+    lemma: hw.lemma,
+    morph: hw.morph || '',
+    occurrence: '1',
+    occurrences: '1',
+    content: sourceWord,
+    children: children,
+    endTag: 'zaln-e\\*'
+  });
+
+  const verseObjects = [];
+
+  // Process each word in english_text order
+  // englishTextWords[i] = normalized key, englishTextWordsRaw[i] = original with punctuation
+  for (let i = 0; i < englishTextWords.length; i++) {
+    const normalized = englishTextWords[i];
+    const rawWord = englishTextWordsRaw[i];
+
+    // Get the alignment for this word occurrence
+    const occIdx = wordOccurrenceIndex[normalized] || 0;
+    wordOccurrenceIndex[normalized] = occIdx + 1;
+
+    const alignInfo = wordToAlignments[normalized]?.[occIdx];
+
+    // Track occurrence for this word (use normalized for counting)
+    currentOccurrence[normalized] = (currentOccurrence[normalized] || 0) + 1;
+    const occurrence = currentOccurrence[normalized];
+    const occurrences = wordTotalOccurrences[normalized];
+
+    // Determine if bracketed - check both alignment word and raw text word
+    const originalWord = alignInfo?.originalWord || rawWord;
+    const isBracketed = originalWord.startsWith('{') || (rawWord.startsWith('{') && rawWord.endsWith('}'));
+
+    // Use the raw word (with punctuation) for output, stripping only brackets
+    const outputWord = rawWord.replace(/[{}]/g, '');
+    const wordObj = buildWordObject(outputWord, occurrence, occurrences);
+
+    // Get Hebrew metadata if aligned
+    let hebrewMeta = [];
+    if (alignInfo) {
+      for (const idx of alignInfo.hebrewIndices) {
+        const hw = hebrewWords[idx] || mapping.hebrew_words[idx];
+        if (hw) {
+          hebrewMeta.push({ hw, idx });
+        }
       }
     }
 
-    // Build zaln milestones for each Hebrew word
-    // For nested alignments (multiple Hebrew words), we nest the zaln-s tags
-    const buildWordObject = (text, occurrence, occurrences) => ({
-      text: text.replace(/[{}]/g, ''), // Remove brackets for the word text
-      tag: 'w',
-      type: 'word',
-      occurrence: occurrence.toString(),
-      occurrences: occurrences.toString()
-    });
-
-    // Build English word objects with occurrence tracking
-    const englishObjs = [];
-    for (let i = 0; i < align.english.length; i++) {
-      const word = align.english[i];
-      const cleanWord = word.replace(/[{}]/g, '');
-      currentOccurrence[cleanWord] = (currentOccurrence[cleanWord] || 0) + 1;
-
-      // Add space between words (except first)
-      if (i > 0) {
-        englishObjs.push({ type: 'text', text: ' ' });
-      }
-
-      // Check if this is a bracketed word
-      if (word.startsWith('{') && word.endsWith('}')) {
-        // Bracketed words get wrapped in { }
-        englishObjs.push({ type: 'text', text: '{' });
-        englishObjs.push(buildWordObject(cleanWord, currentOccurrence[cleanWord], wordOccurrences[cleanWord]));
-        englishObjs.push({ type: 'text', text: '}' });
-      } else {
-        englishObjs.push(buildWordObject(cleanWord, currentOccurrence[cleanWord], wordOccurrences[cleanWord]));
-      }
+    // Add newline before (except first word)
+    if (i > 0) {
+      verseObjects.push({ type: 'text', text: '\n' });
     }
 
-    // Build nested zaln structure for Hebrew words
+    // Build the output structure
+    if (isBracketed) {
+      verseObjects.push({ type: 'text', text: '{' });
+    }
+
     if (hebrewMeta.length === 0) {
-      // No Hebrew source - just add the English words directly (shouldn't happen with new rules)
-      verseObjects.push(...englishObjs);
+      // No alignment - just add the word
+      verseObjects.push(wordObj);
     } else if (hebrewMeta.length === 1) {
       // Single Hebrew word
-      const hw = hebrewMeta[0];
-      const sourceWord = mapping.hebrew_words[align.hebrew_indices[0]]?.word || hw.word;
-      verseObjects.push({
-        tag: 'zaln',
-        type: 'milestone',
-        strong: hw.strong,
-        lemma: hw.lemma,
-        morph: hw.morph || '',
-        occurrence: '1', // TODO: track Hebrew word occurrences
-        occurrences: '1',
-        content: sourceWord,
-        children: englishObjs,
-        endTag: 'zaln-e\\*'
-      });
+      const { hw, idx } = hebrewMeta[0];
+      const sourceWord = mapping.hebrew_words[idx]?.word || hw.word;
+      verseObjects.push(buildZalnMilestone(hw, sourceWord, [wordObj]));
     } else {
       // Multiple Hebrew words - nest the zaln milestones
-      let innermost = englishObjs;
-      // Build from inside out (last Hebrew word wraps innermost)
-      for (let i = hebrewMeta.length - 1; i >= 0; i--) {
-        const hw = hebrewMeta[i];
-        const sourceWord = mapping.hebrew_words[align.hebrew_indices[i]]?.word || hw.word;
-        innermost = [{
-          tag: 'zaln',
-          type: 'milestone',
-          strong: hw.strong,
-          lemma: hw.lemma,
-          morph: hw.morph || '',
-          occurrence: '1',
-          occurrences: '1',
-          content: sourceWord,
-          children: innermost,
-          endTag: 'zaln-e\\*'
-        }];
+      let innermost = [wordObj];
+      for (let j = hebrewMeta.length - 1; j >= 0; j--) {
+        const { hw, idx } = hebrewMeta[j];
+        const sourceWord = mapping.hebrew_words[idx]?.word || hw.word;
+        innermost = [buildZalnMilestone(hw, sourceWord, innermost)];
       }
       verseObjects.push(...innermost);
     }
 
-    // Add space after alignment (except for last)
-    if (align !== mapping.alignments[mapping.alignments.length - 1]) {
-      verseObjects.push({ type: 'text', text: '\n' });
+    if (isBracketed) {
+      verseObjects.push({ type: 'text', text: '}' });
     }
   }
 
@@ -284,6 +495,9 @@ if (!hasTags.includes('ide')) {
   outputJson.headers.splice(2, 0, { tag: 'ide', content: 'UTF-8' });
 }
 
+// Store poetry markers for post-processing
+const versePoetryMarkers = {};
+
 // Process each mapping
 for (const mapping of mappings) {
   const ref = parseReference(mapping.reference);
@@ -307,6 +521,12 @@ for (const mapping of mappings) {
   // Build aligned verse objects
   const verseObjects = buildAlignedVerseObjects(mapping, hebrewWords);
 
+  // Extract poetry markers from source ULT
+  const poetryMarkers = extractPoetryMarkers(ultContent, ref.chapter, ref.verse);
+  if (poetryMarkers.length > 0) {
+    versePoetryMarkers[`${ref.chapter}:${ref.verse}`] = poetryMarkers;
+  }
+
   // Add to output
   outputJson.chapters[ref.chapter][ref.verse] = {
     verseObjects
@@ -314,7 +534,70 @@ for (const mapping of mappings) {
 }
 
 // Convert to USFM
-const outputUsfm = usfm.toUSFM(outputJson);
+let outputUsfm = usfm.toUSFM(outputJson);
+
+// Post-process to add poetry markers
+// This is more reliable than trying to inject them into the JSON structure
+for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
+  const [, verse] = verseRef.split(':');
+
+  for (const { marker, position, startWords } of markers) {
+    if (position === 0) {
+      // Marker before verse - add before \v
+      const versePattern = new RegExp(`(\\\\v\\s+${verse}\\s)`);
+      outputUsfm = outputUsfm.replace(versePattern, `\\${marker} $1`);
+    } else if (position === -1 && startWords && startWords.length > 0) {
+      // Mid-verse marker - find alignment line where word sequence begins
+      const verseStart = outputUsfm.indexOf(`\\v ${verse} `);
+      if (verseStart === -1) continue;
+
+      // Find next verse or end
+      const nextVerseMatch = outputUsfm.slice(verseStart + 5).match(/\\v\s+\d/);
+      const verseEnd = nextVerseMatch ? verseStart + 5 + nextVerseMatch.index : outputUsfm.length;
+      const verseContent = outputUsfm.slice(verseStart, verseEnd);
+
+      const lines = verseContent.split('\n');
+
+      // Collect all aligned words with their line indices
+      // Each line has one word, so we need to match across consecutive lines
+      const alignedWords = [];
+      for (let i = 1; i < lines.length; i++) {  // Start at 1 to skip verse line
+        const line = lines[i];
+        if (!line.includes('\\zaln-s')) continue;
+
+        const wordMatches = line.matchAll(/\\w\s+([^|]+)\|/g);
+        for (const match of wordMatches) {
+          alignedWords.push({
+            word: match[1].toLowerCase().replace(/[.,;:!?'"]/g, ''),
+            lineIndex: i
+          });
+        }
+      }
+
+      // Find where startWords sequence begins
+      let targetLineIndex = -1;
+      for (let i = 0; i <= alignedWords.length - startWords.length; i++) {
+        let matches = true;
+        for (let j = 0; j < startWords.length; j++) {
+          if (alignedWords[i + j].word !== startWords[j]) {
+            matches = false;
+            break;
+          }
+        }
+        if (matches) {
+          targetLineIndex = alignedWords[i].lineIndex;
+          break;
+        }
+      }
+
+      if (targetLineIndex > 0) {
+        lines[targetLineIndex] = `\\${marker} ` + lines[targetLineIndex];
+        const newVerseContent = lines.join('\n');
+        outputUsfm = outputUsfm.slice(0, verseStart) + newVerseContent + outputUsfm.slice(verseEnd);
+      }
+    }
+  }
+}
 
 // Write output
 if (outputFile) {

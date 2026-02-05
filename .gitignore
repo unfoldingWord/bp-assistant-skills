@@ -25,6 +25,7 @@ data/t4t/
 data/issues_resolved.txt
 data/templates.csv
 data/tw_headwords.json
+docs/
 
 # Python
 __pycache__/

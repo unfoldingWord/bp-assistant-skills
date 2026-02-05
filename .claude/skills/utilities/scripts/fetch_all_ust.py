@@ -47,6 +47,7 @@ BOOK_NUMBERS = {
     'ZEP': '36', 'HAG': '37', 'ZEC': '38', 'MAL': '39',
 }
 
+
 def get_cached_date(filepath):
     """Check if file exists and return the date from its first line."""
     if not os.path.exists(filepath):
@@ -59,6 +60,7 @@ def get_cached_date(filepath):
     except:
         pass
     return None
+
 
 def fetch_book(book, output_dir, force=False):
     """Fetch a single book's USFM from Door43."""
@@ -100,6 +102,7 @@ def fetch_book(book, output_dir, force=False):
     except Exception as e:
         print(f"  {book}: Error - {e}", file=sys.stderr)
         return False
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -149,6 +152,7 @@ Examples:
 
     if success_count != len(books):
         sys.exit(1)
+
 
 if __name__ == '__main__':
     main()

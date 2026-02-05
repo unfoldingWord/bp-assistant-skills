@@ -136,6 +136,24 @@ UST makes implicit information **explicit** using {brackets}.
 - Should not be as long as a regular sentence
 - Can be a short complete sentence if reworking would be longer or change focus
 
+### When NOT to Use Brackets
+
+Brackets are only for content that is truly absent from the source text and essential for comprehension. Do NOT bracket:
+
+| Category | Example (Wrong) | Example (Correct) |
+|----------|-----------------|-------------------|
+| Logical connectors | `{because} you answer` | `Because you answer` |
+| Temporal connectors | `{when we} pray` | `when we pray` |
+| Obvious context | `waves crashing {on the shore}` | `waves crashing on the shore` |
+| Relationship markers | `sinned {against you}` | `sinned against you` |
+| Figure of speech signals | `{It is as though} the hills rejoice` | `It is as if the hills are celebrating` |
+| Natural clarifications | `Flocks {of sheep and goats}` | `Flocks of sheep and goats` |
+| Category markers for well-known items | `{the city of} Nineveh` | `the city of Nineveh` |
+
+**Principle:** If natural English expression makes the meaning clear, don't bracket it. Brackets draw attention and signal "this isn't in the source" - use them sparingly. The UST should read as flowing prose, not as a text annotated with implied content markers.
+
+**Test:** Before adding brackets, ask: "Would a native English speaker notice this is 'added' information?" If not, just write it naturally.
+
 ---
 
 ## 9. Number and Plural Handling

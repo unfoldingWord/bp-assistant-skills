@@ -3,25 +3,32 @@
 ## Purpose
 This skill provides an overview of the unfoldingWord Book Package creation pipeline and guides you to the appropriate specialized skill for each stage.
 
-## The Four-Stage Pipeline
+## The Five-Stage Pipeline
 
 ### Stage 1: Literal Transform (ULT)
 Transform source text into unfoldingWord Literal Text - a highly literal translation that preserves the form and structure of the original languages.
 
-**Skill**: `.claude\skills\ULT-gen\SKILL.md`
-**Status**: To be developed
+**Skill**: `.claude/skills/ULT-gen/SKILL.md`
+**Status**: Active
 
-### Stage 2: Simplified Transform (UST)
-Transform source text into unfoldingWord Simplified Text - a meaning-based translation that makes implicit information explicit and restructures for clarity.
+### Stage 1b: ULT Alignment
+Create word-level alignments between Hebrew source and English ULT. AI produces a simple index-based mapping JSON that a script converts to aligned USFM.
 
-**Skill**: `.claude\skills\simplified-transform\SKILL.md`
-**Status**: To be developed
+**Skill**: `.claude/skills/ULT-alignment/SKILL.md`
+**Status**: Active
 
-### Stage 3: Issue Identification
+### Stage 2: Issue Identification
 Analyze biblical text to identify translation issues that require notes - figures of speech, cultural concepts, grammatical patterns, etc.
 
-**Skill**: `.claude\skills\issue-identification\SKILL.md`
-**Status**: Active (6 issue types documented)
+**Agent**: `.claude/agents/issue-identification.md`
+**Invoke**: Use the Task tool with `subagent_type: issue-identification`
+**Status**: Active (93 issue types documented)
+
+### Stage 3: Simplified Transform (UST)
+Transform source text into unfoldingWord Simplified Text - a meaning-based translation that makes implicit information explicit and restructures for clarity.
+
+**Skill**: `.claude/skills/UST-gen/SKILL.md`
+**Status**: Active
 
 ### Stage 4: Note Writing
 Generate translation notes based on identified issues using the appropriate templates.
@@ -33,10 +40,11 @@ Generate translation notes based on identified issues using the appropriate temp
 
 | Task | Stage | Skill Location |
 |------|-------|----------------|
-| Creating ULT text | 1 | ULT-gen\ |
-| Creating UST text | 2 | simplified-transform\ |
-| Finding what needs notes | 3 | issue-identification\ |
-| Writing the actual notes | 4 | note-writing\ |
+| Creating ULT text | 1 | ULT-gen/ |
+| Aligning ULT to Hebrew | 1b | ULT-alignment/ |
+| Finding what needs notes | 2 | agents/issue-identification (Task tool) |
+| Creating UST text | 3 | UST-gen/ |
+| Writing the actual notes | 4 | note-writing/ |
 
 ## Supporting Skills
 

@@ -1,123 +1,144 @@
 #!/usr/bin/env python3
 """
-Convert straight quotes to curly quotes in USFM files.
-
-Converts:
-- Straight double quotes "..." to curly "..."
-- Straight single quotes/apostrophes '...' to curly '...'
+Convert straight quotes to curly quotes in text files.
 
 Usage:
-    python3 curly_quotes.py <file.usfm> [--in-place]
-    python3 curly_quotes.py <file.usfm> -o <output.usfm>
+    python3 curly_quotes.py input.usfm [--output output.usfm] [--in-place]
+
+If --output is not specified and --in-place is not set, outputs to stdout.
 """
 
 import argparse
 import re
 import sys
+from pathlib import Path
 
 
-def convert_quotes(text: str) -> str:
-    """Convert straight quotes to curly quotes."""
+def convert_to_curly_quotes(text: str) -> str:
+    """
+    Convert straight quotes to curly quotes.
+
+    Rules:
+    - Opening quote: after whitespace, at start of line, after opening punctuation
+    - Closing quote: before whitespace, at end of line, before closing punctuation
+
+    Double quotes: " -> " or "
+    Single quotes: ' -> ' or '
+    """
     result = []
     i = 0
-    in_double_quote = False
-    in_single_quote = False
 
     while i < len(text):
         char = text[i]
-        prev_char = text[i - 1] if i > 0 else ''
-        next_char = text[i + 1] if i < len(text) - 1 else ''
 
         if char == '"':
-            # Double quote handling
-            if not in_double_quote:
-                # Opening quote: after whitespace, line start, or opening punctuation
-                if prev_char in ('', ' ', '\t', '\n', '(', '[', '{', '\u2018', '\u201C') or i == 0:
-                    result.append('\u201C')  # Left double quote "
-                    in_double_quote = True
-                else:
-                    # Default to opening if unclear
-                    result.append('\u201C')
-                    in_double_quote = True
+            # Determine if opening or closing
+            if is_opening_quote(text, i):
+                result.append('"')
             else:
-                # Closing quote
-                result.append('\u201D')  # Right double quote "
-                in_double_quote = False
-
+                result.append('"')
         elif char == "'":
-            # Single quote / apostrophe handling
-            # Check if it's an apostrophe within a word (contraction or possessive)
-            if prev_char.isalpha() and next_char.isalpha():
-                # Mid-word apostrophe (e.g., "don't", "it's")
-                result.append('\u2019')  # Right single quote '
-            elif prev_char.isalpha() and (next_char == 's' or next_char == ''):
-                # Possessive or end contraction (e.g., "Jesus'", "James's")
-                result.append('\u2019')  # Right single quote '
-            elif not in_single_quote:
-                # Opening single quote
-                if prev_char in ('', ' ', '\t', '\n', '(', '[', '{', '\u201C', '\u2018') or i == 0:
-                    result.append('\u2018')  # Left single quote '
-                    in_single_quote = True
-                else:
-                    # Likely an apostrophe at word start or unclear context
-                    # Check if followed by word characters (opening quote)
-                    if next_char.isalpha():
-                        result.append('\u2018')  # Left single quote
-                        in_single_quote = True
-                    else:
-                        result.append('\u2019')  # Right single quote (apostrophe)
+            # Check if it's an apostrophe (within a word) or a quote
+            if is_apostrophe(text, i):
+                result.append("'")  # Curly apostrophe
+            elif is_opening_quote(text, i):
+                result.append("'")
             else:
-                # Closing single quote
-                result.append('\u2019')  # Right single quote '
-                in_single_quote = False
-
+                result.append("'")
         else:
             result.append(char)
-            # Reset quote tracking at line breaks
-            if char == '\n':
-                in_double_quote = False
-                in_single_quote = False
 
         i += 1
 
     return ''.join(result)
 
 
-def process_file(input_path: str, output_path: str = None, in_place: bool = False) -> None:
-    """Process a USFM file, converting quotes."""
-    with open(input_path, 'r', encoding='utf-8') as f:
-        content = f.read()
+def is_opening_quote(text: str, pos: int) -> bool:
+    """Determine if quote at position is an opening quote."""
+    if pos == 0:
+        return True
 
-    converted = convert_quotes(content)
+    prev_char = text[pos - 1]
+
+    # Opening after whitespace or opening punctuation
+    if prev_char in ' \t\n\r([{':
+        return True
+
+    # Opening after em-dash or en-dash
+    if prev_char in '—–':
+        return True
+
+    # Check for USFM markers - quote after \v 1, \q1, etc.
+    # Look back for backslash pattern
+    look_back = text[max(0, pos-10):pos]
+    if re.search(r'\\[a-z0-9]+\s*\*?\s*$', look_back):
+        return True
+
+    return False
+
+
+def is_apostrophe(text: str, pos: int) -> bool:
+    """Determine if single quote at position is an apostrophe (within a word)."""
+    if pos == 0 or pos == len(text) - 1:
+        return False
+
+    prev_char = text[pos - 1]
+    next_char = text[pos + 1]
+
+    # Apostrophe if surrounded by letters (contractions, possessives)
+    if prev_char.isalpha() and next_char.isalpha():
+        return True
+
+    # Possessive 's at end of word: "David's"
+    if prev_char.isalpha() and next_char == 's':
+        # Check if 's is at word end
+        if pos + 2 >= len(text) or not text[pos + 2].isalpha():
+            return True
+
+    # Trailing apostrophe for plurals: peoples'
+    if prev_char == 's' and not next_char.isalpha():
+        return True
+
+    return False
+
+
+def process_file(input_path: Path, output_path: Path = None, in_place: bool = False) -> str:
+    """Process a file and convert quotes."""
+    text = input_path.read_text(encoding='utf-8')
+    converted = convert_to_curly_quotes(text)
 
     if in_place:
-        output_path = input_path
-
-    if output_path:
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(converted)
-        print(f"Converted quotes in {input_path}" + (" (in-place)" if in_place else f" -> {output_path}"))
+        input_path.write_text(converted, encoding='utf-8')
+        return f"Converted {input_path} in place"
+    elif output_path:
+        output_path.write_text(converted, encoding='utf-8')
+        return f"Wrote converted text to {output_path}"
     else:
-        # Print to stdout
-        print(converted)
+        return converted
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Convert straight quotes to curly quotes in USFM files.'
+        description='Convert straight quotes to curly quotes in text files.'
     )
-    parser.add_argument('input', help='Input USFM file')
-    parser.add_argument('-o', '--output', help='Output file (default: stdout)')
-    parser.add_argument('--in-place', action='store_true',
+    parser.add_argument('input', type=Path, help='Input file path')
+    parser.add_argument('--output', '-o', type=Path, help='Output file path')
+    parser.add_argument('--in-place', '-i', action='store_true',
                         help='Modify file in place')
 
     args = parser.parse_args()
 
-    if args.in_place and args.output:
-        print("Error: Cannot use both --in-place and --output", file=sys.stderr)
+    if not args.input.exists():
+        print(f"Error: {args.input} does not exist", file=sys.stderr)
         sys.exit(1)
 
-    process_file(args.input, args.output, args.in_place)
+    result = process_file(args.input, args.output, args.in_place)
+
+    if not args.in_place and not args.output:
+        # Output to stdout
+        print(result)
+    else:
+        print(result, file=sys.stderr)
 
 
 if __name__ == '__main__':

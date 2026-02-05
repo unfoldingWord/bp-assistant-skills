@@ -52,7 +52,7 @@ Create a JSON file with this structure:
 |-------|-------------|
 | `reference` | Book chapter:verse (e.g., "GEN 1:1") |
 | `hebrew_words` | Array of Hebrew words with index, word form, Strong's, lemma |
-| `english_text` | Complete English translation |
+| `english_text` | Complete English translation - **this is the authoritative word order** |
 | `alignments` | Array mapping Hebrew indices to English word arrays |
 
 ### Alignment Entry Structure
@@ -61,6 +61,30 @@ Create a JSON file with this structure:
   - Single index `[0]` for one Hebrew word
   - Multiple indices `[3, 4]` when multiple Hebrew words map to one English phrase
 - `english`: Array of English words that render this Hebrew
+
+### Critical: `english_text` Controls Output Word Order
+
+The `english_text` field is **authoritative** for the final output word order. The conversion script:
+1. Parses `english_text` to determine correct word sequence
+2. Outputs each word in that exact order
+3. Wraps each word in its corresponding Hebrew alignment
+
+This means:
+- **Alignment array order doesn't matter** - you can create alignments in any order (Hebrew order, English order, etc.)
+- **The script will reorder** based on where each word appears in `english_text`
+- **Non-consecutive aligned words work correctly** - words grouped in one alignment may appear separated in output
+
+Example: Hebrew וַ⁠יִּקַ֖ץ אֲדֹנָי means "and-he-awoke the-Lord" but English is "And the Lord awoke"
+```json
+{
+  "english_text": "And the Lord awoke...",
+  "alignments": [
+    {"hebrew_indices": [0], "english": ["And", "awoke"]},  // וַ⁠יִּקַ֖ץ
+    {"hebrew_indices": [1], "english": ["the", "Lord"]}    // אֲדֹנָי
+  ]
+}
+```
+Output will be: "And" ... "the Lord" ... "awoke" (correct English order), not "And awoke the Lord"
 
 ## Alignment Principles
 
@@ -148,7 +172,7 @@ Hebrew: בָּרָ֣א אֱלֹהִ֑ים (created God = God created)
 Read the Hebrew USFM for the verse:
 
 ```bash
-grep -A 20 "\\v 1$" data/hebrew_bible/01-GEN.usfm | head -20
+grep -A 20 "\\\\v 1$" data/hebrew_bible/01-GEN.usfm | head -20
 ```
 
 Parse each `\w` tag to extract:
@@ -187,6 +211,44 @@ Write to scratchpad or output directory:
 /tmp/claude-*/scratchpad/alignments/GEN-01-01.json
 ```
 
+### Step 7: Verify Text Preservation
+
+After generating aligned USFM, verify the English text is preserved exactly. This requires two checks since the extraction script strips USFM markers:
+
+**Part A: Verify English text and word order**
+
+Extract English from the aligned output and compare with the original unaligned ULT:
+
+```bash
+# Extract English from aligned output
+python3 .claude/skills/utilities/scripts/extract_ult_english.py \
+  --input-dir output/AI-ULT \
+  --output-dir /tmp/verify-alignment \
+  --force
+
+# Compare extracted text with original unaligned ULT
+diff <(cat /tmp/verify-alignment/BOOK.usfm) <(cat output/AI-ULT/BOOK-unaligned.usfm)
+```
+
+The extracted text should match exactly - same words, same order, same punctuation.
+
+**Part B: Verify USFM marker placement**
+
+Since the extraction script removes USFM markers (\q1, \q2, \v, etc.), verify marker placement separately:
+
+```bash
+# Extract USFM markers from aligned output
+grep -oE '\\(q[12]|v [0-9]+|p|s[0-9]?)' aligned.usfm | sort > /tmp/aligned_markers.txt
+
+# Extract markers from original unaligned ULT
+grep -oE '\\(q[12]|v [0-9]+|p|s[0-9]?)' original.usfm | sort > /tmp/original_markers.txt
+
+# Compare - should be identical
+diff /tmp/aligned_markers.txt /tmp/original_markers.txt
+```
+
+Both comparisons should show no differences. If there are differences, the alignment process has altered the text and must be corrected.
+
 ## Conversion to Aligned USFM
 
 After creating the mapping JSON, run the conversion script:
@@ -195,17 +257,29 @@ After creating the mapping JSON, run the conversion script:
 node .claude/skills/utilities/scripts/usfm/create_aligned_usfm.js \
   --hebrew data/hebrew_bible/01-GEN.usfm \
   --mapping /tmp/alignments/GEN-01-01.json \
-  --ult output/AI-ULT/GEN-01.usfm \
   --chapter 1 --verse 1
 ```
 
 The script:
 1. Reads Hebrew USFM to get full word metadata (Strong's, lemma, morph, x-content)
 2. Reads your mapping JSON
-3. Reads source ULT to preserve poetry markers (`\q1`, `\q2`)
-4. Generates aligned USFM with proper `\zaln-s`, `\zaln-e`, and `\w` markers
+3. Parses `english_text` to determine correct word order
+4. Outputs each English word individually in `english_text` order
+5. Wraps each word in its Hebrew alignment milestone (`\zaln-s`, `\zaln-e`, `\w`)
+6. Tracks word occurrences (`x-occurrence`, `x-occurrences` attributes)
 
-**Important:** Always include `--ult` to preserve poetry formatting from the source translation.
+### Output Structure
+
+Each English word gets its own alignment milestone:
+```
+\zaln-s |x-strong="H1234" x-lemma="..." x-occurrence="1" x-occurrences="1" x-content="הַמֶּלֶךְ"\*\w the|x-occurrence="1" x-occurrences="3"\w*\zaln-e\*
+\zaln-s |x-strong="H1234" x-lemma="..." x-occurrence="1" x-occurrences="1" x-content="הַמֶּלֶךְ"\*\w king|x-occurrence="1" x-occurrences="1"\w*\zaln-e\*
+```
+
+For duplicate English words (e.g., "the" appearing 3 times), each gets sequential occurrence numbers:
+- First "the": `x-occurrence="1" x-occurrences="3"`
+- Second "the": `x-occurrence="2" x-occurrences="3"`
+- Third "the": `x-occurrence="3" x-occurrences="3"`
 
 ## Final Output
 
@@ -213,11 +287,11 @@ After converting all verses, save the combined aligned USFM to `output/AI-ULT/`.
 
 ### Combining Multiple Verses
 
-The script outputs **multi-line USFM** (one line per alignment). When combining verses, capture all lines including poetry markers:
+The script outputs **multi-line USFM** (one line per word/alignment). When combining verses:
 
 ```bash
 # Create header
-cat > output.usfm << 'EOF'
+cat > output/AI-ULT/PSA-078-44-72-aligned.usfm << 'EOF'
 \id PSA EN_ULT - Aligned
 \usfm 3.0
 \ide UTF-8
@@ -227,20 +301,20 @@ cat > output.usfm << 'EOF'
 \c 78
 EOF
 
-# Append each verse (capture poetry markers, verse line, AND all alignment lines)
+# Append each verse
 for v in $(seq 44 72); do
+  vpad=$(printf "%03d" $v)
   node .claude/skills/utilities/scripts/usfm/create_aligned_usfm.js \
     --hebrew data/hebrew_bible/19-PSA.usfm \
-    --mapping alignments/PSA-078-0${v}.json \
-    --ult output/AI-ULT/PSA-078.usfm \
-    --chapter 78 --verse $v 2>/dev/null | sed -n '/^\\q\|^\\v/,/^$/p' >> output.usfm
+    --mapping alignments/PSA-078-${vpad}.json \
+    --chapter 78 --verse $v 2>/dev/null | sed -n '/^\\v/,/^$/p' >> output/AI-ULT/PSA-078-44-72-aligned.usfm
 done
 ```
 
 **Notes:**
-- Always include `--ult` to preserve poetry markers (`\q1`, `\q2`)
-- Use `sed -n '/^\\q\|^\\v/,/^$/p'` to capture lines starting with `\q` or `\v`
-- Do NOT use `grep "^\v"` - this truncates all other lines
+- Use `sed -n '/^\\v/,/^$/p'` to capture verse line and all alignment lines until blank
+- Do NOT use `grep "^\v"` - this only gets the first line and truncates alignments
+- Use zero-padded verse numbers in mapping filenames (e.g., `PSA-078-044.json`)
 
 ### Naming Convention
 
@@ -255,6 +329,19 @@ Examples:
 - `GEN-01-aligned.usfm` (whole chapter)
 
 Use zero-padded chapter numbers: 3 digits for Psalms (150 chapters), 2 digits for all other books.
+
+### Convert to Curly Quotes
+
+After creating the final aligned USFM, run the curly quotes script:
+
+```bash
+python3 .claude/skills/utilities/scripts/curly_quotes.py \
+  output/AI-ULT/{BOOK}-{CHAPTER}-aligned.usfm --in-place
+```
+
+This converts:
+- Straight double quotes `"..."` to curly `"..."`
+- Straight single quotes/apostrophes `'...'` to curly `'...'`
 
 ## Example: Genesis 1:1
 
@@ -303,8 +390,25 @@ Before finalizing alignment JSON:
 - [ ] Direct object markers align with following noun
 - [ ] Bracketed words align to the Hebrew word they support
 - [ ] Construct chains are split (each word aligned separately)
-- [ ] Word order in alignments array follows English text
+- [ ] `english_text` contains the exact English translation with correct word order
 - [ ] Hebrew words copied exactly from source (not typed manually)
+
+### Verifying Output (Critical)
+
+Use Step 7's two-part verification to ensure the aligned output perfectly preserves the original text:
+
+1. **Text verification** - Extract English from aligned USFM using `extract_ult_english.py` and diff against original unaligned ULT
+2. **USFM marker verification** - Compare USFM markers (\q1, \q2, \v, etc.) between aligned and original
+
+Both must match exactly. Any differences indicate the alignment process altered the text and must be corrected before finalizing.
+
+Quick single-verse check:
+```bash
+# Extract words from aligned output
+grep -oE '\\w [^|]+\|' aligned.usfm | sed 's/\\w //;s/|//' | tr '\n' ' '
+
+# Should match original ULT text word-for-word
+```
 
 ## Related Skills
 

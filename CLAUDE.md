@@ -47,3 +47,8 @@ See `.claude/skills/create-issue-description/create-issue-description.md` for th
 - Check Issues Resolved for authoritative decisions
 - Document what IS and what IS NOT this issue type
 - Update tracking CSV when complete
+
+## Git Discipline
+- ALWAYS `git add` and `git commit` new files immediately after creating them
+- Run `git status` before any branch operation (checkout, reset, merge, rebase)
+- NEVER do `git reset --hard` or `git clean` without checking for untracked files first

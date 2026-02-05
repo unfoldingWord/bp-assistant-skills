@@ -14,13 +14,13 @@ The goal is to align at the smallest meaningful unit. This maximizes usefulness 
 ### One-to-Many is Normal
 
 A single Hebrew word often maps to multiple English words:
-- בְּ⁠רֵאשִׁ֖ית -> "In the beginning" (3 English words)
-- הַ⁠מֶּ֫לֶךְ -> "the king" (2 English words)
+- בְּ⁠רֵאשִׁ֖ית → "In the beginning" (3 English words)
+- הַ⁠מֶּ֫לֶךְ → "the king" (2 English words)
 
 ### Many-to-One is Rare but Valid
 
 Multiple Hebrew words may map to one English phrase when:
-- Direct object marker + noun: אֵת הָ⁠אָ֫רֶץ -> "the earth"
+- Direct object marker + noun: אֵת הָ⁠אָ֫רֶץ → "the earth"
 - Compound expressions
 
 ## Word Type Rules
@@ -31,8 +31,8 @@ Hebrew definite article (הַ prefix) and English articles align with their head
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| הַ⁠מֶּ֫לֶךְ | the king | `[heb_idx]` -> `["the", "king"]` |
-| מֶ֫לֶךְ | a king | `[heb_idx]` -> `["a", "king"]` |
+| הַ⁠מֶּ֫לֶךְ | the king | `[heb_idx]` → `["the", "king"]` |
+| מֶ֫לֶךְ | a king | `[heb_idx]` → `["a", "king"]` |
 
 Never align "the" separately from its noun.
 
@@ -42,8 +42,8 @@ Prefixed prepositions (בְּ, לְ, מִן, etc.) align with their English equi
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| בְּ⁠בַ֫יִת | in the house | `[heb_idx]` -> `["in", "the", "house"]` |
-| לַ⁠מֶּ֫לֶךְ | to the king | `[heb_idx]` -> `["to", "the", "king"]` |
+| בְּ⁠בַ֫יִת | in the house | `[heb_idx]` → `["in", "the", "house"]` |
+| לַ⁠מֶּ֫לֶךְ | to the king | `[heb_idx]` → `["to", "the", "king"]` |
 
 ### Conjunctions
 
@@ -51,13 +51,13 @@ Prefixed waw (וְ, וַ) typically aligns separately:
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| וְ⁠הָ⁠אָ֫רֶץ | And the earth | `[waw_idx]` -> `["And"]`; `[aretz_idx]` -> `["the", "earth"]` |
+| וְ⁠הָ⁠אָ֫רֶץ | And the earth | `[waw_idx]` → `["And"]`; `[aretz_idx]` → `["the", "earth"]` |
 
 But when waw is integral to the word form (wayyiqtol), it may align with the verb:
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| וַ⁠יֹּ֫אמֶר | Then ... said | `[heb_idx]` -> `["Then"]` and `["said"]` (split) |
+| וַ⁠יֹּ֫אמֶר | Then ... said | `[heb_idx]` → `["Then"]` and `["said"]` (split) |
 
 ### Direct Object Marker (אֵת)
 
@@ -65,7 +65,7 @@ The untranslatable אֵת aligns with its following noun:
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| אֵת הַ⁠שָּׁמַ֫יִם | the heavens | `[et_idx, shamayim_idx]` -> `["the", "heavens"]` |
+| אֵת הַ⁠שָּׁמַ֫יִם | the heavens | `[et_idx, shamayim_idx]` → `["the", "heavens"]` |
 
 ### Pronouns
 
@@ -73,15 +73,15 @@ Suffixed pronouns align with the English pronoun:
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| דְּבָרוֹ | his word | `[heb_idx]` -> `["his", "word"]` |
-| עִמָּ֫נוּ | with us | `[heb_idx]` -> `["with", "us"]` |
+| דְּבָרוֹ | his word | `[heb_idx]` → `["his", "word"]` |
+| עִמָּ֫נוּ | with us | `[heb_idx]` → `["with", "us"]` |
 
 Independent pronouns align directly:
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| הוּא | he | `[heb_idx]` -> `["he"]` |
-| אֲנִי | I | `[heb_idx]` -> `["I"]` |
+| הוּא | he | `[heb_idx]` → `["he"]` |
+| אֲנִי | I | `[heb_idx]` → `["I"]` |
 
 ### Verbs
 
@@ -89,14 +89,14 @@ Hebrew verbs align with English verb forms, including auxiliaries:
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| יִשְׁמֹר | he will guard | `[heb_idx]` -> `["he", "will", "guard"]` |
-| שָׁמַר | he guarded | `[heb_idx]` -> `["he", "guarded"]` |
+| יִשְׁמֹר | he will guard | `[heb_idx]` → `["he", "will", "guard"]` |
+| שָׁמַר | he guarded | `[heb_idx]` → `["he", "guarded"]` |
 
 When subject is separate, only verb aligns to verb:
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| יהוה יִשְׁמֹר | Yahweh will guard | `[yhwh_idx]` -> `["Yahweh"]`; `[verb_idx]` -> `["will", "guard"]` |
+| יהוה יִשְׁמֹר | Yahweh will guard | `[yhwh_idx]` → `["Yahweh"]`; `[verb_idx]` → `["will", "guard"]` |
 
 ### Participles
 
@@ -104,7 +104,7 @@ Participles often need a be-verb in English:
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| שֹׁמֵר | is guarding | `[heb_idx]` -> `["is", "guarding"]` |
+| שֹׁמֵר | is guarding | `[heb_idx]` → `["is", "guarding"]` |
 
 ### Infinitives
 
@@ -112,13 +112,13 @@ Infinitive construct aligns with "to" + verb:
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| לִשְׁמֹר | to guard | `[heb_idx]` -> `["to", "guard"]` |
+| לִשְׁמֹר | to guard | `[heb_idx]` → `["to", "guard"]` |
 
 Infinitive absolute with finite verb (emphatic doubling):
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| שָׁמוֹר יִשְׁמֹר | guarding he will guard | `[inf_idx]` -> `["guarding"]`; `[finite_idx]` -> `["he", "will", "guard"]` |
+| שָׁמוֹר יִשְׁמֹר | guarding he will guard | `[inf_idx]` → `["guarding"]`; `[finite_idx]` → `["he", "will", "guard"]` |
 
 ## Grammatical Additions (Bracketed Words)
 
@@ -126,8 +126,8 @@ Words in {brackets} in ULT are English additions for grammar. These align to the
 
 | Hebrew Context | ULT Text | Alignment Strategy |
 |----------------|----------|-------------------|
-| טוֹב (adjective) | God {is} good | `[tov_idx]` -> `["{is}", "good"]` |
-| בֹּקֶר (morning) | {it was} morning | `[boqer_idx]` -> `["{it}", "{was}", "morning"]` |
+| טוֹב (adjective) | God {is} good | `[tov_idx]` → `["{is}", "good"]` |
+| בֹּקֶר (morning) | {it was} morning | `[boqer_idx]` → `["{it}", "{was}", "morning"]` |
 
 The bracketed word attaches to whichever Hebrew word it grammatically supports - usually the predicate or the word it enables in English.
 
@@ -139,7 +139,7 @@ When Hebrew verb implies subject but ULT makes it explicit:
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| אָמַר | he said | `[heb_idx]` -> `["he", "said"]` |
+| אָמַר | he said | `[heb_idx]` → `["he", "said"]` |
 
 The "he" is not bracketed because it's encoded in the Hebrew verb form.
 
@@ -151,8 +151,8 @@ For two-word constructs, prefer splitting to maintain word-level precision:
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|
-| בֵּית הַמֶּ֫לֶךְ | house of the king | `[bayit_idx]` -> `["house", "of"]`; `[melek_idx]` -> `["the", "king"]` |
-| דְּבַר יהוה | word of Yahweh | `[davar_idx]` -> `["word", "of"]`; `[yhwh_idx]` -> `["Yahweh"]` |
+| בֵּית הַמֶּ֫לֶךְ | house of the king | `[bayit_idx]` → `["house", "of"]`; `[melek_idx]` → `["the", "king"]` |
+| דְּבַר יהוה | word of Yahweh | `[davar_idx]` → `["word", "of"]`; `[yhwh_idx]` → `["Yahweh"]` |
 
 The "of" goes with the first word (construct form) since it represents the construct relationship.
 

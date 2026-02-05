@@ -5,10 +5,15 @@ compare_ult_ust.py - Compare ULT and UST to identify potential translation issue
 Where UST diverges from ULT (beyond simple synonym/clarity changes), there may be
 a translation issue worth noting.
 
+IMPORTANT: Input files should be plain USFM (no alignment markers). Use parse_usfm.js
+with --plain-only to extract clean text from aligned USFM first:
+
+  node parse_usfm.js aligned.usfm --plain-only > plain.usfm
+
 Usage:
   python compare_ult_ust.py <ult_file> <ust_file> [options]
-  python compare_ult_ust.py /tmp/book_ult.usfm /tmp/book_ust.usfm --chapter 58
-  python compare_ult_ust.py /tmp/book_ult.usfm /tmp/book_ust.usfm --output /tmp/diff.tsv
+  python compare_ult_ust.py /tmp/ult_plain.usfm /tmp/ust_plain.usfm --chapter 58
+  python compare_ult_ust.py /tmp/ult_plain.usfm /tmp/ust_plain.usfm --output /tmp/diff.tsv
 
 Options:
   --chapter <N>      Filter to specific chapter
@@ -35,23 +40,18 @@ import sys
 from difflib import SequenceMatcher
 from typing import Optional
 
-def parse_usfm_verses(content: str, chapter: Optional[int] = None) -> dict:
-    """
-    Parse USFM content and extract verses as {chapter:verse: text}.
 
-    Handles basic USFM markers: \\c, \\v, \\p, \\q, etc.
+def parse_plain_usfm_verses(content: str, chapter: Optional[int] = None) -> dict:
+    """
+    Parse plain USFM content (output from parse_usfm.js --plain-only) and
+    extract verses as {chapter:verse: text}.
+
+    Expects simple USFM with \\c, \\v, \\p markers (no alignment markers).
     """
     verses = {}
     current_chapter = 0
     current_verse = ""
     current_text = []
-
-    # Remove alignment markers like \zaln-s and \zaln-e
-    content = re.sub(r'\\zaln-[se][^\\]*', '', content)
-    # Remove word markers like \w ... \w*
-    content = re.sub(r'\\w\s+([^|\\]+)\|[^\\]*\\w\*', r'\1', content)
-    # Remove any remaining \w markers without content
-    content = re.sub(r'\\w\*', '', content)
 
     for line in content.split('\n'):
         line = line.strip()
@@ -105,9 +105,10 @@ def parse_usfm_verses(content: str, chapter: Optional[int] = None) -> dict:
 
     return verses
 
+
 def clean_usfm(text: str) -> str:
-    """Remove USFM markers from text, keeping content."""
-    # Remove common markers
+    """Remove simple USFM markers from text, keeping content."""
+    # Remove paragraph/poetry markers
     text = re.sub(r'\\[pqsm]\d?\s*', '', text)
     text = re.sub(r'\\d\s*', '', text)
     text = re.sub(r'\\b\s*', '', text)
@@ -118,6 +119,7 @@ def clean_usfm(text: str) -> str:
     # Clean up whitespace
     text = re.sub(r'\s+', ' ', text)
     return text.strip()
+
 
 def analyze_difference(ult_text: str, ust_text: str) -> tuple:
     """
@@ -193,6 +195,7 @@ def analyze_difference(ult_text: str, ust_text: str) -> tuple:
 
     return ('moderate', '', 0.3)
 
+
 def compare_verses(ult_verses: dict, ust_verses: dict) -> list:
     """
     Compare ULT and UST verse by verse.
@@ -227,6 +230,7 @@ def compare_verses(ult_verses: dict, ust_verses: dict) -> list:
 
     return results
 
+
 def format_tsv(results: list) -> str:
     """Format results as TSV."""
     lines = ['verse\tult_text\tust_text\tdiff_type\tsuggested_issue']
@@ -237,9 +241,11 @@ def format_tsv(results: list) -> str:
         lines.append(f"{r['verse']}\t{ult}\t{ust}\t{r['diff_type']}\t{r['suggested_issue']}")
     return '\n'.join(lines)
 
+
 def format_json(results: list) -> str:
     """Format results as JSON."""
     return json.dumps(results, indent=2)
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -277,8 +283,8 @@ Examples:
         sys.exit(1)
 
     # Parse verses
-    ult_verses = parse_usfm_verses(ult_content, args.chapter)
-    ust_verses = parse_usfm_verses(ust_content, args.chapter)
+    ult_verses = parse_plain_usfm_verses(ult_content, args.chapter)
+    ust_verses = parse_plain_usfm_verses(ust_content, args.chapter)
 
     if not ult_verses:
         print("Warning: No verses found in ULT file", file=sys.stderr)
@@ -301,6 +307,7 @@ Examples:
         print(f"Wrote {len(results)} differences to {args.output}", file=sys.stderr)
     else:
         print(output)
+
 
 if __name__ == '__main__':
     main()

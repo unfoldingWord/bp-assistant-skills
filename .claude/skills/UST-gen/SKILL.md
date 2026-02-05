@@ -1,152 +1,257 @@
 ---
 name: UST-gen
 
-description: Transform Hebrew USFM into unfoldingWord Simplified Text (UST) - a meaning-based translation that clearly communicates the meaning of the original text in natural English.
+description: Transform T4T (Translation for Translators) into unfoldingWord Simplified Text (UST) - a meaning-based translation that clearly communicates the meaning of the original text in natural English.
 
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
+## Important: T4T-Based Workflow
+
+The UST creation process starts with the **T4T (Translation for Translators)** as the base text. The goal is to **modify T4T as little as possible** while ensuring it is:
+1. **True to the Hebrew** (final authority on meaning)
+2. **Consistent with the ULT** (same meaning, different form)
+3. **Compliant with unfoldingWord standards** (style, vocabulary, formatting)
+
+**Do NOT start from scratch.** Read the T4T first, verify it against Hebrew/ULT, then make targeted adjustments.
+
+**Note on published UST:** The UST currently on Door43, if not from our recently published approved work, was adapted from T4T long ago by underskilled volunteers and should largely be ignored as a reference. Use T4T as your primary starting point.
+
+---
+
+## Key Principle: Differentiate from ULT
+
+The UST must be **noticeably different** from the ULT. If the only difference is removing "And" at the start, you haven't done enough.
+
+**The UST should:**
+- Use **simpler, more common words** than the ULT
+- **Explain meaning** rather than preserve form
+
+
+**Test:** Read the ULT and UST side by side. If they sound nearly identical, rewrite the UST.
+
+| ULT | Bad UST (too similar) | Good UST (differentiated) |
+|-----|----------------------|---------------------------|
+| "He gave over their cattle to the hail" | "He gave over their cattle to the hail" | "He let the hail kill their cattle" |
+| "and their livestock to the bolts of lightning" | "and their livestock to the bolts of lightning" | "and he let lightning strike their livestock" |
+| "They tested God in their heart" | "They tested God in their heart" | "They challenged God to see if he would help them" |
+| "by asking for food for their craving" | "by asking for food for their craving" | "by demanding the food they wanted" |
+
+### Simpler Vocabulary
+
+Prefer common words over formal/literary ones:
+
+| ULT/Formal | UST/Simple |
+|------------|------------|
+| livestock | animals / herds |
+| craving | desire / want |
+| iniquity | sin / evil |
+| transgressions | sins |
+| rebuke | correct / scold |
+| wrath | anger |
+| affliction | suffering / trouble |
+| insolent | proud / arrogant |
+| abhor | hate / reject |
+| slumber | sleep |
+| give over to | let X destroy / hand over to |
+
+### Collapsing Parallelism
+
+Hebrew poetry often says the same thing twice with different words (synonymous parallelism). In UST, **collapse true parallelism into one statement** when both lines express the same meaning.
+
+| ULT (parallel lines) | UST (collapsed) |
+|---------------------|-----------------|
+| "He gave over their cattle to the hail / and their livestock to the bolts of lightning" | "He sent a terrible thunderstorm with hail to kill all their cattle" |
+| "They did not keep the covenant of God / and they refused to walk in his law" | "They refused to obey God's covenant and law" |
+| "Yahweh knows the way of the righteous / but the way of the wicked will perish" | Keep both - this is **antithetic** parallelism (contrast), not synonymous |
+
+**Judgment call:** If the second line adds new information or contrasts with the first, keep both lines. If it just restates the first line with different words, collapse them.
+
+---
+
 ## 7-Step Workflow
 
-### Step 1: Parse Hebrew Input
+### Step 1: Read T4T Base
 
-Read Hebrew USFM from `data/hebrew_bible/*.usfm`. Extract verse text from `\w` tags with morphology (lemma, strong, x-morph).
-
-For context, also read the corresponding ULT to understand how the passage was rendered literally:
+Read the T4T from `data/t4t/*.usfm`. This is your starting point.
 
 ```bash
-# Parse ULT alignment to see Hebrew->English mappings
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
-  data/published_ult/11-1KI.usfm \
-  --chapter 1 --output-json /tmp/alignments.json
+# Fetch T4T if not present
+python3 .claude/skills/utilities/scripts/fetch_t4t.py --books PSA 1KI
 ```
 
-### Step 2: Read ULT Reference
+T4T uses special markers that serve two purposes:
+1. **Guide your UST rendering** - they identify translation issues in the text
+2. **Must be removed** - the markers themselves don't appear in final UST
 
-Read the corresponding ULT passage. The UST should express the **same meaning** as the ULT but in natural, clear English.
+| Marker | Meaning | UST Implication |
+|--------|---------|-----------------|
+| `\add...\add*` | Implicit information | Usually weave into prose; rarely bracket |
+| `[IDI]` | Idiom | Render the meaning, not literal form |
+| `[DOU]` | Doublet (repetition for emphasis) | May simplify or keep both terms |
+| `[SYN]` | Synecdoche (part for whole) | Express the intended referent |
+| `[RHQ]` | Rhetorical question | Keep as question or convert to statement |
+| `[EUP]` | Euphemism | Use clear language |
+| `[MTY]` | Metonymy (association) | Express what is actually meant |
+
+These markers are valuable pre-identified translation issues - use them to inform your rendering choices before removing them from the final text.
+
+### Step 2: Verify Against Hebrew and ULT
+
+Check that T4T accurately represents the Hebrew meaning:
+
+1. **Read Hebrew source** from `data/hebrew_bible/*.usfm` - this is the final authority
+2. **Read corresponding ULT** - shows the literal form for comparison
+3. **Note any discrepancies** between T4T and Hebrew/ULT
 
 Key relationship:
-- ULT shows **what the Hebrew says** (form)
-- UST shows **what the Hebrew means** (meaning)
+- Hebrew = **final authority** on meaning
+- ULT = **what the Hebrew says** (form)
+- T4T/UST = **what the Hebrew means** (meaning)
 
-### Step 3: Identify Transformation Needs
+If T4T diverges from Hebrew meaning, correct it. If T4T and ULT express the same meaning differently, that's expected - they serve different purposes.
 
-Scan for elements that need UST transformation:
-- Hebrew idioms (body parts, emotions, etc.)
-- Metaphors and figures of speech
-- Abstract nouns that could be verbal
-- Passive constructions
-- Initial conjunctions ("And...")
-- Formal/archaic expressions
-- Implicit information that helps clarity
+### Step 2.5: Check Identified Translation Issues
 
-Consult `reference/ust_patterns.md` for transformation guidance.
+Before generating UST, check for any pre-identified translation issues:
 
-### Step 4: Generate Meaning-Based Draft
+1. Look for issue files at `output/issues/[BOOK]-[CHAPTER].tsv`
+2. If found, read the identified issues - these flag constructions needing attention:
+   - **figs-activepassive**: MUST convert to active voice in UST
+   - **figs-abstractnouns**: Consider verbal/clausal forms
+   - **figs-nominaladj**: Unpack nominalized adjectives
+   - **figs-metaphor/figs-simile**: Express the meaning
+   - **figs-idiom**: Explain rather than preserve
+   - **figs-rquestion**: Consider if rhetorical function is clear
 
-Apply transformations in this order:
+3. Use identified issues to guide your transformation decisions in Step 4
 
-#### A. No Initial Conjunctions
+### Step 3: Identify Changes Needed
 
-UST sentences should NOT start with "And," "But," or similar conjunctions.
+Compare T4T to unfoldingWord standards. Flag areas that need adjustment:
 
-| ULT | UST |
+1. **Check Issues Resolved** for authoritative decisions
+   ```bash
+   grep -i "UST" data/issues_resolved.txt | grep -i "[term or topic]"
+   ```
+
+2. **Remove T4T notation markers** - [IDI], [DOU], [SYN], [RHQ], [EUP], [MTY]
+
+3. **Handle `\add...\add*` markers** - weave into prose; rarely bracket (see Step 4A)
+
+4. **Check for unfoldingWord-specific requirements:**
+   - Divine names: Must use "Yahweh" (not "the LORD")
+   - Proper names: Same as ULT (no modern equivalents)
+   - Active voice for psalm superscriptions
+   - No initial conjunctions ("And", "But")
+
+### Step 4: Make Minimal Modifications
+
+Apply only necessary changes. The T4T is already a good meaning-based translation.
+
+#### A. Handle T4T Markers
+
+| T4T | UST |
 |-----|-----|
-| "And his servants said" | "So his officials said" / "His officials said" |
-| "And they sought" | "They searched" |
-| "But he did not call" | "However, he did not invite" |
+| `\add text \add*` | Evaluate: most become unbracketed natural prose |
+| `[IDI]`, `[DOU]`, etc. | Remove entirely |
+| `[RHQ]` | Remove (keep the rhetorical question) |
 
-Use logical connectors when needed: "So", "However", "Therefore", "Then", "Meanwhile"
+**T4T `\add...\add*` markers:** These mark where T4T added clarifying information. In UST, most of this content should be woven into natural prose WITHOUT brackets. Only use {brackets} when the added content is:
+1. Truly absent from the Hebrew (not just restructured)
+2. Essential for comprehension (not just helpful)
+3. Would seem "added" to a careful reader
 
-#### B. Active Voice
+See `reference/ust_patterns.md` Section 8 for detailed guidance.
 
-Convert passive to active voice whenever possible.
+#### B. Divine Names (if needed)
 
-| ULT (passive) | UST (active) |
-|---------------|--------------|
-| "A psalm written by David when..." | "David wrote this song when..." |
+T4T may use "the LORD" or other renderings. Update to:
+- יהוה = "Yahweh"
+- אֲדֹנָי = "Lord"
+- אֵל / אֱלֹהִים = "God"
+- "angel of Yahweh" = "an angel representing Yahweh"
+
+#### C. Check Vocabulary Against Issues Resolved
+
+```bash
+# Check for specific term decisions
+grep -i "UST" data/issues_resolved.txt | grep -i "[term]"
+
+# Check glossaries
+grep "[term]" data/glossary/hebrew_ot_glossary.csv
+```
+
+#### D. Active Voice
+
+Every passive construction must be converted to active voice.
+
+Detection pattern: auxiliary (be/is/are/was/were/been/being) + past participle
+
+| ULT/T4T (passive) | UST (active) |
+|-------------------|--------------|
+| "they will be killed" | "they will die" / "someone will kill them" |
+| "will be eaten by jackals" | "jackals will eat" |
+| "A psalm written by David" | "David wrote this song" |
 | "it was told to Solomon" | "Someone told Solomon" |
 
-#### C. Idiom Explanations
+**If you cannot identify the agent**, use:
+- Generic agent: "Someone told...", "People will..."
+- Intransitive alternative: "they will die" instead of "they will be killed"
+- God as agent (divine passive): "God will judge them"
 
-Express the **meaning** of Hebrew idioms, not the literal form.
+#### E. Abstract Nouns to Verbal Forms
 
-| Hebrew Idiom | ULT | UST |
-|--------------|-----|-----|
-| אֶרֶךְ אַפַּיִם | "long of nostrils" | "does not quickly become angry" |
-| בֹּא בַּיָּמִים | "come into days" | "very old" |
-| לִפְנֵי | "to the face of" | "with" / "in the presence of" |
-| יָדַע + person | "knew her" | "have sexual relations with her" |
+When identified issues flag **figs-abstractnouns**, convert the abstract noun to a verbal or clausal form:
 
-See `reference/ust_patterns.md` for complete idiom list.
+| Abstract (ULT/T4T) | Verbal (UST) |
+|--------------------|--------------|
+| "the salvation of Yahweh" | "how Yahweh saves" |
+| "his righteousness" | "how righteous he is" |
+| "the fear of Yahweh" | "to deeply respect Yahweh" |
+| "covenant faithfulness" | "You are always kind to me, as you promised" |
+| "his power and glory" | "how powerful and glorious you are" |
 
-#### D. Key Vocabulary - Runtime Lookups
+Ask: What action or quality does this noun represent? Express it as a verb or clause.
 
-**Do NOT guess vocabulary translations. Run the lookup scripts for key terms.**
+#### F. Nominalized Adjectives
 
-1. **First**: Check `data/issues_resolved.txt` for authoritative UST decisions
-   ```bash
-   grep -i "UST" data/issues_resolved.txt | grep -i "[term]"
-   ```
+When identified issues flag **figs-nominaladj**, unpack the nominalized adjective into its full meaning:
 
-2. **Second**: Check glossaries for UST_GLOSS column
-   ```bash
-   grep "[term]" data/glossary/hebrew_ot_glossary.csv
-   ```
+| Nominalized (ULT/T4T) | Unpacked (UST) |
+|-----------------------|----------------|
+| "the wicked" | "wicked people" / "people who do evil" |
+| "the righteous" | "righteous people" / "people who do what is right" |
+| "the dead" | "dead people" / "people who have died" |
+| "the poor" | "poor people" / "people who are poor" |
 
-3. **Third**: Search published UST for how terms were rendered
-   ```bash
-   grep -r "[term]" data/published_ust/*.usfm | head -10
-   ```
+The UST should make clear who or what is being described.
 
-#### E. Title and Address Terms
+#### G. Psalm Superscriptions
 
-| ULT | UST |
-|-----|-----|
-| "my lord the king" | "Your Majesty" |
-| "the sons of Israel" | "Israelites" |
-| "the sons of Ammon" | "the Ammonites" |
-| "sons of [person]" | "descendants of [person]" |
-| "the servant of Yahweh" (appositive) | "Yahweh's servant" |
+(See Active Voice above for passive → active conversion)
 
-#### F. Divine Names
+#### H. Initial Conjunctions
 
-Same as ULT:
-- יהוה (YHWH) = "Yahweh"
-- אֲדֹנָי (Adonai) = "Lord"
-- אֵל / אֱלֹהִים = "God"
+If T4T starts sentences with "And" or "But", replace:
+- "And" → "So" / "Then" / remove
+- "But" → "However" / remove
 
-But for "angel of Yahweh" use: "an angel representing Yahweh"
+### Step 5: Verify Against Standards
 
-#### G. Special Terms
+Cross-check with:
+- `reference/ust_patterns.md` - transformation patterns
+- `../ULT-gen/reference/gl_guidelines.md` - shared style rules
 
-| Hebrew | UST Rendering |
-|--------|---------------|
-| אַשְׁרֵי | "What a good life..." |
-| סֶלָה | "Selah" (keep same) |
-| שׁוֹפָר | "horn" (first instance: "ram's-horn trumpet") |
-| מִדְבָּר | "desolate area" / "dry place" / "uninhabited region" |
-| תּוֹרָה | "instruction" |
-
-### Step 5: Add Implicit Information
-
-Use {brackets} to add background or implicit information that helps clarity.
-
-**When to add:**
-- Location clarification: "{the village of} Elkosh"
-- Category identification: "{the city of} Nineveh"
-- Contextual bridges: "{The king gave them permission,} so they searched"
-- Meaning clarification: "he will certainly punish {those who have done evil things}"
-
-**Length limits:**
-- Should not be as long as a regular sentence
-- Can be a short complete sentence if reworking would be longer
-
-**Do NOT use brackets for:**
-- Grammar words (that's ULT's use of brackets)
-- Information that's already clear from context
+**{Brackets} - Use Sparingly:**
+- Most clarifying information should be woven into natural prose without brackets
+- Only bracket content that is truly unexpressed in the source AND essential for comprehension
+- Length limit: Should not be as long as a regular sentence
+- When in doubt, write naturally without brackets
 
 ### Step 6: Format as USFM
+
+Ensure proper USFM formatting:
 
 ```usfm
 \id [BOOK] - unfoldingWord Simplified Text
@@ -164,35 +269,47 @@ Use {brackets} to add background or implicit information that helps clarity.
 \ts\*
 \q1 [poetry line 1]
 \q2 [poetry line 2 - indented]
-
-\f + \fq quoted text \ft explanation\f*
 ```
 
 **Poetry markers:**
-- `\q1` - first colon of a verse (the "A" line)
+- `\q1` - first colon of a verse
 - `\q2` - second/third colon (parallel lines)
-- `\qa` - acrostic heading
 - `\d` - superscription (Psalms)
 - `\qs ... \qs*` - Selah
 
 ### Step 7: Export to File
 
-Save the completed UST to `output/AI-UST/` with the naming convention:
+Save to `output/AI-UST/` with naming convention:
 
 ```
 output/AI-UST/[BOOK]-[CHAPTER].usfm
 ```
 
-Examples:
-- `output/AI-UST/NAM-01.usfm` - Nahum chapter 1
-- `output/AI-UST/PSA-023.usfm` - Psalm 23
-- `output/AI-UST/1KI-01.usfm` - 1 Kings chapter 1
+### Step 8: Convert to Curly Quotes
 
-Use three-letter book codes and two-digit chapter numbers (zero-padded).
+Run the curly quotes script to convert straight quotes to curly quotes:
+
+```bash
+python3 .claude/skills/utilities/scripts/curly_quotes.py \
+  output/AI-UST/[BOOK]-[CHAPTER].usfm --in-place
+```
+
+This converts:
+- Straight double quotes `"..."` to curly `"..."`
+- Straight single quotes/apostrophes `'...'` to curly `'...'`
 
 ---
 
 ## Scripts Reference
+
+### Fetch T4T (primary source)
+```bash
+# Fetch T4T books
+python3 .claude/skills/utilities/scripts/fetch_t4t.py --books PSA 1KI
+
+# List available books
+python3 .claude/skills/utilities/scripts/fetch_t4t.py --list
+```
 
 ### Vocabulary lookup
 ```bash
@@ -202,24 +319,12 @@ grep -i "UST" data/issues_resolved.txt | grep -i "[term]"
 # 2. Check glossaries (UST_GLOSS column)
 grep "[term]" data/glossary/hebrew_ot_glossary.csv
 
-# 3. Search published UST for patterns
-grep -r "[term]" data/published_ust/*.usfm | head -10
-
-# 4. Compare ULT to UST for same verse
+# 3. Compare T4T to ULT for same verse
+grep "1:1" data/t4t/11-1KI.usfm
 grep "1:1" data/published_ult_english/11-1KI.usfm
-grep "1:1" data/published_ust/11-1KI.usfm
 ```
 
-### Fetch UST data
-```bash
-# Fetch all published UST books
-python3 .claude/skills/utilities/scripts/fetch_all_ust.py
-
-# Fetch specific books
-python3 .claude/skills/utilities/scripts/fetch_all_ust.py --books NAM PSA 1KI
-```
-
-### Parse aligned USFM
+### Parse aligned USFM (for Hebrew verification)
 ```bash
 node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
   data/published_ult/[BOOK].usfm \
@@ -233,22 +338,29 @@ node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
 
 Before finalizing UST output, verify:
 
-- [ ] No sentences starting with "And" or "But"
-- [ ] Active voice used (not passive) where possible
-- [ ] Hebrew idioms expressed as meaning, not literal
-- [ ] Natural English word order
+**T4T Conversion:**
+- [ ] T4T notation markers removed ([IDI], [DOU], [SYN], [RHQ], [EUP], [MTY])
+- [ ] `\add...\add*` content woven into natural prose (rarely bracketed)
+- [ ] Changes are minimal - T4T preserved where it meets standards
+
+**unfoldingWord Standards:**
+- [ ] Divine names correct (Yahweh, not LORD)
 - [ ] Same proper names as ULT (no modern equivalents)
-- [ ] Metaphors and figures explained, not literal
-- [ ] Clear, common vocabulary (not formal/archaic)
-- [ ] {brackets} used for implicit/background info only
+- [ ] No sentences starting with "And" or "But"
+- [ ] **No passive voice** (search for: is/are/was/were/been/being + past participle)
+- [ ] **Abstract nouns converted** to verbal/clausal forms where flagged
+- [ ] **Nominalized adjectives unpacked** (not just "the dead" but "dead people" or similar)
+- [ ] Key vocabulary matches Issues Resolved decisions
+
+**Style:**
+- [ ] Natural English word order
+- [ ] Clear, common vocabulary
+- [ ] {brackets} used sparingly - only for truly unexpressed, essential content
+- [ ] Most clarifications woven into natural prose without brackets
 - [ ] USFM markers properly formatted
 - [ ] Poetry uses \q1/\q2 appropriately
-- [ ] Key vocabulary matches Issues Resolved decisions
-- [ ] Psalm superscriptions use active voice
-- [ ] "sons of X" transformed appropriately (Israelites, descendants, etc.)
-- [ ] Divine names correct (Yahweh, not LORD)
+- [ ] "peoples" kept as "peoples"
 - [ ] Selah retained as "Selah"
-- [ ] "peoples" kept as "peoples" (not changed to singular)
 
 ---
 
@@ -258,15 +370,15 @@ Before finalizing UST output, verify:
 
 | Source | Path | Purpose |
 |--------|------|---------|
+| **T4T** | `data/t4t/*.usfm` | PRIMARY SOURCE for UST |
 | Issues Resolved | `data/issues_resolved.txt` | FINAL AUTHORITY - UST decisions |
 | Hebrew Glossary | `data/glossary/hebrew_ot_glossary.csv` | UST_GLOSS column |
 | Psalms Reference | `data/glossary/psalms_reference.csv` | UST_GLOSS column |
-| Sacrifice Terms | `data/glossary/sacrifice_terminology.csv` | UST_GLOSS column |
-| Biblical Phrases | `data/glossary/biblical_phrases.csv` | UST_GLOSS column |
-| Published UST | `data/published_ust/*.usfm` | Parallel patterns |
-| Published ULT | `data/published_ult_english/*.usfm` | Reference for meaning |
+| Published ULT | `data/published_ult_english/*.usfm` | Meaning verification |
 | UST Patterns | `reference/ust_patterns.md` | Transformation rules |
 | Style Guide | `../ULT-gen/reference/gl_guidelines.md` | Shared style rules |
+
+**Note:** `data/published_ust/` contains older UST that may not meet current standards. Use T4T as your base, not published UST.
 
 ---
 
