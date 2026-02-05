@@ -4,7 +4,7 @@ Patterns for maximum Hebrew-to-English literalness.
 
 ## Word Order Preservation
 
-Preserve Hebrew word order when grammatically possible:
+Preserve Hebrew word order when it reflects emphasis and remains natural in English:
 
 | Hebrew Pattern | Literal ULT | NOT |
 |----------------|-------------|-----|
@@ -13,6 +13,15 @@ Preserve Hebrew word order when grammatically possible:
 | attah elohim (fronted) | "You, God, have you not..." | "Have you not, God..." |
 
 When Hebrew fronts an element for emphasis, preserve that fronting.
+
+**Avoid awkward English ("Yoda-speak"):**
+Preserve fronting when it adds emphasis, but standard clauses should use English SVO:
+- "I called to him with my mouth" (normal clause - use English order)
+- NOT: "To him with my mouth I called" (unnatural in English)
+
+Only preserve Hebrew word order when:
+- An element is clearly fronted for emphasis
+- The English result is grammatically natural
 
 ## Hiphil Causatives
 
@@ -26,10 +35,11 @@ Render Hiphil stems with explicit two-verb causative structure:
 
 ## Construct Chains
 
-Preserve as "X of Y" rather than adjective + noun:
+Preserve as "X of Y" - always show the "of" to mark the construct relationship, even where English idiom would drop it:
 
 | Hebrew | Literal ULT | NOT |
 |--------|-------------|-----|
+| kol-ha'arets | "all of the earth" | "all the earth" |
 | ir matsor | "city of fortification" | "fortified city" |
 | sir rachitsi | "tub of my washing" | "my washbasin" |
 | yayin tar'elah | "wine of staggering" | "staggering wine" |
@@ -43,3 +53,22 @@ Keep verb + noun form rather than verb + adverb:
 | asah chayil | "do valor" | "do valiantly" |
 | asah tsedaqah | "do righteousness" | "act righteously" |
 | dibber shalom | "speak peace" | "speak peacefully" |
+
+## Comparative Constructions
+
+Comparatives with מִן use English comparative form:
+
+| Hebrew Pattern | Literal ULT | NOT |
+|----------------|-------------|-----|
+| yarum mimmenni | "higher than I" | "high away from me" |
+| gadol mimmenni | "greater than I" | "great from me" |
+| X + min (comparative) | "X-er than Y" | "X away from Y" |
+
+## Emphatic Doubling
+
+Preserve Hebrew doubling without adding words:
+
+| Hebrew | Literal ULT | NOT |
+|--------|-------------|-----|
+| yom yom | "day, day" | "day {by} day" |
+| dor wador | "generation and generation" | - |

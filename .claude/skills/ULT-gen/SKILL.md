@@ -64,6 +64,10 @@ Apply rules in this order:
 - אֲדֹנָי (Adonai) = "Lord"
 - אֵל / אֱלֹהִים (El/Elohim) = "God"
 
+**Collective/Generic nouns:**
+- אֱנוֹשׁ (enosh) = "man" (singular, generic) - not "men"
+- אָדָם (adam) = "man/Adam" depending on context
+
 **Do NOT guess vocabulary translations. You MUST run the lookup scripts below for every non-trivial word. Tokens are cheap, mistakes are expensive. If you skip lookups, the output will diverge from human ULT.**
 
 1. **First**: Check `data/issues_resolved.txt` for authoritative decisions
@@ -126,7 +130,6 @@ Body-part idioms especially must stay literal - this is where Hebrew differs mos
 #### D. Literalness Patterns
 
 Consult `reference/literalness_patterns.md` for these patterns:
-- **Word order**: Preserve Hebrew fronting ("To me {is} Gilead")
 - **Hiphil causatives**: Use "made [verb]" ("made see" not "showed")
 - **Construct chains**: Keep "X of Y" ("city of fortification")
 - **Verbal idioms**: Preserve noun ("do valor" not "do valiantly")
@@ -143,6 +146,11 @@ Consult `reference/literalness_patterns.md` for these patterns:
 | Participle | Present tense; NO brackets for be-verb |
 | Imperative | Command form |
 | Jussive/Cohortative | "Let him/me..." or subjunctive |
+
+**Preserve verb form distinctions in parallel structures:**
+When a participle and perfect appear in parallel, do not conform them:
+- "the one putting our soul among the living, and he does not allow our foot to slip" (participle + perfect)
+- NOT: "placing...and not giving" (both as participles)
 
 #### Cohortative Recognition
 
@@ -262,7 +270,7 @@ Reference `reference/gl_guidelines.md` for detailed style guidance. Key points:
 - "Scripture" capitalized for Bible; lowercase for passages
 
 **Word Order:**
-- Preserve Hebrew order where possible while maintaining grammatical English
+- Output English standard SVO order unless unusual Hebrew grammar (focus fronting etc) would more accurately translate to a different English grammar form; do not woodenly follow Hebrew word order
 - Wayyiqtol chains should show sequence
 
 **Emphatic Pronouns:**
@@ -346,6 +354,19 @@ Examples:
 
 Use three-letter book codes and two-digit chapter numbers (zero-padded).
 
+### Step 8: Convert to Curly Quotes
+
+Run the curly quotes script to convert straight quotes to curly quotes:
+
+```bash
+python3 .claude/skills/utilities/scripts/curly_quotes.py \
+  output/AI-ULT/[BOOK]-[CHAPTER].usfm --in-place
+```
+
+This converts:
+- Straight double quotes `"..."` to curly `"..."`
+- Straight single quotes/apostrophes `'...'` to curly `'...'`
+
 ---
 
 ## Scripts Reference
@@ -410,7 +431,6 @@ Before finalizing ULT output, verify:
 - [ ] Infinitive absolute shown as reduplication (not adverbs like "certainly")
 - [ ] {brackets} used correctly - only for grammar words not in Hebrew
 - [ ] No contractions anywhere
-- [ ] Hebrew word order preserved where grammatically possible
 - [ ] USFM markers properly formatted
 - [ ] Poetry uses \q1/\q2 appropriately
 - [ ] Key vocabulary matches Issues Resolved decisions
