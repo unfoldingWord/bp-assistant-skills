@@ -399,9 +399,13 @@ function buildAlignedVerseObjects(mapping, hebrewWords) {
     const originalWord = alignInfo?.originalWord || rawWord;
     const isBracketed = originalWord.startsWith('{') || (rawWord.startsWith('{') && rawWord.endsWith('}'));
 
-    // Use the raw word (with punctuation) for output, stripping only brackets
-    const outputWord = rawWord.replace(/[{}]/g, '');
-    const wordObj = buildWordObject(outputWord, occurrence, occurrences);
+    // Separate trailing punctuation from the word so it goes OUTSIDE the \w block
+    const strippedBrackets = rawWord.replace(/[{}]/g, '');
+    const punctMatch = strippedBrackets.match(/^(.*?)([.,;:!?]+)$/);
+    const cleanWord = punctMatch ? punctMatch[1] : strippedBrackets;
+    const trailingPunct = punctMatch ? punctMatch[2] : '';
+
+    const wordObj = buildWordObject(cleanWord, occurrence, occurrences);
 
     // Get Hebrew metadata if aligned
     let hebrewMeta = [];
@@ -414,9 +418,10 @@ function buildAlignedVerseObjects(mapping, hebrewWords) {
       }
     }
 
-    // Add newline before (except first word)
+    // Add separator before (except first word)
+    // Bracketed words stay inline (space), others get newline
     if (i > 0) {
-      verseObjects.push({ type: 'text', text: '\n' });
+      verseObjects.push({ type: 'text', text: isBracketed ? ' ' : '\n' });
     }
 
     // Build the output structure
@@ -445,6 +450,11 @@ function buildAlignedVerseObjects(mapping, hebrewWords) {
 
     if (isBracketed) {
       verseObjects.push({ type: 'text', text: '}' });
+    }
+
+    // Add trailing punctuation OUTSIDE the \w block
+    if (trailingPunct) {
+      verseObjects.push({ type: 'text', text: trailingPunct });
     }
   }
 

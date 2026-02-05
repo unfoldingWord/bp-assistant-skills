@@ -98,6 +98,16 @@ When subject is separate, only verb aligns to verb:
 |--------|---------|-----------|
 | יהוה יִשְׁמֹר | Yahweh will guard | `[yhwh_idx]` → `["Yahweh"]`; `[verb_idx]` → `["will", "guard"]` |
 
+When Hebrew uses an independent pronoun for emphasis alongside a verb that also encodes the subject, and English renders both pronouns, split them:
+- The emphatic pronoun aligns to the Hebrew pronoun word
+- The verb's subject aligns to the Hebrew verb
+
+| Hebrew | English | Alignment |
+|--------|---------|-----------|
+| אַתָּה הוֹרֵתָנִי | you, you have taught me | `[pronoun_idx]` → `["you,"]`; `[verb_idx]` → `["you", "have", "taught", "me"]` |
+
+The first "you" is the emphatic pronoun; the second "you" is the verb's implied subject.
+
 ### Participles
 
 Participles often need a be-verb in English:
