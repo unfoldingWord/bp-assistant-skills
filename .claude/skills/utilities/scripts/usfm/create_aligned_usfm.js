@@ -6,12 +6,12 @@
  * produces properly formatted aligned USFM using usfm-js.
  *
  * Usage:
- *   node create_aligned_usfm.js --hebrew <hebrew.usfm> --mapping <mapping.json> [options]
+ *   node create_aligned_usfm.js --hebrew <hebrew.usfm> --mapping <mapping.json> --ult <ult.usfm> [options]
  *
- * Options:
+ * Required:
  *   --hebrew <file>     Hebrew source USFM file
  *   --mapping <file>    Simple mapping JSON file from AI
- *   --ult <file>        Source ULT file (to preserve poetry markers)
+ *   --ult <file>        Source ULT file (preserves poetry markers like \q1, \q2)
  *   --output <file>     Output aligned USFM file (default: stdout)
  *   --chapter <num>     Process only this chapter
  *   --verse <num>       Process only this verse (requires --chapter)
@@ -52,12 +52,12 @@ for (let i = 0; i < args.length; i++) {
     case '--help':
     case '-h':
       console.log(`
-Usage: node create_aligned_usfm.js --hebrew <hebrew.usfm> --mapping <mapping.json> [options]
+Usage: node create_aligned_usfm.js --hebrew <hebrew.usfm> --mapping <mapping.json> --ult <ult.usfm> [options]
 
-Options:
-  --hebrew <file>     Hebrew source USFM file (required)
-  --mapping <file>    Simple mapping JSON file from AI (required)
-  --ult <file>        Source ULT file (to preserve poetry markers like \\q1, \\q2)
+Required:
+  --hebrew <file>     Hebrew source USFM file
+  --mapping <file>    Simple mapping JSON file from AI
+  --ult <file>        Source ULT file (preserves poetry markers like \\q1, \\q2)
   --output <file>     Output aligned USFM file (default: stdout)
   --chapter <num>     Process only this chapter
   --verse <num>       Process only this verse (requires --chapter)
@@ -93,7 +93,12 @@ Example:
 }
 
 if (!hebrewFile || !mappingFile) {
-  console.error('Error: Both --hebrew and --mapping are required');
+  console.error('Error: --hebrew, --mapping, and --ult are all required');
+  process.exit(1);
+}
+
+if (!ultFile) {
+  console.error('Error: --ult is required (source ULT file for preserving poetry markers)');
   process.exit(1);
 }
 

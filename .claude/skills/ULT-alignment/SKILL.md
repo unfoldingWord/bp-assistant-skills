@@ -257,6 +257,7 @@ After creating the mapping JSON, run the conversion script:
 node .claude/skills/utilities/scripts/usfm/create_aligned_usfm.js \
   --hebrew data/hebrew_bible/01-GEN.usfm \
   --mapping /tmp/alignments/GEN-01-01.json \
+  --ult output/AI-ULT/GEN-01.usfm \
   --chapter 1 --verse 1
 ```
 
@@ -301,12 +302,13 @@ cat > output/AI-ULT/PSA-078-44-72-aligned.usfm << 'EOF'
 \c 78
 EOF
 
-# Append each verse
+# Append each verse (--ult preserves poetry markers like \q1, \q2)
 for v in $(seq 44 72); do
   vpad=$(printf "%03d" $v)
   node .claude/skills/utilities/scripts/usfm/create_aligned_usfm.js \
     --hebrew data/hebrew_bible/19-PSA.usfm \
     --mapping alignments/PSA-078-${vpad}.json \
+    --ult output/AI-ULT/PSA-078-44-72.usfm \
     --chapter 78 --verse $v 2>/dev/null | sed -n '/^\\v/,/^$/p' >> output/AI-ULT/PSA-078-44-72-aligned.usfm
 done
 ```
