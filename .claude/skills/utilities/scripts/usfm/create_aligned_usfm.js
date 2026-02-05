@@ -111,13 +111,19 @@ const ultContent = ultFile ? readFileSync(ultFile, 'utf8') : null;
 const hebrewParsed = usfm.toJSON(hebrewContent);
 
 /**
- * Extract poetry markers from source ULT for a specific verse
- * Returns array of marker objects with the starting words of each poetry line:
- * [{marker: 'q1', position: 0, startWords: ['And', 'he']},
- *  {marker: 'q2', position: -1, startWords: ['and', 'their', 'streams']}]
- * position 0 = before verse marker, position -1 = mid-verse (use startWords to match)
+ * Extract USFM markers from source ULT for a specific verse
+ * Returns array of marker objects:
+ * [{marker: 'q1', position: 0, startWords: []},           // before \v on same line
+ *  {marker: 'q2', position: -1, startWords: ['and', 'their']},  // mid-verse poetry
+ *  {markerLine: '\\qa Nun', position: -2},                // inter-verse marker (own line)
+ *  {markerLine: '\\ts\\*', position: -2}]                 // inter-verse marker (own line)
+ * position  0 = before verse marker on same line
+ * position -1 = mid-verse (use startWords to match)
+ * position -2 = own line before verse
+ *
+ * @param {boolean} hasDText - if true, skip \d as inter-verse marker (handled as aligned superscription)
  */
-function extractPoetryMarkers(ultContent, chapter, verse) {
+function extractUsfmMarkers(ultContent, chapter, verse, hasDText = false) {
   if (!ultContent) return [];
 
   const markers = [];
@@ -132,6 +138,73 @@ function extractPoetryMarkers(ultContent, chapter, verse) {
   const chapterEnd = nextChapterMatch ? chapterStart + 5 + nextChapterMatch.index : ultContent.length;
   const chapterContent = ultContent.slice(chapterStart, chapterEnd);
 
+  // --- Inter-verse markers (position -2) ---
+  // Find the position of \v <verse> in chapterContent
+  // Also capture any \q1/\q2 prefix on the same line by looking for the line start
+  let versePos = chapterContent.search(new RegExp(`\\\\v\\s+${verse}\\s`));
+  if (versePos === -1) return markers;
+
+  // Back up versePos to include \q1/\q2 prefix on the same line
+  const lineStart = chapterContent.lastIndexOf('\n', versePos - 1);
+  const linePrefix = chapterContent.slice(lineStart + 1, versePos);
+  if (linePrefix.trim().match(/^\\q[12]\s*$/)) {
+    versePos = lineStart + 1;
+  }
+
+  // Find end of previous verse's content (or chapter start line for verse 1)
+  let prevEnd;
+  if (verse === 1) {
+    // For verse 1, look after the \c line
+    const cLineEnd = chapterContent.indexOf('\n');
+    prevEnd = cLineEnd !== -1 ? cLineEnd + 1 : 0;
+  } else {
+    // Find the next verse marker after the previous verse
+    const prevVersePattern = new RegExp(`\\\\v\\s+${verse - 1}\\s`);
+    const prevVerseMatch = chapterContent.match(prevVersePattern);
+    if (prevVerseMatch) {
+      // Find the end of the previous verse's content by looking for the next newline
+      // that starts an inter-verse marker or blank line
+      const prevVerseStart = prevVerseMatch.index;
+      // Find the next \v after prev verse (which is our current verse position)
+      // Everything between prev verse and current verse that isn't verse/poetry text content
+      const betweenRegion = chapterContent.slice(prevVerseStart, versePos);
+      const betweenLines = betweenRegion.split('\n');
+      // Find where the previous verse's text content ends
+      // Text content lines: \v lines, \q lines with text after, or plain text continuation
+      // Inter-verse markers: \qa, \ts\*, \s1, \s2, \b, \cl, \d, or blank lines
+      let lastTextLine = 0;
+      for (let i = 0; i < betweenLines.length; i++) {
+        const trimmed = betweenLines[i].trim();
+        if (!trimmed) continue;  // skip blank lines
+        const isInterVerseMarker = trimmed.match(/^\\(qa\s|ts\\\*|s[12]\s|d\s|b\s*$|cl\s)/);
+        if (!isInterVerseMarker) {
+          lastTextLine = i;
+        }
+      }
+      prevEnd = prevVerseStart + betweenLines.slice(0, lastTextLine + 1).join('\n').length + 1;
+    } else {
+      prevEnd = 0;
+    }
+  }
+
+  // Extract text between previous verse end and current verse position
+  const interVerseText = chapterContent.slice(prevEnd, versePos);
+  const interVerseLines = interVerseText.split('\n');
+
+  // Match inter-verse markers
+  const interVerseMarkerPattern = /^(\\qa\s+.+|\\ts\\\*|\\s[12]\s+.+|\\b\s*$|\\cl\s+.+|\\d\s+.+)/;
+  for (const line of interVerseLines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    const markerMatch = trimmed.match(interVerseMarkerPattern);
+    if (markerMatch) {
+      // Skip \d when mapping has d_text (aligned superscription handled separately)
+      if (hasDText && trimmed.startsWith('\\d ')) continue;
+      markers.push({ markerLine: trimmed, position: -2 });
+    }
+  }
+
+  // --- Poetry markers (position 0 and -1) ---
   // Find this verse within the chapter
   const versePattern = new RegExp(`((?:\\\\q[12]\\s+)?)\\\\v\\s+${verse}\\s+(.+?)(?=\\\\v\\s+\\d|\\\\c\\s+\\d|$)`, 's');
   const verseMatch = chapterContent.match(versePattern);
@@ -510,7 +583,7 @@ if (!hasTags.includes('ide')) {
   outputJson.headers.splice(2, 0, { tag: 'ide', content: 'UTF-8' });
 }
 
-// Store poetry markers for post-processing
+// Store USFM markers for post-processing (poetry, inter-verse, etc.)
 const versePoetryMarkers = {};
 
 // Process each mapping
@@ -533,35 +606,98 @@ for (const mapping of mappings) {
   // Get Hebrew words for this verse
   const hebrewWords = extractHebrewWords(hebrewParsed, ref.chapter, ref.verse);
 
-  // Build aligned verse objects
-  const verseObjects = buildAlignedVerseObjects(mapping, hebrewWords);
+  // Handle d_text (aligned superscription) if present
+  const hasDText = !!mapping.d_text;
+  let dLineUsfm = null;
 
-  // Extract poetry markers from source ULT
-  const poetryMarkers = extractPoetryMarkers(ultContent, ref.chapter, ref.verse);
-  if (poetryMarkers.length > 0) {
-    versePoetryMarkers[`${ref.chapter}:${ref.verse}`] = poetryMarkers;
+  if (hasDText) {
+    // Split alignments: section==="d" goes to \d line, rest goes to \v line
+    const dAlignments = mapping.alignments.filter(a => a.section === 'd');
+    const bodyAlignments = mapping.alignments.filter(a => a.section !== 'd');
+
+    // Build \d line aligned objects
+    const dMapping = {
+      ...mapping,
+      english_text: mapping.d_text,
+      alignments: dAlignments
+    };
+    const dVerseObjects = buildAlignedVerseObjects(dMapping, hebrewWords);
+
+    // Convert \d objects to USFM string for post-processing insertion
+    // Build a temporary structure to get the USFM
+    const tempJson = {
+      headers: [{ tag: 'id', content: 'TEMP' }],
+      chapters: { [ref.chapter]: { 1: { verseObjects: dVerseObjects } } }
+    };
+    const tempUsfm = usfm.toUSFM(tempJson);
+    // Extract just the aligned content (after \v 1 )
+    const vMatch = tempUsfm.match(/\\v\s+1\s+([\s\S]*?)$/);
+    if (vMatch) {
+      // Clean up: trim trailing whitespace, remove trailing empty lines
+      dLineUsfm = vMatch[1].replace(/\n+$/, '');
+    }
+
+    // Build \v line aligned objects (body only)
+    const bodyMapping = {
+      ...mapping,
+      alignments: bodyAlignments
+    };
+    const verseObjects = buildAlignedVerseObjects(bodyMapping, hebrewWords);
+
+    // Extract USFM markers from source ULT
+    const usfmMarkers = extractUsfmMarkers(ultContent, ref.chapter, ref.verse, hasDText);
+    // Add d_line marker for post-processing
+    if (dLineUsfm) {
+      usfmMarkers.unshift({ dLine: dLineUsfm, position: -3 });
+    }
+    if (usfmMarkers.length > 0) {
+      versePoetryMarkers[`${ref.chapter}:${ref.verse}`] = usfmMarkers;
+    }
+
+    outputJson.chapters[ref.chapter][ref.verse] = { verseObjects };
+  } else {
+    // Standard processing (no superscription)
+    const verseObjects = buildAlignedVerseObjects(mapping, hebrewWords);
+
+    // Extract USFM markers from source ULT (poetry, inter-verse, etc.)
+    const usfmMarkers = extractUsfmMarkers(ultContent, ref.chapter, ref.verse, hasDText);
+    if (usfmMarkers.length > 0) {
+      versePoetryMarkers[`${ref.chapter}:${ref.verse}`] = usfmMarkers;
+    }
+
+    outputJson.chapters[ref.chapter][ref.verse] = { verseObjects };
   }
-
-  // Add to output
-  outputJson.chapters[ref.chapter][ref.verse] = {
-    verseObjects
-  };
 }
 
 // Convert to USFM
 let outputUsfm = usfm.toUSFM(outputJson);
 
-// Post-process to add poetry markers
+// Post-process to add USFM markers (poetry, inter-verse, aligned \d)
 // This is more reliable than trying to inject them into the JSON structure
 for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
   const [, verse] = verseRef.split(':');
 
-  for (const { marker, position, startWords } of markers) {
-    if (position === 0) {
-      // Marker before verse - add before \v
+  for (const markerObj of markers) {
+    const { position } = markerObj;
+
+    if (position === -3 && markerObj.dLine) {
+      // Aligned \d superscription line - insert before the verse line
+      const versePattern = new RegExp(`(^|\\n)((?:\\\\q[12]\\s+)?\\\\v\\s+${verse}\\s)`, 'm');
+      const dContent = `\\d ${markerObj.dLine}`;
+      outputUsfm = outputUsfm.replace(versePattern, `$1${dContent}\n$2`);
+
+    } else if (position === -2 && markerObj.markerLine) {
+      // Inter-verse marker - insert on its own line before the verse line
+      // Must go before any \q1/\q2 prefix on the verse line
+      const versePattern = new RegExp(`(^|\\n)((?:\\\\q[12]\\s+)?\\\\v\\s+${verse}\\s)`, 'm');
+      outputUsfm = outputUsfm.replace(versePattern, `$1${markerObj.markerLine}\n$2`);
+
+    } else if (position === 0 && markerObj.marker) {
+      // Marker before verse - add before \v on same line
       const versePattern = new RegExp(`(\\\\v\\s+${verse}\\s)`);
-      outputUsfm = outputUsfm.replace(versePattern, `\\${marker} $1`);
-    } else if (position === -1 && startWords && startWords.length > 0) {
+      outputUsfm = outputUsfm.replace(versePattern, `\\${markerObj.marker} $1`);
+
+    } else if (position === -1 && markerObj.startWords && markerObj.startWords.length > 0) {
       // Mid-verse marker - find alignment line where word sequence begins
       const verseStart = outputUsfm.indexOf(`\\v ${verse} `);
       if (verseStart === -1) continue;
@@ -591,10 +727,10 @@ for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
 
       // Find where startWords sequence begins
       let targetLineIndex = -1;
-      for (let i = 0; i <= alignedWords.length - startWords.length; i++) {
+      for (let i = 0; i <= alignedWords.length - markerObj.startWords.length; i++) {
         let matches = true;
-        for (let j = 0; j < startWords.length; j++) {
-          if (alignedWords[i + j].word !== startWords[j]) {
+        for (let j = 0; j < markerObj.startWords.length; j++) {
+          if (alignedWords[i + j].word !== markerObj.startWords[j]) {
             matches = false;
             break;
           }
@@ -606,7 +742,7 @@ for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
       }
 
       if (targetLineIndex > 0) {
-        lines[targetLineIndex] = `\\${marker} ` + lines[targetLineIndex];
+        lines[targetLineIndex] = `\\${markerObj.marker} ` + lines[targetLineIndex];
         const newVerseContent = lines.join('\n');
         outputUsfm = outputUsfm.slice(0, verseStart) + newVerseContent + outputUsfm.slice(verseEnd);
       }

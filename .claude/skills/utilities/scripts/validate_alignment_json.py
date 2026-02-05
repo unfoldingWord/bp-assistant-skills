@@ -57,10 +57,45 @@ def validate_file(filepath):
         errors.append(f"Hebrew indices out of range: {sorted(extra)}")
 
     # Check every english word appears exactly once
-    eng_from_text = data["english_text"].split()
-    eng_from_alignments = []
-    for a in data["alignments"]:
-        eng_from_alignments.extend(a.get("english", []))
+    # If d_text is present, section:"d" words validate against d_text,
+    # remaining words validate against english_text
+    has_d_text = "d_text" in data
+
+    if has_d_text:
+        d_alignments = [a for a in data["alignments"] if a.get("section") == "d"]
+        body_alignments = [a for a in data["alignments"] if a.get("section") != "d"]
+
+        # Validate d_text words
+        d_from_text = data["d_text"].split()
+        d_from_alignments = []
+        for a in d_alignments:
+            d_from_alignments.extend(a.get("english", []))
+
+        d_text_counts = Counter(d_from_text)
+        d_align_counts = Counter(d_from_alignments)
+
+        if d_text_counts != d_align_counts:
+            for word in sorted(set(d_text_counts.keys()) | set(d_align_counts.keys())):
+                tc = d_text_counts[word]
+                ac = d_align_counts[word]
+                if tc != ac:
+                    if ac == 0:
+                        errors.append(f"d_text: Word \"{word}\" in d_text but not in section:d alignments")
+                    elif tc == 0:
+                        errors.append(f"d_text: Word \"{word}\" in section:d alignments but not in d_text")
+                    else:
+                        errors.append(f"d_text: Word \"{word}\": {ac} in section:d alignments, {tc} in d_text")
+
+        # Validate english_text words (body only)
+        eng_from_text = data["english_text"].split()
+        eng_from_alignments = []
+        for a in body_alignments:
+            eng_from_alignments.extend(a.get("english", []))
+    else:
+        eng_from_text = data["english_text"].split()
+        eng_from_alignments = []
+        for a in data["alignments"]:
+            eng_from_alignments.extend(a.get("english", []))
 
     text_counts = Counter(eng_from_text)
     align_counts = Counter(eng_from_alignments)

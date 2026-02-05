@@ -54,6 +54,7 @@ Create a JSON file with this structure:
 | `hebrew_words` | Array of Hebrew words with index, word form, Strong's, lemma |
 | `english_text` | Complete English translation - **this is the authoritative word order** |
 | `alignments` | Array mapping Hebrew indices to English word arrays |
+| `d_text` | (Optional) Superscription text for `\d` line, used when a psalm has a superscription aligned to Hebrew words in verse 1 |
 
 ### Alignment Entry Structure
 
@@ -61,6 +62,7 @@ Create a JSON file with this structure:
   - Single index `[0]` for one Hebrew word
   - Multiple indices `[3, 4]` when multiple Hebrew words map to one English phrase
 - `english`: Array of English words that render this Hebrew
+- `section`: (Optional) Set to `"d"` for alignment entries that belong on the `\d` superscription line rather than the `\v` verse line
 
 ### Critical: `english_text` Controls Output Word Order
 
@@ -85,6 +87,52 @@ Example: Hebrew וַ⁠יִּקַ֖ץ אֲדֹנָי means "and-he-awoke the-Lor
 }
 ```
 Output will be: "And" ... "the Lord" ... "awoke" (correct English order), not "And awoke the Lord"
+
+### Superscription Alignment (`d_text` and `section`)
+
+Some psalms have a superscription (`\d` line) whose text is aligned to Hebrew words that are part of verse 1. When this occurs, use the `d_text` field and `"section": "d"` on relevant alignment entries:
+
+```json
+{
+  "reference": "PSA 66:1",
+  "hebrew_words": [
+    {"index": 0, "word": "...", "strong": "l:H5329", "lemma": "נָצַח"},
+    {"index": 1, "word": "...", "strong": "H7892a", "lemma": "שִׁיר"},
+    {"index": 2, "word": "...", "strong": "H4210", "lemma": "מִזְמוֹר"},
+    {"index": 3, "word": "...", "strong": "H7321", "lemma": "רוּעַ"},
+    {"index": 4, "word": "...", "strong": "l:H0430", "lemma": "אֱלֹהִים"},
+    {"index": 5, "word": "...", "strong": "H3605", "lemma": "כֹּל"},
+    {"index": 6, "word": "...", "strong": "d:H0776", "lemma": "אֶרֶץ"}
+  ],
+  "d_text": "For the chief musician. A song. A psalm.",
+  "english_text": "Shout to God, all the earth!",
+  "alignments": [
+    {"hebrew_indices": [0], "english": ["For", "the", "chief", "musician."], "section": "d"},
+    {"hebrew_indices": [1], "english": ["A", "song."], "section": "d"},
+    {"hebrew_indices": [2], "english": ["A", "psalm."], "section": "d"},
+    {"hebrew_indices": [3], "english": ["Shout"]},
+    {"hebrew_indices": [4], "english": ["to", "God,"]},
+    {"hebrew_indices": [5, 6], "english": ["all", "the", "earth!"]}
+  ]
+}
+```
+
+The script will:
+1. Process `section: "d"` alignments using `d_text` for word order, output on a `\d` line
+2. Process remaining alignments using `english_text`, output on the `\v` line as normal
+3. Both sections share the same `hebrew_words` array
+
+### Automatic Inter-verse Markers
+
+The script automatically detects and preserves inter-verse markers from the source ULT file, including:
+- `\qa <text>` (acrostic headings, e.g., `\qa Nun`)
+- `\ts\*` (text section breaks)
+- `\s1 <text>`, `\s2 <text>` (section headings)
+- `\b` (blank line markers)
+- `\d <text>` (superscriptions, when not using `d_text` for aligned output)
+- `\cl <text>` (chapter labels)
+
+These markers are inserted on their own lines before the verse they precede. No manual insertion is needed.
 
 ## Alignment Principles
 
@@ -198,10 +246,14 @@ For each Hebrew word (in English rendering order):
 
 ### Step 5: Verify Completeness
 
-Check that:
-- Every Hebrew word index appears in at least one alignment
-- Every English word appears in exactly one alignment
-- Total English words in alignments equals words in english_text
+After saving JSON files, validate them with the validation script:
+
+```bash
+python3 .claude/skills/utilities/scripts/validate_alignment_json.py \
+  /path/to/alignments/*.json
+```
+
+This checks that every Hebrew index is aligned, every English word appears exactly once, and required fields are present.
 
 ### Step 6: Save JSON
 
@@ -302,21 +354,22 @@ cat > output/AI-ULT/PSA-078-44-72-aligned.usfm << 'EOF'
 \c 78
 EOF
 
-# Append each verse (--ult preserves poetry markers like \q1, \q2)
+# Append each verse (--ult preserves poetry markers, inter-verse markers, and \d lines)
 for v in $(seq 44 72); do
   vpad=$(printf "%03d" $v)
   node .claude/skills/utilities/scripts/usfm/create_aligned_usfm.js \
     --hebrew data/hebrew_bible/19-PSA.usfm \
     --mapping alignments/PSA-078-${vpad}.json \
     --ult output/AI-ULT/PSA-078-44-72.usfm \
-    --chapter 78 --verse $v 2>/dev/null | sed -n '/^\\v/,/^$/p' >> output/AI-ULT/PSA-078-44-72-aligned.usfm
+    --chapter 78 --verse $v 2>/dev/null | sed -n '/^\\[vqdstb]/,/^$/p' >> output/AI-ULT/PSA-078-44-72-aligned.usfm
 done
 ```
 
 **Notes:**
-- Use `sed -n '/^\\v/,/^$/p'` to capture verse line and all alignment lines until blank
+- Use `sed -n '/^\\[vqdstb]/,/^$/p'` to capture verse line, inter-verse markers (`\qa`, `\ts\*`, `\d`, `\s1`, `\b`), and all alignment lines until blank
 - Do NOT use `grep "^\v"` - this only gets the first line and truncates alignments
 - Use zero-padded verse numbers in mapping filenames (e.g., `PSA-078-044.json`)
+- Inter-verse markers (`\qa`, `\ts\*`, `\s1`, `\b`, etc.) and aligned `\d` lines are inserted automatically by the script -- no manual insertion needed
 
 ### Naming Convention
 
