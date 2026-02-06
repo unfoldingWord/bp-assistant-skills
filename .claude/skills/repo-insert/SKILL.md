@@ -70,7 +70,24 @@ if [ ! -d "$REPOS_PATH/$REPO" ]; then
 fi
 
 cd "$REPOS_PATH/$REPO"
+```
+
+**Sync with remote before anything else.** Check for local changes, fetch all remote updates, and ensure the working tree is clean:
+```bash
+cd "$REPOS_PATH/$REPO"
+
+# Check for uncommitted changes -- abort if dirty
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "ERROR: Repo has uncommitted changes. Resolve before proceeding."
+  git status
+  # Stop and ask the user how to handle this
+fi
+
+# Fetch all remote updates
 git fetch origin
+
+# Update master to match remote
+git checkout master && git pull origin master
 ```
 
 Checkout the working branch:
@@ -80,7 +97,7 @@ BRANCH="auto-deferredreward-PSA"  # or {username}-tc-create-1 for TN
 if git branch -r | grep -q "origin/$BRANCH"; then
   git checkout "$BRANCH" && git pull origin "$BRANCH"
 else
-  git checkout master && git pull origin master && git checkout -b "$BRANCH"
+  git checkout -b "$BRANCH"
 fi
 ```
 
