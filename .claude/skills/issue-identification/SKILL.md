@@ -226,6 +226,8 @@ The goal is coverage: it's easier for reviewers to delete a suggested issue than
 **For Psalms/Prayers**: Make an extra pass for:
 - **figs-imperative**: Imperatives addressed to God are requests, not commands
 - **figs-explicit**: Covenant concepts (hesed, name, way) may need explanation
+- **figs-parallelism vs figs-doublet**: If synonymous expressions fall on different poetic lines, classify as parallelism not doublet. For 3-line parallel verses, one parallelism note covers all lines. Quote the full parallel lines, not just key words.
+- **figs-ellipsis with parallelism**: Check parallel lines for omitted words, but skip if ULT already supplies them in `{}`.
 
 **For Proverbs**: Check:
 - **figs-imperative**: Imperative + result = conditional ("Do X, and Y" = "If X, then Y")

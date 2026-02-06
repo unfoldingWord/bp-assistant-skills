@@ -319,7 +319,7 @@ Hebrew vocatives at clause end should stay there:
 - `\q2` - second/third colon of a verse (the "B" or "C" line in parallel structure)
 - `\qa` - acrostic heading
 - `\d` - superscription (Psalms)
-- `\qs ... \qs*` - Selah (use this, not plain "Selah")
+- `\qs Selah \qs*` - Selah marker on its own line after the verse's poetry lines (note the space after "Selah" before `\qs*`)
 
 **Poetry indentation pattern:**
 Hebrew poetry uses parallelism. Use `\q1` for the first line of each verse, then `\q2` for continuation lines:
@@ -450,7 +450,7 @@ Before finalizing ULT output, verify:
 - [ ] Vocabulary scripts were run for key terms
 - [ ] Psalm superscriptions use "chief musician" and periods between elements
 - [ ] Comparatives with מִן use "-er than" form ("higher than I")
-- [ ] Selah uses `\qs ... \qs*` markers
+- [ ] Selah uses `\qs Selah \qs*` format on its own line (space after Selah before closing tag)
 - [ ] Emphatic doubling preserved without adding words ("day, day" not "day {by} day")
 
 ---

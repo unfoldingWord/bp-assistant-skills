@@ -53,7 +53,7 @@ In the book of Psalms, refer to the chapter superscription for an author referen
 Assume traditional authorship of Biblical books.
 
 ## "Here" Rule
-Only start a note with "Here" if it is necessary to place in front of a word that starts with a lower case letter in the ULT. For example, do: `Here, **admonish** means...` Do not do: `Here David is saying...`
+Only start a note with "Here, " if it is immediately followed by a **bolded quote from the verse** that starts with a lowercase letter. For example: `Here, **admonish** means...` Do not use "Here" before author names, descriptions, or other non-quoted text. Do not do: `Here David is saying...` or `Here the author is speaking...`
 
 ## Figure of Speech Verbiage
 
@@ -67,12 +67,20 @@ Use the following standard verbiage when speaking about figures of speech:
 | Irony | the opposite of the literal meaning of his words |
 | Litany | repetitive series of clauses |
 | Merism | SPEAKER is referring to all of THING by naming two extremes |
-| Metonymy | Here, hand represents the capability of a person (example - adapt to context) |
+| Metonymy | Here, **hand** represents the capability of a person (example - adapt to context) |
 | Parallelism | These two phrases mean basically the same thing |
-| Personification | Here _____ speaks of text as if it were a person who could... |
+| Personification | SPEAKER speaks of **text** as if it were a person who could... |
 | Synecdoche | AUTHOR is using one kind of food, bread, to mean food in general (example - adapt to context) |
 | Simile | comparison |
 | Hendiadys | The phrase WORD and WORD expresses a single idea |
+
+### Metaphor Template Selection
+
+For figs-metaphor, multiple templates may be available (generic, poetry, and specialized types like "heart", "turn", etc.). Do not automatically choose the "poetry" template just because the text is from a poetic book.
+
+- **Default to `generic`**: "Your language may have a comparable expression... or you could state the meaning plainly." This is correct for most metaphors, even in Psalms.
+- **Use `poetry` only when**: The metaphor involves a sustained, vivid image where preserving the imagery is the preferred translation strategy (e.g., God as a rock, a fortress, a shield, a shepherd). The poetry template says "If this image communicates well... If not, you could express this as a comparison" -- this is appropriate only when the image itself is the point.
+- **Use specialized templates**: When a specific template matches (heart, turn, way/path, fathers, brothers, house, sons, behold), prefer it over both generic and poetry.
 
 ## Issue-Specific Restrictions
 
@@ -88,7 +96,7 @@ Use the following standard verbiage when speaking about figures of speech:
 ### Example 1 (with AT)
 **Template**: SPEAKER is using the plural **text** where he could have used the singular form. This suggests that he is using the plural form to PURPOSE. If it would be helpful in your language, you could use the singular and express the emphasis in another way.
 
-**Note to "the seas" in Jonah 2:3**: Here Jonah is using the plural **seas** where he could have used the singular form. This suggests that he is using the plural form to emphasize the greatness or complexity of the sea. If it would be helpful in your language, you could use the singular and express the emphasis in another way. Alternate translation: [the vast sea] or [the raging sea]
+**Note to "the seas" in Jonah 2:3**: Jonah is using the plural **seas** where he could have used the singular form. This suggests that he is using the plural form to emphasize the greatness or complexity of the sea. If it would be helpful in your language, you could use the singular and express the emphasis in another way. Alternate translation: [the vast sea] or [the raging sea]
 
 ### Example 2 (with AT)
 **Template**: SPEAKER is referring to all of THING by naming two extremes, **EXTREME** and **EXTREME**. If it would be helpful in your language, you could use an equivalent expression or plain language.

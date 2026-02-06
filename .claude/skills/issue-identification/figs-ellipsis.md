@@ -74,6 +74,8 @@ If words appear in the ULT (even in brackets/braces), this is NOT ellipsis:
 
 Ellipsis is ONLY for words the reader must supply that are NOT in the text.
 
+This applies when checking for ellipsis alongside parallelism: if the second/third line of a parallel structure omits a word, but the ULT already supplies it in `{}` braces, do not flag it as ellipsis.
+
 ### Hebrew Carrying Forward (ULT handles these)
 Per Issues Resolved (Jan 8, 2025): "ULT should supply Hebrew conditionals and negatives that carry forward from previous clauses. ULT does not fill in ellipses, but while these seem to be ellipses in English, they are actually not in Hebrew."
 

@@ -25,6 +25,8 @@ From Issues Resolved: "In general, a doublet is two or more words or phrases wit
 
 **The boundary is fuzzy**: Long synonymous phrases may feel more like parallelism. Editorial discretion applies.
 
+**Poetic line indicator**: If two synonymous expressions appear on separate poetic lines (`\q1` / `\q2`), prefer classifying as parallelism rather than doublet. The poetic line structure signals clause-level parallelism.
+
 ### Doublet vs Hendiadys
 
 | Doublet | Hendiadys |

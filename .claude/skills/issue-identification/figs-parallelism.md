@@ -23,7 +23,7 @@ From Issues Resolved: "A parallelism is two or more clauses (= subject + verb; s
 
 **Critical**: We do NOT write notes for **synthetic parallelism** (second clause extends/completes first). Only **synonymous parallelism** (second clause repeats first in different words).
 
-**Note:** Parallel lines often involve ellipsis - the second line may omit verbs or other elements from the first. See [figs-ellipsis](figs-ellipsis.md).
+**Note:** Parallel lines often involve ellipsis - the second line may omit verbs or other elements from the first. See [figs-ellipsis](figs-ellipsis.md). When identifying parallelism, also check for ellipsis in the second/third line. However, if the word that would be "supplied" already appears in the ULT within curly braces `{}`, it is not ellipsis -- ULT has already handled it.
 
 ---
 
@@ -63,11 +63,15 @@ Numerical intensification common in Hebrew poetry:
    - Contains subject + verb (subject may be implied)
    - If just two words/short phrases joined by "and" -> consider figs-doublet
 
-4. **Confirm it's synonymous** (not synthetic):
+4. **Poetic line test**: If synonymous expressions appear on different poetic lines (`\q1` / `\q2`), this strongly indicates parallelism rather than doublet, even if the parallel elements are short phrases. Poetic line breaks are a structural indicator of clause-level parallelism.
+
+5. **Confirm it's synonymous** (not synthetic):
    - Second clause REPEATS meaning of first = synonymous (write note)
    - Second clause EXTENDS/COMPLETES first = synthetic (no note needed)
 
-5. **Consider the effect**: What is the author emphasizing by saying it twice?
+6. **Consider the effect**: What is the author emphasizing by saying it twice?
+
+7. **For tricola** (3-stanza verses): Check if all three lines express the same idea. If so, write one parallelism note covering all three lines rather than separate notes.
 
 ---
 
@@ -90,6 +94,15 @@ One word modifies the other (not equal synonyms):
 
 ### Simple Repetition
 Some repetition is for clarity or structure, not emphasis - context determines if a note is needed.
+
+---
+
+## Quote Selection
+
+When creating the quote field for parallelism, include both (or all three) complete parallel lines. Do not narrow the quote to just the 1-2 words where the synonymy is most visible. The reader needs to see the full parallel structure to understand the note.
+
+Good: "Praise Yahweh, all you nations; exalt him, all you peoples"
+Bad: "Praise ... exalt" or just "all nations ... all peoples"
 
 ---
 
