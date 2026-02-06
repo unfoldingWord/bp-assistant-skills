@@ -72,7 +72,8 @@ fi
 cd "$REPOS_PATH/$REPO"
 ```
 
-**Sync with remote before anything else.** Check for local changes, fetch all remote updates, and ensure the working tree is clean:
+**Sync local with remote before anything else.** The local branch must exactly match the remote before inserting. Stale local state causes merge conflicts and misplaced rows.
+
 ```bash
 cd "$REPOS_PATH/$REPO"
 
@@ -90,15 +91,24 @@ git fetch origin
 git checkout master && git pull origin master
 ```
 
-Checkout the working branch:
+Checkout the working branch, ensuring it matches remote exactly:
 ```bash
 BRANCH="auto-deferredreward-PSA"  # or {username}-tc-create-1 for TN
 
 if git branch -r | grep -q "origin/$BRANCH"; then
-  git checkout "$BRANCH" && git pull origin "$BRANCH"
+  # Branch exists on remote -- reset local to match remote exactly
+  git checkout "$BRANCH"
+  git reset --hard "origin/$BRANCH"
 else
-  git checkout -b "$BRANCH"
+  # New branch -- create from current master
+  git checkout -b "$BRANCH" master
 fi
+```
+
+After checkout, merge master into the working branch so insertions apply on top of the latest content:
+```bash
+git merge origin/master --no-edit
+# If this produces conflicts, STOP and tell the user before proceeding
 ```
 
 ### Step 3: Show Existing Content
