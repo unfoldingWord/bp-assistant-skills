@@ -40,11 +40,11 @@ def parse_reference(ref):
         except ValueError:
             ch = 999999
 
-    # Verse sort key
+    # Verse sort key: intro < front < 1 < 2 < ...
     if verse_str == 'intro':
-        vs = -1
-    elif verse_str == 'front':
         vs = -2
+    elif verse_str == 'front':
+        vs = -1
     else:
         try:
             vs = int(verse_str)
@@ -94,13 +94,37 @@ def group_by_reference(rows):
 def find_insert_position(book_rows, ref_sort_key):
     """Find the position to insert rows for a new reference.
 
+    Locates the chapter block first, then positions within it.
+    This avoids misplacement from data anomalies (e.g. typos like 559:1).
+
     Returns the index where the new rows should be inserted (before this index).
     """
+    target_ch, target_vs = ref_sort_key
+
+    # Find the contiguous block of rows belonging to this chapter
+    chapter_start = None
+    chapter_end = None
     for i, row in enumerate(book_rows):
-        existing_key = parse_reference(get_reference(row))
-        if existing_key > ref_sort_key:
-            return i
-    return len(book_rows)
+        row_ch = parse_reference(get_reference(row))[0]
+        if row_ch == target_ch:
+            if chapter_start is None:
+                chapter_start = i
+            chapter_end = i + 1
+
+    if chapter_start is not None:
+        # Chapter exists -- find correct position within the chapter block
+        for i in range(chapter_start, chapter_end):
+            row_vs = parse_reference(get_reference(book_rows[i]))[1]
+            if row_vs > target_vs:
+                return i
+        return chapter_end
+    else:
+        # Chapter doesn't exist -- find position by chapter order
+        for i, row in enumerate(book_rows):
+            row_ch = parse_reference(get_reference(row))[0]
+            if row_ch > target_ch:
+                return i
+        return len(book_rows)
 
 
 def detect_line_ending(filepath):
