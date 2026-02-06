@@ -32,7 +32,7 @@ translation issues exist so it can model handling them.
 
 All four agents read the ULT draft from wave 1. Each works independently but
 all are constantly checking each other's work -- reading each other's output,
-questioning classifications, and flagging disagreements. If one agent calls
+questioning classifications, and flagging disagreements. Use `build_tn_index.py --lookup` and `--issue` for precedent lookups instead of raw grep against published TNs. If one agent calls
 something a metaphor and another calls it metonymy, that conflict should be
 surfaced, not silently ignored.
 

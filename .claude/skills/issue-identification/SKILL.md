@@ -175,8 +175,12 @@ Read through the entire chapter to understand the big picture:
 - **Unusual constructions**: Flag any phrases that seem distinctive or potentially challenging
 - **Genre indicators**: Note poetry sections, dialogue patterns, narrative vs. instruction
 
-For any unusual phrases noticed, do a quick search:
+For any unusual phrases noticed, check the published TN index first, then fall back to raw grep:
 ```bash
+# Fast: check index for keyword classification precedent
+python3 .claude/skills/utilities/scripts/build_tn_index.py --lookup "phrase"
+
+# Fallback: raw grep when index doesn't have what you need
 grep -i "phrase or key words" data/published-tns/tn_*.tsv | head -10
 ```
 
@@ -190,6 +194,14 @@ For each paragraph or segment identified in Pass 1:
 
 When uncertain about a construction:
 ```bash
+# Fast: check index for keyword or issue type
+python3 .claude/skills/utilities/scripts/build_tn_index.py --lookup "keyword"
+python3 .claude/skills/utilities/scripts/build_tn_index.py --issue figs-metonymy
+
+# Check prior decisions
+grep "keyword" data/quick-ref/issue_decisions.csv 2>/dev/null
+
+# Fallback: raw grep when index doesn't have what you need
 grep -i "key phrase from segment" data/published-tns/tn_*.tsv
 ```
 
@@ -215,9 +227,10 @@ Use TaskCreate to generate one task per issue type from `data/translation-issues
 
 1. **Detection scripts first** - integrate passives and abstract nouns from scripts
 2. **tW check for names** - run `check_tw_headwords.py` before flagging translate-names/translate-unknown
-3. **Search when uncertain** - check `data/published-tns/` for similar phrases
+3. **Search when uncertain** - check the published TN index first (`build_tn_index.py --lookup`), then `data/published-tns/` for similar phrases
 4. **Consult Issues Resolved** - when classifications conflict, `data/issues_resolved.txt` has final authority
 5. **Check implicit info** - would modern readers miss cultural practices, theological concepts, or covenant language?
+6. **Record non-trivial decisions** - after resolving a classification that required checking published precedent or where multiple issue types were plausible, append to `data/quick-ref/issue_decisions.csv`
 
 The goal is coverage: it's easier for reviewers to delete a suggested issue than to identify one from scratch. When in doubt, include it.
 
@@ -309,8 +322,30 @@ This document contains content team decisions that override other guidance.
 cat data/issues_resolved.txt | grep -i "[search term]"
 ```
 
+### Published TN Index
+Pre-built index of all published translation notes by issue type and keyword. Use for fast precedent lookups instead of raw grep:
+
+```bash
+# Check how a keyword was classified across all published notes
+python3 .claude/skills/utilities/scripts/build_tn_index.py --lookup "hand"
+
+# List examples for a specific issue type
+python3 .claude/skills/utilities/scripts/build_tn_index.py --issue figs-metaphor
+```
+
+Source: `data/cache/tn_index.json` (built from `data/published-tns/`)
+
+### Issue Decisions
+Accumulated classification decisions from prior runs. Check before re-deriving:
+
+```bash
+grep "hand of" data/quick-ref/issue_decisions.csv 2>/dev/null
+```
+
+Source: `data/quick-ref/issue_decisions.csv` (append-only)
+
 ### Reference Examples: Published Notes
-Search `data/published-tns/` for similar examples before classifying uncertain issues:
+When the index doesn't have what you need, search `data/published-tns/` directly:
 
 ```bash
 # Search for issue type patterns
@@ -328,6 +363,7 @@ grep -i "fallen\|sword" data/published-tns/tn_*.tsv
 | detect_activepassive.py | scripts/detection/ | Find ALL passive constructions. Use `--text "..."` for plain English |
 | detect_abstract_nouns.py | scripts/detection/ | Find abstract nouns (591 word list). Use `--text "..."` for plain English |
 | check_tw_headwords.py | scripts/ | Check names/unknowns against tW headwords - filters translate-names/translate-unknown |
+| build_tn_index.py | utilities/scripts/ | Published TN index lookup. `--lookup "hand"` for keyword, `--issue figs-metaphor` for issue type |
 
 ### Ambiguity Detection (Cross-Cutting Check)
 
