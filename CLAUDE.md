@@ -1,6 +1,12 @@
 Check your environment. You are probably in windows. You may be in WSL.
 Don't use emojis, it breaks windows terminal.
 
+## Workflow Expectations
+- When exploring or analyzing, write findings incrementally to a file rather than holding everything in context. Even interrupted sessions should leave a usable artifact.
+- Before multi-step exploration, outline a short plan and confirm direction.
+- When working on skills, check `.claude/skills/` for existing patterns before proposing new approaches.
+- Plans have two tiers: an **approval plan** (concise, what/why, shown to user) and an **execution plan** (full detail, exact changes, saved to scratchpad so it survives context clears). The approval plan should reference the scratchpad file path.
+
 ## Primary Tasks
 You are either being asked to:
 1) Assist with creation of unfoldingWord Book Package items including the unfoldingWord Literal Text, unfoldingword Simplified Text, translation notes, or possibly translation questions. You will have skills for each of these, the top level skills may lead you to other skills.
@@ -12,41 +18,24 @@ You are either being asked to:
 
 ### Skills (in `.claude/skills/`)
 - `pipeline-overview/` - Orchestration and workflow guidance
-- `ULT-gen/` - ULT creation (placeholder)
-- `simplified-transform/` - UST creation (placeholder)
-- `issue-identification/` - Identifying translation issues (figs-metaphor, figs-idiom, etc.)
+- `ULT-gen/` - Hebrew USFM to literal English translation
+- `ULT-alignment/` - Word-level Hebrew-to-ULT alignment
+- `UST-gen/` - T4T to meaning-based simplified translation
+- `UST-alignment/` - Phrase-level Hebrew-to-UST alignment
+- `issue-identification/` - 94 translation issue type skills (complete)
+- `issue-to-tn/` - Convert identified issues to translation notes
+- `repo-insert/` - Insert content into Door43 repos, commit, create PRs
+- `create-issue-description/` - Create new issue identification skills
 - `note-writing/` - Writing translation notes (placeholder)
 - `hebrew-reference/` - Hebrew language reference (placeholder)
-- `create-issue-description/` - Create new issue identification skills
+- `utilities/` - Shared scripts (alignment, USFM parsing, Proskomma, fetch tools)
 
 ### Data (in `data/`)
-- `translation-issues.csv` - List of all translation issues; `last_updated` column tracks skill completion
-- `issues_resolved.txt` - Cached Issues Resolved document (auto-fetched daily)
-- `templates.csv` - Cached TN Templates (auto-fetched daily)
-
-### External Resources
-- `data/ta-flat/` - Translation Academy articles (source definitions)
-- `data/published-tns/` - Human-identified examples in TSV format
-
-### Tracking
-- When completing a skill, update `data/translation-issues.csv` with today's date (YYYY-MM-DD)
-- "Next issue" or "go to next one" means find first issue without a date and create that skill
-
-### Authoritative Sources (in order of authority)
-1. **Issues Resolved** (FINAL AUTHORITY) - Content team decisions
-   - Fetch: `python .claude/skills/issue-identification/scripts/fetch_issues_resolved.py` (cached daily in `data/issues_resolved.txt`)
-   - If Issues Resolved contradicts other sources, Issues Resolved wins
-2. **Processed Translation Notes** - Human-identified examples
-3. **TN Templates** - Official note templates
-   - Fetch: `python .claude/skills/utilities/scripts/fetch_templates.py` (cached daily in `data/templates.csv`)
-4. **Translation Academy** - Definitions and explanations
-
-### Creating Skills
-See `.claude/skills/create-issue-description/create-issue-description.md` for the full process. Key requirements:
-- Examine 200+ examples from processed notes (if available)
-- Check Issues Resolved for authoritative decisions
-- Document what IS and what IS NOT this issue type
-- Update tracking CSV when complete
+- `translation-issues.csv` - All 94 translation issues (complete)
+- `glossary/` - Hebrew vocabulary, biblical phrases, measurements, sacrifice terminology
+- `hebrew_bible/` - Hebrew USFM with Strong's numbers and morphology
+- `ta-flat/` - Translation Academy articles
+- `issues_resolved.txt`, `templates.csv` - Cached reference data (auto-fetched daily)
 
 ## Git Discipline
 - ALWAYS `git add` and `git commit` new files immediately after creating them (not in output folders)
