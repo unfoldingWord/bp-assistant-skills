@@ -50,6 +50,8 @@ All paths relative to project root. These directories exist locally but are not 
 - `data/glossary/` - Glossary data
 - `data/editor-feedback/` - Editor feedback and corrections
 - `data/t4t/` - Translation for Translators data
+- `data/cache/` - Generated indexes (Strong's index JSON, ~4MB)
+- `data/quick-ref/` - Accumulated decisions from ULT-gen runs (CSV)
 
 #### Output Directories
 - `output/` - Generated files and reports (gitignored)

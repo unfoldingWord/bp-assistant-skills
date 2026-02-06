@@ -20,6 +20,8 @@ docs/*
 data/issues_resolved.txt
 data/templates.csv
 data/tw_headwords.json
+data/cache/
+data/quick-ref/
 docs/
 
 # Archived/old files

@@ -75,38 +75,46 @@ Apply rules in this order:
    grep -i "chesed\|חֶסֶד" data/issues_resolved.txt
    ```
 
-2. **Second**: Search published ULT for how this exact word was rendered
-
-   Use Proskomma to find every occurrence of a Strong's number:
+2. **Second**: Check quick-ref decisions from prior ULT-gen runs
    ```bash
-   # Find all renderings of a Hebrew word by Strong's number
-   node .claude/skills/utilities/scripts/proskomma/query_word.js H4869 --format table
+   grep "H4869" data/quick-ref/ult_decisions.csv
    ```
+   If found, use the recorded rendering unless issues_resolved overrides it.
 
-   Or grep the aligned USFM for the Strong's number:
+3. **Third**: Look up the Strong's index for aggregated rendering data
    ```bash
-   grep -r "strong=\"H4869\"" data/published_ult/*.usfm | head -20
+   python3 .claude/skills/utilities/scripts/build_strongs_index.py --lookup H4869
    ```
+   This returns all renderings with occurrence counts and sample refs from published ULT, without scanning 43MB of USFM. Use the dominant rendering unless context requires otherwise.
 
-   Then extract how it was translated in context:
-   ```bash
-   # Parse a sample verse to see the English rendering
-   node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
-     data/published_ult/19-PSA.usfm --verse "PSA 9:9" --output-json /tmp/sample.json
-   ```
-
-3. **Third**: Check project glossary for editorial overrides
+4. **Fourth**: Check project glossary for editorial overrides
    ```bash
    grep -i "[term]" data/glossary/project_glossary.md
    ```
    Only add to project glossary when human review revealed a needed change from existing published patterns.
 
-4. **Fourth**: Check other glossaries in `data/glossary/`
+5. **Fifth**: Check other glossaries in `data/glossary/`
    - `hebrew_ot_glossary.csv` - main vocabulary with ULT/UST glosses
    - `psalms_reference.csv` - Psalms-specific terms
    - `sacrifice_terminology.csv` - sacrificial vocabulary
    - `biblical_measurements.csv` - measurements and units
    - `biblical_phrases.csv` - common constructions
+
+6. **After resolving**: For words that required 2+ sources or had multiple possible renderings, append the decision to the quick-ref CSV so future runs resolve faster:
+   ```bash
+   # Only if data/quick-ref/ult_decisions.csv doesn't already have this decision
+   echo "H4869,misgav,stronghold,PSA,dominant rendering 85% of 20 occ,,$(date +%Y-%m-%d)" >> data/quick-ref/ult_decisions.csv
+   ```
+   Create the file with a header row on first use:
+   ```bash
+   mkdir -p data/quick-ref && echo "Strong,Hebrew,Rendering,Book,Context,Notes,Date" > data/quick-ref/ult_decisions.csv
+   ```
+
+**Fallback**: If the index doesn't have an entry (e.g., unpublished books), fall back to Proskomma or grep:
+   ```bash
+   node .claude/skills/utilities/scripts/proskomma/query_word.js H4869 --format table
+   grep -r "strong=\"H4869\"" data/published_ult/*.usfm | head -20
+   ```
 
 **Search multiple times if needed.** For any word that appears more than once in a chapter, verify consistency by checking 3-5 published occurrences before settling on a rendering.
 
@@ -380,28 +388,46 @@ node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
   --output-json /tmp/alignments.json
 ```
 
+### Strong's index lookup (fast, preferred for vocabulary)
+```bash
+# Build index if stale (daily check, ~10 seconds)
+python3 .claude/skills/utilities/scripts/build_strongs_index.py
+
+# Look up renderings for a Strong's number (instant from JSON)
+python3 .claude/skills/utilities/scripts/build_strongs_index.py --lookup H3068
+
+# Index statistics
+python3 .claude/skills/utilities/scripts/build_strongs_index.py --stats
+```
+
 ### Vocabulary lookup (search aggressively)
 ```bash
 # 1. Check authoritative decisions
 grep -i "[hebrew term]\|[english term]" data/issues_resolved.txt
 
-# 2. Find all occurrences of a Hebrew word by Strong's number
+# 2. Check prior decisions from ULT-gen runs
+grep "H4869" data/quick-ref/ult_decisions.csv
+
+# 3. Strong's index (preferred over raw grep)
+python3 .claude/skills/utilities/scripts/build_strongs_index.py --lookup H4869
+
+# 4. Fallback: Proskomma for verse-level context
 node .claude/skills/utilities/scripts/proskomma/query_word.js H4869 --format table
 
-# 3. Or grep aligned USFM for Strong's number
+# 5. Fallback: grep aligned USFM for Strong's number
 grep -r "strong=\"H4869\"" data/published_ult/*.usfm | head -20
 
-# 4. Parse specific verse to see full alignment
+# 6. Parse specific verse to see full alignment
 node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
   data/published_ult/19-PSA.usfm --verse "PSA 18:2" --output-json /tmp/sample.json
 
-# 5. Search plain English text for phrases
+# 7. Search plain English text for phrases
 grep -r "stronghold" data/published_ult_english/*.usfm | head -10
 
-# 6. Check project glossary for editorial overrides
+# 8. Check project glossary for editorial overrides
 grep -i "[term]" data/glossary/project_glossary.md
 
-# 7. Check standard glossaries
+# 9. Check standard glossaries
 grep "[term]" data/glossary/hebrew_ot_glossary.csv
 ```
 
@@ -468,6 +494,8 @@ Before finalizing ULT output, verify:
 | Sacrifice Terms | `data/glossary/sacrifice_terminology.csv` | Sacrificial vocabulary |
 | Measurements | `data/glossary/biblical_measurements.csv` | Units and measures |
 | Phrases | `data/glossary/biblical_phrases.csv` | Common constructions |
+| Quick-Ref Decisions | `data/quick-ref/ult_decisions.csv` | Prior ULT-gen vocabulary decisions |
+| Strong's Index | `data/cache/strongs_index.json` | Aggregated Strong's -> rendering map |
 | Published ULT | `data/published_ult_english/*.usfm` | Parallel patterns |
 | Style Guide | `reference/gl_guidelines.md` | Detailed style rules |
 
