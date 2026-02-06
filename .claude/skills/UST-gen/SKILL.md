@@ -178,8 +178,21 @@ T4T may use "the LORD" or other renderings. Update to:
 # Check for specific term decisions
 grep -i "UST" data/issues_resolved.txt | grep -i "[term]"
 
+# Check UST Strong's index for published precedent
+python3 .claude/skills/utilities/scripts/build_ust_index.py --lookup H2617
+
 # Check glossaries
 grep "[term]" data/glossary/hebrew_ot_glossary.csv
+```
+
+When a vocabulary decision requires checking published precedent (UST index, glossaries, or issues_resolved), record it in `data/quick-ref/ust_decisions.csv` for future reference. Only record non-trivial decisions -- common words that map obviously don't need tracking.
+
+```bash
+# Check if decision already recorded
+grep "H2617" data/quick-ref/ust_decisions.csv 2>/dev/null
+
+# Append new decision (creates file with header if needed)
+echo "H2617,chesed,faithful love,PSA,dominant UST rendering 67%,,$(date +%Y-%m-%d)" >> data/quick-ref/ust_decisions.csv
 ```
 
 #### D. Active Voice
@@ -316,12 +329,36 @@ python3 .claude/skills/utilities/scripts/fetch_t4t.py --list
 # 1. Check authoritative UST decisions
 grep -i "UST" data/issues_resolved.txt | grep -i "[term]"
 
-# 2. Check glossaries (UST_GLOSS column)
+# 2. Check prior UST vocabulary decisions
+grep "H2617" data/quick-ref/ust_decisions.csv 2>/dev/null
+
+# 3. Check UST Strong's index for published UST precedent
+python3 .claude/skills/utilities/scripts/build_ust_index.py --lookup H2617
+
+# 4. Compare ULT vs UST renderings for the same word
+python3 .claude/skills/utilities/scripts/build_ust_index.py --compare H2617
+
+# 5. Check glossaries (UST_GLOSS column)
 grep "[term]" data/glossary/hebrew_ot_glossary.csv
 
-# 3. Compare T4T to ULT for same verse
+# 6. Compare T4T to ULT for same verse
 grep "1:1" data/t4t/11-1KI.usfm
 grep "1:1" data/published_ult_english/11-1KI.usfm
+```
+
+### UST Strong's Index
+```bash
+# Build/refresh UST index (daily staleness check)
+python3 .claude/skills/utilities/scripts/build_ust_index.py
+
+# Look up published UST renderings for a Strong's number
+python3 .claude/skills/utilities/scripts/build_ust_index.py --lookup H2617
+
+# Compare ULT (literal) vs UST (meaning-based) renderings
+python3 .claude/skills/utilities/scripts/build_ust_index.py --compare H2617
+
+# Index statistics
+python3 .claude/skills/utilities/scripts/build_ust_index.py --stats
 ```
 
 ### Parse aligned USFM (for Hebrew verification)
@@ -375,10 +412,12 @@ Before finalizing UST output, verify:
 | Hebrew Glossary | `data/glossary/hebrew_ot_glossary.csv` | UST_GLOSS column |
 | Psalms Reference | `data/glossary/psalms_reference.csv` | UST_GLOSS column |
 | Published ULT | `data/published_ult_english/*.usfm` | Meaning verification |
+| UST Strong's Index | `data/cache/ust_index.json` | Published UST renderings by Strong's number |
+| UST Decisions | `data/quick-ref/ust_decisions.csv` | Prior UST vocabulary decisions |
 | UST Patterns | `reference/ust_patterns.md` | Transformation rules |
 | Style Guide | `../ULT-gen/reference/gl_guidelines.md` | Shared style rules |
 
-**Note:** `data/published_ust/` contains older UST that may not meet current standards. Use T4T as your base, not published UST.
+**Note:** `data/published_ust/` contains older UST that may not meet current standards. Use T4T as your base, not published UST. The UST Strong's index is still useful for seeing how published UST renders specific Hebrew words -- treat it as precedent to consider, not authority to follow.
 
 ---
 

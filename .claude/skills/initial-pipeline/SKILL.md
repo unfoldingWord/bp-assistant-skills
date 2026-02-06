@@ -103,6 +103,7 @@ it gets revised. If the agent makes a compelling case, the classification stands
 - **UST-gen agent**: Creates simplified translation from T4T, informed by:
   - The final revised ULT (draft 2)
   - The final issues TSV
+  - The UST Strong's index (`build_ust_index.py --lookup`/`--compare`) for published UST rendering precedent
   - UST models how to handle each identified issue -- it shows the translator
     what the text means in natural language, with figures unpacked, implicit
     info made explicit, passives made active, etc.
