@@ -51,9 +51,11 @@ Options:
 
 Read `reference/note-style-guide.md` for the note writing rules.
 
-### Step 4: Generate Notes
+### Step 4: Generate Notes (write keyed JSON, not TSV)
 
-Read `/tmp/claude/prepared_notes.json`. For each item:
+Read `/tmp/claude/prepared_notes.json`. For each item, generate a note and write it to a JSON object keyed by the item's `id`. Write the result to `/tmp/claude/generated_notes.json`.
+
+Process one item at a time:
 
 1. Read the `system_prompt_key` field to know which persona to use:
    - `ai_writes_at_agent` -- Generate the note AND an alternate translation
@@ -72,6 +74,17 @@ Read `/tmp/claude/prepared_notes.json`. For each item:
    - Present multiple interpretations using the "This could mean:" format
    - Each interpretation gets its own AT in square brackets
 
+Output format -- a flat JSON object mapping item ID to note text:
+```json
+{
+  "em7t": "A **chief musician** is a person who...",
+  "dcc8": "A **stringed instrument** is a type of...",
+  ...
+}
+```
+
+Write this to `/tmp/claude/generated_notes.json`. Do NOT assemble the TSV yourself -- the assembly script handles that to prevent row misalignment.
+
 ### Step 5: AT Fit Check
 
 For each generated note that contains an alternate translation (text in `[square brackets]`):
@@ -82,25 +95,18 @@ For each generated note that contains an alternate translation (text in `[square
 4. Check: does the substituted verse read as natural English?
 5. If not, adjust the AT (or expand the GLQuote if the AT needs more surrounding text)
 6. Verify the AT is not identical to UST phrasing
+7. Update the entry in `/tmp/claude/generated_notes.json` if changes were needed
 
-### Step 6: Write Output TSV
+### Step 6: Assemble Output TSV (script)
 
-Assemble the 7-column TN TSV with headers and write to `output/notes/<BOOK>-<CHAPTER>.tsv`:
+Run the assembly script to produce the final TSV. The script reads metadata from the prepared JSON and note text from the generated JSON, matching by ID. This prevents note/row misalignment.
 
+```bash
+python3 .claude/skills/tn-writer/scripts/assemble_notes.py \
+    /tmp/claude/prepared_notes.json \
+    /tmp/claude/generated_notes.json \
+    --output output/notes/<BOOK>-<CHAPTER>.tsv
 ```
-Reference	ID	Tags	SupportReference	Quote	Occurrence	Note
-```
-
-Order rows by reference: `front` rows first, then verse order (1, 2, 3...).
-
-Column values from the JSON:
-- **Reference**: `reference` field
-- **ID**: `id` field
-- **Tags**: (empty)
-- **SupportReference**: `rc://*/ta/man/translate/{sref}`
-- **Quote**: `orig_quote` (Hebrew text from language conversion). For `front` items, use the exact Hebrew from `hebrew_front_words` -- match the `gl_quote` meaning to the right word in the list.
-- **Occurrence**: `1`
-- **Note**: The generated note text
 
 ### Step 7: Post-Process
 
