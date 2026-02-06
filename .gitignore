@@ -2,12 +2,6 @@
 output/
 /tmp/
 
-# Archived/old files
-.old/
-
-# Environment/secrets
-.env
-
 # External data (can be fetched)
 data/en_tw/
 data/published-tns/
@@ -27,6 +21,12 @@ data/issues_resolved.txt
 data/templates.csv
 data/tw_headwords.json
 docs/
+
+# Archived/old files
+.old/
+
+# Environment/secrets
+.env
 
 # Python
 __pycache__/

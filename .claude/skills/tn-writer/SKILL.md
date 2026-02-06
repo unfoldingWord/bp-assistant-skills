@@ -39,6 +39,10 @@ python3 .claude/skills/tn-writer/scripts/prepare_notes.py \
 
 This produces a JSON file with fully-assembled prompts for each item.
 
+The script automatically:
+- Filters out items with "has tW article" in the explanation (Translation Words already covers them)
+- Sorts output so `front` references come before verse references
+
 Options:
 - `--skip-lang` -- Skip language conversion (keep original English quotes)
 - `--skip-ids` -- Skip ID generation
@@ -58,6 +62,8 @@ Read `/tmp/claude/prepared_notes.json`. For each item:
 2. Read the `prompt` field -- it contains all context (templates, verse text, explanation). Generate the note following the style guide.
 
 3. For items with `needs_at: true`:
+   - Place the AT at the end of the note: `Alternate translation: [text here]`
+   - Use square brackets, not quotes, around the AT text
    - The AT must fit seamlessly: removing `gl_quote` from `ult_verse` and inserting the AT should read as natural English
    - The AT must differ from the UST phrasing in `ust_verse`
    - Use minimal changes to the ULT wording; only change what the translation issue requires
@@ -84,6 +90,8 @@ Assemble the 7-column TN TSV with headers and write to `output/notes/<BOOK>-<CHA
 ```
 Reference	ID	Tags	SupportReference	Quote	Occurrence	Note
 ```
+
+Order rows by reference: `front` rows first, then verse order (1, 2, 3...).
 
 Column values from the JSON:
 - **Reference**: `reference` field

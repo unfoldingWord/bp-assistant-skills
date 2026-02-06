@@ -34,17 +34,17 @@ def convert_to_curly_quotes(text: str) -> str:
         if char == '"':
             # Determine if opening or closing
             if is_opening_quote(text, i):
-                result.append('"')
+                result.append('\u201c')
             else:
-                result.append('"')
+                result.append('\u201d')
         elif char == "'":
             # Check if it's an apostrophe (within a word) or a quote
             if is_apostrophe(text, i):
-                result.append("'")  # Curly apostrophe
+                result.append('\u2019')  # Curly apostrophe
             elif is_opening_quote(text, i):
-                result.append("'")
+                result.append('\u2018')
             else:
-                result.append("'")
+                result.append('\u2019')
         else:
             result.append(char)
 

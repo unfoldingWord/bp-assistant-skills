@@ -615,6 +615,12 @@ def main():
     items, book_code = parse_input_tsv(args.input_tsv)
     print(f"  Found {len(items)} items for {book_code}", file=sys.stderr)
 
+    # Filter out items with tW articles (no note needed -- tW covers them)
+    tw_filtered = [i for i in items if 'has tw article' not in i['explanation'].lower()]
+    if len(tw_filtered) < len(items):
+        print(f"  Filtered {len(items) - len(tw_filtered)} items with tW articles", file=sys.stderr)
+        items = tw_filtered
+
     # Extract chapter from filename for output metadata
     basename = os.path.basename(args.input_tsv)
     chapter_match = re.search(r'-(\d+)', basename)
@@ -700,7 +706,25 @@ def main():
             'explanation': item['explanation'],
         })
 
-    # 7. Write output JSON
+    # 7. Sort: front references first, then verse order
+    def ref_sort_key(item):
+        ref = item['reference']
+        if ':' in ref:
+            parts = ref.split(':', 1)
+            verse = parts[1]
+            if verse == 'front':
+                return (0, 0)
+            try:
+                return (1, int(verse.split('-')[0]))
+            except ValueError:
+                return (1, 9999)
+        return (1, 9999)
+
+    output_items.sort(key=ref_sort_key)
+    for idx, item in enumerate(output_items):
+        item['index'] = idx
+
+    # 8. Write output JSON
     output = {
         'book': book_code,
         'chapter': chapter,
