@@ -60,17 +60,38 @@ Tools for fetching resources, creating new issue skills, and other supporting fu
 **Skill**: `.claude\skills\utilities\SKILL.md`
 **Status**: Active
 
+## Orchestrators
+
+### Initial Pipeline (`/initial-pipeline`)
+Coordinates ULT-gen, issue-id, and UST-gen as a team for a chapter. 6-wave pipeline
+with adversarial issue identification, ULT feedback loop, and UST generated last
+(so it can model handling identified issues).
+
+**Skill**: `.claude/skills/initial-pipeline/SKILL.md`
+
+### Post-Human-Edit Review (`/post-edit-review`)
+After humans edit ULT/UST, adapts existing issues to match their changes. Diff-based
+review that drops, updates, or adds issues without re-running full identification.
+
+**Skill**: `.claude/skills/post-edit-review/SKILL.md`
+
 ## Common Workflows
+
+### "Run the full pipeline for [passage]"
+1. Use `/initial-pipeline` -- coordinates ULT, issue-id, and UST as a team
+
+### "Humans edited the ULT/UST, update issues"
+1. Use `/post-edit-review` -- reconciles issues with human changes
 
 ### "Create translation notes for [passage]"
 1. Use **issue-identification** to find translation issues
-2. Use **note-writing** to generate notes for each issue
+2. Use **tn-writer** to generate notes for each issue
 
 ### "Create skill for [issue type]"
-1. Use **utilities\create-issue-skill.md** to create a new identification skill
+1. Use **create-issue-description** to create a new identification skill
 
 ### "What figure of speech is this?"
-1. Use the appropriate skill in **issue-identification\** (e.g., figs-metaphor.md, figs-idiom.md)
+1. Use the appropriate skill in **issue-identification/** (e.g., figs-metaphor.md, figs-idiom.md)
 
 ## Authoritative Sources
 
