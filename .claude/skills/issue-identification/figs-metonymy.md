@@ -67,10 +67,14 @@ These have been explicitly decided by the content team (Issues Resolved):
 | Body part representing entire person | Whole substitutes for part | Part for whole |
 | "gates" (= city borders) | Physical boundary meaning | Part for whole |
 
+### Use figs-metonymy for:
+| Expression | Reason |
+|------------|--------|
+| "heart" (= thoughts/feelings/attitude) | Close association, not comparison |
+
 ### Use figs-metaphor for:
 | Expression | Reason |
 |------------|--------|
-| "heart" (= thoughts/feelings) | Comparison, not association |
 | "way/path" (= behavior) | Life spoken of AS IF a journey |
 | "house" (= descendants) | Family spoken of AS IF dwelling together |
 
@@ -144,6 +148,28 @@ From Issues Resolved: "Sometimes there is an admittedly fine line between synecd
 | **gates** | community within | "within your gates" = "in your community" |
 | Tribe names | tribe's people/army | "Judah" = "the people of Judah" |
 | Nation names | nation's people | "Israel" = "the Israelites" |
+
+---
+
+## Authoritative Biblical Imagery -- Metonymy
+
+These are confirmed metonymy by the content team (close association, not comparison):
+
+- FACE represents presence, sight, knowledge, perception, attention, judgment, front, or surface
+- HAND represents power, control, agency, or action
+- HEAD represents tip, top, or uppermost part
+- HEART represents thinking, feeling, or attitude
+- EYES represent sight, knowledge, perception, attention, or judgment
+- HEAD represents a ruler or leader
+- MOUTH represents speech or words
+- NAME represents the person, or their power/authority/position/status
+- NOSE represents anger
+- TONGUE represents the language spoken
+- BRONZE represents strength
+
+Also note:
+- "in the EYES of" = idiom (not metonymy)
+- LYING DOWN or SLEEPING means dying or being dead = euphemism (not metonymy)
 
 ---
 

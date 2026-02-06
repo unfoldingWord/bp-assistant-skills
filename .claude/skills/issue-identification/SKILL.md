@@ -282,6 +282,10 @@ Before finalizing a tag, check if a related issue fits better:
 | figs-explicit | figs-ellipsis | Adding background info vs. supplying omitted words |
 | grammar-connect-logic-goal | grammar-connect-logic-result | Intended outcome vs. unintended consequence |
 
+### Biblical Imagery Classification
+
+When classifying body parts, nature imagery, or cultural concepts as metonymy vs metaphor, consult the authoritative lists in `figs-metonymy.md` and `figs-metaphor.md` (under "Authoritative Biblical Imagery" sections).
+
 ### Final Review Pass
 
 After completing all identification, review your output:

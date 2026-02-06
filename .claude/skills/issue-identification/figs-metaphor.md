@@ -39,7 +39,7 @@ These have been explicitly decided by the content team (Issues Resolved):
 | "house" (= temple) | figs-metaphor | Yahweh's dwelling |
 | "fathers" (= ancestors) | figs-metaphor | |
 | "brothers" (= fellow descendants) | figs-metaphor | People from same ancestor |
-| "heart" (= thoughts/feelings/will) | figs-metaphor | Body part for inner person |
+| "heart" (= thoughts/feelings/will) | figs-metonymy | Close association (see figs-metonymy.md) |
 
 ### "Behold" Patterns
 Per Issues Resolved: "behold" when calling attention to what follows is figs-metaphor (speaker says "look" but means "listen").
@@ -110,7 +110,7 @@ Comparisons using explicit words "like," "as," or "than":
 
 | Category | Image | Meaning | Notes |
 |----------|-------|---------|-------|
-| Body Part | heart | thoughts, feelings, motives, intentions, desires | "eyes", "ears", "hand", "face" are typically metonymy |
+| Body Part | heart | thoughts, feelings, motives, intentions, desires | Reclassified as metonymy (close association) -- see figs-metonymy.md |
 | Path/Journey | way/path | behavior, lifestyle, conduct | |
 | Path/Journey | walking | living, behaving | |
 | Path/Journey | turn away/toward | reject/accept (change of life direction) | |
@@ -123,6 +123,57 @@ Comparisons using explicit words "like," "as," or "than":
 | Building | rock | stability, protection | |
 | Building | cornerstone | most important element | |
 | Nature | flowing with milk and honey | very productive | |
+
+---
+
+## Authoritative Biblical Imagery -- Metaphor
+
+These are confirmed metaphor by the content team (X and Y share a point of comparison):
+
+- FATHER represents ancestor(s); SON represents descendant(s)
+- BROTHER represents relatives, associates, or peers
+- DAUGHTER represents a village near a city; MOTHER represents a city with surrounding villages
+- BODY represents a group of people
+- CHAINS represent control
+- BRANCH, PLANT, TREE represent a person; SEED represents descendants
+- MASTER represents anything that motivates action
+- WALKING represents behaving; PATH represents a kind of behavior
+- SON OF SOMETHING represents sharing qualities of another thing
+- CLOTHING represents moral or emotional qualities
+- HOUSE represents family/household, descendants, possessions, or a people group
+- SNARE represents death; TENT represents home, household, descendants
+- LIGHT represents righteousness/wisdom/life; DARKNESS represents wickedness/foolishness/death
+- FIRE represents extreme feelings (love or anger); LIGHT OF FACE represents smiling/favor
+- WIDE SPACE represents safety; NARROW SPACE represents danger
+- WATER/LIQUID represents moral/emotional quality or speech; FLOODING WATER represents disaster
+- FOUNTAIN/SPRING represents origin or source
+- ROCK represents salvation or protection
+
+**Metaphor-like expressions:**
+- Being BENT OVER = discouraged/oppressed; BIRTH PAINS = necessary suffering
+- Being CALLED SOMETHING = being that thing
+- Being CLEAN = acceptable for God's purposes; UNCLEAN = not acceptable
+- COMING/STANDING BEFORE SOMEONE = serving; CUT OFF = killed or separated
+- DRINKING WINE = being judged; EATING UP = defeating/destroying
+- FALLING/BEING UPON = affecting; FOLLOWING = being loyal
+- INHERITING = permanently possessing; LIFTING = promoting
+- RESTING = safe situation; RISING/STANDING UP = taking action
+- SEEING = knowledge/perception; SEEKING = pleading or trying
+- SELLING = handing over control; BUYING = removing from control
+- SITTING = reigning/ruling/judging; STANDING = defending/resisting
+- TURNING = changing
+
+**Cultural models (metaphor):**
+- Leader as SHEPHERD, followers as SHEEP
+- Life as BLOOD
+- Country as WOMAN, its gods as HER HUSBAND
+- Israel as GOD'S SON
+- Sun as BEING IN A CONTAINER when not visible
+- Fast-moving things as having WINGS
+- Futility as blown by WIND
+- Life constraints as PHYSICAL BOUNDARIES
+- Distress as WILDERNESS
+- Wellbeing as CLEANLINESS, evil as DIRTINESS
 
 ---
 
