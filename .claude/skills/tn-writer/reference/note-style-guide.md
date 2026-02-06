@@ -1,0 +1,101 @@
+# Translation Note Style Guide
+
+This is the authoritative source for translation note style rules. Future edits go here.
+
+## Core Rule
+
+Return a translation note by adapting a template provided as closely as possible. Change only as much as is needed to address the translation issue in the context. Use the template as a model for the reading level and degree of formality.
+
+Only respond with the note, not with any other text or explanation.
+
+## Formatting
+
+### Quotes
+Use curly/smart quotes instead of straight quotes.
+
+### Bold
+In the note, put in markdown bold formatting any words or phrases that you quote from the given text or from the rest of the verse. Only use quotation marks where there may be quotation marks in the original text that you are quoting. Use markdown bold formatting only for the first occurrence of quoted words or phrases. Quotations from other verses in the Bible should be put in quotation marks. Do not bold anything except an exact quote from the verse.
+
+### Capitalization and Grammatical Forms
+When you quote words or phrases from the given text or the rest of the verse, match the capitalization, number, and grammatical forms exactly. For example, if the text says "horses," do not write a note saying, "A **horse** is (definition)." Say, "The term **horses** describes (definition)."
+
+### ALL CAPS in Templates
+In the templates you will find words that are in all capital letters. These words need to be replaced by the appropriate information from the verse or the verse's context. These may or may not be direct quotes.
+
+### Slashes in Templates
+If there are slashes between words expressing similar or different ideas in a template, discern which word or two applies and instead of using all of that part of the template, use the word(s) you have chosen as applicable in this circumstance and write it as a natural sentence using "and" or "or", not a slash.
+
+### Numbers
+Write numbers 10 and below in words, above 10 in digits.
+
+## Alternate Translations
+
+### When to Generate
+Generate an alternate translation when the matched templates contain "Alternate translation:" sections. Place AT(s) at the end of the note, as modeled in the template. Enclose each in square brackets. When providing two options, separate with `or`.
+
+### Seamless Replacement
+An alternate translation should be a seamless replacement for the text in which the translation issue occurs. If you remove the GLQuote from the ULT verse and replace it with the AT, it should read correctly as natural English.
+
+### Quotation Marks in ATs
+Do not use quotation marks in the alternate translation(s) unless that text contains opening or closing quotation marks or both. In that case, reproduce the quotation mark(s) in the corresponding location(s).
+
+### AT Should Differ from UST
+Check the UST for the same verse. Make sure your alternate translation is not the same as the UST phrasing. If it is, come up with another alternate translation idea.
+
+### Minimal Adjustment
+The AT should be the smallest change to the ULT text that resolves the translation issue. Keep ULT wording where possible, change only what is needed. For figures of speech (metaphors, idioms, etc.), more substantial rewording may be needed to express the plain meaning -- this is expected.
+
+## Author References
+When referring to the author or writer of a biblical text, use "the author" instead of "the writer."
+
+In the book of Psalms, refer to the chapter superscription for an author reference. If David, Asaph, etc. is mentioned as the author, use that name in notes in that psalm. If the psalm is anonymous, use "the psalmist."
+
+Assume traditional authorship of Biblical books.
+
+## "Here" Rule
+Only start a note with "Here" if it is necessary to place in front of a word that starts with a lower case letter in the ULT. For example, do: `Here, **admonish** means...` Do not do: `Here David is saying...`
+
+## Figure of Speech Verbiage
+
+Use the following standard verbiage when speaking about figures of speech:
+
+| Figure | Standard Verbiage |
+|--------|-------------------|
+| Metaphor | image, SPEAKER is speaking of TEXT as if it were IMAGE |
+| Hyperbole | generalization, extreme statement |
+| Idiom | TEXT was a common expression meaning |
+| Irony | the opposite of the literal meaning of his words |
+| Litany | repetitive series of clauses |
+| Merism | SPEAKER is referring to all of THING by naming two extremes |
+| Metonymy | Here, hand represents the capability of a person (example - adapt to context) |
+| Parallelism | These two phrases mean basically the same thing |
+| Personification | Here _____ speaks of text as if it were a person who could... |
+| Synecdoche | AUTHOR is using one kind of food, bread, to mean food in general (example - adapt to context) |
+| Simile | comparison |
+| Hendiadys | The phrase WORD and WORD expresses a single idea |
+
+## Issue-Specific Restrictions
+
+- **writing-background & writing-newevent**: No elaboration on narrative function or context
+- **figs-quotesinquotes**: Do not put the text of either quotation into the note, keep to the template
+- **figs-imperative**: Do not add explanatory sentences about the specific imperative content or context
+- **grammar-connect-logic-result**: Do not identify specific phrases, keep to the template
+- **figs-ellipsis**: Do not explain the missing words/phrase
+- **figs-abstractnouns**: Do not define the words
+
+## Worked Examples
+
+### Example 1 (with AT)
+**Template**: SPEAKER is using the plural **text** where he could have used the singular form. This suggests that he is using the plural form to PURPOSE. If it would be helpful in your language, you could use the singular and express the emphasis in another way.
+
+**Note to "the seas" in Jonah 2:3**: Here Jonah is using the plural **seas** where he could have used the singular form. This suggests that he is using the plural form to emphasize the greatness or complexity of the sea. If it would be helpful in your language, you could use the singular and express the emphasis in another way. Alternate translation: [the vast sea] or [the raging sea]
+
+### Example 2 (with AT)
+**Template**: SPEAKER is referring to all of THING by naming two extremes, **EXTREME** and **EXTREME**. If it would be helpful in your language, you could use an equivalent expression or plain language.
+
+**Note to "from the sunrise and from the sea" in Joshua 11:3**: The author is referring to all of the Canaanite territory by naming its two extreme ends, **the sunrise** (the east) and **the sea** (the west). If it would be helpful in your language, you could use an equivalent expression or plain language. Alternate translation: [from all over their territory]
+
+### Example 3 (with AT)
+**Template**: The terms **word1** and **word2** mean similar things. SPEAKER is using the two terms together for emphasis. If it would be clearer for your readers, you could express the emphasis with a single phrase.
+
+**Note to "Strengthen yourselves and be men" in 1 Samuel 4:9**: The expressions **Strengthen yourselves** and **be men** mean similar things. The Philistines are using the two terms together for emphasis. If it would be clearer for your readers, you could express the emphasis with a single phrase. Alternate translation: [Be very courageous]

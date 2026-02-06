@@ -26,7 +26,7 @@ You are either being asked to:
 - `issue-to-tn/` - Convert identified issues to translation notes
 - `repo-insert/` - Insert content into Door43 repos, commit, create PRs
 - `create-issue-description/` - Create new issue identification skills
-- `note-writing/` - Writing translation notes (placeholder)
+- `tn-writer/` - Translation note generation (script-first architecture)
 - `hebrew-reference/` - Hebrew language reference (placeholder)
 - `utilities/` - Shared scripts (alignment, USFM parsing, Proskomma, fetch tools)
 

@@ -31,10 +31,10 @@ Transform source text into unfoldingWord Simplified Text - a meaning-based trans
 **Status**: Active
 
 ### Stage 4: Note Writing
-Generate translation notes based on identified issues using the appropriate templates.
+Generate translation notes from identified issues. A preparation script handles deterministic work (template matching, language conversion, ID generation), then AI generates note text following the style guide.
 
-**Skill**: `.claude\skills\note-writing\SKILL.md`
-**Status**: To be developed
+**Skill**: `.claude/skills/tn-writer/SKILL.md`
+**Status**: Active
 
 ## When to Use Each Stage
 
@@ -44,7 +44,7 @@ Generate translation notes based on identified issues using the appropriate temp
 | Aligning ULT to Hebrew | 1b | ULT-alignment/ |
 | Finding what needs notes | 2 | agents/issue-identification (Task tool) |
 | Creating UST text | 3 | UST-gen/ |
-| Writing the actual notes | 4 | note-writing/ |
+| Writing the actual notes | 4 | tn-writer/ |
 
 ## Supporting Skills
 
