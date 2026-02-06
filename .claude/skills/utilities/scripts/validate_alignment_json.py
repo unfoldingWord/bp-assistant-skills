@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-"""Validate alignment JSON files for the ULT-alignment workflow.
+"""Validate alignment JSON files for the ULT/UST-alignment workflow.
 
 Checks:
 1. Every Hebrew word index (0 to n-1) appears in at least one alignment
+   (UST mode: unaligned Hebrew indices are allowed)
 2. Every English word from english_text appears exactly once across alignments
 3. Required fields are present
+4. UST mode: entries with hebrew_indices: [] must have all words bracketed
 
 Usage:
     python3 validate_alignment_json.py FILE [FILE ...]
+    python3 validate_alignment_json.py --ust FILE [FILE ...]
     python3 validate_alignment_json.py alignments/*.json
 """
 
@@ -17,7 +20,7 @@ from collections import Counter
 from pathlib import Path
 
 
-def validate_file(filepath):
+def validate_file(filepath, ust_mode=False):
     """Validate a single alignment JSON file. Returns list of error strings."""
     errors = []
 
@@ -49,12 +52,35 @@ def validate_file(filepath):
             aligned_indices.add(idx)
 
     expected_indices = set(range(len(hebrew_words)))
-    missing = expected_indices - aligned_indices
     extra = aligned_indices - expected_indices
-    if missing:
-        errors.append(f"Hebrew indices not aligned: {sorted(missing)}")
     if extra:
         errors.append(f"Hebrew indices out of range: {sorted(extra)}")
+
+    if not ust_mode:
+        # ULT mode: every Hebrew index must be aligned
+        missing = expected_indices - aligned_indices
+        if missing:
+            errors.append(f"Hebrew indices not aligned: {sorted(missing)}")
+    else:
+        # UST mode: unaligned Hebrew indices are allowed (report as info, not error)
+        missing = expected_indices - aligned_indices
+        if missing:
+            # Just informational -- not an error in UST mode
+            pass
+
+    # UST mode: entries with hebrew_indices: [] must have all words bracketed
+    if ust_mode:
+        for i, a in enumerate(data["alignments"]):
+            if a.get("hebrew_indices") == []:
+                for word in a.get("english", []):
+                    if not (word.startswith("{") and word.endswith("}")):
+                        # Strip trailing punctuation before checking
+                        stripped = word.rstrip(".,;:!?")
+                        if not (stripped.startswith("{") and stripped.endswith("}")):
+                            errors.append(
+                                f"Alignment {i}: word \"{word}\" has hebrew_indices: [] "
+                                f"but is not bracketed"
+                            )
 
     # Check every english word appears exactly once
     # If d_text is present, section:"d" words validate against d_text,
@@ -117,15 +143,26 @@ def validate_file(filepath):
 
 def main():
     if len(sys.argv) < 2:
-        print(f"Usage: {sys.argv[0]} FILE [FILE ...]", file=sys.stderr)
+        print(f"Usage: {sys.argv[0]} [--ust] FILE [FILE ...]", file=sys.stderr)
         sys.exit(1)
 
-    files = sys.argv[1:]
+    args = sys.argv[1:]
+    ust_mode = False
+
+    if "--ust" in args:
+        ust_mode = True
+        args.remove("--ust")
+
+    if not args:
+        print(f"Usage: {sys.argv[0]} [--ust] FILE [FILE ...]", file=sys.stderr)
+        sys.exit(1)
+
+    files = args
     all_pass = True
 
     for filepath in sorted(files):
         name = Path(filepath).name
-        errors = validate_file(filepath)
+        errors = validate_file(filepath, ust_mode=ust_mode)
         if errors:
             all_pass = False
             print(f"FAIL  {name}")

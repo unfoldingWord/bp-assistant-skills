@@ -6,15 +6,17 @@
  * produces properly formatted aligned USFM using usfm-js.
  *
  * Usage:
- *   node create_aligned_usfm.js --hebrew <hebrew.usfm> --mapping <mapping.json> --ult <ult.usfm> [options]
+ *   node create_aligned_usfm.js --hebrew <hebrew.usfm> --mapping <mapping.json> --source <source.usfm> [options]
  *
  * Required:
  *   --hebrew <file>     Hebrew source USFM file
  *   --mapping <file>    Simple mapping JSON file from AI
- *   --ult <file>        Source ULT file (preserves poetry markers like \q1, \q2)
+ *   --source <file>     Source ULT/UST file (preserves poetry markers like \q1, \q2)
+ *                       (--ult is accepted as an alias for backward compatibility)
  *   --output <file>     Output aligned USFM file (default: stdout)
  *   --chapter <num>     Process only this chapter
  *   --verse <num>       Process only this verse (requires --chapter)
+ *   --ust               UST mode: brackets placed outside milestones, contiguous groups wrapped
  */
 
 import { readFileSync, writeFileSync } from 'fs';
@@ -28,6 +30,7 @@ let ultFile = null;
 let outputFile = null;
 let filterChapter = null;
 let filterVerse = null;
+let ustMode = false;
 
 for (let i = 0; i < args.length; i++) {
   switch (args[i]) {
@@ -38,7 +41,11 @@ for (let i = 0; i < args.length; i++) {
       mappingFile = args[++i];
       break;
     case '--ult':
+    case '--source':
       ultFile = args[++i];
+      break;
+    case '--ust':
+      ustMode = true;
       break;
     case '--output':
       outputFile = args[++i];
@@ -52,15 +59,17 @@ for (let i = 0; i < args.length; i++) {
     case '--help':
     case '-h':
       console.log(`
-Usage: node create_aligned_usfm.js --hebrew <hebrew.usfm> --mapping <mapping.json> --ult <ult.usfm> [options]
+Usage: node create_aligned_usfm.js --hebrew <hebrew.usfm> --mapping <mapping.json> --source <source.usfm> [options]
 
 Required:
   --hebrew <file>     Hebrew source USFM file
   --mapping <file>    Simple mapping JSON file from AI
-  --ult <file>        Source ULT file (preserves poetry markers like \\q1, \\q2)
+  --source <file>     Source ULT/UST file (preserves poetry markers)
+                      (--ult is accepted as an alias)
   --output <file>     Output aligned USFM file (default: stdout)
   --chapter <num>     Process only this chapter
   --verse <num>       Process only this verse (requires --chapter)
+  --ust               UST mode: brackets outside milestones, contiguous groups wrapped
   --help, -h          Show this help message
 
 Mapping JSON format:
@@ -79,7 +88,7 @@ Example:
   node create_aligned_usfm.js \\
     --hebrew data/hebrew_bible/01-GEN.usfm \\
     --mapping /tmp/alignments/GEN-01-01.json \\
-    --ult output/AI-ULT/GEN-01.usfm \\
+    --source output/AI-ULT/GEN-01.usfm \\
     --output /tmp/aligned.usfm \\
     --chapter 1 --verse 1
 `);
@@ -393,7 +402,7 @@ function reorderAlignmentsByEnglishText(alignments, englishText) {
  * This function outputs English words in the exact order they appear in english_text,
  * wrapping each word (or group of consecutive aligned words) in appropriate zaln milestones.
  */
-function buildAlignedVerseObjects(mapping, hebrewWords) {
+function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
   // Normalize a word for matching: strip brackets and punctuation, lowercase
   const normalizeWord = (w) => w.replace(/[{}.,;:!?"']/g, '').toLowerCase();
 
@@ -454,6 +463,21 @@ function buildAlignedVerseObjects(mapping, hebrewWords) {
     endTag: 'zaln-e\\*'
   });
 
+  // Pre-compute bracket status for each word position
+  // Do a dry-run of occurrence counting to determine bracket status
+  const bracketStatus = [];
+  const dryRunOccIdx = {};
+  for (let i = 0; i < englishTextWords.length; i++) {
+    const normalized = englishTextWords[i];
+    const rawWord = englishTextWordsRaw[i];
+    const occIdx = dryRunOccIdx[normalized] || 0;
+    dryRunOccIdx[normalized] = occIdx + 1;
+    const alignInfo = wordToAlignments[normalized]?.[occIdx];
+    const originalWord = alignInfo?.originalWord || rawWord;
+    const isBracketed = originalWord.startsWith('{') || (rawWord.startsWith('{') && rawWord.endsWith('}'));
+    bracketStatus.push(isBracketed);
+  }
+
   const verseObjects = [];
 
   // Process each word in english_text order
@@ -473,9 +497,11 @@ function buildAlignedVerseObjects(mapping, hebrewWords) {
     const occurrence = currentOccurrence[normalized];
     const occurrences = wordTotalOccurrences[normalized];
 
-    // Determine if bracketed - check both alignment word and raw text word
-    const originalWord = alignInfo?.originalWord || rawWord;
-    const isBracketed = originalWord.startsWith('{') || (rawWord.startsWith('{') && rawWord.endsWith('}'));
+    const isBracketed = bracketStatus[i];
+
+    // Detect group boundaries for bracket rendering
+    const isGroupStart = isBracketed && (i === 0 || !bracketStatus[i - 1]);
+    const isGroupEnd = isBracketed && (i === englishTextWords.length - 1 || !bracketStatus[i + 1]);
 
     // Separate trailing punctuation from the word so it goes OUTSIDE the \w block
     const strippedBrackets = rawWord.replace(/[{}]/g, '');
@@ -502,8 +528,12 @@ function buildAlignedVerseObjects(mapping, hebrewWords) {
       verseObjects.push({ type: 'text', text: isBracketed ? ' ' : '\n' });
     }
 
-    // Build the output structure
-    if (isBracketed) {
+    // UST mode: brackets go outside milestones, wrapping contiguous groups
+    // ULT mode: brackets go inside \w tags (per-word)
+    if (ustMode && isGroupStart) {
+      verseObjects.push({ type: 'text', text: '{' });
+    }
+    if (!ustMode && isBracketed) {
       verseObjects.push({ type: 'text', text: '{' });
     }
 
@@ -526,7 +556,10 @@ function buildAlignedVerseObjects(mapping, hebrewWords) {
       verseObjects.push(...innermost);
     }
 
-    if (isBracketed) {
+    if (!ustMode && isBracketed) {
+      verseObjects.push({ type: 'text', text: '}' });
+    }
+    if (ustMode && isGroupEnd) {
       verseObjects.push({ type: 'text', text: '}' });
     }
 
@@ -567,7 +600,7 @@ for (const header of hebrewParsed.headers || []) {
     const bookId = header.content.split(' ')[0];
     outputJson.headers.push({
       tag: 'id',
-      content: `${bookId} EN_ULT - Aligned`
+      content: `${bookId} ${ustMode ? 'EN_UST' : 'EN_ULT'} - Aligned`
     });
   } else {
     outputJson.headers.push(header);
@@ -621,7 +654,7 @@ for (const mapping of mappings) {
       english_text: mapping.d_text,
       alignments: dAlignments
     };
-    const dVerseObjects = buildAlignedVerseObjects(dMapping, hebrewWords);
+    const dVerseObjects = buildAlignedVerseObjects(dMapping, hebrewWords, ustMode);
 
     // Convert \d objects to USFM string for post-processing insertion
     // Build a temporary structure to get the USFM
@@ -642,7 +675,7 @@ for (const mapping of mappings) {
       ...mapping,
       alignments: bodyAlignments
     };
-    const verseObjects = buildAlignedVerseObjects(bodyMapping, hebrewWords);
+    const verseObjects = buildAlignedVerseObjects(bodyMapping, hebrewWords, ustMode);
 
     // Extract USFM markers from source ULT
     const usfmMarkers = extractUsfmMarkers(ultContent, ref.chapter, ref.verse, hasDText);
@@ -657,9 +690,9 @@ for (const mapping of mappings) {
     outputJson.chapters[ref.chapter][ref.verse] = { verseObjects };
   } else {
     // Standard processing (no superscription)
-    const verseObjects = buildAlignedVerseObjects(mapping, hebrewWords);
+    const verseObjects = buildAlignedVerseObjects(mapping, hebrewWords, ustMode);
 
-    // Extract USFM markers from source ULT (poetry, inter-verse, etc.)
+    // Extract USFM markers from source ULT/UST (poetry, inter-verse, etc.)
     const usfmMarkers = extractUsfmMarkers(ultContent, ref.chapter, ref.verse, hasDText);
     if (usfmMarkers.length > 0) {
       versePoetryMarkers[`${ref.chapter}:${ref.verse}`] = usfmMarkers;
