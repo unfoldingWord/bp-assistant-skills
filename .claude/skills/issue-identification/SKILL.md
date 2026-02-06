@@ -413,7 +413,20 @@ Format:
 | (empty) | Reserved |
 | explanation | Brief note if issue not obvious from text (optional) |
 
-Example:
+**Ordering**: Within each verse, output issues in ULT reading order:
+1. **First to last** by start position of the quoted phrase in the ULT verse
+2. **Longest to shortest** when phrases overlap or nest (the containing phrase comes before its sub-phrases)
+
+Example for "For you are a refuge to me, a strong tower from the face of the enemy":
+```
+psa	61:3	figs-metaphor	For you are a refuge to me, a strong tower from the face of the enemy
+psa	61:3	figs-metaphor	For you are a refuge to me
+psa	61:3	figs-metaphor	a refuge
+psa	61:3	figs-metonymy	from the face of the enemy
+psa	61:3	figs-possession	of the enemy
+```
+
+General example:
 ```
 psa	78:17	writing-pronouns	And they added			ancestors/israelites
 psa	78:19	figs-rquestion	Is God able			rhetorical - asserting doubt

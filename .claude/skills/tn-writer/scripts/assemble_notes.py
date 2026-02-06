@@ -15,10 +15,11 @@ Usage:
 import argparse
 import json
 import os
+import re
 import sys
 
 
-def sort_key(ref):
+def ref_sort_key(ref):
     """Sort references: 'front' first, then numerically by verse."""
     parts = ref.split(':')
     if len(parts) == 2 and parts[1] == 'front':
@@ -29,6 +30,32 @@ def sort_key(ref):
         except ValueError:
             return (int(parts[0]), 9999)
     return (9999, 9999)
+
+
+def intra_verse_sort_key(item):
+    """Within a verse, sort by ULT position (first to last), then longest first.
+
+    This produces note order matching reading order in the ULT, with
+    containing phrases before their sub-phrases.
+    """
+    gl_quote = item.get('gl_quote', '')
+    ult_verse = item.get('ult_verse', '')
+
+    if not gl_quote or not ult_verse:
+        return (0, 0)
+
+    # Find position of gl_quote in ULT verse (case-insensitive)
+    pos = ult_verse.lower().find(gl_quote.lower())
+    if pos < 0:
+        # Try without curly braces
+        clean_ult = re.sub(r'\{([^}]*)\}', r'\1', ult_verse)
+        clean_quote = re.sub(r'\{([^}]*)\}', r'\1', gl_quote)
+        pos = clean_ult.lower().find(clean_quote.lower())
+    if pos < 0:
+        pos = 9999
+
+    # Negative length so longer phrases sort first
+    return (pos, -len(gl_quote))
 
 
 def main():
@@ -88,11 +115,12 @@ def main():
             'quote': quote,
             'occurrence': '1',
             'note': note_text.strip(),
-            'sort_key': sort_key(ref)
+            'ref_key': ref_sort_key(ref),
+            'verse_key': intra_verse_sort_key(item)
         })
 
-    # Sort by reference
-    rows.sort(key=lambda r: r['sort_key'])
+    # Sort by reference, then within each verse by ULT position (first to last, longest first)
+    rows.sort(key=lambda r: (r['ref_key'], r['verse_key']))
 
     # Write TSV
     os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
