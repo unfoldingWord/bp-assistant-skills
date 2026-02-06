@@ -98,7 +98,7 @@ Column values from the JSON:
 - **ID**: `id` field
 - **Tags**: (empty)
 - **SupportReference**: `rc://*/ta/man/translate/{sref}`
-- **Quote**: `orig_quote` (Hebrew text from language conversion)
+- **Quote**: `orig_quote` (Hebrew text from language conversion). For `front` items, use the exact Hebrew from `hebrew_front_words` -- match the `gl_quote` meaning to the right word in the list.
 - **Occurrence**: `1`
 - **Note**: The generated note text
 

@@ -34,6 +34,7 @@ FETCH_TEMPLATES_SCRIPT = os.path.join(
 )
 LANG_CONVERT_SCRIPT = os.path.join(SCRIPT_DIR, 'lang_convert.js')
 GENERATE_IDS_SCRIPT = os.path.join(SCRIPT_DIR, 'generate_ids.py')
+HEBREW_DIR = os.path.join(PROJECT_ROOT, 'data', 'hebrew_bible')
 
 # Prompt templates (from tnwriter-dev/config/prompts.yaml)
 WRITES_AT_PROMPT = """Return only the note.
@@ -651,6 +652,19 @@ def main():
         else:
             print("  WARNING: Language conversion failed, using original quotes", file=sys.stderr)
 
+    # 4b. Extract front/superscription Hebrew from source
+    front_words = []
+    hebrew_usfm = None
+    for f in os.listdir(HEBREW_DIR):
+        if f.upper().endswith(f'-{book_code}.usfm'.upper()):
+            hebrew_usfm = os.path.join(HEBREW_DIR, f)
+            break
+    if hebrew_usfm and chapter:
+        from fix_hebrew_quotes import extract_front_words
+        front_words = extract_front_words(hebrew_usfm, chapter.lstrip('0') or '0')
+        if front_words:
+            print(f"  Extracted {len(front_words)} superscription words from Hebrew source", file=sys.stderr)
+
     # 5. Generate IDs
     ids = None
     if not args.skip_ids:
@@ -687,7 +701,7 @@ def main():
         )
 
         ref = item['ref']
-        output_items.append({
+        entry = {
             'index': idx,
             'reference': ref,
             'sref': item['sref'],
@@ -704,7 +718,14 @@ def main():
             'ust_verse': ust_verses.get(ref, ''),
             'at_provided': item['at'],
             'explanation': item['explanation'],
-        })
+        }
+
+        # For front items, include source Hebrew words so the AI
+        # can use the exact text instead of guessing
+        if ref.endswith(':front') and front_words:
+            entry['hebrew_front_words'] = front_words
+
+        output_items.append(entry)
 
     # 7. Sort: front references first, then verse order
     def ref_sort_key(item):
