@@ -224,7 +224,7 @@ python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
 
 - Matches rows by exact reference string (column 0)
 - Replaces existing rows or inserts at correct sort position
-- Sort order: `front:intro` < `front:*` < `1:intro` < `1:1` < `1:2` < ...
+- Sort order within each chapter: `:intro` < `:front` < `:1` < `:2` < ... (see Note Ordering below)
 - `--references` filters to specific references from the source file
 
 ### gitea_pr.py
@@ -238,6 +238,22 @@ python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
 
 - Reads `DOOR43_TOKEN` from `.env` or environment
 - Prints the PR URL on success
+
+## Note Ordering (TN)
+
+For any given chapter, notes follow this reference order:
+
+```
+<chapter>:intro    (chapter introduction -- may be auto-generated in the future)
+<chapter>:front    (superscription / pre-verse-1 content)
+<chapter>:1
+<chapter>:2
+...
+```
+
+Within each verse, notes are ordered by position in the ULT (first to last),
+with longer phrases before shorter nested phrases. The `insert_tn_rows.py`
+script and `assemble_notes.py` both enforce this ordering.
 
 ## Safety
 
