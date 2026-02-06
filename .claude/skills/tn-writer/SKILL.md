@@ -87,15 +87,21 @@ Write this to `/tmp/claude/generated_notes.json`. Do NOT assemble the TSV yourse
 
 ### Step 5: AT Fit Check
 
-For each generated note that contains an alternate translation (text in `[square brackets]`):
+Run the verification script to see all substitutions at once:
 
-1. Extract the AT text from the note
-2. Take the `gl_quote_roundtripped` value (or `gl_quote` if no roundtrip)
-3. In the `ult_verse`, replace the GLQuote with the AT
-4. Check: does the substituted verse read as natural English?
-5. If not, adjust the AT (or expand the GLQuote if the AT needs more surrounding text)
-6. Verify the AT is not identical to UST phrasing
-7. Update the entry in `/tmp/claude/generated_notes.json` if changes were needed
+```bash
+python3 .claude/skills/tn-writer/scripts/verify_at_fit.py \
+    /tmp/claude/prepared_notes.json \
+    /tmp/claude/generated_notes.json
+```
+
+This shows every AT substituted into its ULT verse. Review the output:
+
+1. Fix any ERRORS (gl_quote not found -- usually a curly brace or case issue)
+2. Read each substitution result -- does it read as natural English?
+3. Watch for prepositions/conjunctions adjacent to the gl_quote that may need to be included in the AT (Hebrew prefixes like bet/lamed/mem often correspond to English "to/in/from" that sits outside the gl_quote)
+4. Verify no AT is identical to UST phrasing
+5. Update entries in `/tmp/claude/generated_notes.json` for any fixes
 
 ### Step 6: Assemble Output TSV (script)
 
