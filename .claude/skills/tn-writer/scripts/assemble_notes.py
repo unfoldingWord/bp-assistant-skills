@@ -15,7 +15,9 @@ Usage:
 import argparse
 import json
 import os
+import random
 import re
+import string
 import sys
 
 
@@ -58,6 +60,13 @@ def intra_verse_sort_key(item):
     return (pos, -len(gl_quote))
 
 
+def generate_short_id():
+    """Generate a 4-character ID (first char letter, rest alphanumeric)."""
+    first = random.choice(string.ascii_lowercase)
+    rest = ''.join(random.choices(string.ascii_lowercase + string.digits, k=3))
+    return first + rest
+
+
 def main():
     parser = argparse.ArgumentParser(description='Assemble TN TSV from prepared + generated notes')
     parser.add_argument('prepared_json', help='Path to prepared_notes.json from prepare_notes.py')
@@ -72,6 +81,7 @@ def main():
         generated = json.load(f)
 
     items = prepared['items']
+    intro_rows = prepared.get('intro_rows', [])
     missing = []
     rows = []
 
@@ -124,8 +134,24 @@ def main():
 
     # Write TSV
     os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
+    intro_count = 0
     with open(args.output, 'w', newline='') as f:
         f.write('Reference\tID\tTags\tSupportReference\tQuote\tOccurrence\tNote\n')
+
+        # Write intro rows first (passthrough, no AI processing)
+        for intro in intro_rows:
+            intro_id = generate_short_id()
+            f.write('\t'.join([
+                'front:intro',
+                intro_id,
+                '',
+                '',
+                '',
+                '0',
+                intro.get('content', '')
+            ]) + '\n')
+            intro_count += 1
+
         for row in rows:
             f.write('\t'.join([
                 row['reference'],
@@ -137,7 +163,8 @@ def main():
                 row['note']
             ]) + '\n')
 
-    print(f"Wrote {len(rows)} notes to {args.output}")
+    total = len(rows) + intro_count
+    print(f"Wrote {total} rows to {args.output} ({intro_count} intro, {len(rows)} notes)")
     if missing:
         print(f"WARNING: {len(missing)} items missing from generated notes: {', '.join(missing)}", file=sys.stderr)
 

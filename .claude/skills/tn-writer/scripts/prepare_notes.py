@@ -115,8 +115,12 @@ def parse_input_tsv(filepath):
     """Parse headerless 7-column issue TSV.
 
     Columns: Book, Ref, SRef, GLQuote, Go?, AT, Explanation
+
+    Intro rows (reference like 'N:intro') are separated out and returned
+    as a second list for passthrough to assembly.
     """
     items = []
+    intro_rows = []
     book_code = None
 
     with open(filepath, 'r', encoding='utf-8') as f:
@@ -130,6 +134,15 @@ def parse_input_tsv(filepath):
 
             if book_code is None:
                 book_code = cols[0].upper()
+
+            # Detect intro rows and store separately
+            if ':intro' in cols[1]:
+                intro_rows.append({
+                    'book': cols[0],
+                    'reference': cols[1].strip(),
+                    'content': cols[6].strip(),
+                })
+                continue
 
             items.append({
                 'book': cols[0].upper() if cols[0] else book_code,
@@ -150,7 +163,7 @@ def parse_input_tsv(filepath):
         if parts and len(parts[0]) == 3 and parts[0].isalpha():
             book_code = parts[0].upper()
 
-    return items, book_code
+    return items, intro_rows, book_code
 
 
 # ---------------------------------------------------------------------------
@@ -613,8 +626,10 @@ def main():
 
     # 1. Parse input
     print(f"Parsing input TSV: {args.input_tsv}", file=sys.stderr)
-    items, book_code = parse_input_tsv(args.input_tsv)
+    items, intro_rows, book_code = parse_input_tsv(args.input_tsv)
     print(f"  Found {len(items)} items for {book_code}", file=sys.stderr)
+    if intro_rows:
+        print(f"  Found {len(intro_rows)} intro row(s) (will pass through to assembly)", file=sys.stderr)
 
     # Filter out items with tW articles (no note needed -- tW covers them)
     tw_filtered = [i for i in items if 'has tw article' not in i['explanation'].lower()]
@@ -753,6 +768,8 @@ def main():
         'item_count': len(output_items),
         'items': output_items,
     }
+    if intro_rows:
+        output['intro_rows'] = intro_rows
 
     os.makedirs(os.path.dirname(args.output) or '.', exist_ok=True)
     with open(args.output, 'w', encoding='utf-8') as f:
