@@ -98,9 +98,13 @@ def extract_zaln_attrs(attr_str):
 
 
 def normalize_strong(raw):
-    """Strip morphological prefixes like 'b:d:H1234' -> 'H1234'."""
-    # Prefixes are single lowercase letters followed by colons
-    return re.sub(r'^(?:[a-z]:)+', '', raw)
+    """Strip morphological prefixes like 'b:d:H1234' -> 'H1234'.
+    Returns None for bare prefixes with no Strong's number."""
+    result = re.sub(r'^(?:[a-z]:)+', '', raw)
+    # Discard if no Strong's number remains (just a bare prefix letter)
+    if not re.match(r'^[HG]\d', result):
+        return None
+    return result
 
 
 def parse_file(filepath):
@@ -158,9 +162,10 @@ def parse_file(filepath):
                         stack[-1]["words"].extend(closed["words"])
                     # Record the alignment
                     strong_raw = closed["attrs"].get("strong", "")
-                    if strong_raw and english:
+                    strong_norm = normalize_strong(strong_raw) if strong_raw else None
+                    if strong_norm and english:
                         results.append({
-                            "strong": normalize_strong(strong_raw),
+                            "strong": strong_norm,
                             "lemma": closed["attrs"].get("lemma", ""),
                             "content": closed["attrs"].get("content", ""),
                             "english": english,
@@ -265,8 +270,11 @@ def do_build(force=False):
 
 
 def do_lookup(strong_num):
-    """Look up a Strong's number in the index and print renderings."""
-    strong_num = strong_num.upper()
+    """Look up a Strong's number in the index and print renderings.
+
+    Supports both exact matches (H2617a) and base-number matches (H2617)
+    which will find all suffix variants (H2617a, H2617b, etc.).
+    """
     if not os.path.exists(INDEX_PATH):
         print(f"Error: Index not found at {INDEX_PATH}", file=sys.stderr)
         print("Run: python3 build_strongs_index.py  (to build)", file=sys.stderr)
@@ -275,19 +283,32 @@ def do_lookup(strong_num):
     with open(INDEX_PATH, "r", encoding="utf-8") as f:
         index = json.load(f)
 
-    if strong_num not in index:
+    # Try exact match first, then case-preserving match, then base-number match
+    matches = []
+    if strong_num in index:
+        matches = [strong_num]
+    else:
+        # Search for matching keys (case-insensitive prefix match)
+        base = strong_num.upper().rstrip("ABCDEFabcdef")
+        matches = sorted(k for k in index if k != "_meta" and k.upper().startswith(base.upper()))
+
+    if not matches:
         print(f"No entry for {strong_num} in index.")
         sys.exit(0)
 
-    entry = index[strong_num]
-    print(f"Strong's: {strong_num} (lemma: {entry.get('lemma', '?')})")
-    print(f"Total occurrences: {entry['total']}")
-    print()
+    for key in matches:
+        entry = index[key]
+        print(f"Strong's: {key} (lemma: {entry.get('lemma', '?')})")
+        print(f"Total occurrences: {entry['total']}")
+        print()
 
-    for r in entry["renderings"]:
-        pct = (r["count"] / entry["total"] * 100) if entry["total"] > 0 else 0
-        refs_str = ", ".join(r["refs"][:5])
-        print(f"  {r['text']:30s}  {r['count']:4d}  ({pct:5.1f}%)  [{refs_str}]")
+        for r in entry["renderings"]:
+            pct = (r["count"] / entry["total"] * 100) if entry["total"] > 0 else 0
+            refs_str = ", ".join(r["refs"][:5])
+            print(f"  {r['text']:30s}  {r['count']:4d}  ({pct:5.1f}%)  [{refs_str}]")
+
+        if key != matches[-1]:
+            print()
 
 
 def do_stats():
