@@ -12,11 +12,14 @@ TQ answers should capture the *idea* of the content so that any translation deri
 
 ## Content Rules
 
-### Match Literal Translation
-- Questions and responses must conceptually match the Literal Translation (ULT)
-- Use terms and ideas present in the ULT text
+### Match the Content, Not the Form
+- Questions and responses must match the *ideas* in the ULT, not its literal wording
+- The ULT often preserves Hebrew idioms and structures that would confuse ESL readers -- express the same idea in plain, accessible English
+- Use key terms from the ULT (proper nouns, theological terms like "covenant faithfulness") but restate Hebrew idioms in natural English
 - If the ULT uses "Yahweh," the TQ should use "Yahweh" (not "the LORD")
-- If the ULT uses a specific phrase, the TQ answer should reflect that phrasing
+- Example: ULT says "for length of days" -- the TQ answer should say "for as long as he lives," not repeat the Hebrew idiom
+- Example: ULT says "waters of rest" -- the TQ answer should say "quiet waters" or "peaceful waters"
+- The test: could an ESL reader understand the answer without needing to look up what the phrase means?
 
 ### Language Level
 - Write in natural English suitable for ESL speakers (approximately 8th grade reading level)
