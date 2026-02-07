@@ -7,6 +7,19 @@ description: End-to-end Book Package for a chapter. Orchestrates ULT, issues, US
 
 Generate a complete Book Package for a single chapter and push to Door43.
 
+## Context Window Strategy
+
+The orchestrator (this agent) stays lightweight. Every generation phase runs as
+a **Task subagent** so its work happens in a separate context window. The
+orchestrator only holds:
+- This skill (~200 lines)
+- Task launch/result messages (~1-2k tokens each)
+- A few bash script outputs for prep work
+
+Never invoke sub-skills inline (via the Skill tool). Always delegate to Task
+subagents. This keeps the orchestrator's context free for coordination across
+all phases.
+
 ## Arguments
 
 `/makeBP <book> <chapter> <username>`
@@ -33,36 +46,42 @@ eval $(grep -v '^#' .env | xargs -d '\n' printf 'export %s\n')
 ## Dependency Graph
 
 ```
-Phase 1: /initial-pipeline ──→ ULT + issues + UST
+Phase 1: /initial-pipeline ──→ ULT + issues + UST        [1 Task subagent]
               │
-Phase 2: ─────┼──→ /chapter-intro ──────┐
+Phase 2: ─────┼──→ /chapter-intro ──────┐                [4 Task subagents]
 (parallel)    ├──→ /tq-writer            │
               ├──→ /ULT-alignment        │
               └──→ /UST-alignment        │
                                          ↓
-Phase 3: ──────────→ /tn-writer (needs intro row)
+Phase 3: ──────────→ /tn-writer (needs intro row)         [1 Task subagent]
               │
-Phase 4: ─────┴──→ /repo-insert (all content, parallel)
+Phase 4: ─────┴──→ /repo-insert (all content, parallel)  [4 Task subagents]
 ```
 
 Phases 2 and 3 overlap: tq-writer and alignments keep running while tn-writer
 starts after chapter-intro finishes.
 
+Total subagents across the run: 10 (sequential phases, not all at once).
+
 ## Phase 1: Initial Pipeline
 
-Invoke `/initial-pipeline {BOOK} {CHAPTER}`.
+Launch a **Task subagent** (`subagent_type: general-purpose`) with a prompt to
+invoke `/initial-pipeline {BOOK} {CHAPTER}` and follow its SKILL.md. The
+initial-pipeline skill manages its own internal 6-wave team (ULT draft,
+adversarial issue-id, challenge/defend, merge, ULT revision, verification,
+UST generation).
 
-This runs the 6-wave team internally (ULT draft, adversarial issue-id,
-challenge/defend, merge, ULT revision, verification, UST generation).
+The subagent's context handles all that complexity. The orchestrator just waits
+for completion and checks that the output files exist.
 
-**Outputs:**
+**Outputs to verify:**
 - `output/AI-ULT/{BOOK}-{CH}.usfm` -- revised ULT
 - `output/AI-UST/{BOOK}-{CH}.usfm` -- UST
 - `output/issues/{BOOK}-{CH}.tsv` -- verified issues
 
 ## Between Phases: Prepare Plain Text
 
-Create plain-text ULT/UST for tn-writer and tq-writer:
+The orchestrator runs these directly (small bash commands, no context cost):
 
 ```bash
 node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
@@ -78,8 +97,9 @@ LAST_VERSE=$(grep -oP '\\v \K[0-9]+' output/AI-ULT/{BOOK}-{CH}.usfm | tail -1)
 
 ## Phase 2: Parallel Generation
 
-Launch four agents in parallel using the Task tool (`subagent_type: general-purpose`).
-Each agent invokes its skill and follows that skill's full workflow.
+Launch four **Task subagents** in parallel (`subagent_type: general-purpose`).
+Each agent gets a prompt telling it to invoke the skill and providing all
+file paths. Each runs in its own context window.
 
 | Agent | Skill to invoke | Key inputs | Output |
 |-------|----------------|-----------|--------|
@@ -88,25 +108,31 @@ Each agent invokes its skill and follows that skill's full workflow.
 | ULT Alignment | `/ULT-alignment` | `output/AI-ULT/{BOOK}-{CH}.usfm` + Hebrew source | `output/AI-ULT/{BOOK}-{CH}-aligned.usfm` |
 | UST Alignment | `/UST-alignment` | `output/AI-UST/{BOOK}-{CH}.usfm` + Hebrew source | `output/AI-UST/{BOOK}-{CH}-aligned.usfm` |
 
-**Agent prompts should include:**
+**Each agent prompt should include:**
 - Book, chapter, and padded chapter values
 - Paths to all input files
 - Expected output path
-- Instruction to invoke the skill and follow its SKILL.md
+- Instruction to invoke the skill via the Skill tool and follow its SKILL.md
+
+Run the chapter-intro agent without `run_in_background` so the orchestrator
+knows when it completes. The other three can run in the background if desired.
 
 ## Phase 3: TN Writer
 
 After the **chapter-intro agent** completes (intro row must exist in issues TSV),
-launch the tn-writer agent. Do not wait for tq-writer or alignments.
+launch the tn-writer **Task subagent**. Do not wait for tq-writer or alignments.
 
 | Agent | Skill to invoke | Key inputs | Output |
 |-------|----------------|-----------|--------|
 | TN Writer | `/tn-writer` | `output/issues/{BOOK}-{CH}.tsv` (with intro), `/tmp/claude/ult_plain.usfm`, `/tmp/claude/ust_plain.usfm` | `output/notes/{BOOK}-{CH}.tsv` |
 
+Wait for this agent plus any remaining Phase 2 agents to complete before
+proceeding.
+
 ## Phase 4: Repo Insert
 
 After all agents complete, insert each content type into Door43 repos.
-These can run in parallel (each touches a different repo directory).
+Launch four **Task subagents** in parallel (each touches a different repo).
 
 | Content | Source | Repo | Branch | Insert script |
 |---------|--------|------|--------|---------------|
