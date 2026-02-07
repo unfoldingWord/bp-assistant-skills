@@ -5,7 +5,7 @@ Don't use emojis, it breaks windows terminal.
 - When exploring or analyzing, write findings incrementally to a file rather than holding everything in context. Even interrupted sessions should leave a usable artifact.
 - Before multi-step exploration, outline a short plan and confirm direction.
 - When working on skills, check `.claude/skills/` for existing patterns before proposing new approaches.
-- Plans have two tiers: an **approval plan** (concise, what/why, shown to user) and an **execution plan** (full detail, exact changes, saved to scratchpad so it survives context clears). The approval plan should reference the scratchpad file path.
+- Plans have two tiers: an **approval plan** (concise, what/why, shown to user) and an **execution plan** (full detail, exact changes, saved to `plans/` so it survives context clears). The approval plan should reference the execution plan file path.
 - Script first design. If something can be scripted when making skills or otherwise working, script it, it is more accurate (if the script is written correctly).
 
 ## Primary Tasks
