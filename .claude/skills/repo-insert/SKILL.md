@@ -61,12 +61,13 @@ echo "Repos: $DOOR43_REPOS_PATH, User: $DOOR43_USERNAME"
 ### Step 2: Setup Repo
 
 ```bash
-REPOS_PATH="/mnt/c/Users/benja/Documents/GitHub"  # or from .env
+REPOS_PATH="$DOOR43_REPOS_PATH"
 REPO="en_ult"  # en_ult, en_ust, or en_tn
+HTTPS_URL="https://${DOOR43_USERNAME}:${DOOR43_TOKEN}@git.door43.org/unfoldingWord/${REPO}.git"
 
-# Clone if needed (SSH)
+# Clone if needed (use HTTPS with token -- works in sandboxed environments)
 if [ ! -d "$REPOS_PATH/$REPO" ]; then
-  git clone git@git.door43.org:unfoldingWord/$REPO.git "$REPOS_PATH/$REPO"
+  git clone "$HTTPS_URL" "$REPOS_PATH/$REPO"
 fi
 
 cd "$REPOS_PATH/$REPO"
@@ -84,11 +85,12 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   # Stop and ask the user how to handle this
 fi
 
-# Fetch all remote updates
-git fetch origin
+# Fetch all remote updates (use HTTPS URL, not SSH origin)
+git fetch "$HTTPS_URL" master
+git fetch "$HTTPS_URL" "$BRANCH" || true  # may not exist yet
 
 # Update master to match remote
-git checkout master && git pull origin master
+git checkout master && git pull "$HTTPS_URL" master
 ```
 
 Checkout the working branch, ensuring it matches remote exactly:
@@ -100,14 +102,15 @@ if git branch -r | grep -q "origin/$BRANCH"; then
   git checkout "$BRANCH"
   git reset --hard "origin/$BRANCH"
 else
-  # New branch -- create from current master
-  git checkout -b "$BRANCH" master
+  git fetch "$HTTPS_URL" "$BRANCH" 2>/dev/null && \
+    git checkout "$BRANCH" && git reset --hard FETCH_HEAD || \
+    git checkout -b "$BRANCH" master  # New branch -- create from master
 fi
 ```
 
 After checkout, merge master into the working branch so insertions apply on top of the latest content:
 ```bash
-git merge origin/master --no-edit
+git merge FETCH_HEAD --no-edit
 # If this produces conflicts, STOP and tell the user before proceeding
 ```
 
@@ -173,7 +176,7 @@ Check:
 cd "$REPOS_PATH/$REPO"
 git add 19-PSA.usfm  # or tn_PSA.tsv
 git commit -m "Insert AI ULT for PSA 119:100-104"
-git push origin "$BRANCH"
+git push "$HTTPS_URL" "$BRANCH"
 ```
 
 ### Step 7: Optional PR Creation
