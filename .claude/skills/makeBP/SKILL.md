@@ -50,16 +50,18 @@ Phase 1: /initial-pipeline ──→ ULT + issues + UST        [1 Task subagent]
               │
 Phase 2: ─────┼──→ /chapter-intro ──────┐                [4 Task subagents]
 (parallel)    ├──→ /tq-writer            │
-              ├──→ /ULT-alignment        │
-              └──→ /UST-alignment        │
+              ├──→ /ULT-alignment ───────┤
+              └──→ /UST-alignment ───────┤
                                          ↓
-Phase 3: ──────────→ /tn-writer (needs intro row)         [1 Task subagent]
+Phase 3: ──────────→ /tn-writer (needs intro + alignments) [1 Task subagent]
               │
 Phase 4: ─────┴──→ /repo-insert (all content, parallel)  [4 Task subagents]
 ```
 
-Phases 2 and 3 overlap: tq-writer and alignments keep running while tn-writer
-starts after chapter-intro finishes.
+Phase 3 starts after chapter-intro AND both ULT-alignment AND UST-alignment
+complete. The tn-writer needs the aligned ULT for quote conversion (local file
+instead of remote API), and the aligned UST to verify ATs don't duplicate
+UST phrasing.
 
 Total subagents across the run: 10 (sequential phases, not all at once).
 
@@ -119,8 +121,11 @@ knows when it completes. The other three can run in the background if desired.
 
 ## Phase 3: TN Writer
 
-After the **chapter-intro agent** completes (intro row must exist in issues TSV),
-launch the tn-writer **Task subagent**. Do not wait for tq-writer or alignments.
+After **chapter-intro**, **ULT-alignment**, and **UST-alignment** all complete,
+launch the tn-writer **Task subagent**. The tn-writer needs: the intro row in
+the issues TSV, the aligned ULT for local quote conversion (avoids empty Quote
+columns from remote API mismatch), and the aligned UST for AT verification.
+Do not wait for tq-writer.
 
 | Agent | Skill to invoke | Key inputs | Output |
 |-------|----------------|-----------|--------|

@@ -132,6 +132,10 @@ def parse_input_tsv(filepath):
             while len(cols) < 7:
                 cols.append('')
 
+            # Skip header row
+            if line_num == 1 and cols[0].lower() == 'book':
+                continue
+
             if book_code is None:
                 book_code = cols[0].upper()
 
@@ -336,13 +340,17 @@ def prepare_converter_tsv(items):
     return '\n'.join(lines)
 
 
-def run_language_conversion(items, book_code):
+def run_language_conversion(items, book_code, aligned_usfm_path=None):
     """Run roundtrip language conversion via lang_convert.js.
 
     Returns list of dicts with OrigQuote and GLQuote per item.
+    If aligned_usfm_path is provided, uses local file instead of remote API.
     """
     tsv_content = prepare_converter_tsv(items)
-    bible_link = 'unfoldingWord/en_ult/master'
+    if aligned_usfm_path:
+        bible_link = f'file://{aligned_usfm_path}'
+    else:
+        bible_link = 'unfoldingWord/en_ult/master'
 
     try:
         result = subprocess.run(
@@ -660,8 +668,17 @@ def main():
     # 4. Language conversion
     conversion_results = None
     if not args.skip_lang:
+        # Check for local aligned ULT (from ULT-alignment phase)
+        aligned_path = None
+        aligned_candidate = os.path.join(PROJECT_ROOT, 'output', 'AI-ULT',
+                                          f'{book_code}-{chapter}-aligned.usfm')
+        if os.path.exists(aligned_candidate):
+            aligned_path = aligned_candidate
+            print(f"Using local aligned ULT: {aligned_path}", file=sys.stderr)
+        else:
+            print(f"No local aligned ULT found at {aligned_candidate}, using remote", file=sys.stderr)
         print(f"Running language conversion for {book_code}...", file=sys.stderr)
-        conversion_results = run_language_conversion(items, book_code)
+        conversion_results = run_language_conversion(items, book_code, aligned_path)
         if conversion_results:
             print(f"  Got {len(conversion_results)} conversion results", file=sys.stderr)
         else:

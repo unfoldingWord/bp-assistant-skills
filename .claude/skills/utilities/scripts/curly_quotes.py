@@ -31,7 +31,18 @@ def convert_to_curly_quotes(text: str) -> str:
     while i < len(text):
         char = text[i]
 
-        if char == '"':
+        if char == '"' and i > 0 and text[i - 1] == '=':
+            # USFM attribute value like x-strong="H1984b" -- pass through unchanged
+            result.append(char)
+            i += 1
+            while i < len(text) and text[i] != '"':
+                result.append(text[i])
+                i += 1
+            if i < len(text):
+                result.append(text[i])  # closing straight quote
+                i += 1
+            continue
+        elif char == '"':
             # Determine if opening or closing
             if is_opening_quote(text, i):
                 result.append('\u201c')
