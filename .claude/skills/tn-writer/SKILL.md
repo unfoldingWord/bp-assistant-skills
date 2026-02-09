@@ -47,11 +47,45 @@ Options:
 - `--skip-lang` -- Skip language conversion (keep original English quotes)
 - `--skip-ids` -- Skip ID generation
 
-### Step 3: Read the Style Guide
+### Step 3: Verify Roundtrip Alignment
+
+After prepare_notes.py runs (which roundtrips gl_quotes internally), verify the results before investing in note generation. Check each item's `gl_quote` vs `gl_quote_roundtripped` in the prepared JSON. If they differ, the original gl_quote may not align cleanly to Hebrew words -- investigate before proceeding.
+
+```bash
+python3 -c "
+import json
+with open('/tmp/claude/prepared_notes.json') as f:
+    data = json.load(f)
+diffs = [(i['id'], i['reference'], i['gl_quote'], i['gl_quote_roundtripped'])
+         for i in data['items']
+         if i['gl_quote'].strip().lower() != i['gl_quote_roundtripped'].strip().lower()]
+if diffs:
+    print(f'{len(diffs)} roundtrip discrepancies:')
+    for d in diffs:
+        print(f'  {d[0]} {d[1]}: \"{d[2]}\" -> \"{d[3]}\"')
+else:
+    print('All gl_quotes roundtrip cleanly.')
+"
+```
+
+Review any discrepancies. Minor differences (capitalization, whitespace) are usually fine. If a gl_quote roundtrips to something substantially different, the Hebrew alignment may be off -- check the original quote against the ULT verse and fix before continuing.
+
+### Step 4: Flag Narrow Quotes
+
+Run the narrow-quote flagger against the prepared JSON:
+
+```bash
+python3 .claude/skills/tn-writer/scripts/flag_narrow_quotes.py \
+    /tmp/claude/prepared_notes.json
+```
+
+Review flagged items. These quotes are correct for focusing the note body on the issue, but may need wider phrase boundaries for AT fit later. Keep this list in mind during note generation -- write initial ATs that anticipate the surrounding phrase context.
+
+### Step 5: Read the Style Guide
 
 Read `reference/note-style-guide.md` for the note writing rules.
 
-### Step 4: Generate Notes (write keyed JSON, not TSV)
+### Step 6: Generate Notes (write keyed JSON, not TSV)
 
 Read `/tmp/claude/prepared_notes.json`. For each item, generate a note and write it to a JSON object keyed by the item's `id`. Write the result to `/tmp/claude/generated_notes.json`.
 
@@ -69,6 +103,7 @@ Process one item at a time:
    - The AT must fit seamlessly: removing `gl_quote` from `ult_verse` and inserting the AT should read as natural English
    - The AT must differ from the UST phrasing in `ust_verse`
    - Use minimal changes to the ULT wording; only change what the translation issue requires
+   - For items flagged as narrow in Step 4: the narrow gl_quote is still correct in the prompt (it focuses the note body on the issue). But write the initial AT with the surrounding phrase context in mind, since the quote boundary may be expanded for AT fit in Step 7.
 
 4. For items with `tcm_mode: true`:
    - Present multiple interpretations using the "This could mean:" format
@@ -85,9 +120,9 @@ Output format -- a flat JSON object mapping item ID to note text:
 
 Write this to `/tmp/claude/generated_notes.json`. Do NOT assemble the TSV yourself -- the assembly script handles that to prevent row misalignment.
 
-### Step 5: AT Fit Check
+### Step 7: Expand Narrow Quotes and AT Fit Check (iterative)
 
-Run the verification script to see all substitutions at once:
+Run the verification script to see all substitutions:
 
 ```bash
 python3 .claude/skills/tn-writer/scripts/verify_at_fit.py \
@@ -95,15 +130,33 @@ python3 .claude/skills/tn-writer/scripts/verify_at_fit.py \
     /tmp/claude/generated_notes.json
 ```
 
-This shows every AT substituted into its ULT verse. Review the output:
+Read the full stdout -- every substitution line is the review, not just the error summary at the end.
 
-1. Fix any ERRORS (gl_quote not found -- usually a curly brace or case issue)
-2. Read each substitution result -- does it read as natural English?
-3. Watch for prepositions/conjunctions adjacent to the gl_quote that may need to be included in the AT (Hebrew prefixes like bet/lamed/mem often correspond to English "to/in/from" that sits outside the gl_quote)
-4. Verify no AT is identical to UST phrasing
-5. Update entries in `/tmp/claude/generated_notes.json` for any fixes
+For each substitution that reads unnaturally (broken grammar, orphaned words, verb agreement issues):
 
-### Step 6: Assemble Output TSV (script)
+1. **Expand the gl_quote** to a wider phrase boundary in the ULT verse. For example, if `distress` sits inside "in my distress", expand the quote to `in my distress`.
+
+2. **Roundtrip the expanded quote** to verify Hebrew alignment. Build a one-row TSV with the expanded quote and run:
+   ```bash
+   echo -e "Reference\tID\tTags\tQuote\tOccurrence\tNote\n<REF>\t\t<SREF>\t<EXPANDED_QUOTE>\t1\t" | \
+       node .claude/skills/tn-writer/scripts/lang_convert.js roundtrip unfoldingWord/en_ult/master <BOOK> -
+   ```
+   Verify the roundtripped OrigQuote has Hebrew content and the GLQuote matches.
+
+3. **Update prepared_notes.json** -- set `gl_quote`, `gl_quote_roundtripped`, and `orig_quote` for the expanded item.
+
+4. **Rewrite the AT** in `generated_notes.json` to fit the expanded quote boundary. The AT should now be a seamless replacement for the wider phrase.
+
+5. **Re-run verify_at_fit.py**. Repeat until every substitution reads as natural English.
+
+Do not proceed to assembly until every substitution line has been reviewed and reads correctly.
+
+Also check:
+- Fix any ERRORS (gl_quote not found -- usually a curly brace or case issue)
+- Watch for prepositions/conjunctions adjacent to the gl_quote that may need inclusion in the AT (Hebrew prefixes like bet/lamed/mem often correspond to English "to/in/from" outside the gl_quote)
+- Verify no AT is identical to UST phrasing
+
+### Step 8: Assemble Output TSV (script)
 
 Run the assembly script to produce the final TSV. The script reads metadata from the prepared JSON and note text from the generated JSON, matching by ID. This prevents note/row misalignment.
 
@@ -114,7 +167,7 @@ python3 .claude/skills/tn-writer/scripts/assemble_notes.py \
     --output output/notes/<BOOK>-<CHAPTER>.tsv
 ```
 
-### Step 7: Post-Process
+### Step 9: Post-Process
 
 Run curly quote conversion on the output:
 

@@ -45,6 +45,12 @@ Check the UST for the same verse. Make sure your alternate translation is not th
 ### Minimal Adjustment
 The AT should be the smallest change to the ULT text that resolves the translation issue. Keep ULT wording where possible, change only what is needed. For figures of speech (metaphors, idioms, etc.), more substantial rewording may be needed to express the plain meaning -- this is expected.
 
+### Punctuation in ATs
+Do not include closing punctuation (period, comma, question mark) in the AT brackets unless the note is specifically suggesting a punctuation change.
+
+### Discontinuous ATs
+When an AT covers non-adjacent text, use a single pair of brackets with a true ellipsis character between the parts: `[I desire peace … they desire war]` (spaces around the ellipsis).
+
 ## Author References
 When referring to the author or writer of a biblical text, use "the author" instead of "the writer."
 
