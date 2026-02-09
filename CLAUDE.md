@@ -34,10 +34,10 @@ You are either being asked to:
 ### Data (in `data/`)
 Data Files (Not in Git)
 
-The project uses extensive data files that are gitignored but available locally:
+The project uses extensive data files that are not gitignored so you can see them, but should never be commited or pushed:
 
 #### Data Directories
-All paths relative to project root. These directories exist locally but are not tracked in git:
+All paths relative to project root. These directories exist locally but should not tracked in git:
 
 - `data/en_tw/` - English Translation Words
 - `data/published-tns/` - Published Translation Notes  
@@ -54,7 +54,7 @@ All paths relative to project root. These directories exist locally but are not 
 - `data/quick-ref/` - Accumulated decisions from ULT-gen runs (CSV)
 
 #### Output Directories
-- `output/` - Generated files and reports (gitignored)
+- `output/` - Generated files and reports 
 - `tmp/` - Temporary processing files - you are often in sandbox mode and should use this
 
 **Output Folder Organization**: When any output folder exceeds ~10 files, sort into book subfolders (e.g., `output/AI-ULT/PSA/PSA-061.usfm` instead of `output/AI-ULT/PSA-061.usfm`). Smaller collections can stay flat. The `hints/` subfolder under `AI-UST` is always a subfolder regardless of count.
@@ -74,6 +74,6 @@ find data/ -name "*.usfm"
 ```
 
 ## Git Discipline
-- ALWAYS `git add` and `git commit` new files immediately after creating them (not in output folders)
+- ALWAYS `git add` and `git commit` new files immediately after creating them (not in output, data, tmp folders)
 - Run `git status` before any branch operation (checkout, reset, merge, rebase)
 - NEVER do `git reset --hard` or `git clean` without checking for untracked files first
