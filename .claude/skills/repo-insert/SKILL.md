@@ -73,7 +73,7 @@ fi
 cd "$REPOS_PATH/$REPO"
 ```
 
-**Sync local with remote before anything else.** The local branch must exactly match the remote before inserting. Stale local state causes merge conflicts and misplaced rows.
+**Sync local with remote before anything else.** The local branch must exactly match the remote before inserting. Stale local state causes merge conflicts and misplaced rows. Do not merge master into the working branch -- the goal is an exact replica of the remote branch state.
 
 ```bash
 cd "$REPOS_PATH/$REPO"
@@ -85,33 +85,24 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   # Stop and ask the user how to handle this
 fi
 
-# Fetch all remote updates (use HTTPS URL, not SSH origin)
-git fetch "$HTTPS_URL" master
+# Fetch the working branch from remote
 git fetch "$HTTPS_URL" "$BRANCH" || true  # may not exist yet
-
-# Update master to match remote
-git checkout master && git pull "$HTTPS_URL" master
 ```
 
 Checkout the working branch, ensuring it matches remote exactly:
 ```bash
 BRANCH="auto-deferredreward-PSA"  # or {username}-tc-create-1 for TN
 
-if git branch -r | grep -q "origin/$BRANCH"; then
-  # Branch exists on remote -- reset local to match remote exactly
+# Fetch and create/reset local branch to match remote exactly
+if git fetch "$HTTPS_URL" "$BRANCH" 2>/dev/null; then
+  git fetch "$HTTPS_URL" "$BRANCH:$BRANCH" 2>/dev/null || true
   git checkout "$BRANCH"
-  git reset --hard "origin/$BRANCH"
+  git reset --hard FETCH_HEAD
 else
-  git fetch "$HTTPS_URL" "$BRANCH" 2>/dev/null && \
-    git checkout "$BRANCH" && git reset --hard FETCH_HEAD || \
-    git checkout -b "$BRANCH" master  # New branch -- create from master
+  # Branch doesn't exist on remote -- fetch master and create from it
+  git fetch "$HTTPS_URL" master
+  git checkout -b "$BRANCH" FETCH_HEAD
 fi
-```
-
-After checkout, merge master into the working branch so insertions apply on top of the latest content:
-```bash
-git merge FETCH_HEAD --no-edit
-# If this produces conflicts, STOP and tell the user before proceeding
 ```
 
 ### Step 3: Show Existing Content

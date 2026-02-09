@@ -191,6 +191,9 @@ Orchestrator or Merger agent merges all findings.
 - Enforces the output format guardrail (brief hints only)
 - Produces final issues TSV
 
+### Final Check
+Before writing to output/issues/, verify ordering within each verse: first-to-last by ULT position, longest-to-shortest when phrases nest.
+
 ## Cleanup
 
 After Merger completes:

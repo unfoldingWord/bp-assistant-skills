@@ -239,7 +239,15 @@ function extractPlainText(parsed, filterChap, filterVrs) {
 function extractVerseText(objects) {
   const parts = [];
   for (const obj of objects) {
-    if (obj.type === 'text' && obj.text) {
+    if (obj.type === 'quote' && obj.tag) {
+      // Preserve \q1/\q2 markers for poetic line structure
+      const marker = `\\${obj.tag}`;
+      if (obj.text) {
+        parts.push(`\n${marker} ${obj.text.replace(/\n$/, '')}`);
+      } else {
+        // Standalone marker (before next verse) -- skip, not useful in plain text
+      }
+    } else if (obj.type === 'text' && obj.text) {
       parts.push(obj.text);
     } else if (obj.tag === 'w' && obj.type === 'word' && obj.text) {
       parts.push(obj.text);
