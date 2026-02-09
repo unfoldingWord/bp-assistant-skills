@@ -14,108 +14,167 @@ Adversarial multi-agent issue identification against human-authored ULT/UST from
 
 ## Setup (orchestrator runs directly)
 
+### Working Directory
+
+Use a project-local tmp directory (sandbox may block `/tmp/claude/`):
+```bash
+TMP=tmp/deep-issue-id
+mkdir -p $TMP
+```
+
+All paths below use `$TMP` as the working directory.
+
 ### 1. Fetch and Parse
 
 ```bash
-python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> > /tmp/claude/book_ult.usfm
-python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> --type ust > /tmp/claude/book_ust.usfm 2>/dev/null || true
+python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> > $TMP/book_ult.usfm
+python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> --type ust > $TMP/book_ust.usfm 2>/dev/null || true
 
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js /tmp/claude/book_ult.usfm \
+node .claude/skills/utilities/scripts/usfm/parse_usfm.js $TMP/book_ult.usfm \
   --chapter <N> \
-  --output-json /tmp/claude/alignments.json \
-  --output-plain /tmp/claude/ult_plain.usfm
+  --output-json $TMP/alignments.json \
+  --output-plain $TMP/ult_plain.usfm
 
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js /tmp/claude/book_ust.usfm \
-  --plain-only > /tmp/claude/ust_plain.usfm 2>/dev/null || true
+node .claude/skills/utilities/scripts/usfm/parse_usfm.js $TMP/book_ust.usfm \
+  --chapter <N> \
+  --plain-only > $TMP/ust_plain.usfm 2>/dev/null || true
 ```
+
+Note: `--chapter` filters both alignment JSON and plain text output. The UST parse also needs `--chapter <N>` to avoid dumping the whole book.
 
 ### 2. Compare ULT/UST
 
 ```bash
 python3 .claude/skills/issue-identification/scripts/compare_ult_ust.py \
-  /tmp/claude/ult_plain.usfm /tmp/claude/ust_plain.usfm \
-  --chapter <N> --output /tmp/claude/ult_ust_diff.tsv
+  $TMP/ult_plain.usfm $TMP/ust_plain.usfm \
+  --chapter <N> --output $TMP/ult_ust_diff.tsv
 ```
 
 ### 3. Run Automated Detection
 
 ```bash
 python3 .claude/skills/issue-identification/scripts/detection/detect_activepassive.py \
-  /tmp/claude/alignments.json --format tsv > /tmp/claude/detected_issues.tsv
+  $TMP/alignments.json --format tsv > $TMP/detected_issues.tsv
 
 python3 .claude/skills/issue-identification/scripts/detection/detect_abstract_nouns.py \
-  /tmp/claude/alignments.json --format tsv >> /tmp/claude/detected_issues.tsv
+  $TMP/alignments.json --format tsv >> $TMP/detected_issues.tsv
 ```
 
 ### 4. Build Published TN Index
 
 ```bash
-python3 .claude/skills/issue-identification/scripts/build_tn_index.py <BOOK> <N>
+python3 .claude/skills/utilities/scripts/build_tn_index.py
 ```
 
-Use `--lookup` and `--issue` for precedent lookups during analysis (not raw grep).
+This builds/refreshes the index (daily cache). Use `--lookup` and `--issue` for precedent lookups during analysis (not raw grep):
+```bash
+python3 .claude/skills/utilities/scripts/build_tn_index.py --issue figs-metaphor
+python3 .claude/skills/utilities/scripts/build_tn_index.py --lookup "tongue"
+```
 
-## Wave 2: Issue Identification (4 agents, parallel, adversarial)
+## Team Setup
 
-Spawn 4 Task agents (`subagent_type: "issue-identification"`). Each agent reads:
-- Human ULT (`/tmp/claude/ult_plain.usfm`)
-- Human UST (`/tmp/claude/ust_plain.usfm`) if available
-- Alignment JSON (`/tmp/claude/alignments.json`)
-- ULT/UST divergence patterns (`/tmp/claude/ult_ust_diff.tsv`)
-- Automated detections (`/tmp/claude/detected_issues.tsv`)
+Create a team for cross-agent interaction:
 
-Each works independently but all cross-check each other's work, reading each other's output, questioning classifications, and surfacing disagreements.
+```
+TeamCreate "deep-issue-<BOOK>-<CHAPTER>"
+```
 
-### Discourse Analyst
+Team name pattern: `deep-issue-PSA-120`, `deep-issue-GEN-01`, etc.
+
+All agents below are spawned as teammates in this team.
+
+## Wave 2: Issue Identification (4 team analysts)
+
+Spawn 4 teammates (`subagent_type: "issue-identification"`, with `team_name` set). Each analyst reads:
+- Human ULT (`$TMP/ult_plain.usfm`)
+- Human UST (`$TMP/ust_plain.usfm`) if available
+- Alignment JSON (`$TMP/alignments.json`)
+- ULT/UST divergence patterns (`$TMP/ult_ust_diff.tsv`)
+- Automated detections (`$TMP/detected_issues.tsv`)
+
+Each writes their TSV to `$TMP/wave2_*.tsv`. As they work, they read each other's output files for cross-checking. When they find genuine disagreements, they send DMs to the relevant analyst using SendMessage.
+
+Example interaction: Figurative analyst reads Grammar's output, sees "lip of falsehood" tagged as figs-possession but thinks figs-metonymy is the primary issue. Sends a DM to Grammar: "v2 'lip of falsehood' -- I have this as figs-metonymy (lip = speech). Your figs-possession is also valid but should it be secondary?"
+
+This is lightweight -- not forced on every issue, just available when analysts genuinely disagree.
+
+Include in each analyst's prompt:
+- The output format guardrail (see Output Format section below)
+- Instruction to read other analysts' TSV files as they appear
+- Instruction to use SendMessage for disagreements worth flagging
+
+### Discourse Analyst (teammate name: "discourse")
 Macro-level grammar and structure. Discourse markers, participant tracking, paragraph structure, connectors between clauses, quotation structure, genre indicators. Focuses on writing-* and grammar-connect-* issue types.
 
-Output: `/tmp/claude/wave2_discourse.tsv`
+Output: `$TMP/wave2_discourse.tsv`
 
-### Grammar Analyst
+### Grammar Analyst (teammate name: "grammar")
 Micro-level grammar within clauses. Passives, abstract nouns, possession, pronouns, ellipsis, word-level syntax. Integrates automated detection output first. Focuses on figs-activepassive, figs-abstractnouns, figs-possession, writing-pronouns, figs-ellipsis.
 
-Output: `/tmp/claude/wave2_grammar.tsv`
+Output: `$TMP/wave2_grammar.tsv`
 
-### Figurative Language Analyst
+### Figurative Language Analyst (teammate name: "figurative")
 Figures of speech. Metaphor, metonymy, simile, synecdoche, personification, merism, hendiadys, doublet, idiom. Cross-references the biblical imagery classification lists in figs-metonymy.md and figs-metaphor.md. Focuses on figs-* issue types.
 
-Output: `/tmp/claude/wave2_figurative.tsv`
+Output: `$TMP/wave2_figurative.tsv`
 
-### Speech Acts & Literary Analyst
+### Speech Acts & Literary Analyst (teammate name: "speech")
 Rhetorical devices and speech acts. Rhetorical questions, imperatives, exclamations, irony, hyperbole, litotes, euphemism, poetry markers, parallelism. Focuses on figs-rquestion, figs-imperative, figs-exclamations, figs-hyperbole, writing-poetry, figs-parallelism.
 
-Output: `/tmp/claude/wave2_speech.tsv`
+Output: `$TMP/wave2_speech.tsv`
 
 Each agent has a primary domain but overlaps with the others. When agents identify the same phrase, they should compare classifications. Disagreement is productive -- it's better to surface a conflict than to let a wrong classification pass unchallenged.
 
+Wait for all 4 analysts to go idle before proceeding to Wave 3.
+
 ## Wave 3: Challenge and Defend
 
-Spawn a Challenger agent after wave 2 completes.
+Spawn the Challenger as a 5th teammate (name: "challenger"). The Wave 2 analysts stay alive for this round.
 
-### Classification Challenger
-For every classification from wave 2, checks:
+### Challenge Phase
+The Challenger:
+1. Reads all wave 2 TSVs
+2. Identifies issues to challenge (misclassifications, missed overlaps, ULT coherence failures)
+3. Groups challenges by analyst
+4. Sends one batch DM to each analyst with their challenges
+
+Challenge criteria:
 - Is this the right issue type? Could it be a commonly confused alternative?
 - Tests: metaphor vs metonymy, doublet vs hendiadys, idiom vs metaphor, doublet vs parallelism
 - Cross-references issues_resolved and the biblical imagery classification lists
 - Does NOT find new issues -- only challenges existing ones
-- Pays special attention to disagreements surfaced in wave 2
+- Resolves disagreements between Wave 2 agents (e.g., one agent kept an issue another dropped)
+- Identifies duplicates where multiple agents flagged the same issue
 - **ULT coherence check**: For each issue, does it match what the human ULT actually renders? If the human ULT already handles the construct naturally (e.g., already made a passive active, already unpacked a figure), drop the issue. The human ULT is authoritative -- flag the issue, not the text.
 
-Wave 2 agents defend: When challenged, the original agent argues for their classification with evidence from the text, published TNs, or issues_resolved. The Challenger can accept the defense or escalate to the Merger.
+### Defend Phase
+Each analyst wakes up, reads their challenges, and sends a defense DM back to the Challenger. One round only -- no infinite back-and-forth.
 
-Output: `/tmp/claude/wave3_challenges.tsv` (challenged items with resolutions)
+### Ruling Phase
+The Challenger reads all defenses and makes final rulings: KEEP, DROP, RECLASSIFY, or MERGE_DUPLICATE for each challenged issue.
+
+Output: `$TMP/wave3_challenges.tsv` (all items with resolutions)
 
 ## Wave 4: Merge
 
-Spawn a Merger agent (or orchestrator handles directly for smaller chapters).
+Orchestrator or Merger agent merges all findings.
 
 ### Translational Decision Advisor
 - Merges all wave 2 findings
-- Applies wave 3 challenge outcomes
+- Applies wave 3 challenge outcomes (rulings override wave 2)
 - Resolves remaining conflicts
 - Deduplicates (same phrase, overlapping issues)
 - Orders: first-to-last by ULT position within each verse, longest-to-shortest when phrases nest
+- Enforces the output format guardrail (brief hints only)
 - Produces final issues TSV
+
+## Cleanup
+
+After Merger completes:
+1. Send `shutdown_request` to all 5 teammates (discourse, grammar, figurative, speech, challenger)
+2. Wait for shutdown confirmations
+3. `TeamDelete` to clean up team resources
 
 ## Guiding Principle
 
@@ -130,23 +189,59 @@ Same format as base issue-identification:
 [book]	[chapter:verse]	[supportreference]	[ULT text]			[explanation if needed]
 ```
 
+### Output Format (Firewall)
+
+The explanation column is a brief classification hint. It describes WHY the issue exists, not HOW to handle it. This applies to every agent (Wave 2 analysts, Challenger, and Merger).
+
+Rules:
+- 1-10 words maximum
+- Why the issue exists, not how to handle it
+- No "If your language..." phrasing
+- No "Alternate translation:" suggestions
+- No translation note templates or proto-notes
+- No advice to the translator -- that is the TN writer's job
+
+Good:
+```
+metonymy - lip represents speech
+rhetorical question - declares certainty of punishment
+abstract noun - could be verb
+doublet - two words for emphasis
+metaphor - refuge as physical shelter
+passive - agent is God
+```
+
+Bad (never produce these):
+```
+If your language does not use abstract nouns, you could express "salvation" as a verb
+Alternate translation: "the things he says"
+This is a metaphor. The psalmist speaks of God as if he were a fortress.
+```
+
+Include these rules in every agent prompt (Wave 2 analysts, Challenger batch, Merger).
+
 ## Flow
 
 ```
 Setup:    Fetch human ULT/UST from Door43 master
-          Parse -> alignment JSON + plain text
+          Parse -> alignment JSON + plain text (chapter-filtered)
           Compare ULT/UST divergence patterns
           Run automated detection (passives, abstract nouns)
           Build published TN index
 
-Wave 2:   Discourse Analyst ───┐
-          Grammar Analyst ─────┤  (all read human ULT/UST,
-          Figurative Lang. ────┤   detection output, divergences,
-          Speech Acts/Lit. ────┘   check each other's work)
+Team:     TeamCreate "deep-issue-<BOOK>-<CHAPTER>"
 
-Wave 3:   Challenger ──────────── (challenges classifications,
-                                   checks ULT coherence,
-                                   wave 2 agents defend)
+Wave 2:   Discourse ──────────┐
+          Grammar ────────────┤  (4 teammates, cross-read files,
+          Figurative ─────────┤   DM on disagreements,
+          Speech ─────────────┘   stay alive for Wave 3)
 
-Wave 4:   Merger ─────────────── (final issues TSV)
+Wave 3:   Challenger spawns ──── challenges each analyst via DM
+          Analysts defend ──────  one round of defend/respond
+          Challenger rules ─────  writes final rulings
+
+Wave 4:   Merger ─────────────── (applies rulings, deduplicates,
+                                   enforces output format firewall)
+
+Cleanup:  shutdown_request all → TeamDelete
 ```
