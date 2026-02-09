@@ -84,6 +84,18 @@ Team name pattern: `deep-issue-PSA-120`, `deep-issue-GEN-01`, etc.
 
 All agents below are spawned as teammates in this team.
 
+## Orchestrator Patience
+
+Agents take time. Do not:
+- Send shutdown requests until ALL waves are complete and the final merge is written
+- Send duplicate shutdown requests
+
+Do:
+- Wait for each analyst's "file written" message before proceeding to Wave 3
+- Wait for the challenger's "rulings complete" message before proceeding to Wave 4
+- Only send shutdown_request after the merge is written to output/issues/
+- You may gently nudge agents, or ask what they are waiting for if they seem stuck.
+
 ## Wave 2: Issue Identification (4 team analysts)
 
 Spawn 4 teammates (`subagent_type: "issue-identification"`, with `team_name` set). Each analyst reads:
@@ -148,6 +160,12 @@ Challenge criteria:
 - Resolves disagreements between Wave 2 agents (e.g., one agent kept an issue another dropped)
 - Identifies duplicates where multiple agents flagged the same issue
 - **ULT coherence check**: For each issue, does it match what the human ULT actually renders? If the human ULT already handles the construct naturally (e.g., already made a passive active, already unpacked a figure), drop the issue. The human ULT is authoritative -- flag the issue, not the text.
+- **Grammar issues are independent**: Abstract nouns, passives (figs-abstractnouns,
+  figs-activepassive) are script-detected and AI-verified. They cannot be subsumed
+  by, merged into, or dropped in favor of figurative issues on the same phrase.
+  Keep both layers. Other grammar-level issues (figs-possession, figs-ellipsis,
+  figs-nominaladj) should also generally not be dropped or merged with figurative
+  issues.
 
 ### Defend Phase
 Each analyst wakes up, reads their challenges, and sends a defense DM back to the Challenger. One round only -- no infinite back-and-forth.
@@ -167,7 +185,8 @@ Orchestrator or Merger agent merges all findings.
 - Merges all wave 2 findings
 - Applies wave 3 challenge outcomes (rulings override wave 2)
 - Resolves remaining conflicts
-- Deduplicates (same phrase, overlapping issues)
+- Deduplicates (same phrase, same issue type only -- different issue types on the same phrase are not duplicates)
+- Grammar issues (abstract nouns, passives, possession, ellipsis, nominaladj) always survive alongside figurative issues on the same phrase
 - Orders: first-to-last by ULT position within each verse, longest-to-shortest when phrases nest
 - Enforces the output format guardrail (brief hints only)
 - Produces final issues TSV

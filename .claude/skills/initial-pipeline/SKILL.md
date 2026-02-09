@@ -77,6 +77,12 @@ it gets revised. If the agent makes a compelling case, the classification stands
 - **Wave 2 agents defend**: When challenged, the original agent argues for their
   classification with evidence from the text, published TNs, or issues_resolved.
   The Challenger can accept the defense or escalate to the Merger (wave 4a).
+- **Grammar issues are independent**: Abstract nouns, passives (figs-abstractnouns,
+  figs-activepassive) are script-detected and AI-verified. They cannot be subsumed
+  by, merged into, or dropped in favor of figurative issues on the same phrase.
+  Keep both layers. Other grammar-level issues (figs-possession, figs-ellipsis,
+  figs-nominaladj) should also generally not be dropped or merged with figurative
+  issues.
 - **ULT Reviewer**: Cross-checks issue-id output against ULT rendering:
   - figs-infostructure candidates: Is the Hebrew word order structurally significant?
     If not, flag the ULT for adjustment and drop the note.
@@ -89,6 +95,8 @@ it gets revised. If the agent makes a compelling case, the classification stands
 ### Wave 4a: Merge
 - **Translational Decision Advisor**: Merges wave 2 findings, applies wave 3 feedback,
   resolves conflicts, produces final issues TSV.
+- Grammar issues (abstract nouns, passives, possession, ellipsis, nominaladj)
+  always survive alongside figurative issues on the same phrase
 
 ### Wave 4b: Apply ULT Revisions
 - Apply the ULT Reviewer's changes to the ULT draft.

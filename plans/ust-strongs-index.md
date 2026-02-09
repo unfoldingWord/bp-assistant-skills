@@ -20,7 +20,7 @@ The published UST uses the same aligned USFM format as ULT (zaln-s/zaln-e with x
 
 Reuses the parsing architecture from `build_strongs_index.py` (zaln-s/zaln-e stack parsing, Strong's normalization) but targets `data/published_ust/`. Same CLI:
 
-- `python3 build_ust_index.py` -- build if stale (daily check)
+- `python3 build_ust_index.py` -- build if stale (daily check against release at https://git.door43.org/unfoldingWord/en_ust/releases)
 - `python3 build_ust_index.py --force` -- force rebuild
 - `python3 build_ust_index.py --lookup H2617` -- print UST renderings
 - `python3 build_ust_index.py --stats` -- summary statistics

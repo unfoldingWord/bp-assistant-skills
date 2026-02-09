@@ -308,6 +308,11 @@ After completing all identification, review your output:
 2. **Duplicate check**: Did you tag the same phrase twice for issues that are really one? (e.g., tagging both figs-doublet and figs-parallelism for the same word pair)
 
 3. **Missing overlap check**: Are there phrases that genuinely need two tags? (e.g., a simile that also contains an abstract noun - both figs-simile AND figs-abstractnouns may apply)
+   Abstract nouns, passives (figs-abstractnouns, figs-activepassive) are script-detected
+   and exist at a different analytical layer than figures of speech. They always coexist --
+   a figurative issue on the same phrase does not replace a grammar issue. Other grammar-level
+   issues (figs-possession, figs-ellipsis, figs-nominaladj) should also generally not be
+   dropped or merged with figurative issues.
 
 4. **Keyword sweep**: Scan output for any keyword triggers above that you may have tagged incorrectly.
 

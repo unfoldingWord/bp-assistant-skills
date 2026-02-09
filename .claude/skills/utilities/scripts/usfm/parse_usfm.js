@@ -201,21 +201,30 @@ function extractEnglishWords(children) {
 /**
  * Extract plain English text from parsed USFM
  */
-function extractPlainText(parsed) {
+function extractPlainText(parsed, filterChap, filterVrs) {
   const lines = [];
 
-  // Add headers
-  for (const header of parsed.headers || []) {
-    if (header.tag && header.content) {
-      lines.push(`\\${header.tag} ${header.content}`);
+  // Add headers only when not filtering to a specific chapter
+  if (!filterChap) {
+    for (const header of parsed.headers || []) {
+      if (header.tag && header.content) {
+        lines.push(`\\${header.tag} ${header.content}`);
+      }
     }
   }
 
   for (const [chapterNum, chapterData] of Object.entries(parsed.chapters || {})) {
+    const chapter = parseInt(chapterNum, 10);
+    if (filterChap && chapter !== filterChap) continue;
+
     lines.push(`\\c ${chapterNum}`);
     lines.push('\\p');
 
     for (const [verseNum, verseData] of Object.entries(chapterData)) {
+      if (filterVrs) {
+        const vn = parseInt(verseNum, 10);
+        if (!isNaN(vn) && !isNaN(filterVrs) && vn !== filterVrs) continue;
+      }
       const verseText = extractVerseText(verseData.verseObjects || []);
       lines.push(`\\v ${verseNum} ${verseText}`);
     }
@@ -273,7 +282,7 @@ if (!plainOnly) {
 }
 
 // Output plain text
-const plainText = extractPlainText(parsed);
+const plainText = extractPlainText(parsed, filterChapter, filterVerse);
 if (!jsonOnly && outputPlainFile) {
   writeFileSync(outputPlainFile, plainText);
   console.error(`Wrote plain USFM to ${outputPlainFile}`);
