@@ -405,6 +405,8 @@ function reorderAlignmentsByEnglishText(alignments, englishText) {
 function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
   // Normalize a word for matching: strip brackets and punctuation, lowercase
   const normalizeWord = (w) => w.replace(/[{}.,;:!?"']/g, '').toLowerCase();
+  // Case-sensitive key for occurrence counting: strip brackets and punctuation, keep case
+  const occurrenceKey = (w) => w.replace(/[{}.,;:!?"']/g, '');
 
   // Tokenize english_text to get the authoritative word order
   // Keep original words with punctuation for output
@@ -433,10 +435,11 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
   // Track which occurrence of each word we're processing
   const wordOccurrenceIndex = {};
 
-  // Count total occurrences of each normalized word for x-occurrences attribute
+  // Count total occurrences of each word for x-occurrences attribute (case-sensitive)
+  const englishTextOccKeys = englishTextWordsRaw.map(occurrenceKey);
   const wordTotalOccurrences = {};
-  for (const word of englishTextWords) {
-    wordTotalOccurrences[word] = (wordTotalOccurrences[word] || 0) + 1;
+  for (const key of englishTextOccKeys) {
+    wordTotalOccurrences[key] = (wordTotalOccurrences[key] || 0) + 1;
   }
 
   // Track current occurrence for x-occurrence attribute
@@ -492,10 +495,11 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
 
     const alignInfo = wordToAlignments[normalized]?.[occIdx];
 
-    // Track occurrence for this word (use normalized for counting)
-    currentOccurrence[normalized] = (currentOccurrence[normalized] || 0) + 1;
-    const occurrence = currentOccurrence[normalized];
-    const occurrences = wordTotalOccurrences[normalized];
+    // Track occurrence for this word (case-sensitive for viewer compatibility)
+    const occKey = englishTextOccKeys[i];
+    currentOccurrence[occKey] = (currentOccurrence[occKey] || 0) + 1;
+    const occurrence = currentOccurrence[occKey];
+    const occurrences = wordTotalOccurrences[occKey];
 
     const isBracketed = bracketStatus[i];
 
