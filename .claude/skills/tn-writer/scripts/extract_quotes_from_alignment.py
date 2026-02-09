@@ -26,10 +26,11 @@ import sys
 def parse_aligned_usfm(usfm_path):
     """Parse aligned USFM into per-verse word-to-Hebrew mappings.
 
-    Returns dict: { "chapter:verse" -> [ (english_word, hebrew_content, strong) ] }
+    Returns dict: { "chapter:verse" -> [ (english_word, hebrew_content, strong, hebrew_pos) ] }
 
-    Each entry is an English word with its aligned Hebrew x-content and
-    Strong's number from the enclosing zaln-s milestone.
+    Each entry is an English word with its aligned Hebrew x-content,
+    Strong's number from the enclosing zaln-s milestone, and the
+    Hebrew source position (order of first appearance in the verse).
     """
     with open(usfm_path, 'r', encoding='utf-8') as f:
         content = f.read()
@@ -38,6 +39,8 @@ def parse_aligned_usfm(usfm_path):
     current_chapter = None
     current_verse = None
     current_words = []
+    hebrew_order = {}
+    hebrew_pos_counter = 0
 
     # Process line by line
     for line in content.split('\n'):
@@ -51,6 +54,8 @@ def parse_aligned_usfm(usfm_path):
             current_chapter = ch_match.group(1)
             current_verse = None
             current_words = []
+            hebrew_order = {}
+            hebrew_pos_counter = 0
             continue
 
         # Verse marker
@@ -62,6 +67,8 @@ def parse_aligned_usfm(usfm_path):
                 verses[key] = current_words
             current_verse = v_match.group(1)
             current_words = []
+            hebrew_order = {}
+            hebrew_pos_counter = 0
             # Continue processing the rest of the line (don't skip it)
             line_rest = line
         else:
@@ -94,6 +101,9 @@ def parse_aligned_usfm(usfm_path):
                 sm = re.search(r'x-strong="([^"]*)"', attrs)
                 if sm:
                     x_strong = sm.group(1)
+                if x_content and x_content not in hebrew_order:
+                    hebrew_order[x_content] = hebrew_pos_counter
+                    hebrew_pos_counter += 1
                 active_milestones.append((x_content, x_strong))
                 pos += zaln_match.end()
                 continue
@@ -105,7 +115,7 @@ def parse_aligned_usfm(usfm_path):
                 # Use the innermost (last) active milestone
                 if active_milestones:
                     hebrew, strong = active_milestones[-1]
-                    current_words.append((eng_word, hebrew, strong))
+                    current_words.append((eng_word, hebrew, strong, hebrew_order.get(hebrew, 999)))
                 pos += w_match.end()
                 continue
 
@@ -181,12 +191,16 @@ def extract_quotes(aligned_usfm_path, items):
 
         # Collect Hebrew words from the matched span
         matched_words = verse_words[best_start:best_end]
-        hebrew_words = []
+        hebrew_items = []
         seen_hebrew = set()
-        for eng, hebrew, strong in matched_words:
+        for eng, hebrew, strong, hpos in matched_words:
             if hebrew and hebrew not in seen_hebrew:
-                hebrew_words.append(hebrew)
+                hebrew_items.append((hebrew, hpos))
                 seen_hebrew.add(hebrew)
+
+        # Sort by Hebrew source order
+        hebrew_items.sort(key=lambda x: x[1])
+        hebrew_words = [h for h, _ in hebrew_items]
 
         # Build roundtripped English from the matched span
         roundtripped_english = ' '.join(w[0] for w in matched_words)
