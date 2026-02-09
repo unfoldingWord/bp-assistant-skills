@@ -103,6 +103,7 @@ Include in each analyst's prompt:
 - The output format guardrail (see Output Format section below)
 - Instruction to read other analysts' TSV files as they appear
 - Instruction to use SendMessage for disagreements worth flagging
+- **Hold for Wave 3**: After writing your TSV, do NOT mark your task as completed. Send a message to team-lead confirming your file is written, then wait for DMs from the challenger agent. You will receive challenges to defend -- respond with one defense DM back to the challenger. After the challenger confirms rulings are complete, then mark your task completed.
 
 ### Discourse Analyst (teammate name: "discourse")
 Macro-level grammar and structure. Discourse markers, participant tracking, paragraph structure, connectors between clauses, quotation structure, genre indicators. Focuses on writing-* and grammar-connect-* issue types.
@@ -126,7 +127,7 @@ Output: `$TMP/wave2_speech.tsv`
 
 Each agent has a primary domain but overlaps with the others. When agents identify the same phrase, they should compare classifications. Disagreement is productive -- it's better to surface a conflict than to let a wrong classification pass unchallenged.
 
-Wait for all 4 analysts to go idle before proceeding to Wave 3.
+Wait for all 4 analysts to send their "file written" messages to team-lead. Do NOT mark Wave 2 tasks complete yet -- analysts must stay active to defend challenges in Wave 3. Only proceed to Wave 3 once all 4 files exist.
 
 ## Wave 3: Challenge and Defend
 
@@ -153,6 +154,8 @@ Each analyst wakes up, reads their challenges, and sends a defense DM back to th
 
 ### Ruling Phase
 The Challenger reads all defenses and makes final rulings: KEEP, DROP, RECLASSIFY, or MERGE_DUPLICATE for each challenged issue.
+
+After writing rulings, the Challenger sends a DM to each analyst: "Rulings complete, you may shut down." This releases analysts from their hold so they can mark their tasks completed.
 
 Output: `$TMP/wave3_challenges.tsv` (all items with resolutions)
 
