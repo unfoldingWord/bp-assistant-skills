@@ -34,6 +34,7 @@ python3 .claude/skills/tn-writer/scripts/prepare_notes.py \
     output/issues/<BOOK>-<CHAPTER>.tsv \
     --ult-usfm /tmp/claude/ult_plain.usfm \
     --ust-usfm /tmp/claude/ust_plain.usfm \
+    --aligned-usfm output/AI-ULT/<BOOK>-<CHAPTER>-aligned.usfm \
     --output /tmp/claude/prepared_notes.json
 ```
 
@@ -44,6 +45,7 @@ The script automatically:
 - Sorts output so `front` references come before verse references
 
 Options:
+- `--aligned-usfm PATH` -- Extract Hebrew quotes directly from aligned ULT (preferred; bypasses lang_convert.js roundtrip and eliminates QUOTE_NOT_FOUND from ULT version mismatch). Auto-detected if omitted and aligned file exists at the standard path.
 - `--skip-lang` -- Skip language conversion (keep original English quotes)
 - `--skip-ids` -- Skip ID generation
 
@@ -174,6 +176,18 @@ Run curly quote conversion on the output:
 ```bash
 python3 .claude/skills/utilities/scripts/curly_quotes.py output/notes/<BOOK>-<CHAPTER>.tsv --in-place
 ```
+
+### Step 10: Final Review
+
+Read the assembled TSV alongside the aligned ULT. For each row, verify:
+
+1. **Quote column** is non-empty and contains Hebrew text
+2. **Note text** addresses the issue type indicated by SupportReference
+3. **AT fit** -- if an Alternate Translation is present, mentally substitute it for the GLQuote in the ULT verse and confirm it reads naturally
+4. **Quote scope** -- the Hebrew quote covers the right range (not too narrow or too wide for the issue)
+5. **No duplicate UST phrasing** -- ATs should differ from the UST for the same verse
+
+Fix any issues found and rewrite the TSV row(s) if needed. This is a lightweight review pass, not a regeneration -- just catch structural problems the scripts can't judge.
 
 ## Input Format
 

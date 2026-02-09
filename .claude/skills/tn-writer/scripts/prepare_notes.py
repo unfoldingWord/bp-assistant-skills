@@ -625,6 +625,9 @@ def main():
     parser.add_argument('--ust-usfm', required=True, help='Path to plain UST USFM')
     parser.add_argument('--output', '-o', default='/tmp/claude/prepared_notes.json',
                         help='Output JSON file (default: /tmp/claude/prepared_notes.json)')
+    parser.add_argument('--aligned-usfm',
+                        help='Path to aligned ULT USFM (extracts Hebrew quotes directly, '
+                             'bypassing lang_convert.js roundtrip)')
     parser.add_argument('--skip-lang', action='store_true',
                         help='Skip language conversion (use original GLQuote)')
     parser.add_argument('--skip-ids', action='store_true',
@@ -665,24 +668,50 @@ def main():
     ust_verses, ust_context = parse_usfm_verses(args.ust_usfm)
     print(f"  Parsed {len(ust_verses)} UST verses", file=sys.stderr)
 
-    # 4. Language conversion
+    # 4. Language conversion / quote extraction
     conversion_results = None
     if not args.skip_lang:
-        # Check for local aligned ULT (from ULT-alignment phase)
+        # Determine aligned ULT path: explicit arg > auto-detected > none
         aligned_path = None
-        aligned_candidate = os.path.join(PROJECT_ROOT, 'output', 'AI-ULT',
-                                          f'{book_code}-{chapter}-aligned.usfm')
-        if os.path.exists(aligned_candidate):
-            aligned_path = aligned_candidate
-            print(f"Using local aligned ULT: {aligned_path}", file=sys.stderr)
+        if args.aligned_usfm:
+            if os.path.exists(args.aligned_usfm):
+                aligned_path = args.aligned_usfm
+            else:
+                print(f"WARNING: --aligned-usfm path not found: {args.aligned_usfm}",
+                      file=sys.stderr)
         else:
-            print(f"No local aligned ULT found at {aligned_candidate}, using remote", file=sys.stderr)
-        print(f"Running language conversion for {book_code}...", file=sys.stderr)
-        conversion_results = run_language_conversion(items, book_code, aligned_path)
-        if conversion_results:
-            print(f"  Got {len(conversion_results)} conversion results", file=sys.stderr)
+            aligned_candidate = os.path.join(PROJECT_ROOT, 'output', 'AI-ULT',
+                                              f'{book_code}-{chapter}-aligned.usfm')
+            if os.path.exists(aligned_candidate):
+                aligned_path = aligned_candidate
+
+        if aligned_path:
+            # Use direct extraction from aligned USFM (bypasses lang_convert.js)
+            print(f"Extracting Hebrew quotes from aligned ULT: {aligned_path}",
+                  file=sys.stderr)
+            from extract_quotes_from_alignment import extract_quotes
+            raw_results = extract_quotes(aligned_path, items)
+            # Convert to the same format run_language_conversion returns
+            conversion_results = [
+                {'Quote': r['Quote'], 'GLQuote': r['GLQuote']}
+                for r in raw_results
+            ]
+            found = sum(1 for r in conversion_results if r['Quote'])
+            missing = len(conversion_results) - found
+            print(f"  Extracted {found} Hebrew quotes ({missing} missing)",
+                  file=sys.stderr)
         else:
-            print("  WARNING: Language conversion failed, using original quotes", file=sys.stderr)
+            # Fall back to lang_convert.js roundtrip
+            print(f"No aligned ULT available, falling back to lang_convert.js",
+                  file=sys.stderr)
+            print(f"Running language conversion for {book_code}...", file=sys.stderr)
+            conversion_results = run_language_conversion(items, book_code)
+            if conversion_results:
+                print(f"  Got {len(conversion_results)} conversion results",
+                      file=sys.stderr)
+            else:
+                print("  WARNING: Language conversion failed, using original quotes",
+                      file=sys.stderr)
 
     # 4b. Extract front/superscription Hebrew from source
     front_words = []

@@ -119,6 +119,20 @@ file paths. Each runs in its own context window.
 Run the chapter-intro agent without `run_in_background` so the orchestrator
 knows when it completes. The other three can run in the background if desired.
 
+## Between Phase 2 and 3: Validate Brackets
+
+After ULT-alignment completes, run the bracket validator to catch words
+incorrectly marked as implied when they actually translate a Hebrew prefix:
+
+```bash
+python3 .claude/skills/utilities/scripts/validate_ult_brackets.py \
+  output/AI-ULT/{BOOK}-{CH}-aligned.usfm
+```
+
+If issues are found, fix the aligned USFM before proceeding to tn-writer.
+Typical fix: remove curly braces from words like `{in}` that align to a
+prefixed Strong's number (e.g. `b:H6951` where `b` = "in").
+
 ## Phase 3: TN Writer
 
 After **chapter-intro**, **ULT-alignment**, and **UST-alignment** all complete,
@@ -127,9 +141,14 @@ the issues TSV, the aligned ULT for local quote conversion (avoids empty Quote
 columns from remote API mismatch), and the aligned UST for AT verification.
 Do not wait for tq-writer.
 
+The tn-writer's `prepare_notes.py` accepts `--aligned-usfm` to extract Hebrew
+quotes directly from the aligned ULT instead of roundtripping through
+`lang_convert.js`. This eliminates QUOTE_NOT_FOUND errors caused by differences
+between our AI-generated ULT and the published Door43 master.
+
 | Agent | Skill to invoke | Key inputs | Output |
 |-------|----------------|-----------|--------|
-| TN Writer | `/tn-writer` | `output/issues/{BOOK}-{CH}.tsv` (with intro), `/tmp/claude/ult_plain.usfm`, `/tmp/claude/ust_plain.usfm` | `output/notes/{BOOK}-{CH}.tsv` |
+| TN Writer | `/tn-writer` | `output/issues/{BOOK}-{CH}.tsv` (with intro), `/tmp/claude/ult_plain.usfm`, `/tmp/claude/ust_plain.usfm`, `output/AI-ULT/{BOOK}-{CH}-aligned.usfm` | `output/notes/{BOOK}-{CH}.tsv` |
 
 Wait for this agent plus any remaining Phase 2 agents to complete before
 proceeding.
