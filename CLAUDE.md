@@ -55,7 +55,9 @@ All paths relative to project root. These directories exist locally but are not 
 
 #### Output Directories
 - `output/` - Generated files and reports (gitignored)
-- `tmp/` - Temporary processing files
+- `tmp/` - Temporary processing files - you are often in sandbox mode and should use this
+
+**Output Folder Organization**: When any output folder exceeds ~10 files, sort into book subfolders (e.g., `output/AI-ULT/PSA/PSA-061.usfm` instead of `output/AI-ULT/PSA-061.usfm`). Smaller collections can stay flat. The `hints/` subfolder under `AI-UST` is always a subfolder regardless of count.
 
 #### Other files
 - `translation-issues.csv` - All 94 translation issues (complete)

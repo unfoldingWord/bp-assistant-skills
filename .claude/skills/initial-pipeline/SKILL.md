@@ -262,7 +262,8 @@ Include in the UST agent's prompt:
 The UST agent:
 1. Generates UST (following UST-gen skill)
 2. Writes to `output/AI-UST/<BOOK>-<CH>.usfm`
-3. Sends message to team-lead: "UST complete"
+3. Writes alignment hints to `output/AI-UST/hints/<BOOK>-<CH>.json` (per UST-gen Step 7.5)
+4. Sends message to team-lead: "UST complete"
 
 ## Cleanup
 
@@ -275,7 +276,8 @@ After Wave 6 output is confirmed:
 
 1. `output/AI-ULT/<BOOK>-<CH>.usfm` -- revised ULT (draft 2, post-issue-id feedback)
 2. `output/AI-UST/<BOOK>-<CH>.usfm` -- UST (informed by issues)
-3. `output/issues/<BOOK>-<CH>.tsv` -- verified issues (post-ULT-revision check)
+3. `output/AI-UST/hints/<BOOK>-<CH>.json` -- alignment hints from UST generator
+4. `output/issues/<BOOK>-<CH>.tsv` -- verified issues (post-ULT-revision check)
 
 ## Output Format (Firewall)
 

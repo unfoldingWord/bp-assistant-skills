@@ -108,7 +108,7 @@ file paths. Each runs in its own context window.
 | Chapter Intro | `/chapter-intro {BOOK} {CHAPTER}` | ULT, UST, issues from Phase 1 | Inserts intro row into `output/issues/{BOOK}-{CH}.tsv` |
 | TQ Writer | `/tq-writer` | ULT, UST | `output/tq/{BOOK}-{CHAPTER}.tsv` |
 | ULT Alignment | `/ULT-alignment` | `output/AI-ULT/{BOOK}-{CH}.usfm` + Hebrew source | `output/AI-ULT/{BOOK}-{CH}-aligned.usfm` |
-| UST Alignment | `/UST-alignment` | `output/AI-UST/{BOOK}-{CH}.usfm` + Hebrew source | `output/AI-UST/{BOOK}-{CH}-aligned.usfm` |
+| UST Alignment | `/UST-alignment` | `output/AI-UST/{BOOK}-{CH}.usfm` + Hebrew source + `output/AI-UST/hints/{BOOK}-{CH}.json` | `output/AI-UST/{BOOK}-{CH}-aligned.usfm` |
 
 **Each agent prompt should include:**
 - Book, chapter, and padded chapter values

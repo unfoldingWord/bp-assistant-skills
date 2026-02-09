@@ -298,6 +298,36 @@ Save to `output/AI-UST/` with naming convention:
 output/AI-UST/[BOOK]-[CHAPTER].usfm
 ```
 
+### Step 7.5: Write Alignment Hints
+
+After writing the UST USFM, write a hints JSON that records which Hebrew words you rendered in each English phrase. As you generated each phrase, you knew which Hebrew concepts you were rendering -- capture that mapping now.
+
+Output path: `output/AI-UST/hints/<BOOK>-<CH>.json`
+
+Format:
+```json
+[
+  {
+    "reference": "PSA 1:1",
+    "hints": [
+      {"english": "The person who will have a truly good life", "hebrew_indices": [0, 1]},
+      {"english": "is the person who", "hebrew_indices": [2]},
+      {"english": "does not do what evil people tell him to do,", "hebrew_indices": [3, 4, 5, 6]},
+      {"english": "{It seems like}", "hebrew_indices": [], "implied": true}
+    ]
+  }
+]
+```
+
+Rules:
+- One entry per verse
+- `english` = phrase from the UST, matching `english_text` word-for-word
+- `hebrew_indices` = which Hebrew word positions (0-based) contributed meaning to that phrase
+- Add `"implied": true` on entries with bracketed content (`hebrew_indices: []`)
+- Phrases should cover all English words (complete coverage)
+- Granularity: phrase-level, not word-level. Group by the meaning units you were thinking in.
+- This is a rough draft for the aligner, not a finished alignment. Don't overthink it.
+
 ### Step 8: Convert to Curly Quotes
 
 Run the curly quotes script to convert straight quotes to curly quotes:

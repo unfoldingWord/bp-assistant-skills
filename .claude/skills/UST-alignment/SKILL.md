@@ -20,6 +20,18 @@ You need:
 1. **Hebrew USFM** from `data/hebrew_bible/*.usfm` - contains Strong's numbers, lemmas, morphology
 2. **English UST text** - from `output/AI-UST/` or user-provided
 
+## Using Alignment Hints
+
+If `output/AI-UST/hints/<BOOK>-<CH>.json` exists, read it first. These hints are a rough mapping from the UST generator showing which Hebrew words contributed to each English phrase. The generator wrote them while the translation decisions were fresh, so they capture the "why" behind each phrase.
+
+Use hints as your starting point:
+- Refine phrase boundaries (split large groups where meaning can be divided)
+- Handle split alignments (same Hebrew index appearing in multiple entries)
+- Verify against Hebrew source -- the hints are approximate, not authoritative
+- Entries with `"implied": true` correspond to bracketed content with `hebrew_indices: []`
+
+The hints give you the translator's intent. You provide the precision.
+
 ## Output Format: Simple Mapping JSON
 
 Same JSON structure as ULT alignment:
