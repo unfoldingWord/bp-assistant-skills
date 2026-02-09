@@ -141,8 +141,11 @@ def main():
         # Write intro rows first (passthrough, no AI processing)
         for intro in intro_rows:
             intro_id = generate_short_id()
+            # Use the reference from the source TSV (e.g. "78:intro"),
+            # NOT "front:intro" which is the book-level intro slot
+            intro_ref = intro.get('reference', 'front:intro')
             f.write('\t'.join([
-                'front:intro',
+                intro_ref,
                 intro_id,
                 '',
                 '',
