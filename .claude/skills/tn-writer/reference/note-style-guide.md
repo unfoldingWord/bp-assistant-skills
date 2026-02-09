@@ -97,6 +97,14 @@ For figs-metaphor, multiple templates may be available (generic, poetry, and spe
 - **figs-ellipsis**: Do not explain the missing words/phrase
 - **figs-abstractnouns**: Do not define the words
 
+## Terminology
+
+When writing notes, use the same terms that appear in the ULT and UST for the verse. Never substitute common English terms that differ from the project's chosen renderings. For example:
+
+- ULT uses "Box" (capitalized) or "Box of the Testimony/Covenant" for the Ark of the Covenant. Do not write "ark" or "ark of the covenant."
+- UST uses "Sacred Chest" (capitalized). Do not write "ark" in UST-referencing contexts.
+- See `data/glossary/hebrew_ot_glossary.csv` for the full list of standard renderings.
+
 ## Worked Examples
 
 ### Example 1 (with AT)
