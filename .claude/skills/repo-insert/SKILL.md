@@ -8,6 +8,13 @@ allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 
 Insert AI-generated content (ULT, UST, or TN) into local clones of git.door43.org repos, commit, push, and optionally create pull requests.
 
+## Organization Rule
+
+All repos belong to the **unfoldingWord** organization on Door43. Never push to a
+personal fork. Always verify the remote URL contains `git.door43.org/unfoldingWord/`
+before any git operation. Never commit to or checkout master -- master is only used
+as the base for creating branches.
+
 ## Configuration
 
 Uses `.env` in the project root (already in `.gitignore`):
@@ -18,7 +25,7 @@ DOOR43_USERNAME=deferredreward
 DOOR43_REPOS_PATH=/mnt/c/Users/benja/Documents/GitHub
 ```
 
-- **Git operations** (clone, push, pull): SSH URLs (`git@git.door43.org:unfoldingWord/{repo}.git`) -- SSH keys already configured
+- **Git operations** (clone, push, pull): HTTPS with token (`https://${DOOR43_USERNAME}:${DOOR43_TOKEN}@git.door43.org/unfoldingWord/{repo}.git`)
 - **PR creation**: Needs a Gitea API token (see `reference/gitea-api.md`)
 
 ## Parameters
@@ -73,11 +80,25 @@ fi
 cd "$REPOS_PATH/$REPO"
 ```
 
-**Sync local with remote before anything else.** The local branch must exactly match the remote before inserting. Stale local state causes merge conflicts and misplaced rows. Do not merge master into the working branch -- the goal is an exact replica of the remote branch state.
+**Verify remote points to unfoldingWord.** If the origin URL points to a personal
+fork instead of unfoldingWord, fix it before proceeding:
 
 ```bash
 cd "$REPOS_PATH/$REPO"
 
+# Verify remote -- must be unfoldingWord org, not a personal fork
+ORIGIN_URL=$(git remote get-url origin)
+if [[ "$ORIGIN_URL" != *"git.door43.org/unfoldingWord/"* ]]; then
+  echo "WARNING: Remote points to $ORIGIN_URL -- fixing to unfoldingWord"
+  git remote set-url origin "$HTTPS_URL"
+fi
+```
+
+**Sync local with remote before anything else.** The local branch must exactly
+match the remote before inserting. Stale local state causes merge conflicts and
+misplaced rows.
+
+```bash
 # Check for uncommitted changes -- abort if dirty
 if ! git diff --quiet || ! git diff --cached --quiet; then
   echo "ERROR: Repo has uncommitted changes. Resolve before proceeding."
@@ -85,23 +106,28 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   # Stop and ask the user how to handle this
 fi
 
-# Fetch the working branch from remote
-git fetch "$HTTPS_URL" "$BRANCH" || true  # may not exist yet
+# Fetch latest from remote
+git fetch origin
 ```
 
-Checkout the working branch, ensuring it matches remote exactly:
+**Create or checkout the working branch from origin/master.** Always branch from
+`origin/master` so the branch has the full repo contents. Never create a branch
+from scratch or from a local-only state.
+
 ```bash
 BRANCH="auto-deferredreward-PSA"  # or {username}-tc-create-1 for TN
 
-# Fetch and create/reset local branch to match remote exactly
-if git fetch "$HTTPS_URL" "$BRANCH" 2>/dev/null; then
-  git fetch "$HTTPS_URL" "$BRANCH:$BRANCH" 2>/dev/null || true
-  git checkout "$BRANCH"
-  git reset --hard FETCH_HEAD
+# Delete stale local branch if it exists
+git branch -D "$BRANCH" 2>/dev/null || true
+
+# Check if branch exists on remote
+if git ls-remote --heads origin "$BRANCH" | grep -q "$BRANCH"; then
+  # Branch exists remotely -- checkout and merge master
+  git checkout -b "$BRANCH" "origin/$BRANCH"
+  git merge origin/master --no-edit
 else
-  # Branch doesn't exist on remote -- fetch master and create from it
-  git fetch "$HTTPS_URL" master
-  git checkout -b "$BRANCH" FETCH_HEAD
+  # Branch doesn't exist -- create from origin/master
+  git checkout -b "$BRANCH" origin/master
 fi
 ```
 
@@ -163,11 +189,13 @@ Check:
 
 ### Step 6: Commit and Push
 
+Never commit to master. The working branch was set up in Step 2.
+
 ```bash
 cd "$REPOS_PATH/$REPO"
 git add 19-PSA.usfm  # or tn_PSA.tsv
 git commit -m "Insert AI ULT for PSA 119:100-104"
-git push "$HTTPS_URL" "$BRANCH"
+git push origin "$BRANCH"
 ```
 
 ### Step 7: Optional PR Creation

@@ -139,23 +139,39 @@ proceeding.
 After all agents complete, insert each content type into Door43 repos.
 Launch four **Task subagents** in parallel (each touches a different repo).
 
+All repos are under the **unfoldingWord** organization on Door43. Never push
+to a personal fork. Never touch the master branch.
+
 | Content | Source | Repo | Branch | Insert script |
 |---------|--------|------|--------|---------------|
-| ULT (aligned) | `output/AI-ULT/{BOOK}-{CH}-aligned.usfm` | en_ult | `auto-{user}-{BOOK}` | `insert_usfm_verses.py` |
-| UST (aligned) | `output/AI-UST/{BOOK}-{CH}-aligned.usfm` | en_ust | `auto-{user}-{BOOK}` | `insert_usfm_verses.py` |
-| TN | `output/notes/{BOOK}-{CH}.tsv` | en_tn | `{user}-tc-create-1` | `insert_tn_rows.py` |
-| TQ | `output/tq/{BOOK}-{CHAPTER}.tsv` | en_tq | `auto-{user}-{BOOK}` | `insert_tn_rows.py` |
+| ULT (aligned) | `output/AI-ULT/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ult | `auto-{user}-{BOOK}` | `insert_usfm_verses.py` |
+| UST (aligned) | `output/AI-UST/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ust | `auto-{user}-{BOOK}` | `insert_usfm_verses.py` |
+| TN | `output/notes/{BOOK}-{CH}.tsv` | unfoldingWord/en_tn | `{user}-tc-create-1` | `insert_tn_rows.py` |
+| TQ | `output/tq/{BOOK}-{CHAPTER}.tsv` | unfoldingWord/en_tq | `auto-{user}-{BOOK}` | `insert_tn_rows.py` |
 
-For each content type, follow the repo-insert skill workflow:
+### Git procedure for each repo (strict order)
 
-1. **Setup repo** -- clone if needed, checkout branch (create from master or
-   reset to remote), merge `origin/master`
-2. **Insert** -- run the appropriate script with `--backup`
-   - USFM: `--chapter {CHAPTER} --verses 1-{LAST_VERSE}`
+1. **Ensure remote points to unfoldingWord** -- verify the origin URL contains
+   `git.door43.org/unfoldingWord/{repo}`. If it points to a fork, fix it:
+   ```bash
+   git remote set-url origin "https://${DOOR43_USERNAME}:${DOOR43_TOKEN}@git.door43.org/unfoldingWord/{repo}.git"
+   ```
+2. **Fetch** -- `git fetch origin`
+3. **Create or checkout branch from origin/master** -- always branch from
+   `origin/master` so the branch has the full repo contents. Never create a
+   branch from scratch or from a local-only state.
+   - If the branch exists remotely: `git checkout {BRANCH} && git merge origin/master --no-edit`
+   - If the branch does not exist: `git checkout -b {BRANCH} origin/master`
+   - If a stale local branch exists, delete it first: `git branch -D {BRANCH}`
+4. **Insert** -- run the appropriate script with `--backup`
+   - USFM: `--chapter {CHAPTER} --verses {FIRST}-{LAST_VERSE}`
    - TSV: no verse filter needed (script matches by reference)
-3. **Verify** -- log `git diff` output
-4. **Commit** -- `AI {content_type} for {BOOK} {CHAPTER}`
-5. **Push** -- `git push origin {BRANCH}`
+5. **Verify** -- log `git diff --stat` output
+6. **Commit** -- `git add {file} && git commit -m "AI {content_type} for {BOOK} {CHAPTER}"`
+7. **Push** -- `git push origin {BRANCH}`
+
+Never commit to master. Never checkout master for editing. Master is only used
+as the base for creating branches.
 
 ### Repo-insert commands reference
 
@@ -166,13 +182,13 @@ REPOS="$DOOR43_REPOS_PATH"
 python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
   --book-file "$REPOS/en_ult/{BOOK_NUM}-{BOOK}.usfm" \
   --source-file output/AI-ULT/{BOOK}-{CH}-aligned.usfm \
-  --chapter {CHAPTER} --verses 1-{LAST_VERSE} --backup
+  --chapter {CHAPTER} --verses {FIRST}-{LAST_VERSE} --backup
 
 # UST
 python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
   --book-file "$REPOS/en_ust/{BOOK_NUM}-{BOOK}.usfm" \
   --source-file output/AI-UST/{BOOK}-{CH}-aligned.usfm \
-  --chapter {CHAPTER} --verses 1-{LAST_VERSE} --backup
+  --chapter {CHAPTER} --verses {FIRST}-{LAST_VERSE} --backup
 
 # TN
 python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
