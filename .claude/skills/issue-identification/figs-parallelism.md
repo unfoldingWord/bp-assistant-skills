@@ -21,7 +21,10 @@ From Issues Resolved: "A parallelism is two or more clauses (= subject + verb; s
 
 **The boundary is fuzzy**: Long synonymous phrases may feel more like parallelism than doublet. Editorial discretion applies.
 
-**Critical**: We do NOT write notes for **synthetic parallelism** (second clause extends/completes first). Only **synonymous parallelism** (second clause repeats first in different words).
+**Critical**: We ONLY write notes for **synonymous parallelism** (second clause repeats first in different words). We do NOT write notes for:
+- **Synthetic parallelism** (second clause extends/completes first)
+- **Antithetical parallelism** (second clause contrasts with first)
+  - Exception: If antithetical parallelism forms a merism (two opposites to express totality), check if figs-merism applies, but don't assume - verify it actually functions as a merism
 
 **Note:** Parallel lines often involve ellipsis - the second line may omit verbs or other elements from the first. See [figs-ellipsis](figs-ellipsis.md). When identifying parallelism, also check for ellipsis in the second/third line. However, if the word that would be "supplied" already appears in the ULT within curly braces `{}`, it is not ellipsis -- ULT has already handled it.
 
@@ -76,6 +79,14 @@ Numerical intensification common in Hebrew poetry:
 ---
 
 ## NOT figs-parallelism
+
+### Antithetical Parallelism (no note needed)
+The second clause contrasts with or opposes the first:
+- "The wicked flee when no one pursues / but the righteous are bold as a lion" (Prov 28:1)
+- "A wise son makes his father rejoice / but a foolish son is his mother's grief" (Prov 10:1)
+- "For Yahweh knows the way of the righteous / but the way of the wicked will perish" (Ps 1:6)
+
+**Exception**: If the antithetical pair forms a **merism** (two opposites expressing totality), consider figs-merism instead. For example, "good and evil" to mean "everything." But verify this carefully - don't assume all contrasts are merisms.
 
 ### Synthetic Parallelism (no note needed)
 The second clause adds new information or completes the thought:
