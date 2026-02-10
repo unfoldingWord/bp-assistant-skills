@@ -93,6 +93,20 @@ The second clause adds new information or completes the thought:
 - "Your word is a lamp to my feet / and a light for my path" - This IS synonymous parallelism (both describe guidance)
 - "the king was passing by, and he cried out" - NOT parallelism, sequential events
 
+### figs-merism (use instead when parallel lines contain merism pairs)
+When parallel lines contain a merism pair (two opposites/extremes expressing totality), use figs-merism instead of figs-parallelism:
+- "young men ... virgins" = all young people
+- "heaven and earth" = everything
+- "good and evil" = everything
+
+Why merism takes precedence:
+- Identifies the actual rhetorical device at work
+- Explains why both elements must be preserved
+- Prevents translators from collapsing into one line
+- The parallel structure serves the merism, not vice versa
+
+Note: Don't confuse this with antithetical parallelism. "Fire consumed his young men / and his virgins were not praised in wedding songs" is NOT antithetical (both lines express the same tragedy). It's synonymous parallelism with an embedded merism - and merism is the right note.
+
 ### figs-doublet (use instead)
 Just two words or very short phrases:
 - "scattered and dispersed" -> figs-doublet
