@@ -1,7 +1,7 @@
 # figs-possession
 
 ## Purpose
-Identify when a possessive form expresses a relationship other than simple ownership.
+Identify when a possessive form expresses a relationship other than simple ownership, but only when the meaning is unclear without a note—especially when the relationship isn't already clarified by nearby issues like abstract nouns.
 
 ## Definition (from Translation Academy)
 In English, grammatical possession (using "of," "'s," or possessive pronouns) indicates various relationships between nouns, not just ownership. Biblical Hebrew and Greek similarly use possessive forms for many relationship types that may not translate directly into other languages.
@@ -107,23 +107,29 @@ START: Is there a possessive form (X of Y, Y's X, his/her/their X)?
               |
               +--YES--> Probably not figs-possession (natural in most languages)
               |
-              +--NO--> Would the possessive form be unclear or unnatural in translation?
+              +--NO--> Is there an abstract noun in this phrase?
                         |
-                        +--NO--> May not need a note
+                        +--YES--> Flag figs-abstractnouns instead
+                        |         Don't add figs-possession (suppressed)
                         |
-                        +--YES--> IDENTIFY THE RELATIONSHIP TYPE:
+                        +--NO--> Would the literal translation be unclear or misleading
+                                 AND is the meaning not already clarified by the UST?
                                   |
-                                  +-- Y characterizes X? --> Characterization
-                                  +-- Y is source of X? --> Source/Origin
-                                  +-- X is about Y? --> Content/Subject Matter
-                                  +-- Y receives action of X? --> Object
-                                  +-- Y performs action of X? --> Subject
-                                  +-- Y is location of X? --> Location/Association
-                                  +-- X results in Y? --> Result/Outcome
-                                  +-- X is made of Y? --> Composition/Material
-                                  +-- Social connection? --> Social Relationship
-                                  +-- X part of Y or superlative? --> Part-Whole
-                                  +-- Y specifies time? --> Time-Related
+                                  +--NO--> Don't flag (meaning is clear)
+                                  |
+                                  +--YES--> IDENTIFY THE RELATIONSHIP TYPE:
+                                            |
+                                            +-- Y characterizes X? --> Characterization
+                                            +-- Y is source of X? --> Source/Origin
+                                            +-- X is about Y? --> Content/Subject Matter
+                                            +-- Y receives action of X? --> Object
+                                            +-- Y performs action of X? --> Subject
+                                            +-- Y is location of X? --> Location/Association
+                                            +-- X results in Y? --> Result/Outcome
+                                            +-- X is made of Y? --> Composition/Material
+                                            +-- Social connection? --> Social Relationship
+                                            +-- X part of Y or superlative? --> Part-Whole
+                                            +-- Y specifies time? --> Time-Related
 ```
 
 ## Key Test Questions
@@ -131,7 +137,30 @@ START: Is there a possessive form (X of Y, Y's X, his/her/their X)?
 1. **Would "X of Y" or "Y's X" sound unnatural if translated literally?**
 2. **Is Y the owner, or is there another relationship (source, subject, object, characteristic)?**
 3. **Can the relationship be clarified with "from," "about," "for," "characterized by," or a relative clause?**
-4. **Is this an abstract noun as possessor (fear, wrath, judgment)?** - Often needs clarification
+4. **Is this an abstract noun as possessor (fear, wrath, judgment)?** - Check first if it needs a note
+
+## When to Suppress figs-possession
+
+Do NOT flag figs-possession when:
+
+### Abstract Noun in Same Phrase
+When the same phrase contains an abstract noun AND transforming that abstract noun would clarify the possession relationship, suppress the possession note. The abstract noun note will handle the clarification.
+
+**Examples:**
+- "fear of God" - flagging figs-abstractnouns (fear → being afraid) already clarifies the relationship. Don't add figs-possession.
+- "power of God" - flagging figs-abstractnouns (power → powerful/to have power) already clarifies whether it's "power from God" or "God's power." Don't add figs-possession.
+- "righteousness of God" - flagging figs-abstractnouns already indicates whether it's "to be righteous" or "righteous character," clarifying the relationship. Don't add figs-possession.
+
+### Meaning Already Clear from UST
+Check the UST version. If the UST makes the possession relationship clear without ambiguity, suppress the note. The simplification itself handles the translation challenge.
+
+**Example:**
+- ULT: "the judgment of God"
+- UST: "when God judges"
+- The UST already clarifies this is "God's judging" (subject possession). Don't add figs-possession.
+
+### Simple Possessive Ownership
+Natural possessives in most languages don't need notes. Only flag when the relationship is genuinely non-obvious or would be misleading if translated literally.
 
 ## Common Patterns by Genre
 
@@ -179,9 +208,15 @@ For ambiguous cases, notes may present both options: "This could refer to: (1) .
 
 | If you see... | Use... | Because... |
 |---------------|--------|------------|
-| Possessive expressing relationship | figs-possession | Non-ownership possessive |
+| Possessive expressing relationship | figs-possession | Non-ownership possessive (only if not clarified by abstract noun in same phrase) |
 | "hand" = power (people context) | figs-metonymy | Association with power |
 | "face" = presence | figs-metonymy | Association with presence |
 | "from the face of" = because of | figs-idiom | Fixed cultural expression |
-| Abstract noun needing verbal form | figs-abstractnouns | Abstract -> concrete |
+| Abstract noun needing verbal form | figs-abstractnouns | Abstract -> concrete (supersedes possession note if same phrase) |
+
+### Key Decision Point
+When a phrase contains both an abstract noun AND a possessive form (like "fear of God," "power of God," "righteousness of God"):
+1. **Always** flag the abstract noun for figs-abstractnouns
+2. **Suppress** figs-possession because transforming the abstract noun clarifies the relationship
+3. Example: "fear of God" only needs figs-abstractnouns. The abstract noun note explains whether it's "fear toward God" or contextual fear. Don't add a separate possession note.
 
