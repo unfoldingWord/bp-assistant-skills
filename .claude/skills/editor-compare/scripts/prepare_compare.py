@@ -219,8 +219,13 @@ def resolve_ai_source(book, chapter, text_type):
     filename = f"{normalized}-{int(chapter):03d}.usfm"
     ai_path = os.path.join(PROJECT_ROOT, "output", f"AI-{type_upper}", filename)
 
-    if not os.path.exists(ai_path):
-        print(f"Error: AI output not found: {ai_path}", file=sys.stderr)
+    # Also check book subfolder (e.g., output/AI-ULT/PSA/PSA-069.usfm)
+    ai_path_sub = os.path.join(PROJECT_ROOT, "output", f"AI-{type_upper}", normalized, filename)
+
+    if os.path.exists(ai_path_sub):
+        ai_path = ai_path_sub
+    elif not os.path.exists(ai_path):
+        print(f"Error: AI output not found: {ai_path} or {ai_path_sub}", file=sys.stderr)
         sys.exit(1)
 
     with open(ai_path, "r", encoding="utf-8") as f:

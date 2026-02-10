@@ -130,6 +130,7 @@ UST makes implicit information **explicit** using {brackets}.
 - Category identification: "Nineveh" -> "the city of Nineveh"
 - Contextual clarification: "they searched" -> "{The king gave them permission,} so they searched"
 - Meaning clarification: "he will certainly punish" -> "he will certainly punish {those who have done evil things}"
+- Verse-initial framing from implied context: "I lift up my eyes to the hills" -> "{As I travel toward Jerusalem,} I look toward the hills"
 
 ### Length Limits
 
@@ -143,7 +144,7 @@ Brackets are only for content that is truly absent from the source text and esse
 | Category | Example (Wrong) | Example (Correct) |
 |----------|-----------------|-------------------|
 | Logical connectors | `{because} you answer` | `Because you answer` |
-| Temporal connectors | `{when we} pray` | `when we pray` |
+| Temporal connectors (simple) | `{when we} pray` | `when we pray` |
 | Obvious context | `waves crashing {on the shore}` | `waves crashing on the shore` |
 | Relationship markers | `sinned {against you}` | `sinned against you` |
 | Figure of speech signals | `{It is as though} the hills rejoice` | `It is as if the hills are celebrating` |
@@ -151,6 +152,8 @@ Brackets are only for content that is truly absent from the source text and esse
 | Category markers for well-known items | `{the city of} Nineveh` | `the city of Nineveh` |
 
 **Principle:** If natural English expression makes the meaning clear, don't bracket it. Brackets draw attention and signal "this isn't in the source" - use them sparingly. The UST should read as flowing prose, not as a text annotated with implied content markers.
+
+**Verse-initial framing note:** A short opening frame can still be bracketed when it introduces explicit setting that is not directly stated in the source text (for example, travel/worship setting inferred from a psalm heading).
 
 **Test:** Before adding brackets, ask: "Would a native English speaker notice this is 'added' information?" If not, just write it naturally.
 

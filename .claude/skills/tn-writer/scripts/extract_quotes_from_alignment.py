@@ -17,20 +17,176 @@ Usage standalone:
 """
 
 import argparse
+from collections import Counter
+import glob
 import json
 import os
 import re
 import sys
+import unicodedata
+
+COMMON_FUNCTION_WORDS = {
+    'a', 'an', 'and', 'as', 'at', 'by', 'for', 'from', 'he', 'her', 'his',
+    'in', 'is', 'it', 'its', 'of', 'on', 'or', 'our', 'she', 'that', 'the',
+    'their', 'them', 'they', 'to', 'was', 'we', 'were', 'who', 'with', 'you',
+    'your'
+}
+
+
+def _project_root():
+    """Resolve project root from this script location."""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    # .../.claude/skills/tn-writer/scripts
+    return os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(script_dir))))
+
+
+def _normalize_hebrew_token(token):
+    """Normalize Hebrew token for robust matching across USFM variants."""
+    if not token:
+        return ''
+    # Remove formatting controls often present in aligned text
+    token = token.replace('\u2060', '').replace('\u200f', '').replace('\u200e', '')
+    # Remove combining marks (niqqud/cantillation), keep base letters
+    token = ''.join(
+        ch for ch in unicodedata.normalize('NFD', token)
+        if unicodedata.category(ch) != 'Mn'
+    )
+    # Keep Hebrew letters only (drop punctuation/maqaf/sof-pasuq/etc)
+    token = ''.join(ch for ch in token if '\u05d0' <= ch <= '\u05ea')
+    return token
+
+
+def _find_hebrew_source_file(book_code):
+    """Find data/hebrew_bible/*-BOOK.usfm."""
+    if not book_code:
+        return None
+    hebrew_dir = os.path.join(_project_root(), 'data', 'hebrew_bible')
+    pattern = os.path.join(hebrew_dir, f'*-{book_code.upper()}.usfm')
+    matches = sorted(glob.glob(pattern))
+    return matches[0] if matches else None
+
+
+def _parse_hebrew_source_verses(usfm_path):
+    """Parse Hebrew source USFM into verse word lists.
+
+    Returns dict: { "chapter:verse" -> [word_record, ...] }
+    where word_record has:
+      - surface
+      - norm
+      - abs_idx
+      - occurrence
+      - occurrences
+    """
+    if not usfm_path or not os.path.exists(usfm_path):
+        return {}
+
+    verses = {}
+    current_chapter = None
+    current_verse = None
+
+    for line in open(usfm_path, 'r', encoding='utf-8'):
+        ch_match = re.match(r'\\c\s+(\d+)', line)
+        if ch_match:
+            current_chapter = ch_match.group(1)
+            current_verse = None
+            continue
+
+        v_match = re.match(r'.*\\v\s+(\d+[-\d]*|front)\s*(.*)', line)
+        if v_match and current_chapter:
+            current_verse = v_match.group(1)
+
+        if not current_chapter or not current_verse:
+            continue
+
+        key = f"{current_chapter}:{current_verse}"
+        verses.setdefault(key, [])
+
+        # Extract Hebrew surface tokens from \w ...|...\w*
+        for m in re.finditer(r'\\w\s+([^|\\]+)\|[^\\]*\\w\*', line):
+            word_text = m.group(1).strip()
+            if word_text:
+                verses[key].append({
+                    'surface': word_text,
+                    'norm': _normalize_hebrew_token(word_text),
+                })
+
+    # Add absolute and occurrence-of-occurrences indices
+    for ref, words in verses.items():
+        totals = Counter(w['norm'] for w in words if w.get('norm'))
+        running = Counter()
+        for idx, w in enumerate(words):
+            norm = w.get('norm', '')
+            w['abs_idx'] = idx
+            if norm:
+                running[norm] += 1
+                w['occurrence'] = running[norm]
+                w['occurrences'] = totals[norm]
+            else:
+                w['occurrence'] = 0
+                w['occurrences'] = 0
+
+    return verses
+
+
+def _reorder_by_hebrew_source(ref, hebrew_items, hebrew_source_verses):
+    """Reorder extracted Hebrew items by source Hebrew verse order."""
+    if not hebrew_items:
+        return hebrew_items
+
+    src_words = hebrew_source_verses.get(ref, [])
+    if not src_words:
+        return hebrew_items
+
+    # Build lookup keyed by (normalized Hebrew token, occurrence index)
+    by_norm_occ = {}
+    by_norm = {}
+    for sw in src_words:
+        norm = sw.get('norm', '')
+        occ = sw.get('occurrence', 0)
+        abs_idx = sw.get('abs_idx', 10**9)
+        if norm:
+            by_norm_occ[(norm, occ)] = abs_idx
+            by_norm.setdefault(norm, []).append(abs_idx)
+
+    used_abs = set()
+    for item in hebrew_items:
+        src_idx = None
+        norm = item.get('heb_norm', '')
+        occ = item.get('heb_occurrence', 0)
+
+        # First try exact (token + occurrence/occurrences) anchor
+        if norm and occ:
+            src_idx = by_norm_occ.get((norm, occ))
+            if src_idx in used_abs:
+                src_idx = None
+
+        # Fallback: first unused source token with same normalized form
+        if src_idx is None and norm:
+            for idx in by_norm.get(norm, []):
+                if idx not in used_abs:
+                    src_idx = idx
+                    break
+
+        if src_idx is not None:
+            used_abs.add(src_idx)
+        item['src_abs_idx'] = src_idx
+
+    # Source-matched words first in source order, then unmatched by Hebrew abs index
+    hebrew_items.sort(
+        key=lambda x: (0, x['src_abs_idx'], x['heb_abs_idx'])
+        if x.get('src_abs_idx') is not None else (1, 10**9, x['heb_abs_idx'])
+    )
+    return hebrew_items
 
 
 def parse_aligned_usfm(usfm_path):
     """Parse aligned USFM into per-verse word-to-Hebrew mappings.
 
-    Returns dict: { "chapter:verse" -> [ (english_word, hebrew_content, strong, hebrew_pos) ] }
-
-    Each entry is an English word with its aligned Hebrew x-content,
-    Strong's number from the enclosing zaln-s milestone, and the
-    Hebrew source position (order of first appearance in the verse).
+    Returns dict: { "chapter:verse" -> [word_record, ...] }.
+    Each word_record includes:
+      - eng_word, eng_norm, eng_abs_idx, eng_occurrence, eng_occurrences
+      - hebrew, heb_norm, heb_abs_idx, heb_occurrence, heb_occurrences
+      - strong
     """
     with open(usfm_path, 'r', encoding='utf-8') as f:
         content = f.read()
@@ -39,8 +195,38 @@ def parse_aligned_usfm(usfm_path):
     current_chapter = None
     current_verse = None
     current_words = []
-    hebrew_order = {}
+    english_pos_counter = 0
     hebrew_pos_counter = 0
+    active_milestones = []
+
+    def _finalize_verse_words(words):
+        """Attach occurrence-of-occurrences metadata for English and Hebrew."""
+        eng_totals = Counter(w['eng_norm'] for w in words if w.get('eng_norm'))
+        heb_totals = Counter(w['heb_norm'] for w in words if w.get('heb_norm'))
+        eng_running = Counter()
+        heb_running = Counter()
+
+        for w in words:
+            eng = w.get('eng_norm', '')
+            heb = w.get('heb_norm', '')
+
+            if eng:
+                eng_running[eng] += 1
+                w['eng_occurrence'] = eng_running[eng]
+                w['eng_occurrences'] = eng_totals[eng]
+            else:
+                w['eng_occurrence'] = 0
+                w['eng_occurrences'] = 0
+
+            if heb:
+                heb_running[heb] += 1
+                w['heb_occurrence'] = heb_running[heb]
+                w['heb_occurrences'] = heb_totals[heb]
+            else:
+                w['heb_occurrence'] = 0
+                w['heb_occurrences'] = 0
+
+        return words
 
     # Process line by line
     for line in content.split('\n'):
@@ -50,12 +236,13 @@ def parse_aligned_usfm(usfm_path):
             # Save previous verse
             if current_chapter and current_verse and current_words:
                 key = f"{current_chapter}:{current_verse}"
-                verses[key] = current_words
+                verses[key] = _finalize_verse_words(current_words)
             current_chapter = ch_match.group(1)
             current_verse = None
             current_words = []
-            hebrew_order = {}
+            english_pos_counter = 0
             hebrew_pos_counter = 0
+            active_milestones = []
             continue
 
         # Verse marker
@@ -64,11 +251,12 @@ def parse_aligned_usfm(usfm_path):
             # Save previous verse
             if current_verse and current_words:
                 key = f"{current_chapter}:{current_verse}"
-                verses[key] = current_words
+                verses[key] = _finalize_verse_words(current_words)
             current_verse = v_match.group(1)
             current_words = []
-            hebrew_order = {}
+            english_pos_counter = 0
             hebrew_pos_counter = 0
+            active_milestones = []
             # Continue processing the rest of the line (don't skip it)
             line_rest = line
         else:
@@ -83,7 +271,6 @@ def parse_aligned_usfm(usfm_path):
         #
         # Strategy: walk the line and track active zaln-s milestones
         pos = 0
-        active_milestones = []
 
         while pos < len(line_rest):
             # Look for zaln-s milestone
@@ -101,10 +288,9 @@ def parse_aligned_usfm(usfm_path):
                 sm = re.search(r'x-strong="([^"]*)"', attrs)
                 if sm:
                     x_strong = sm.group(1)
-                if x_content and x_content not in hebrew_order:
-                    hebrew_order[x_content] = hebrew_pos_counter
-                    hebrew_pos_counter += 1
-                active_milestones.append((x_content, x_strong))
+                x_pos = hebrew_pos_counter
+                hebrew_pos_counter += 1
+                active_milestones.append((x_content, x_strong, x_pos))
                 pos += zaln_match.end()
                 continue
 
@@ -114,8 +300,17 @@ def parse_aligned_usfm(usfm_path):
                 eng_word = w_match.group(1).strip()
                 # Use the innermost (last) active milestone
                 if active_milestones:
-                    hebrew, strong = active_milestones[-1]
-                    current_words.append((eng_word, hebrew, strong, hebrew_order.get(hebrew, 999)))
+                    hebrew, strong, hpos = active_milestones[-1]
+                    current_words.append({
+                        'eng_word': eng_word,
+                        'eng_norm': clean_word(eng_word),
+                        'eng_abs_idx': english_pos_counter,
+                        'hebrew': hebrew,
+                        'heb_norm': _normalize_hebrew_token(hebrew),
+                        'heb_abs_idx': hpos,
+                        'strong': strong,
+                    })
+                english_pos_counter += 1
                 pos += w_match.end()
                 continue
 
@@ -133,7 +328,7 @@ def parse_aligned_usfm(usfm_path):
     # Save last verse
     if current_chapter and current_verse and current_words:
         key = f"{current_chapter}:{current_verse}"
-        verses[key] = current_words
+        verses[key] = _finalize_verse_words(current_words)
 
     return verses
 
@@ -157,6 +352,11 @@ def extract_quotes(aligned_usfm_path, items):
         for each input item, parallel to the items list.
     """
     verses = parse_aligned_usfm(aligned_usfm_path)
+    book_code = ''
+    if items:
+        book_code = (items[0].get('book') or '').upper()
+    hebrew_source_file = _find_hebrew_source_file(book_code)
+    hebrew_source_verses = _parse_hebrew_source_verses(hebrew_source_file)
     results = []
 
     for item in items:
@@ -178,7 +378,7 @@ def extract_quotes(aligned_usfm_path, items):
         clean_tokens = [clean_word(t) for t in quote_tokens]
 
         # Build clean versions of verse words for matching
-        verse_clean = [clean_word(w[0]) for w in verse_words]
+        verse_clean = [w['eng_norm'] for w in verse_words]
 
         # Find the best matching window in the verse
         best_start, best_end = find_matching_span(clean_tokens, verse_clean)
@@ -192,18 +392,28 @@ def extract_quotes(aligned_usfm_path, items):
         # Collect Hebrew words from the matched span
         matched_words = verse_words[best_start:best_end]
         hebrew_items = []
-        seen_hebrew = set()
-        for eng, hebrew, strong, hpos in matched_words:
-            if hebrew and hebrew not in seen_hebrew:
-                hebrew_items.append((hebrew, hpos))
-                seen_hebrew.add(hebrew)
+        seen_positions = set()
+        for w in matched_words:
+            hebrew = w['hebrew']
+            hpos = w['heb_abs_idx']
+            if hebrew and hpos not in seen_positions:
+                hebrew_items.append({
+                    'hebrew': hebrew,
+                    'heb_norm': w['heb_norm'],
+                    'heb_abs_idx': hpos,
+                    'heb_occurrence': w['heb_occurrence'],
+                    'heb_occurrences': w['heb_occurrences'],
+                })
+                seen_positions.add(hpos)
 
-        # Sort by Hebrew source order
-        hebrew_items.sort(key=lambda x: x[1])
-        hebrew_words = [h for h, _ in hebrew_items]
+        # First keep alignment order for stability...
+        hebrew_items.sort(key=lambda x: x['heb_abs_idx'])
+        # ...then reorder by actual Hebrew source verse sequence when available.
+        hebrew_items = _reorder_by_hebrew_source(ref, hebrew_items, hebrew_source_verses)
+        hebrew_words = [h['hebrew'] for h in hebrew_items]
 
         # Build roundtripped English from the matched span
-        roundtripped_english = ' '.join(w[0] for w in matched_words)
+        roundtripped_english = ' '.join(w['eng_word'] for w in matched_words)
 
         # Join Hebrew words with space (standard format for Quote column)
         orig_quote = ' '.join(hebrew_words)
@@ -235,9 +445,10 @@ def find_matching_span(query_tokens, verse_tokens):
         if window == query_tokens:
             return start, start + n_query
 
-    # Try fuzzy: allow one missing/extra token
+    # Try fuzzy with conservative confidence checks.
     best_score = 0
     best_span = (None, None)
+    non_function_query = [t for t in query_tokens if t and t not in COMMON_FUNCTION_WORDS]
 
     # Try windows of size n_query-1 to n_query+1
     for window_size in [n_query, n_query + 1, n_query - 1, n_query + 2]:
@@ -245,13 +456,19 @@ def find_matching_span(query_tokens, verse_tokens):
             continue
         for start in range(n_verse - window_size + 1):
             window = verse_tokens[start:start + window_size]
+            window_set = set(window)
+            # Require all content tokens from query to appear in the candidate window.
+            if non_function_query and not all(t in window_set for t in non_function_query):
+                continue
             score = _match_score(query_tokens, window)
+            occ_score = _occurrence_profile_score(query_tokens, window)
+            score = (0.85 * score) + (0.15 * occ_score)
             if score > best_score:
                 best_score = score
                 best_span = (start, start + window_size)
 
-    # Require at least 70% match
-    if best_score >= 0.7:
+    # Require high confidence to avoid cross-clause drift.
+    if best_score >= 0.9:
         return best_span
 
     return None, None
@@ -262,13 +479,55 @@ def _match_score(query, window):
     if not query:
         return 0
 
-    matched = 0
-    window_set = set(window)
-    for qt in query:
-        if qt in window_set:
-            matched += 1
+    # Order-sensitive longest-common-subsequence match.
+    lcs_len = _lcs_length(query, window)
+    recall = lcs_len / len(query)
+    precision = lcs_len / len(window) if window else 0
 
-    return matched / len(query)
+    # Slightly favor tighter windows when recall is similar.
+    return (0.7 * recall) + (0.3 * precision)
+
+
+def _lcs_length(a, b):
+    """Return LCS length for two token lists."""
+    if not a or not b:
+        return 0
+
+    rows = len(a) + 1
+    cols = len(b) + 1
+    dp = [[0] * cols for _ in range(rows)]
+    for i in range(1, rows):
+        ai = a[i - 1]
+        for j in range(1, cols):
+            if ai == b[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    return dp[-1][-1]
+
+
+def _occurrence_profile_score(query, window):
+    """Score overlap on token occurrence/occurrences profiles."""
+    if not query or not window:
+        return 0
+
+    q_profile = set(_token_occurrence_profile(query))
+    w_profile = set(_token_occurrence_profile(window))
+    if not q_profile:
+        return 0
+    overlap = len(q_profile.intersection(w_profile))
+    return overlap / len(q_profile)
+
+
+def _token_occurrence_profile(tokens):
+    """Return [(token, occurrence, occurrences), ...] for token list."""
+    totals = Counter(tokens)
+    running = Counter()
+    profile = []
+    for t in tokens:
+        running[t] += 1
+        profile.append((t, running[t], totals[t]))
+    return profile
 
 
 def main():

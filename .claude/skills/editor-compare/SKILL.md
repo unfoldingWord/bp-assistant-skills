@@ -30,6 +30,11 @@ python3 .claude/skills/editor-compare/scripts/prepare_compare.py <BOOK> <CHAPTER
     --editor-file "<path>" --output /tmp/claude/compare_<type>.json
 ```
 
+**Important**: The script automatically handles aligned USFM with `\zaln` markers via `extract_ult_english.py`. Do not manually parse aligned USFM. If you need plain English text outside the script:
+```bash
+python3 .claude/skills/utilities/scripts/extract_ult_english.py <file.usfm>
+```
+
 ### Step 2: Read the comparison JSON
 
 Read `/tmp/claude/compare_<type>.json`. Note the summary stats (total, changed, unchanged).

@@ -162,6 +162,17 @@ Apply only necessary changes. The T4T is already a good meaning-based translatio
 2. Essential for comprehension (not just helpful)
 3. Would seem "added" to a careful reader
 
+**Important edge case:** If a `\add` phrase is a **verse-initial framing clause** (scene-setting such as travel/worship setting, speaker setup, or inferred self-talk context) and it has no direct Hebrew expression, prefer `{brackets}` instead of plain prose.
+
+Example (PSA 121:1):
+- Better: `{As I travel toward Jerusalem,} I look toward the hills and ask myself, “Where will my help come from?”`
+- Worse: `As I travel toward Jerusalem, I look toward the hills ...` (reads as if directly expressed in source)
+
+Quick decision check per `\add` segment: **drop / weave / bracket**.
+- Drop if non-essential and redundant
+- Weave if naturally implied and not likely perceived as added
+- Bracket if it introduces explicit new framing that is not in the source text
+
 See `reference/ust_patterns.md` Section 8 for detailed guidance.
 
 #### B. Divine Names (if needed)
@@ -244,6 +255,18 @@ The UST should make clear who or what is being described.
 
 (See Active Voice above for passive → active conversion)
 
+**Superscription verse anchoring (must follow Hebrew structure):**
+Do not place every psalm heading in `\d` by default. Check the Hebrew chapter start and mirror its anchoring:
+
+1. **If Hebrew has superscription wording inside `\v 1`** (for example, Psalm 120/121 "song of ascents"), keep that content in **UST `\v 1`** rather than moving it to `\d`.
+2. **If Hebrew has a standalone `\d` heading block before the first verse**, keep a standalone `\d` before `\v 1` in UST.
+3. **If Hebrew includes verse-offset markers (`\va`) indicating heading-versification differences**, preserve standard output versification and keep heading placement consistent with the Hebrew structure (do not collapse offset distinctions).
+
+Quick check:
+- Read the first 5-10 lines after `\c N` in Hebrew (`data/hebrew_bible/*.usfm`).
+- Decide: embedded-in-`v1` or standalone-`\d`.
+- Apply the same structure in UST output.
+
 #### H. Initial Conjunctions
 
 If T4T starts sentences with "And" or "But", replace:
@@ -261,6 +284,7 @@ Cross-check with:
 - Only bracket content that is truly unexpressed in the source AND essential for comprehension
 - Length limit: Should not be as long as a regular sentence
 - When in doubt, write naturally without brackets
+- Exception: short verse-initial framing clauses from implied context may be bracketed (e.g., `{As I travel toward Jerusalem,}`)
 
 ### Step 6: Format as USFM
 
@@ -287,7 +311,7 @@ Ensure proper USFM formatting:
 **Poetry markers:**
 - `\q1` - first colon of a verse
 - `\q2` - second/third colon (parallel lines)
-- `\d` - superscription (Psalms)
+- `\d` - superscription (Psalms, only when Hebrew has standalone heading)
 - `\qs ... \qs*` - Selah
 
 ### Step 7: Export to File
@@ -425,6 +449,7 @@ Before finalizing UST output, verify:
 - [ ] {brackets} used sparingly - only for truly unexpressed, essential content
 - [ ] Most clarifications woven into natural prose without brackets
 - [ ] USFM markers properly formatted
+- [ ] Superscription placement matches Hebrew anchoring (`\v 1`-embedded vs standalone `\d`)
 - [ ] Poetry uses \q1/\q2 appropriately
 - [ ] "peoples" kept as "peoples"
 - [ ] Selah retained as "Selah"

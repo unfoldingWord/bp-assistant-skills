@@ -198,6 +198,18 @@ Per psalms_reference.csv: Nominal adjectives like "the righteous," "the wicked,"
 Separate superscription elements with periods, not commas:
 - "For the chief musician. On a stringed instrument. Of David."
 
+**Superscription verse anchoring (critical):**
+Do not assume all psalm headings belong in `\d` before verse 1. Anchor placement to the Hebrew chapter structure:
+
+1. **If Hebrew starts with `\v 1` and the superscription words are inside that verse** (e.g., Psalm 120/121 "song of ascents"), keep that heading content in **` \v 1` text**, not a standalone `\d`.
+2. **If Hebrew has a standalone `\d` block before the first verse line** (often with `\va 1\va*`), keep it as `\d` before `\v 1` in output.
+3. **If Hebrew shows verse-offset markers (`\va`)** where prose/poetry starts at Hebrew v2 while English uses v1, preserve the established output versification and keep the heading in `\d`; do not force heading words into English `\v 1`.
+
+Quick check at chapter start:
+- Read the first 5-10 lines after `\c N` in Hebrew.
+- Determine whether the heading is embedded in `\v 1` or separated as `\d`.
+- Mirror that structure in generated ULT.
+
 #### G. Comparatives with מִן
 
 | Hebrew Pattern | ULT | NOT |
@@ -326,7 +338,7 @@ Hebrew vocatives at clause end should stay there:
 - `\q1` - first colon of a verse (the "A" line)
 - `\q2` - second/third colon of a verse (the "B" or "C" line in parallel structure)
 - `\qa` - acrostic heading
-- `\d` - superscription (Psalms)
+- `\d` - superscription (Psalms, only when Hebrew treats it as standalone heading)
 - `\qs Selah \qs*` - Selah marker on its own line after the verse's poetry lines (note the space after "Selah" before `\qs*`)
 
 **Poetry indentation pattern:**
@@ -475,6 +487,7 @@ Before finalizing ULT output, verify:
 - [ ] Large numbers use numerals with commas (12,000)
 - [ ] Vocabulary scripts were run for key terms
 - [ ] Psalm superscriptions use "chief musician" and periods between elements
+- [ ] Superscription placement matches Hebrew anchoring (`\v 1`-embedded vs standalone `\d`)
 - [ ] Comparatives with מִן use "-er than" form ("higher than I")
 - [ ] Selah uses `\qs Selah \qs*` format on its own line (space after Selah before closing tag)
 - [ ] Emphatic doubling preserved without adding words ("day, day" not "day {by} day")

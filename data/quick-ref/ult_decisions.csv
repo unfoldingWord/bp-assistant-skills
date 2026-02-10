@@ -1,2 +1,34 @@
 Strong,Hebrew,Rendering,Book,Context,Notes,Date
 H727,אֲרוֹן,Box,ALL,"Ark of the Covenant context","Capitalize 'Box'. Use 'Box of the Testimony' (Exodus) or 'Box of the Covenant' (Joshua+). Never 'ark'. See hebrew_ot_glossary.",2025-02-09
+H6041,עָנִי,poor,PSA,"69:29 poor and in pain","Form-based: adjective, not passive participle. Not 'afflicted'.",2025-02-10
+H6035,עָנָו,poor,PSA,"69:32 The poor will see","Form-based: adjective, not passive participle. Same as H6041.",2025-02-10
+H0954,בּוּשׁ,feel shame,PSA,"69:6 may...not feel shame; 70:2 feel shame","Form-based: active verb, do not represent as passive. Not 'be ashamed'.",2025-02-10
+H7941,שֵׁכָר,beer,PSA,"69:12 drinkers of beer","Not 'strong drink'. More specific.",2025-02-10
+H0639,אַף,nose,PSA,"69:24 burning of your nose","Preserve body-part idiom. Not 'anger'. Consistent with literal ULT philosophy.",2025-02-10
+H4229a,מָחָה,wiped,PSA,"69:28 wiped from the book","Not 'blotted out'. No additional preposition.",2025-02-10
+H7857,שָׁטַף,overflow,PSA,"69:2,15 a flood overflows me","Not 'sweep away'. Present tense preferred.",2025-02-10
+H7574,רֶתֶם,broom trees,PSA,120:4 coals of broom trees,2/3 published: juniper tree (1KI) vs broom trees (JOB). 'broom trees' is botanically accurate.,2026-02-10
+H7423a,רְמִיָּה,deceit,PSA,120:2-3 tongue of deceit,Dominant rendering 50% (2/4 occ). Also used in PSA 101:7 JOB 27:4.,2026-02-10
+H0190,אוֹיָה,Woe,PSA,120:5 Woe to me,Not in published ULT. Interjection of lament. Consistent with 'Woe' used elsewhere (ZEP 2:5 3:1).,2026-02-10
+H7600,שַׁאֲנָן,the ones at ease,PSA,123:4 the scorn of the ones at ease,Only 2 occ in index: arrogance (2KI) and secure (JOB); at ease fits contemptuous context,2026-02-10
+H1349,גַּאֲיוֹן,the proud,PSA,123:4 the contempt of the proud,Hapax legomenon; from root ga'ah (to be exalted/proud),2026-02-10
+H0937,בּוּז,contempt,PSA,123:3-4 satisfied with contempt,Dominant rendering 43% of 7 occ,2026-02-10
+H3933,לַעַג,scorn,PSA,123:4 the scorn of the ones at ease,50% scorn in index (2 occ total),2026-02-10
+H2121,זֵידוֹן,raging,PSA,124:5 the raging waters,Not in published ULT; adjective from root zid (to boil/be insolent). For waters context 'raging' is literal.,2026-02-10
+H3884,לוּלֵא,Unless,PSA,124:1-2 Unless Yahweh who was for us,PSA dominant: Unless (27:13 94:17). Counterfactual conditional particle.,2026-02-10
+H6341a,פַּח,snare,PSA,124:7 from the snare of the trappers,Dominant rendering 43% (snare/snares). Matches PSA 91:3.,2026-02-10
+H3369,יָקֹשׁ,trappers,PSA,124:7 the snare of the trappers,Qal participle plural. PSA 91:3 uses 'trapper' (singular).,2026-02-10
+H2964,טֶרֶף,prey,PSA,124:6 prey to their teeth,22% prey in index. Animal metaphor context with teeth.,2026-02-10
+H5315,נֶפֶשׁ,life,PSA,"71:10,13 those who watch for my life","Not 'soul' in hostile/danger context. Editor PSA 71.",2026-02-10
+H7451c,רַע,hurt,PSA,"71:13,24 those who seek my hurt","Not 'harm'. Noun form for enemy intent.",2026-02-10
+H2167,זָמַר,make music,PSA,"71:22,23 with harp/lyre context","Preserves distinction from singing when parallel with vocal praise.",2026-02-10
+H5553,סֶלַע,rock,PSA,"71:3 you are my rock","Not 'cliff'. Editor PSA 71.",2026-02-10
+H8597,תִּפְאָרָה,honor,PSA,"71:8 all the day with your honor","Not 'splendor'. Editor PSA 71.",2026-02-10
+H2363,חִישׁ,hurry,PSA,"71:12 hurry to help me","Not 'hasten'. Editor PSA 71.",2026-02-10
+H0571,אֶמֶת,trustworthiness,PSA,"71:22 for your trustworthiness","Not 'faithfulness'. Editor PSA 71.",2026-02-10
+H1420,גְּדוּלָה,honor,PSA,"71:21 increase my honor","Not 'greatness'. Editor PSA 71.",2026-02-10
+H3766,כָּרַע,kneel,PSA,"72:9 May desert-dwellers kneel","Not 'bow down'. Distinct from H7812 shachah. Editor PSA 72.",2026-02-10
+H1369,גְּבוּרָה,mighty acts,PSA,"71:16 the mighty acts of Lord Yahweh","Not 'mighty deeds'. Also 'power' in 71:18. Editor PSA 71.",2026-02-10
+H2220,זְרוֹעַ,strength,PSA,"71:18 declaring your strength","Not 'arm' in this context. Editor PSA 71. (arm is more literal; editor chose semantic)",2026-02-10
+H6381,פָּלָא,wonderful,PSA,"71:17 your wonderful deeds","Not 'wondrous'. Niphal participle. Editor PSA 71.",2026-02-10
+H1897,הָגָה,talk about,PSA,"71:24 tongue will also talk about","Not 'meditate on'. Editor PSA 71.",2026-02-10

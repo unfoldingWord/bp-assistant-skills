@@ -21,6 +21,22 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | יָשַׁב | H3427 | dwell | sit | permanent residence; use "sit" for literal |
 | קָשַׁב (hiphil) | H7181 | listen | attend | "listen to" with לְ preposition |
 | עֵדָה | H5713b | testimonies | decrees | Psa 119 master uses "testimonies" consistently; distinct from edut H5715 |
+| עָנִי | H6041 | poor | afflicted | adjective, not passive participle; editor PSA 69:29,32 |
+| עָנָו | H6035 | poor | afflicted | adjective, not passive participle; editor PSA 69:32; same as H6041 |
+| בּוּשׁ | H0954 | feel shame | be ashamed | active verb, not passive; editor PSA 69:6, 70:2. Note: PSA 71 editor uses "put to shame" (passive) -- may reflect different editorial pass |
+| שֵׁכָר | H7941 | beer | strong drink | editor PSA 69:12 |
+| אַף | H0639 | nose | anger | preserve body-part idiom literally; editor PSA 69:24 |
+| מָחָה | H4229a | wiped | blotted out | editor PSA 69:28; no "out" |
+| שָׁטַף | H7857 | overflow | sweep away | editor PSA 69:2,15 |
+| נֶפֶשׁ | H5315 | life | soul | in hostile/danger context; editor PSA 71:10,13 |
+| רַע (noun) | H7451c | hurt | harm | as noun for enemy intent; editor PSA 71:13,24 |
+| זָמַר | H2167 | make music | sing praises | preserves distinction from singing when used in parallel with vocal praise |
+| סֶלַע | H5553 | rock | cliff | editor PSA 71:3 |
+| תִּפְאָרָה | H8597 | honor | splendor | editor PSA 71:8 |
+| חִישׁ | H2363 | hurry | hasten | editor PSA 71:12 |
+| אֶמֶת | H0571 | trustworthiness | faithfulness | editor PSA 71:22 |
+| גְּדוּלָה | H1420 | honor | greatness | editor PSA 71:21 |
+| כָּרַע | H3766 | kneel | bow down | editor PSA 72:9 |
 
 ## Phrases
 
@@ -28,8 +44,13 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 |----------------|-----|-----|-------|
 | צַר־לִי | trouble to me | my distress | preserve prepositional structure |
 | מָגִנֵּנוּ אֲדֹנָי | Lord our shield | our shield, Lord | preserve vocative order |
-| וַאֲנִי + verb | I, I [verb] | I [verb] | preserve emphatic pronoun |
+| וַאֲנִי + verb | I, I [verb] | I [verb] | preserve emphatic pronoun; but PSA 71 editor drops doubling (71:14,22) -- context-dependent |
 | הַמִּתְקוֹמְמַי | the ones rising up against me | who rise up against me | participle as noun |
 | יוֹם יוֹם | day, day | day {by} day | preserve doubling without added words |
 | כֵּן (adverbial) | Thus | So | formal connector |
 | יָרוּם מִמֶּנִּי | higher than I | high away from me | comparative with מִן |
+| Jussive negative | may you not [verb] | do not [verb] | form-based: use jussive for 2nd person negative wishes, not imperative; editor PSA 69:6,17; 70:5 |
+| Concessive waw | Though...yet | And...and | discretionary: read waw as concessive in contrast contexts; editor PSA 69:10-11,20 |
+| Fronted predicate | subject-first | predicate-first | discretionary: editor normalizes Hebrew fronted predicates to English SVO; PSA 69:4,33; 70:2,4,5 |
+| 3rd person jussive (prayer) | May he/they [verb] | He/they will [verb] | read yiqtol as jussive in petitionary psalms; editor PSA 72 throughout (16 of 20 verses) |
+| Participial noun phrase | those who [verb] | the ones [verb]ing | prefer relative clause over participle-as-noun; editor PSA 71:4,10,13,24 |
