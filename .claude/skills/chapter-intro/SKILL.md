@@ -188,6 +188,7 @@ Follow the template below. Use the **detailed format** for most psalms. Use the 
 - Content is translator-oriented, not devotional commentary
 - No verse-level detail that belongs in translation notes instead
 - Tone is informative and measured, not dramatic
+- Follow shared style rules in `../ULT-gen/reference/gl_guidelines.md`
 
 ### Step 7: Format and Insert into Issue File
 

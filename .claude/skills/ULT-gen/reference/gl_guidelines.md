@@ -126,6 +126,7 @@ The ULT maintains a **formal register**:
 - Use subjunctive mood ("If he were..." not "If he was...")
 - Use adverbs properly ("She spoke quietly" not "She spoke quiet")
 - Use "whom" as object pronoun
+- Use "like" for comparing things (nouns) and "as" for comparing actions (clauses): "he is like a lion" but "do as I say"
 
 ---
 

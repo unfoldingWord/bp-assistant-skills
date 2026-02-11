@@ -265,29 +265,7 @@ Brackets mark words added for English grammar not present in Hebrew.
 
 ### Step 5: Apply Style Rules
 
-Reference `reference/gl_guidelines.md` for detailed style guidance. Key points:
-
-**Formality:**
-- No contractions ("do not" not "don't")
-- Use "whom" not "who" as object
-- Subjunctive mood ("if he were" not "if he was")
-- Formal register throughout
-
-**Numbers:**
-- 1-10: Spell out ("one", "five")
-- 11+: Use numerals with commas ("12,000")
-- Ranges: En-dash ("30-40 people")
-
-**Punctuation:**
-- Oxford comma ("red, white, and blue")
-- American spelling ("color" not "colour")
-- Single space between sentences
-- Quotation marks at start/end of speech only
-
-**Capitalization:**
-- God pronouns: lowercase except sentence start
-- Titles: capitalize ("Son of Man", "King David")
-- "Scripture" capitalized for Bible; lowercase for passages
+Apply all shared style rules from `reference/gl_guidelines.md` (formality, numbers, punctuation, capitalization, spelling). ULT-specific rules below:
 
 **Word Order:**
 - Use English standard SVO order; do not woodenly follow Hebrew word order

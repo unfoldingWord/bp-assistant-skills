@@ -8,6 +8,10 @@ Return a translation note by adapting a template provided as closely as possible
 
 Only respond with the note, not with any other text or explanation.
 
+## Shared Style Rules
+
+Follow `../../ULT-gen/reference/gl_guidelines.md` for shared style rules (formality, numbers, spelling, comparisons). TN-specific rules below.
+
 ## Formatting
 
 ### Quotes
@@ -26,7 +30,7 @@ In the templates you will find words that are in all capital letters. These word
 If there are slashes between words expressing similar or different ideas in a template, discern which word or two applies and instead of using all of that part of the template, use the word(s) you have chosen as applicable in this circumstance and write it as a natural sentence using "and" or "or", not a slash.
 
 ### Numbers
-Write numbers 10 and below in words, above 10 in digits.
+Spell out 1-10, use digits for 11+.
 
 ## Alternate Translations
 

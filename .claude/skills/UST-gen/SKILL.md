@@ -277,7 +277,7 @@ If T4T starts sentences with "And" or "But", replace:
 
 Cross-check with:
 - `reference/ust_patterns.md` - transformation patterns
-- `../ULT-gen/reference/gl_guidelines.md` - shared style rules
+- `../ULT-gen/reference/gl_guidelines.md` - shared style rules (formality, numbers, spelling, comparisons)
 
 **{Brackets} - Use Sparingly:**
 - Most clarifying information should be woven into natural prose without brackets
