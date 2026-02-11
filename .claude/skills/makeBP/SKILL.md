@@ -22,13 +22,14 @@ all phases.
 
 ## Arguments
 
-`/makeBP <book> <chapter> <username>`
+`/makeBP <book> <chapter> <username> [--lite]`
 
 | Argument | Example | Description |
 |----------|---------|-------------|
 | book | psa | Book abbreviation (3-letter) |
 | chapter | 149 | Chapter number |
 | username | deferredreward | Door43 username for branch naming |
+| --lite | (flag) | Use 2 issue-id analysts instead of 4 (optional) |
 
 ## Setup
 
@@ -68,10 +69,10 @@ Total subagents across the run: 10 (sequential phases, not all at once).
 ## Phase 1: Initial Pipeline
 
 Launch a **Task subagent** (`subagent_type: general-purpose`) with a prompt to
-invoke `/initial-pipeline {BOOK} {CHAPTER}` and follow its SKILL.md. The
-initial-pipeline skill manages its own internal 6-wave team (ULT draft,
-adversarial issue-id, challenge/defend, merge, ULT revision, verification,
-UST generation).
+invoke `/initial-pipeline {BOOK} {CHAPTER}` (append `--lite` if the flag was
+passed to makeBP) and follow its SKILL.md. The initial-pipeline skill manages
+its own internal 6-wave team (ULT draft, adversarial issue-id,
+challenge/defend, merge, ULT revision, verification, UST generation).
 
 The subagent's context handles all that complexity. The orchestrator just waits
 for completion and checks that the output files exist.

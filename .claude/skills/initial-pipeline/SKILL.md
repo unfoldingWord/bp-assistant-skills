@@ -1,6 +1,6 @@
 ---
 name: initial-pipeline
-description: Orchestrate ULT-gen, issue-id, and UST-gen as a coordinated team for a chapter. 6-wave pipeline with adversarial issue identification and ULT feedback loop.
+description: Orchestrate ULT-gen, issue-id, and UST-gen as a coordinated team for a chapter. 6-wave pipeline with adversarial issue identification and ULT feedback loop. Supports --lite for 2-agent issue identification.
 model: opus
 ---
 
@@ -12,10 +12,21 @@ Coordinates ULT-gen, issue-id, and UST-gen as a persistent team for a chapter. A
 
 - **Book**: 3-letter abbreviation (PSA, GEN, 2SA, etc.)
 - **Chapter**: number
+- **Mode**: `--lite` (optional) -- use 2 combined analysts instead of 4 for reduced token usage
 
 ### Chapter Padding Convention
 
 Zero-pad the chapter number for all filenames: 3 digits for PSA (e.g., `061`), 2 digits for other books (e.g., `03`). Use `<CH>` below to mean the padded form. This matches makeBP's convention so output files are found by downstream phases.
+
+## Mode
+
+If `--lite` is specified:
+- Wave 2 uses 2 analysts ("structure" and "rhetoric") instead of 4
+- Wave 3 challenger reviews 2 TSVs instead of 4
+- Wave 5 verification contacts 2 analysts instead of 4
+- All other waves unchanged (ULT-gen, merge, ULT revision, UST-gen)
+
+If no mode flag: default (4 analysts).
 
 ## Why Run Together
 
@@ -80,6 +91,16 @@ Do:
 | grammar | Wave 2 | Waves 2, 3, 5 | Wave 6 | After cleanup |
 | figurative | Wave 2 | Waves 2, 3, 5 | Wave 6 | After cleanup |
 | speech | Wave 2 | Waves 2, 3, 5 | Wave 6 | After cleanup |
+| challenger | Wave 3 | Wave 3 | -- | After Wave 3 rulings |
+| ust-gen | Wave 6 | Wave 6 | -- | After cleanup |
+
+### Lite Mode Lifetimes
+
+| Teammate | Spawn | Active Work | Passive/Queryable | Shutdown |
+|----------|-------|-------------|-------------------|----------|
+| ult-gen | Wave 1 | Waves 1, 4b | Waves 2-3, 5-6 | After cleanup |
+| structure | Wave 2 | Waves 2, 3, 5 | Wave 6 | After cleanup |
+| rhetoric | Wave 2 | Waves 2, 3, 5 | Wave 6 | After cleanup |
 | challenger | Wave 3 | Wave 3 | -- | After Wave 3 rulings |
 | ust-gen | Wave 6 | Wave 6 | -- | After cleanup |
 
@@ -150,6 +171,24 @@ Output: `$TMP/wave2_speech.tsv`
 Each agent has a primary domain but overlaps with the others. When agents identify the same phrase, they should compare classifications. Disagreement is productive -- it's better to surface a conflict than to let a wrong classification pass unchallenged.
 
 Wait for all 4 analysts to send their "file written" messages to team-lead. Do NOT proceed to Wave 3 until all 4 files exist.
+
+### Lite Mode: 2 Analysts
+
+If `--lite`, spawn 2 teammates instead of 4 (`subagent_type: "issue-identification"`, with `team_name` set). Same inputs, cross-reading, hold protocol, and output format as full mode.
+
+#### Structure Analyst (teammate name: "structure")
+Grammar and discourse structure, from macro to micro level. Discourse markers, participant tracking, paragraph structure, connectors between clauses, quotation structure, genre indicators, passives, abstract nouns, possession, pronouns, ellipsis, word-level syntax. Integrates automated detection output first. Focuses on writing-*, grammar-connect-*, figs-activepassive, figs-abstractnouns, figs-possession, writing-pronouns, figs-ellipsis, and similar structural issues.
+
+Output: `$TMP/wave2_structure.tsv`
+
+#### Rhetoric Analyst (teammate name: "rhetoric")
+Figures of speech, speech acts, and cultural references. Metaphor, metonymy, simile, synecdoche, personification, merism, hendiadys, doublet, idiom, rhetorical questions, imperatives, exclamations, irony, hyperbole, litotes, euphemism, poetry markers, parallelism. Cross-references the biblical imagery classification lists in figs-metonymy.md and figs-metaphor.md.
+
+Output: `$TMP/wave2_rhetoric.tsv`
+
+As you work, read the other analyst's TSV file when it appears. If you find the same phrase classified differently, send a DM to flag the disagreement.
+
+Wait for both analysts to send their "file written" messages. Do NOT proceed to Wave 3 until both files exist.
 
 ## Wave 3: Challenge and Defend
 
@@ -232,7 +271,7 @@ Each analyst:
 4. Writes verification notes to `$TMP/wave5_*.tsv`
 5. Sends message to team-lead: "Verification complete"
 
-Wait for all 4 analysts to confirm, then update the merged issues based on verification feedback.
+Wait for all analysts to confirm (2 in lite mode, 4 in full mode), then update the merged issues based on verification feedback.
 
 Final issues written to `output/issues/<BOOK>-<CH>.tsv`.
 
@@ -257,7 +296,7 @@ These queries are optional -- only when the UST agent genuinely needs clarificat
 
 Include in the UST agent's prompt:
 - Invoke the UST-gen skill for the chapter
-- You have access to the ULT agent and 4 issue analysts as teammates. If the issues TSV or ULT text leaves something ambiguous, DM them to clarify before guessing.
+- You have access to the ULT agent and the issue analysts as teammates (2 in lite mode, 4 in full mode). If the issues TSV or ULT text leaves something ambiguous, DM them to clarify before guessing.
 - UST models how to handle each identified issue -- it shows the translator what the text means in natural language, with figures unpacked, implicit info made explicit, passives made active, etc.
 
 The UST agent:
@@ -269,7 +308,7 @@ The UST agent:
 ## Cleanup
 
 After Wave 6 output is confirmed:
-1. Send `shutdown_request` to all live teammates (ult-gen, discourse, grammar, figurative, speech, ust-gen, and challenger if still alive)
+1. Send `shutdown_request` to all live teammates (in lite mode: ult-gen, structure, rhetoric, ust-gen; in full mode: ult-gen, discourse, grammar, figurative, speech, ust-gen; and challenger if still alive)
 2. Wait for shutdown confirmations
 3. `TeamDelete` to clean up team resources
 
@@ -345,6 +384,51 @@ Wave 5:   team-lead -> analysts ── (re-check against revised ULT)
           analysts verify ──────── (drop/add, write updates)
           |
           | all 4 "verification complete"
+          v
+          orchestrator writes final issues TSV
+
+Wave 6:   ust-gen (teammate) ───── reads final ULT + issues
+          ust-gen <-> ult-gen ──── (optional: rendering queries)
+          ust-gen <-> analysts ─── (optional: issue clarification)
+          ust-gen writes UST
+          |
+          | "UST complete"
+          v
+Cleanup:  shutdown_request all -> TeamDelete
+```
+
+### Lite Mode Flow
+
+```
+Setup:    TeamCreate "pipeline-<BOOK>-<CHAPTER>"
+          mkdir working directory, build TN index
+
+Wave 1:   ult-gen (teammate) ──── generates ULT draft, holds
+          |
+          | "ULT draft written"
+          v
+Wave 2:   structure ───────────┐  (2 teammates, cross-read files,
+          rhetoric ────────────┘   DM on disagreements, hold)
+          |
+          | both "file written"
+          v
+Wave 3:   challenger (teammate) ── challenges 2 analysts via DM
+          analysts defend ──────── one round of defend/respond
+          challenger <-> ult-gen ── queries about rendering intent
+          challenger rules ─────── writes rulings, notifies analysts
+          |
+          v
+Wave 4a:  orchestrator merges ──── (applies rulings, deduplicates)
+Wave 4b:  team-lead -> ult-gen ─── (revision instructions via DM)
+          ult-gen revises ──────── (writes ULT draft 2)
+          |
+          | "ULT revision complete"
+          v
+Wave 5:   team-lead -> analysts ── (re-check against revised ULT)
+          analysts <-> ult-gen ─── (optional clarification DMs)
+          analysts verify ──────── (drop/add, write updates)
+          |
+          | both "verification complete"
           v
           orchestrator writes final issues TSV
 

@@ -1,6 +1,6 @@
 ---
 name: deep-issue-id
-description: Multi-agent adversarial issue identification against human ULT/UST from Door43 master. 4 parallel domain analysts + challenger debate, without AI text generation.
+description: Multi-agent adversarial issue identification against human ULT/UST from Door43 master. 4 parallel domain analysts + challenger debate, without AI text generation. Supports --lite for 2-agent mode.
 ---
 
 # Deep Issue Identification (Human ULT/UST)
@@ -11,6 +11,16 @@ Adversarial multi-agent issue identification against human-authored ULT/UST from
 
 - **Book**: 3-letter abbreviation (PSA, GEN, 2SA, etc.)
 - **Chapter**: number
+- **Mode**: `--lite` (optional) -- use 2 combined analysts instead of 4 for reduced token usage
+
+## Mode
+
+If `--lite` is specified:
+- Wave 2 uses 2 analysts ("structure" and "rhetoric") instead of 4
+- Wave 3 challenger reviews 2 TSVs instead of 4
+- All other setup and merge steps unchanged
+
+If no mode flag: default (4 analysts).
 
 ## Setup (orchestrator runs directly)
 
@@ -141,6 +151,24 @@ Each agent has a primary domain but overlaps with the others. When agents identi
 
 Wait for all 4 analysts to send their "file written" messages to team-lead. Do NOT mark Wave 2 tasks complete yet -- analysts must stay active to defend challenges in Wave 3. Only proceed to Wave 3 once all 4 files exist.
 
+### Lite Mode: 2 Analysts
+
+If `--lite`, spawn 2 teammates instead of 4 (`subagent_type: "issue-identification"`, with `team_name` set). Same inputs, cross-reading, hold protocol, and output format as full mode.
+
+#### Structure Analyst (teammate name: "structure")
+Grammar and discourse structure, from macro to micro level. Discourse markers, participant tracking, paragraph structure, connectors between clauses, quotation structure, genre indicators, passives, abstract nouns, possession, pronouns, ellipsis, word-level syntax. Integrates automated detection output first. Focuses on writing-*, grammar-connect-*, figs-activepassive, figs-abstractnouns, figs-possession, writing-pronouns, figs-ellipsis, and similar structural issues.
+
+Output: `$TMP/wave2_structure.tsv`
+
+#### Rhetoric Analyst (teammate name: "rhetoric")
+Figures of speech, speech acts, and cultural references. Metaphor, metonymy, simile, synecdoche, personification, merism, hendiadys, doublet, idiom, rhetorical questions, imperatives, exclamations, irony, hyperbole, litotes, euphemism, poetry markers, parallelism. Cross-references the biblical imagery classification lists in figs-metonymy.md and figs-metaphor.md.
+
+Output: `$TMP/wave2_rhetoric.tsv`
+
+As you work, read the other analyst's TSV file when it appears. If you find the same phrase classified differently, send a DM to flag the disagreement.
+
+Wait for both analysts to send their "file written" messages. Do NOT mark Wave 2 tasks complete yet -- analysts must stay active to defend challenges in Wave 3. Only proceed to Wave 3 once both files exist.
+
 ## Wave 3: Challenge and Defend
 
 Spawn the Challenger as a 5th teammate (name: "challenger"). The Wave 2 analysts stay alive for this round.
@@ -197,7 +225,7 @@ Before writing to output/issues/, verify ordering within each verse: first-to-la
 ## Cleanup
 
 After Merger completes:
-1. Send `shutdown_request` to all 5 teammates (discourse, grammar, figurative, speech, challenger)
+1. Send `shutdown_request` to all teammates (in lite mode: structure, rhetoric, challenger; in full mode: discourse, grammar, figurative, speech, challenger)
 2. Wait for shutdown confirmations
 3. `TeamDelete` to clean up team resources
 
@@ -260,6 +288,28 @@ Wave 2:   Discourse ──────────┐
           Grammar ────────────┤  (4 teammates, cross-read files,
           Figurative ─────────┤   DM on disagreements,
           Speech ─────────────┘   stay alive for Wave 3)
+
+Wave 3:   Challenger spawns ──── challenges each analyst via DM
+          Analysts defend ──────  one round of defend/respond
+          Challenger rules ─────  writes final rulings
+
+Wave 4:   Merger ─────────────── (applies rulings, deduplicates,
+                                   enforces output format firewall)
+
+Cleanup:  shutdown_request all → TeamDelete
+```
+
+### Lite Mode Flow
+
+```
+Setup:    Fetch human ULT/UST from Door43 master
+          Parse, compare, detect, build TN index
+
+Team:     TeamCreate "deep-issue-<BOOK>-<CHAPTER>"
+
+Wave 2:   Structure ───────────┐  (2 teammates, cross-read files,
+          Rhetoric ────────────┘   DM on disagreements,
+                                   stay alive for Wave 3)
 
 Wave 3:   Challenger spawns ──── challenges each analyst via DM
           Analysts defend ──────  one round of defend/respond
