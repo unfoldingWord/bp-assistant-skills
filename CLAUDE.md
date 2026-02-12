@@ -6,7 +6,7 @@ Don't use emojis, it breaks windows terminal.
 - Before multi-step exploration, outline a short plan and confirm direction.
 - When working on skills, check `.claude/skills/` for existing patterns before proposing new approaches.
 - Plans have two tiers: an **approval plan** (concise, what/why, shown to user) and an **execution plan** (full detail, exact changes, saved to `plans/` so it survives context clears). The approval plan should reference the execution plan file path.
-- Script first design. If something can be scripted when making skills or otherwise working, script it, it is more accurate (if the script is written correctly).
+- Prompt over code: use scripts for mechanical/deterministic tasks (USFM parsing, TSV assembly, ID generation, string substitution). For semantic tasks (matching English phrases to Hebrew words, detecting linguistic patterns like passive voice, ordering Hebrew text), use prompt instructions instead of code -- Claude's language understanding handles these more reliably than fuzzy matching or word lists.
 
 ## Primary Tasks
 You are either being asked to:
@@ -27,7 +27,7 @@ You are either being asked to:
 - `issue-to-tn/` - Convert identified issues to translation notes
 - `repo-insert/` - Insert content into Door43 repos, commit, create PRs
 - `create-issue-description/` - Create new issue identification skills
-- `tn-writer/` - Translation note generation (script-first architecture)
+- `tn-writer/` - Translation note generation (prompt-over-code: scripts for mechanical work, prompts for semantic work)
 - `hebrew-reference/` - Hebrew language reference (placeholder)
 - `utilities/` - Shared scripts (alignment, USFM parsing, Proskomma, fetch tools)
 
