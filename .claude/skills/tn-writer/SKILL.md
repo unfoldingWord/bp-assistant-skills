@@ -1,7 +1,6 @@
 ---
 name: tn-writer
 description: Generate translation notes from issue identification TSV. Runs deterministic preparation script then AI generates notes following the style guide.
-model: sonnet
 ---
 
 # Translation Note Writer

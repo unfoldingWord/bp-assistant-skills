@@ -1,7 +1,6 @@
 ---
 name: initial-pipeline
 description: Orchestrate ULT-gen, issue-id, and UST-gen as a coordinated team for a chapter. 6-wave pipeline with adversarial issue identification and ULT feedback loop. Supports --lite for 2-agent issue identification.
-model: opus
 ---
 
 # Initial Pipeline Orchestrator

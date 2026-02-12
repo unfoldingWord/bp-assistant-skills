@@ -1,7 +1,6 @@
 ---
 name: tq-writer
 description: Update translation questions to align with current ULT/UST. Runs preparation script then AI reviews and updates Q&A content following the guidelines.
-model: sonnet
 ---
 
 # Translation Question Writer

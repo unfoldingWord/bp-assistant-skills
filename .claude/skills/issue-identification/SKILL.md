@@ -2,7 +2,6 @@
 name: issue-identification
 description: Find translation issues in ULT/Hebrew/Greek texts. Use when analyzing passages for figures of speech, abstract nouns, or other translation concerns.
 allowed-tools: Read, Grep, Glob, Bash
-model: opus
 ---
 
 # Issue Identification

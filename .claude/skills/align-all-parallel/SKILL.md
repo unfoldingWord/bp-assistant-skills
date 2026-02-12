@@ -24,8 +24,8 @@ Spawn both alignment agents in parallel and wait for both to complete.
 
 ## Output
 
-- `output/AI-ULT-aligned/<BOOK>-<CH>.usfm` - ULT with word-level alignments
-- `output/AI-UST-aligned/<BOOK>-<CH>.usfm` - UST with phrase-level alignments
+- `output/AI-ULT/<BOOK>/<BOOK>-<CH>-aligned.usfm` - ULT with word-level alignments
+- `output/AI-UST/<BOOK>/<BOOK>-<CH>-aligned.usfm` - UST with phrase-level alignments
 
 Both are ready for insertion into Door43 repos.
 

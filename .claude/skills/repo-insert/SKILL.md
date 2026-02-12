@@ -110,23 +110,24 @@ fi
 git fetch origin
 ```
 
-**Create or checkout the working branch from origin/master.** Always branch from
-`origin/master` so the branch has the full repo contents. Never create a branch
+**Create or checkout the working branch.** Check whether the branch already
+exists on the remote before deciding how to set it up. Never create a branch
 from scratch or from a local-only state.
 
 ```bash
 BRANCH="auto-deferredreward-PSA"  # or {username}-tc-create-1 for TN
 
-# Delete stale local branch if it exists
+# Detach HEAD first so we can safely delete the local branch if it exists
+git checkout --detach 2>/dev/null
 git branch -D "$BRANCH" 2>/dev/null || true
 
 # Check if branch exists on remote
 if git ls-remote --heads origin "$BRANCH" | grep -q "$BRANCH"; then
-  # Branch exists remotely -- checkout and merge master
+  # Branch exists remotely -- checkout from remote and merge latest master
   git checkout -b "$BRANCH" "origin/$BRANCH"
   git merge origin/master --no-edit
 else
-  # Branch doesn't exist -- create from origin/master
+  # Branch doesn't exist -- create fresh from origin/master
   git checkout -b "$BRANCH" origin/master
 fi
 ```

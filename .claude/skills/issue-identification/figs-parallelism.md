@@ -76,6 +76,8 @@ Numerical intensification common in Hebrew poetry:
 
 7. **For tricola** (3-stanza verses): Check if all three lines express the same idea. If so, write one parallelism note covering all three lines rather than separate notes.
 
+8. **First instance in a psalm**: For the first parallelism identified in a psalm (or chapter), add `t: first instance` to the explanation. This routes the note writer to a template that introduces parallelism as a pattern and asks translators to establish a team-wide approach for the rest of the psalm. Only mark one occurrence per psalm as `t: first instance`.
+
 ---
 
 ## NOT figs-parallelism
