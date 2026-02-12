@@ -99,32 +99,25 @@ Output shows verses where UST made significant changes, with suggested issue typ
 
 Skip this step if UST file doesn't exist.
 
-#### Step 4: Run Automated Detection Scripts
-These scripts identify issues that should appear in output.
+#### Step 4: Run Automated Detection and Identify Passives
 
-Every passive construction needs a note. Every abstract noun should be evaluated.
+**Abstract nouns** -- run the detection script:
 
 ```bash
-# Passive voice - every passive needs a note
-python3 .claude/skills/issue-identification/scripts/detection/detect_activepassive.py \
-  /tmp/alignments.json --format tsv >> /tmp/detected_issues.tsv
-
 # Abstract nouns - evaluate each for note necessity
 python3 .claude/skills/issue-identification/scripts/detection/detect_abstract_nouns.py \
   /tmp/alignments.json --format tsv >> /tmp/detected_issues.tsv
 ```
 
+**Passive voice** -- identify ALL passive constructions during your verse-by-verse analysis (no script needed). Read the detection instructions in `figs-activepassive.md` for the passive voice pattern (auxiliary "be" + past participle), stative adjective exclusions, and worked examples. Every passive construction needs a note.
+
 Merge detected issues into final output.
 
 ### Option B: Quick Workflow (plain English text)
 
-When you just have English text (no USFM, no alignments), use `--text` to run detection directly. This skips source language morphology checks but still finds passives and abstract nouns.
+When you just have English text (no USFM, no alignments), use `--text` to run detection directly. This skips source language morphology checks but still finds abstract nouns. Passive voice is identified by Claude during analysis (see `figs-activepassive.md`).
 
 ```bash
-# Passive voice detection on plain English
-python3 .claude/skills/issue-identification/scripts/detection/detect_activepassive.py \
-  --text "The bread was broken and given to them" --format tsv
-
 # Abstract noun detection on plain English
 python3 .claude/skills/issue-identification/scripts/detection/detect_abstract_nouns.py \
   --text "The righteousness of God brings salvation" --format tsv
@@ -219,13 +212,14 @@ Use TaskCreate to generate one task per issue type from `data/translation-issues
 4. When uncertain, search published notes before deciding
 
 **Integrating detection script output:**
-- Check detection script output first - passives and abstract nouns are pre-identified
-- Mark those tasks as completed with the script findings
+- Check abstract noun detection script output first - abstract nouns are pre-identified
+- Identify all passive constructions yourself using the patterns in `figs-activepassive.md`
+- Mark those tasks as completed with the findings
 - For names/unknowns, run `check_tw_headwords.py` before flagging
 
 ### Systematic Review Principles
 
-1. **Detection scripts first** - integrate passives and abstract nouns from scripts
+1. **Detection first** - integrate abstract nouns from scripts and passives from your own analysis
 2. **tW check for names** - run `check_tw_headwords.py` before flagging translate-names/translate-unknown
 3. **Search when uncertain** - check the published TN index first (`build_tn_index.py --lookup`), then `data/published-tns/` for similar phrases
 4. **Consult Issues Resolved** - when classifications conflict, `data/issues_resolved.txt` has final authority
@@ -365,7 +359,6 @@ grep -i "fallen\|sword" data/published-tns/tn_*.tsv
 | fetch_door43.py | utilities/scripts/ | Fetch USFM from Door43 (supports `--type ust` for UST) |
 | parse_usfm.js | utilities/scripts/usfm/ | Parse USFM, extract alignments and plain text (usfm-js) |
 | compare_ult_ust.py | scripts/ | Compare ULT/UST plain text to identify divergences suggesting issues |
-| detect_activepassive.py | scripts/detection/ | Find ALL passive constructions. Use `--text "..."` for plain English |
 | detect_abstract_nouns.py | scripts/detection/ | Find abstract nouns (591 word list). Use `--text "..."` for plain English |
 | check_tw_headwords.py | scripts/ | Check names/unknowns against tW headwords - filters translate-names/translate-unknown |
 | build_tn_index.py | utilities/scripts/ | Published TN index lookup. `--lookup "hand"` for keyword, `--issue figs-metaphor` for issue type |

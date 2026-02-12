@@ -27,6 +27,18 @@ python3 fetch_door43.py 1JN | \
 - Source morphology confirms noun (Gr,N... or He,N...)
 - Source adjective translated as English noun (higher confidence)
 
+### Supplementary: Catching Abstract Nouns Not in the Word List
+
+The 591-word list provides a deterministic baseline but cannot be exhaustive. During your verse-by-verse analysis, also watch for words with these common abstract noun suffixes that may not be in the list:
+
+- **-ness** (righteousness, faithfulness, kindness, wickedness)
+- **-tion / -sion** (salvation, redemption, sanctification, justification, destruction)
+- **-ment** (judgment, amazement, resentment, atonement)
+- **-ity / -ety** (integrity, purity, prosperity, anxiety)
+- **-ance / -ence** (obedience, endurance, repentance, reverence)
+
+If you encounter a word with one of these suffixes that expresses an attitude, quality, event, or situation (not a concrete thing), flag it as a potential abstract noun even if the detection script didn't catch it.
+
 ---
 
 ## When to Create a Note

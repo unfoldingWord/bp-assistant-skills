@@ -56,6 +56,16 @@ If there is any data here, it is a previous note written by AI that the human ed
 
 When you make the alternate translation, it should fit seamlessly back into the ULT such that if you remove the GLQuote `{gl_quote}` and replace it with the alternate translation it reads correctly. Here is the ULT for this verse: `{ult_verse}`
 
+CRITICAL AT RULES:
+- Look at the word immediately BEFORE the gl_quote in the ULT verse. If it is a
+  conjunction (And, But, So, Then, Or) or preposition (in, to, from, by, for, with,
+  on, at, of), your AT must include that leading word so it is not orphaned.
+- Match the capitalization of the first word position. If the gl_quote appears at
+  the start of the verse or after a period, capitalize the first word of your AT.
+  If it appears mid-sentence, use lowercase.
+- Mentally substitute your AT into the verse and read the full sentence aloud.
+  Does it flow? Is anything orphaned or missing?
+
 Check the UST for the same verse to make sure that your alternate translation is not the same as the UST. If it is, come up with another alternate translation idea. Here is the UST for that verse: `{ust_verse}`
 
 Use the template(s) provided below. There may be more than one template; if so, discern which particular template is needed in this instance and use it. The explanation of the issue may indicate what template to use.
@@ -632,6 +642,9 @@ def main():
                         help='Skip language conversion (use original GLQuote)')
     parser.add_argument('--skip-ids', action='store_true',
                         help='Skip ID generation')
+    parser.add_argument('--alignment-json',
+                        help='Output path for extracted alignment data JSON '
+                             '(default: /tmp/claude/alignment_data.json)')
 
     args = parser.parse_args()
 
@@ -670,6 +683,7 @@ def main():
 
     # 4. Language conversion / quote extraction
     conversion_results = None
+    alignment_json_path = None
     if not args.skip_lang:
         # Determine aligned ULT path: explicit arg > auto-detected > none
         aligned_path = None
@@ -686,20 +700,19 @@ def main():
                 aligned_path = aligned_candidate
 
         if aligned_path:
-            # Use direct extraction from aligned USFM (bypasses lang_convert.js)
-            print(f"Extracting Hebrew quotes from aligned ULT: {aligned_path}",
+            # Extract alignment data for Claude to use in Hebrew quote matching
+            print(f"Extracting alignment data from aligned ULT: {aligned_path}",
                   file=sys.stderr)
-            from extract_quotes_from_alignment import extract_quotes
-            raw_results = extract_quotes(aligned_path, items)
-            # Convert to the same format run_language_conversion returns
-            conversion_results = [
-                {'Quote': r['Quote'], 'GLQuote': r['GLQuote']}
-                for r in raw_results
-            ]
-            found = sum(1 for r in conversion_results if r['Quote'])
-            missing = len(conversion_results) - found
-            print(f"  Extracted {found} Hebrew quotes ({missing} missing)",
-                  file=sys.stderr)
+            from extract_alignment_data import parse_aligned_usfm
+            alignment_data = parse_aligned_usfm(aligned_path)
+            alignment_json_path = args.alignment_json or '/tmp/claude/alignment_data.json'
+            os.makedirs(os.path.dirname(alignment_json_path) or '.', exist_ok=True)
+            with open(alignment_json_path, 'w', encoding='utf-8') as af:
+                json.dump(alignment_data, af, indent=2, ensure_ascii=False)
+            total_words = sum(len(words) for words in alignment_data.values())
+            print(f"  Wrote alignment data: {len(alignment_data)} verses, "
+                  f"{total_words} words -> {alignment_json_path}", file=sys.stderr)
+            # orig_quote left empty -- Claude fills it using alignment data + Hebrew source
         else:
             # Fall back to lang_convert.js roundtrip
             print(f"No aligned ULT available, falling back to lang_convert.js",
@@ -814,6 +827,8 @@ def main():
         'item_count': len(output_items),
         'items': output_items,
     }
+    if alignment_json_path:
+        output['alignment_data_path'] = alignment_json_path
     if intro_rows:
         output['intro_rows'] = intro_rows
 

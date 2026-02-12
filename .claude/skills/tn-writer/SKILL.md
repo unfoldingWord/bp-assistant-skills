@@ -26,7 +26,7 @@ node .claude/skills/utilities/scripts/usfm/parse_usfm.js /tmp/claude/book_ult.us
 node .claude/skills/utilities/scripts/usfm/parse_usfm.js /tmp/claude/book_ust.usfm --plain-only > /tmp/claude/ust_plain.usfm
 ```
 
-### Step 2: Run the Preparation Script
+### Step 2a: Run the Preparation Script
 
 ```bash
 python3 .claude/skills/tn-writer/scripts/prepare_notes.py \
@@ -37,39 +37,76 @@ python3 .claude/skills/tn-writer/scripts/prepare_notes.py \
     --output /tmp/claude/prepared_notes.json
 ```
 
-This produces a JSON file with fully-assembled prompts for each item.
+This produces a JSON file with fully-assembled prompts for each item, plus alignment data at `/tmp/claude/alignment_data.json`.
 
 The script automatically:
 - Filters out items with "has tW article" in the explanation (Translation Words already covers them)
 - Sorts output so `front` references come before verse references
+- Extracts alignment data (English-to-Hebrew word mappings) from aligned USFM
 
 Options:
-- `--aligned-usfm PATH` -- Extract Hebrew quotes directly from aligned ULT (preferred; bypasses lang_convert.js roundtrip and eliminates QUOTE_NOT_FOUND from ULT version mismatch). Auto-detected if omitted and aligned file exists at the standard path.
+- `--aligned-usfm PATH` -- Extract alignment data from aligned ULT (preferred). Auto-detected if omitted and aligned file exists at the standard path.
+- `--alignment-json PATH` -- Custom output path for alignment data (default: `/tmp/claude/alignment_data.json`)
 - `--skip-lang` -- Skip language conversion (keep original English quotes)
 - `--skip-ids` -- Skip ID generation
 
-### Step 3: Verify Roundtrip Alignment
+Note: `orig_quote` fields in the prepared JSON will be empty when using aligned USFM. Hebrew quotes are filled in Step 2c below.
 
-After prepare_notes.py runs (which roundtrips gl_quotes internally), verify the results before investing in note generation. Check each item's `gl_quote` vs `gl_quote_roundtripped` in the prepared JSON. If they differ, the original gl_quote may not align cleanly to Hebrew words -- investigate before proceeding.
+### Step 2b: Review Alignment Data
+
+Read the alignment data JSON to understand the English-to-Hebrew word mappings:
+
+```bash
+python3 -c "
+import json
+with open('/tmp/claude/alignment_data.json') as f:
+    data = json.load(f)
+print(f'{len(data)} verses with alignment data')
+for ref in sorted(data.keys(), key=lambda r: (int(r.split(\":\")[0]), int(r.split(\":\")[1]) if r.split(\":\")[1] != \"front\" else 0))[:3]:
+    print(f'  {ref}: {len(data[ref])} aligned words')
+    for w in data[ref][:5]:
+        print(f'    {w[\"eng\"]} -> {w[\"heb\"]} (pos {w[\"heb_pos\"]})')
+"
+```
+
+### Step 2c: Fill Hebrew Quotes (Claude Semantic Matching)
+
+For each item in `/tmp/claude/prepared_notes.json` where `orig_quote` is empty:
+
+1. Read the alignment data for the item's verse from `/tmp/claude/alignment_data.json`
+2. Semantically identify which English aligned words correspond to the item's `gl_quote`
+3. Collect the Hebrew `heb` values for those matched alignment entries
+4. Read the Hebrew source verse from `data/hebrew_bible/*-<BOOK>.usfm` (find the `\c` and `\v` markers for the chapter:verse)
+5. Order the collected Hebrew words to match their reading order in the Hebrew source verse
+6. Verify EXACT Unicode match: each Hebrew word you collected must appear character-for-character as a `\w` token in the Hebrew source verse for that reference
+7. Join the Hebrew words with spaces and update `orig_quote` in the prepared JSON
+
+**CRITICAL**: You MUST copy Hebrew text character-for-character from the source file. Do not generate Hebrew from memory. Read the source, find the words, copy them exactly.
+
+After filling all items, write the updated prepared JSON back to `/tmp/claude/prepared_notes.json`.
+
+### Step 3: Verify Hebrew Quotes
+
+After filling orig_quote values, verify each Hebrew quote is a valid substring of Hebrew source:
 
 ```bash
 python3 -c "
 import json
 with open('/tmp/claude/prepared_notes.json') as f:
     data = json.load(f)
-diffs = [(i['id'], i['reference'], i['gl_quote'], i['gl_quote_roundtripped'])
-         for i in data['items']
-         if i['gl_quote'].strip().lower() != i['gl_quote_roundtripped'].strip().lower()]
-if diffs:
-    print(f'{len(diffs)} roundtrip discrepancies:')
-    for d in diffs:
-        print(f'  {d[0]} {d[1]}: \"{d[2]}\" -> \"{d[3]}\"')
+empty = [i for i in data['items'] if not i.get('orig_quote') and not i['reference'].endswith(':front')]
+if empty:
+    print(f'WARNING: {len(empty)} items still missing orig_quote:')
+    for e in empty[:10]:
+        print(f'  {e[\"id\"]} {e[\"reference\"]}: \"{e[\"gl_quote\"]}\"')
 else:
-    print('All gl_quotes roundtrip cleanly.')
+    print(f'All {len(data[\"items\"])} items have orig_quote filled.')
 "
 ```
 
-Review any discrepancies. Minor differences (capitalization, whitespace) are usually fine. If a gl_quote roundtrips to something substantially different, the Hebrew alignment may be off -- check the original quote against the ULT verse and fix before continuing.
+Investigate any items still missing `orig_quote`. Common causes:
+- The gl_quote doesn't match any words in the alignment data (check for typos)
+- The aligned USFM is missing alignment for that verse
 
 ### Step 4: Flag Narrow Quotes
 
@@ -152,9 +189,26 @@ For each substitution that reads unnaturally (broken grammar, orphaned words, ve
 
 Do not proceed to assembly until every substitution line has been reviewed and reads correctly.
 
+When reviewing each substitution line from verify_at_fit.py, check specifically:
+
+1. **Orphaned conjunctions**: Is there a lonely "And", "But", "So", "Then"
+   immediately before [the AT]? If yes, either:
+   - Expand gl_quote to include the conjunction, OR
+   - Rewrite the AT to include the conjunction
+
+2. **Orphaned prepositions**: Is there a lonely "in", "to", "from", "by", "for",
+   "with" before [the AT]? Same fix as above.
+
+3. **Capitalization**: Does the first word of the AT match its sentence position?
+   - Start of verse/sentence → capitalize
+   - Mid-sentence → lowercase
+   - Fix by rewriting the AT with correct case
+
+4. **Read the full result sentence**: Does it parse as natural English? Watch for
+   broken grammar at the boundaries.
+
 Also check:
 - Fix any ERRORS (gl_quote not found -- usually a curly brace or case issue)
-- Watch for prepositions/conjunctions adjacent to the gl_quote that may need inclusion in the AT (Hebrew prefixes like bet/lamed/mem often correspond to English "to/in/from" outside the gl_quote)
 - Verify no AT is identical to UST phrasing
 
 ### Step 8: Assemble Output TSV (script)

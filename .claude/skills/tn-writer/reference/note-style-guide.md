@@ -40,6 +40,22 @@ Generate an alternate translation when the matched templates contain "Alternate 
 ### Seamless Replacement
 An alternate translation should be a seamless replacement for the text in which the translation issue occurs. If you remove the GLQuote from the ULT verse and replace it with the AT, it should read correctly as natural English.
 
+### Conjunction and Preposition Handling
+Hebrew prefixes (waw = "and", bet = "in", lamed = "to", mem = "from") are attached
+to the Hebrew word but correspond to separate English words. When a gl_quote boundary
+does not include an adjacent conjunction or preposition in the ULT, your AT must
+account for this:
+
+- If the ULT reads "And in my distress" and gl_quote is "in my distress", your AT
+  should start with the preposition: [in my suffering] not just [my suffering]
+- If the ULT reads "And he went" and gl_quote is "And he went", your AT must include
+  "And": [And he traveled] not just [he traveled]
+
+### Capitalization in ATs
+Match the sentence position of the gl_quote:
+- Verse/sentence start: capitalize first word → [He traveled to the city]
+- Mid-sentence: lowercase → [he traveled to the city]
+
 ### Quotation Marks in ATs
 Do not use quotation marks in the alternate translation(s) unless that text contains opening or closing quotation marks or both. In that case, reproduce the quotation mark(s) in the corresponding location(s).
 
