@@ -75,12 +75,11 @@ python3 .claude/skills/issue-identification/scripts/compare_ult_ust.py \
 ### 3. Run Automated Detection
 
 ```bash
-python3 .claude/skills/issue-identification/scripts/detection/detect_activepassive.py \
-  $TMP/alignments.json --format tsv > $TMP/detected_issues.tsv
-
 python3 .claude/skills/issue-identification/scripts/detection/detect_abstract_nouns.py \
-  $TMP/alignments.json --format tsv >> $TMP/detected_issues.tsv
+  $TMP/alignments.json --format tsv > $TMP/detected_issues.tsv
 ```
+
+**Passive voice** is identified by the analysts during their verse-by-verse analysis (prompt-over-code approach -- Claude's language understanding handles this more reliably than script matching). See `figs-activepassive.md` for the passive voice pattern, stative adjective exclusions, and worked examples.
 
 ### 4. Build Published TN Index
 
@@ -145,7 +144,7 @@ Macro-level grammar and structure. Discourse markers, participant tracking, para
 Output: `$TMP/wave2_discourse.tsv`
 
 ### Grammar Analyst (teammate name: "grammar")
-Micro-level grammar within clauses. Passives, abstract nouns, possession, pronouns, ellipsis, word-level syntax. Integrates automated detection output first. Focuses on figs-activepassive, figs-abstractnouns, figs-possession, writing-pronouns, figs-ellipsis.
+Micro-level grammar within clauses. Passives, abstract nouns, possession, pronouns, ellipsis, word-level syntax. Integrates abstract noun detection output; identifies passives during analysis (see figs-activepassive.md). Focuses on figs-activepassive, figs-abstractnouns, figs-possession, writing-pronouns, figs-ellipsis.
 
 Output: `$TMP/wave2_grammar.tsv`
 
@@ -168,7 +167,7 @@ Wait for all 4 analysts to send their "file written" messages to team-lead. Do N
 If `--lite`, spawn 2 teammates instead of 4 (`subagent_type: "issue-identification"`, with `team_name` set). Same inputs, cross-reading, hold protocol, and output format as full mode.
 
 #### Structure Analyst (teammate name: "structure")
-Grammar and discourse structure, from macro to micro level. Discourse markers, participant tracking, paragraph structure, connectors between clauses, quotation structure, genre indicators, passives, abstract nouns, possession, pronouns, ellipsis, word-level syntax. Integrates automated detection output first. Focuses on writing-*, grammar-connect-*, figs-activepassive, figs-abstractnouns, figs-possession, writing-pronouns, figs-ellipsis, and similar structural issues.
+Grammar and discourse structure, from macro to micro level. Discourse markers, participant tracking, paragraph structure, connectors between clauses, quotation structure, genre indicators, passives, abstract nouns, possession, pronouns, ellipsis, word-level syntax. Integrates abstract noun detection output; identifies passives during analysis (see figs-activepassive.md). Focuses on writing-*, grammar-connect-*, figs-activepassive, figs-abstractnouns, figs-possession, writing-pronouns, figs-ellipsis, and similar structural issues.
 
 Output: `$TMP/wave2_structure.tsv`
 
@@ -200,8 +199,7 @@ Challenge criteria:
 - Resolves disagreements between Wave 2 agents (e.g., one agent kept an issue another dropped)
 - Identifies duplicates where multiple agents flagged the same issue
 - **ULT coherence check**: For each issue, does it match what the human ULT actually renders? If the human ULT already handles the construct naturally (e.g., already made a passive active, already unpacked a figure), drop the issue. The human ULT is authoritative -- flag the issue, not the text.
-- **Grammar issues are independent**: Abstract nouns, passives (figs-abstractnouns,
-  figs-activepassive) are script-detected and AI-verified. They cannot be subsumed
+- **Grammar issues are independent**: Abstract nouns (figs-abstractnouns) are script-detected and AI-verified; passives (figs-activepassive) are identified by analysts during analysis. They cannot be subsumed
   by, merged into, or dropped in favor of figurative issues on the same phrase.
   Keep both layers. Other grammar-level issues (figs-possession, figs-ellipsis,
   figs-nominaladj) should also generally not be dropped or merged with figurative
@@ -294,7 +292,7 @@ Include these rules in every agent prompt (Wave 2 analysts, Challenger batch, Me
 Setup:    Fetch human ULT/UST from Door43 master
           Parse -> alignment JSON + plain text (chapter-filtered)
           Compare ULT/UST divergence patterns
-          Run automated detection (passives, abstract nouns)
+          Run automated detection (abstract nouns)
           Build published TN index
 
 Team:     TeamCreate "deep-issue-<BOOK>-<CHAPTER>"
