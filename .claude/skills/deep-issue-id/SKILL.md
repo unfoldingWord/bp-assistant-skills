@@ -1,6 +1,6 @@
 ---
 name: deep-issue-id
-description: Multi-agent adversarial issue identification against human ULT/UST from Door43 master. 4 parallel domain analysts + challenger debate, without AI text generation. Supports --lite for 2-agent mode.
+description: Multi-agent adversarial issue identification against human ULT/UST from Door43 master. 4 parallel domain analysts + challenger debate, without AI text generation. Supports --lite for 2-agent mode and --verses for chunked analysis of long chapters.
 ---
 
 # Deep Issue Identification (Human ULT/UST)
@@ -11,6 +11,7 @@ Adversarial multi-agent issue identification against human-authored ULT/UST from
 
 - **Book**: 3-letter abbreviation (PSA, GEN, 2SA, etc.)
 - **Chapter**: number
+- **Verses**: `--verses 1-40` (optional) -- restrict analysis to a verse range within the chapter. Useful for long chapters (e.g., PSA 119 at 176 verses) that benefit from chunked runs.
 - **Mode**: `--lite` (optional) -- use 2 combined analysts instead of 4 for reduced token usage
 
 ## Mode
@@ -21,6 +22,17 @@ If `--lite` is specified:
 - All other setup and merge steps unchanged
 
 If no mode flag: default (4 analysts).
+
+## Verse Range
+
+If `--verses <start>-<end>` is specified:
+- Pass `--verse <start>-<end>` to both `parse_usfm.js` calls (filters alignment JSON and plain text)
+- Downstream scripts (compare, detect) automatically operate on the filtered data
+- Use verse-range suffix in tmp directory: `$TMP` becomes `tmp/deep-issue-id-v<start>-<end>`
+- Output file uses verse range: `output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv`
+- Team name includes range: `deep-issue-<BOOK>-<CH>-v<START>-<END>`
+
+After running all chunks, concatenate the chunk TSVs (stripping any duplicate headers) into the final `output/issues/<BOOK>/<BOOK>-<CH>.tsv`.
 
 ## Setup (orchestrator runs directly)
 
@@ -41,16 +53,16 @@ python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> > $TMP/book_ult.
 python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> --type ust > $TMP/book_ust.usfm 2>/dev/null || true
 
 node .claude/skills/utilities/scripts/usfm/parse_usfm.js $TMP/book_ult.usfm \
-  --chapter <N> \
+  --chapter <N> [--verse <START>-<END>] \
   --output-json $TMP/alignments.json \
   --output-plain $TMP/ult_plain.usfm
 
 node .claude/skills/utilities/scripts/usfm/parse_usfm.js $TMP/book_ust.usfm \
-  --chapter <N> \
+  --chapter <N> [--verse <START>-<END>] \
   --plain-only > $TMP/ust_plain.usfm 2>/dev/null || true
 ```
 
-Note: `--chapter` filters both alignment JSON and plain text output. The UST parse also needs `--chapter <N>` to avoid dumping the whole book.
+Note: `--chapter` filters both alignment JSON and plain text output. `--verse` further narrows to a verse range within the chapter. The UST parse also needs both flags to match.
 
 ### 2. Compare ULT/UST
 
@@ -90,7 +102,7 @@ Create a team for cross-agent interaction:
 TeamCreate "deep-issue-<BOOK>-<CHAPTER>"
 ```
 
-Team name pattern: `deep-issue-PSA-120`, `deep-issue-GEN-01`, etc.
+Team name pattern: `deep-issue-PSA-120`, `deep-issue-GEN-01`, etc. With verse range: `deep-issue-PSA-119-v1-40`.
 
 All agents below are spawned as teammates in this team.
 
@@ -235,7 +247,10 @@ The human ULT/UST is authoritative. Issues adapt to the text, not the other way 
 
 ## Output
 
-`output/issues/<BOOK>-<CHAPTER>.tsv`
+Without verse range: `output/issues/<BOOK>/<BOOK>-<CHAPTER>.tsv`
+With verse range: `output/issues/<BOOK>/<BOOK>-<CHAPTER>-v<START>-<END>.tsv`
+
+After all chunks are complete, concatenate into `output/issues/<BOOK>/<BOOK>-<CHAPTER>.tsv` (strip duplicate headers, preserve verse ordering).
 
 Same format as base issue-identification:
 ```
