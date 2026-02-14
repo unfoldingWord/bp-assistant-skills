@@ -222,7 +222,7 @@ Use TaskCreate to generate one task per issue type from `data/translation-issues
 1. **Detection first** - integrate abstract nouns from scripts and passives from your own analysis
 2. **tW check for names** - run `check_tw_headwords.py` before flagging translate-names/translate-unknown
 3. **Search when uncertain** - check the published TN index first (`build_tn_index.py --lookup`), then `data/published-tns/` for similar phrases
-4. **Consult Issues Resolved** - when classifications conflict, `data/issues_resolved.txt` has final authority
+4. **Consult Issues Resolved and Note Templates** - when classifications conflict, `data/issues_resolved.txt` and `data/templates.csv` have final authority on how issues are classified
 5. **Check implicit info** - would modern readers miss cultural practices, theological concepts, or covenant language?
 6. **Record non-trivial decisions** - after resolving a classification that required checking published precedent or where multiple issue types were plausible, append to `data/quick-ref/issue_decisions.csv`
 
@@ -268,7 +268,8 @@ When you encounter these words, ALWAYS check the specific issue listed:
 |---------|--------------|
 | man, men, brothers, sons, fathers | figs-gendernotations (generic masculine?) |
 | like, as, than | figs-simile before figs-metaphor |
-| hand, hands, eyes, heart, face | figs-metonymy or figs-synecdoche (body part for action/person?) |
+| hand, hands, eyes, face | figs-metonymy or figs-synecdoche (body part for action/person?) |
+| heart | figs-metaphor (heart = thoughts/feelings/will; see template) |
 | all, every, never, always | figs-hyperbole (exaggeration for emphasis?) |
 | the righteous, the wicked, the poor | figs-nominaladj (adjective as noun?) |
 
@@ -319,6 +320,16 @@ This document contains content team decisions that override other guidance.
 ```bash
 # Search for relevant decisions
 cat data/issues_resolved.txt | grep -i "[search term]"
+```
+
+### Note Templates (Classification Reference)
+The note templates in `data/templates.csv` reflect confirmed team decisions on how issues are classified and described. When a template exists for an expression (e.g., "heart" under figs-metaphor), that classification is authoritative. Issue identification should tag issues consistently with how templates classify them.
+
+Note: issue-identification produces *explanations*, not notes. But the template classifications indicate which support reference to use.
+
+```bash
+# Check how a term is classified in templates
+grep -i "heart" data/templates.csv
 ```
 
 ### Published TN Index

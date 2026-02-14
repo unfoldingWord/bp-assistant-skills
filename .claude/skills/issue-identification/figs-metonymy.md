@@ -67,11 +67,6 @@ These have been explicitly decided by the content team (Issues Resolved):
 | Body part representing entire person | Whole substitutes for part | Part for whole |
 | "gates" (= city borders) | Physical boundary meaning | Part for whole |
 
-### Use figs-metonymy for:
-| Expression | Reason |
-|------------|--------|
-| "heart" (= thoughts/feelings/attitude) | Close association, not comparison |
-
 ### Use figs-metaphor for:
 | Expression | Reason |
 |------------|--------|
@@ -158,7 +153,7 @@ These are confirmed metonymy by the content team (close association, not compari
 - FACE represents presence, sight, knowledge, perception, attention, judgment, front, or surface
 - HAND represents power, control, agency, or action
 - HEAD represents tip, top, or uppermost part
-- HEART represents thinking, feeling, or attitude
+- HEART -- classified as figs-metaphor, not metonymy (see figs-metaphor.md)
 - EYES represent sight, knowledge, perception, attention, or judgment
 - HEAD represents a ruler or leader
 - MOUTH represents speech or words
@@ -196,5 +191,5 @@ Also note:
 1. **"In the eyes of"** - This is idiom, not metonymy (per Issues Resolved)
 2. **"From the face" (causal)** - When meaning "because of," use idiom
 3. **"Struck"** - When meaning "defeated/killed," use figs-explicit, not metonymy
-4. **Heart** - Usually metaphor (inner person spoken of AS thoughts/feelings)
+4. **Heart** - This is metaphor, not metonymy (see figs-metaphor.md)
 5. **Body parts where whole substitutes** - These are synecdoche, not metonymy

@@ -39,7 +39,7 @@ These have been explicitly decided by the content team (Issues Resolved):
 | "house" (= temple) | figs-metaphor | Yahweh's dwelling |
 | "fathers" (= ancestors) | figs-metaphor | |
 | "brothers" (= fellow descendants) | figs-metaphor | People from same ancestor |
-| "heart" (= thoughts/feelings/will) | figs-metonymy | Close association (see figs-metonymy.md) |
+| "heart" (= thoughts/feelings/will) | figs-metaphor | Heart represents where thoughts/feelings/motives/intentions/desires exist |
 
 ### "Behold" Patterns
 Per Issues Resolved: "behold" when calling attention to what follows is figs-metaphor (speaker says "look" but means "listen").
@@ -110,7 +110,7 @@ Comparisons using explicit words "like," "as," or "than":
 
 | Category | Image | Meaning | Notes |
 |----------|-------|---------|-------|
-| Body Part | heart | thoughts, feelings, motives, intentions, desires | Reclassified as metonymy (close association) -- see figs-metonymy.md |
+| Body Part | heart | thoughts, feelings, motives, intentions, desires | Per template: heart represents where these exist |
 | Path/Journey | way/path | behavior, lifestyle, conduct | |
 | Path/Journey | walking | living, behaving | |
 | Path/Journey | turn away/toward | reject/accept (change of life direction) | |
