@@ -36,7 +36,7 @@ DOOR43_REPOS_PATH=/mnt/c/Users/benja/Documents/GitHub
 | Book | `PSA` | Standard abbreviation |
 | Verse range | `119:100-104` | Chapter:start-end |
 | Username | `deferredreward` | From user or `.env` |
-| Source file | `output/AI-ULT/PSA-119-100-104-aligned.usfm` | Locate in `output/` |
+| Source file | `output/AI-ULT/PSA/PSA-119-100-104-aligned.usfm` | Locate in `output/` |
 | Create PR? | yes/no | User specifies |
 | PR base branch | working branch or master | User chooses when PR requested |
 
@@ -141,7 +141,7 @@ For USFM (ULT/UST):
 # Show current verses in the file
 python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
   --book-file "$REPOS_PATH/$REPO/19-PSA.usfm" \
-  --source-file output/AI-ULT/PSA-119-100-104-aligned.usfm \
+  --source-file output/AI-ULT/PSA/PSA-119-100-104-aligned.usfm \
   --chapter 119 --verses 100-104 --dry-run
 ```
 
@@ -149,7 +149,7 @@ For TN:
 ```bash
 python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
   --book-file "$REPOS_PATH/$REPO/tn_PSA.tsv" \
-  --source-file output/notes/PSA-058.tsv \
+  --source-file output/notes/PSA/PSA-058.tsv \
   --dry-run
 ```
 
@@ -163,7 +163,7 @@ For USFM:
 ```bash
 python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
   --book-file "$REPOS_PATH/$REPO/19-PSA.usfm" \
-  --source-file output/AI-ULT/PSA-119-100-104-aligned.usfm \
+  --source-file output/AI-ULT/PSA/PSA-119-100-104-aligned.usfm \
   --chapter 119 --verses 100-104 --backup
 ```
 
@@ -171,7 +171,7 @@ For TN:
 ```bash
 python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
   --book-file "$REPOS_PATH/$REPO/tn_PSA.tsv" \
-  --source-file output/notes/PSA-058.tsv \
+  --source-file output/notes/PSA/PSA-058.tsv \
   --backup
 ```
 

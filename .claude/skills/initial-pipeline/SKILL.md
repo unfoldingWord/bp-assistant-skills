@@ -111,7 +111,7 @@ Spawn `ult-gen` as a teammate (`subagent_type: "general-purpose"`, with `team_na
 
 The ULT agent:
 1. Translates Hebrew to literal English for the chapter (following ULT-gen skill)
-2. Writes draft to `output/AI-ULT/<BOOK>-<CH>.usfm`
+2. Writes draft to `output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`
 3. Sends message to team-lead: "ULT draft written"
 4. Stays alive -- holds for messages from later waves
 
@@ -132,7 +132,7 @@ UST is NOT generated here. UST needs the issue-id output to know what translatio
 ## Wave 2: Issue Identification (2 teammates)
 
 Spawn 2 teammates (`subagent_type: "issue-identification"`, with `team_name` set). Each analyst reads:
-- ULT draft from Wave 1 (`output/AI-ULT/<BOOK>-<CH>.usfm`)
+- ULT draft from Wave 1 (`output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`)
 - Published TN index (via `build_tn_index.py --lookup`/`--issue`)
 
 Each writes their TSV to `$TMP/wave2_*.tsv`. As they work, they read each other's output files for cross-checking. When they find genuine disagreements, they send DMs to the relevant analyst using SendMessage.
@@ -252,7 +252,7 @@ Send a message to `ult-gen` (still alive from Wave 1) with the ULT revision requ
 The ULT agent:
 1. Reads the revision requests
 2. Applies changes to the ULT draft
-3. Writes revised ULT (draft 2) to `output/AI-ULT/<BOOK>-<CH>.usfm`
+3. Writes revised ULT (draft 2) to `output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`
 4. Sends message to team-lead: "ULT revision complete"
 
 This is more natural than a separate agent applying changes -- the original translator revises their own work with specific feedback.
@@ -265,7 +265,7 @@ Wait for the ULT agent's confirmation before proceeding.
 
 **When Wave 5 runs** (ULT was revised in 4b):
 
-Send a message to each Wave 2 analyst (still alive): "Re-check your findings against the revised ULT at output/AI-ULT/<BOOK>-<CH>.usfm. Drop anything that no longer applies after the revision. Flag anything new the revision introduced."
+Send a message to each Wave 2 analyst (still alive): "Re-check your findings against the revised ULT at output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm. Drop anything that no longer applies after the revision. Flag anything new the revision introduced."
 
 Each analyst:
 1. Reads the revised ULT (draft 2)
@@ -276,7 +276,7 @@ Each analyst:
 
 Wait for all analysts to confirm (2 default, 4 in heavy mode), then update the merged issues based on verification feedback.
 
-Final issues written to `output/issues/<BOOK>-<CH>.tsv`.
+Final issues written to `output/issues/<BOOK>/<BOOK>-<CH>.tsv`.
 
 ### Final Check
 Before writing to output/issues/, verify ordering within each verse: first-to-last by ULT position, longest-to-shortest when phrases nest. The orchestrator performs this final write.
@@ -286,8 +286,8 @@ Before writing to output/issues/, verify ordering within each verse: first-to-la
 Spawn `ust-gen` as a teammate (`subagent_type: "general-purpose"`, with `team_name` set, name: "ust-gen").
 
 The UST agent reads:
-- The final revised ULT (draft 2) at `output/AI-ULT/<BOOK>-<CH>.usfm`
-- The final issues TSV at `output/issues/<BOOK>-<CH>.tsv`
+- The final revised ULT (draft 2) at `output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`
+- The final issues TSV at `output/issues/<BOOK>/<BOOK>-<CH>.tsv`
 - T4T source text
 - UST Strong's index (`build_ust_index.py --lookup`/`--compare`) for published UST rendering precedent
 
@@ -304,8 +304,8 @@ Include in the UST agent's prompt:
 
 The UST agent:
 1. Generates UST (following UST-gen skill)
-2. Writes to `output/AI-UST/<BOOK>-<CH>.usfm`
-3. Writes alignment hints to `output/AI-UST/hints/<BOOK>-<CH>.json` (per UST-gen Step 7.5)
+2. Writes to `output/AI-UST/<BOOK>/<BOOK>-<CH>.usfm`
+3. Writes alignment hints to `output/AI-UST/hints/<BOOK>/<BOOK>-<CH>.json` (per UST-gen Step 7.5)
 4. Sends message to team-lead: "UST complete"
 
 ## Cleanup
@@ -317,10 +317,10 @@ After Wave 6 output is confirmed:
 
 ## Outputs
 
-1. `output/AI-ULT/<BOOK>-<CH>.usfm` -- revised ULT (draft 2, post-issue-id feedback)
-2. `output/AI-UST/<BOOK>-<CH>.usfm` -- UST (informed by issues)
-3. `output/AI-UST/hints/<BOOK>-<CH>.json` -- alignment hints from UST generator
-4. `output/issues/<BOOK>-<CH>.tsv` -- verified issues (post-ULT-revision check)
+1. `output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm` -- revised ULT (draft 2, post-issue-id feedback)
+2. `output/AI-UST/<BOOK>/<BOOK>-<CH>.usfm` -- UST (informed by issues)
+3. `output/AI-UST/hints/<BOOK>/<BOOK>-<CH>.json` -- alignment hints from UST generator
+4. `output/issues/<BOOK>/<BOOK>-<CH>.tsv` -- verified issues (post-ULT-revision check)
 
 ## Output Format (Firewall)
 

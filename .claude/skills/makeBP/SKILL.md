@@ -78,9 +78,9 @@ The subagent's context handles all that complexity. The orchestrator just waits
 for completion and checks that the output files exist.
 
 **Outputs to verify:**
-- `output/AI-ULT/{BOOK}-{CH}.usfm` -- revised ULT
-- `output/AI-UST/{BOOK}-{CH}.usfm` -- UST
-- `output/issues/{BOOK}-{CH}.tsv` -- verified issues
+- `output/AI-ULT/{BOOK}/{BOOK}-{CH}.usfm` -- revised ULT
+- `output/AI-UST/{BOOK}/{BOOK}-{CH}.usfm` -- UST
+- `output/issues/{BOOK}/{BOOK}-{CH}.tsv` -- verified issues
 
 ## Between Phases: Prepare Plain Text
 
@@ -88,14 +88,14 @@ The orchestrator runs these directly (small bash commands, no context cost):
 
 ```bash
 node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
-  output/AI-ULT/{BOOK}-{CH}.usfm --plain-only > /tmp/claude/ult_plain.usfm
+  output/AI-ULT/{BOOK}/{BOOK}-{CH}.usfm --plain-only > /tmp/claude/ult_plain.usfm
 node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
-  output/AI-UST/{BOOK}-{CH}.usfm --plain-only > /tmp/claude/ust_plain.usfm
+  output/AI-UST/{BOOK}/{BOOK}-{CH}.usfm --plain-only > /tmp/claude/ust_plain.usfm
 ```
 
 Determine verse count for repo-insert later:
 ```bash
-LAST_VERSE=$(grep -oP '\\v \K[0-9]+' output/AI-ULT/{BOOK}-{CH}.usfm | tail -1)
+LAST_VERSE=$(grep -oP '\\v \K[0-9]+' output/AI-ULT/{BOOK}/{BOOK}-{CH}.usfm | tail -1)
 ```
 
 ## Phase 2: Parallel Generation
@@ -106,10 +106,10 @@ file paths. Each runs in its own context window.
 
 | Agent | Skill to invoke | Key inputs | Output |
 |-------|----------------|-----------|--------|
-| Chapter Intro | `/chapter-intro {BOOK} {CHAPTER}` | ULT, UST, issues from Phase 1 | Inserts intro row into `output/issues/{BOOK}-{CH}.tsv` |
-| TQ Writer | `/tq-writer` | ULT, UST | `output/tq/{BOOK}-{CHAPTER}.tsv` |
-| ULT Alignment | `/ULT-alignment` | `output/AI-ULT/{BOOK}-{CH}.usfm` + Hebrew source | `output/AI-ULT/{BOOK}-{CH}-aligned.usfm` |
-| UST Alignment | `/UST-alignment` | `output/AI-UST/{BOOK}-{CH}.usfm` + Hebrew source + `output/AI-UST/hints/{BOOK}-{CH}.json` | `output/AI-UST/{BOOK}-{CH}-aligned.usfm` |
+| Chapter Intro | `/chapter-intro {BOOK} {CHAPTER}` | ULT, UST, issues from Phase 1 | Inserts intro row into `output/issues/{BOOK}/{BOOK}-{CH}.tsv` |
+| TQ Writer | `/tq-writer` | ULT, UST | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` |
+| ULT Alignment | `/ULT-alignment` | `output/AI-ULT/{BOOK}/{BOOK}-{CH}.usfm` + Hebrew source | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` |
+| UST Alignment | `/UST-alignment` | `output/AI-UST/{BOOK}/{BOOK}-{CH}.usfm` + Hebrew source + `output/AI-UST/hints/{BOOK}/{BOOK}-{CH}.json` | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` |
 
 **Each agent prompt should include:**
 - Book, chapter, and padded chapter values
@@ -127,7 +127,7 @@ incorrectly marked as implied when they actually translate a Hebrew prefix:
 
 ```bash
 python3 .claude/skills/utilities/scripts/validate_ult_brackets.py \
-  output/AI-ULT/{BOOK}-{CH}-aligned.usfm
+  output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm
 ```
 
 If issues are found, fix the aligned USFM before proceeding to tn-writer.
@@ -149,7 +149,7 @@ between our AI-generated ULT and the published Door43 master.
 
 | Agent | Skill to invoke | Key inputs | Output |
 |-------|----------------|-----------|--------|
-| TN Writer | `/tn-writer` | `output/issues/{BOOK}-{CH}.tsv` (with intro), `/tmp/claude/ult_plain.usfm`, `/tmp/claude/ust_plain.usfm`, `output/AI-ULT/{BOOK}-{CH}-aligned.usfm` | `output/notes/{BOOK}-{CH}.tsv` |
+| TN Writer | `/tn-writer` | `output/issues/{BOOK}/{BOOK}-{CH}.tsv` (with intro), `/tmp/claude/ult_plain.usfm`, `/tmp/claude/ust_plain.usfm`, `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` |
 
 Wait for this agent plus any remaining Phase 2 agents to complete before
 proceeding.
@@ -164,10 +164,10 @@ to a personal fork. Never touch the master branch.
 
 | Content | Source | Repo | Branch | Insert script |
 |---------|--------|------|--------|---------------|
-| ULT (aligned) | `output/AI-ULT/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ult | `auto-{user}-{BOOK}` | `insert_usfm_verses.py` |
-| UST (aligned) | `output/AI-UST/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ust | `auto-{user}-{BOOK}` | `insert_usfm_verses.py` |
-| TN | `output/notes/{BOOK}-{CH}.tsv` | unfoldingWord/en_tn | `{user}-tc-create-1` | `insert_tn_rows.py` |
-| TQ | `output/tq/{BOOK}-{CHAPTER}.tsv` | unfoldingWord/en_tq | `auto-{user}-{BOOK}` | `insert_tn_rows.py` |
+| ULT (aligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ult | `auto-{user}-{BOOK}` | `insert_usfm_verses.py` |
+| UST (aligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ust | `auto-{user}-{BOOK}` | `insert_usfm_verses.py` |
+| TN | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` | unfoldingWord/en_tn | `{user}-tc-create-1` | `insert_tn_rows.py` |
+| TQ | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` | unfoldingWord/en_tq | `auto-{user}-{BOOK}` | `insert_tn_rows.py` |
 
 ### Git procedure for each repo (strict order)
 
@@ -201,24 +201,24 @@ REPOS="$DOOR43_REPOS_PATH"
 # ULT
 python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
   --book-file "$REPOS/en_ult/{BOOK_NUM}-{BOOK}.usfm" \
-  --source-file output/AI-ULT/{BOOK}-{CH}-aligned.usfm \
+  --source-file output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm \
   --chapter {CHAPTER} --verses {FIRST}-{LAST_VERSE} --backup
 
 # UST
 python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
   --book-file "$REPOS/en_ust/{BOOK_NUM}-{BOOK}.usfm" \
-  --source-file output/AI-UST/{BOOK}-{CH}-aligned.usfm \
+  --source-file output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm \
   --chapter {CHAPTER} --verses {FIRST}-{LAST_VERSE} --backup
 
 # TN
 python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
   --book-file "$REPOS/en_tn/tn_{BOOK}.tsv" \
-  --source-file output/notes/{BOOK}-{CH}.tsv --backup
+  --source-file output/notes/{BOOK}/{BOOK}-{CH}.tsv --backup
 
 # TQ
 python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
   --book-file "$REPOS/en_tq/tq_{BOOK}.tsv" \
-  --source-file output/tq/{BOOK}-{CHAPTER}.tsv --backup
+  --source-file output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv --backup
 ```
 
 Book numbers for filenames (from `fetch_door43.py` BOOK_NUMBERS mapping):
@@ -228,13 +228,13 @@ PSA = `19-PSA.usfm`, GEN = `01-GEN.usfm`, etc.
 
 | Content | Local path | Repo | Branch |
 |---------|-----------|------|--------|
-| ULT (aligned) | `output/AI-ULT/{BOOK}-{CH}-aligned.usfm` | en_ult | `auto-{user}-{BOOK}` |
-| UST (aligned) | `output/AI-UST/{BOOK}-{CH}-aligned.usfm` | en_ust | `auto-{user}-{BOOK}` |
-| TN | `output/notes/{BOOK}-{CH}.tsv` | en_tn | `{user}-tc-create-1` |
-| TQ | `output/tq/{BOOK}-{CHAPTER}.tsv` | en_tq | `auto-{user}-{BOOK}` |
-| Issues | `output/issues/{BOOK}-{CH}.tsv` | -- | working file only |
-| ULT (unaligned) | `output/AI-ULT/{BOOK}-{CH}.usfm` | -- | not inserted |
-| UST (unaligned) | `output/AI-UST/{BOOK}-{CH}.usfm` | -- | not inserted |
+| ULT (aligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | en_ult | `auto-{user}-{BOOK}` |
+| UST (aligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` | en_ust | `auto-{user}-{BOOK}` |
+| TN | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` | en_tn | `{user}-tc-create-1` |
+| TQ | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` | en_tq | `auto-{user}-{BOOK}` |
+| Issues | `output/issues/{BOOK}/{BOOK}-{CH}.tsv` | -- | working file only |
+| ULT (unaligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}.usfm` | -- | not inserted |
+| UST (unaligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}.usfm` | -- | not inserted |
 
 ## Error Handling
 

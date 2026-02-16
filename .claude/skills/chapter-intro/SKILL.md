@@ -30,9 +30,9 @@ Normalize arguments:
 Read the following files. Not all may exist; work with what's available.
 
 **Pipeline output (preferred):**
-- ULT: `output/AI-ULT/<BOOK>-<CHAPTER_PAD>.usfm`
-- Issues: `output/issues/<BOOK>-<CHAPTER_PAD>.tsv`
-- UST: `output/AI-UST/<BOOK>-<CHAPTER_PAD>.usfm`
+- ULT: `output/AI-ULT/<BOOK>/<BOOK>-<CHAPTER_PAD>.usfm`
+- Issues: `output/issues/<BOOK>/<BOOK>-<CHAPTER_PAD>.tsv`
+- UST: `output/AI-UST/<BOOK>/<BOOK>-<CHAPTER_PAD>.usfm`
 
 **Fallbacks if pipeline output doesn't exist:**
 - Published ULT: `data/published_ult_english/` (find the book file, extract the chapter)
@@ -216,7 +216,7 @@ Columns:
 7. Content: the full intro with `\n` escapes
 
 **Insert into the issue file:**
-1. Read the existing issue file at `output/issues/<BOOK>-<CHAPTER_PAD>.tsv`
+1. Read the existing issue file at `output/issues/<BOOK>/<BOOK>-<CHAPTER_PAD>.tsv`
 2. Prepend the intro row as the first line
 3. Write back to the same file
 

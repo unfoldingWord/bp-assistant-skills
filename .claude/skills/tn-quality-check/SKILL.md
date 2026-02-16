@@ -90,7 +90,7 @@ If a note starts with "Here, ", verify the next content is a **bolded quote from
 
 ### Step 4: Write Report
 
-Write the final quality report to `output/quality/<BOOK>-<CHAPTER>-quality.md`:
+Write the final quality report to `output/quality/<BOOK>/<BOOK>-<CHAPTER>-quality.md`:
 
 ```markdown
 # TN Quality Report: <BOOK> <CHAPTER>

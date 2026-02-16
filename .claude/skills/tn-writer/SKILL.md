@@ -30,10 +30,10 @@ node .claude/skills/utilities/scripts/usfm/parse_usfm.js /tmp/claude/book_ust.us
 
 ```bash
 python3 .claude/skills/tn-writer/scripts/prepare_notes.py \
-    output/issues/<BOOK>-<CHAPTER>.tsv \
+    output/issues/<BOOK>/<BOOK>-<CHAPTER>.tsv \
     --ult-usfm /tmp/claude/ult_plain.usfm \
     --ust-usfm /tmp/claude/ust_plain.usfm \
-    --aligned-usfm output/AI-ULT/<BOOK>-<CHAPTER>-aligned.usfm \
+    --aligned-usfm output/AI-ULT/<BOOK>/<BOOK>-<CHAPTER>-aligned.usfm \
     --output /tmp/claude/prepared_notes.json
 ```
 
@@ -45,7 +45,7 @@ The script automatically:
 - Extracts alignment data (English-to-Hebrew word mappings) from aligned USFM
 
 Options:
-- `--aligned-usfm PATH` -- Extract alignment data from aligned ULT (preferred). Auto-detected if omitted and aligned file exists at the standard path.
+- `--aligned-usfm PATH` -- Extract alignment data from aligned ULT (preferred). Auto-detected if omitted and aligned file exists at the standard path (`output/AI-ULT/<BOOK>/<BOOK>-<CHAPTER>-aligned.usfm`).
 - `--alignment-json PATH` -- Custom output path for alignment data (default: `/tmp/claude/alignment_data.json`)
 - `--skip-lang` -- Skip language conversion (keep original English quotes)
 - `--skip-ids` -- Skip ID generation
@@ -219,7 +219,7 @@ Run the assembly script to produce the final TSV. The script reads metadata from
 python3 .claude/skills/tn-writer/scripts/assemble_notes.py \
     /tmp/claude/prepared_notes.json \
     /tmp/claude/generated_notes.json \
-    --output output/notes/<BOOK>-<CHAPTER>.tsv
+    --output output/notes/<BOOK>/<BOOK>-<CHAPTER>.tsv
 ```
 
 ### Step 9: Post-Process
@@ -227,7 +227,7 @@ python3 .claude/skills/tn-writer/scripts/assemble_notes.py \
 Run curly quote conversion on the output:
 
 ```bash
-python3 .claude/skills/utilities/scripts/curly_quotes.py output/notes/<BOOK>-<CHAPTER>.tsv --in-place
+python3 .claude/skills/utilities/scripts/curly_quotes.py output/notes/<BOOK>/<BOOK>-<CHAPTER>.tsv --in-place
 ```
 
 ### Step 10: Final Review

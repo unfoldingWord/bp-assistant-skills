@@ -16,7 +16,7 @@ This skill maps English ULT words to Hebrew source words. The workflow is two-st
 
 You need:
 1. **Hebrew USFM** from `data/hebrew_bible/*.usfm` - contains Strong's numbers, lemmas, morphology
-2. **English ULT text** - either from `output/AI-ULT/` or user-provided
+2. **English ULT text** - either from `output/AI-ULT/{BOOK}/` or user-provided
 
 ## Output Format: Simple Mapping JSON
 
@@ -274,12 +274,12 @@ Extract English from the aligned output and compare with the original unaligned 
 ```bash
 # Extract English from aligned output
 python3 .claude/skills/utilities/scripts/extract_ult_english.py \
-  --input-dir output/AI-ULT \
+  --input-dir output/AI-ULT/{BOOK} \
   --output-dir /tmp/verify-alignment \
   --force
 
 # Compare extracted text with original unaligned ULT
-diff <(cat /tmp/verify-alignment/BOOK.usfm) <(cat output/AI-ULT/BOOK-unaligned.usfm)
+diff <(cat /tmp/verify-alignment/{BOOK}.usfm) <(cat output/AI-ULT/{BOOK}/{BOOK}-unaligned.usfm)
 ```
 
 The extracted text should match exactly - same words, same order, same punctuation.
@@ -309,7 +309,7 @@ After creating the mapping JSON, run the conversion script:
 node .claude/skills/utilities/scripts/usfm/create_aligned_usfm.js \
   --hebrew data/hebrew_bible/01-GEN.usfm \
   --mapping /tmp/alignments/GEN-01-01.json \
-  --ult output/AI-ULT/GEN-01.usfm \
+  --ult output/AI-ULT/GEN/GEN-01.usfm \
   --chapter 1 --verse 1
 ```
 
@@ -336,7 +336,7 @@ For duplicate English words (e.g., "the" appearing 3 times), each gets sequentia
 
 ## Final Output
 
-After converting all verses, save the combined aligned USFM to `output/AI-ULT/`.
+After converting all verses, save the combined aligned USFM to `output/AI-ULT/{BOOK}/`.
 
 ### Combining Multiple Verses
 
@@ -344,7 +344,7 @@ The script outputs **multi-line USFM** (one line per word/alignment). When combi
 
 ```bash
 # Create header
-cat > output/AI-ULT/PSA-078-44-72-aligned.usfm << 'EOF'
+cat > output/AI-ULT/PSA/PSA-078-44-72-aligned.usfm << 'EOF'
 \id PSA EN_ULT - Aligned
 \usfm 3.0
 \ide UTF-8
@@ -360,8 +360,8 @@ for v in $(seq 44 72); do
   node .claude/skills/utilities/scripts/usfm/create_aligned_usfm.js \
     --hebrew data/hebrew_bible/19-PSA.usfm \
     --mapping alignments/PSA-078-${vpad}.json \
-    --ult output/AI-ULT/PSA-078-44-72.usfm \
-    --chapter 78 --verse $v 2>/dev/null | sed -n '/^\\[vqdstb]/,/^$/p' >> output/AI-ULT/PSA-078-44-72-aligned.usfm
+    --ult output/AI-ULT/PSA/PSA-078-44-72.usfm \
+    --chapter 78 --verse $v 2>/dev/null | sed -n '/^\\[vqdstb]/,/^$/p' >> output/AI-ULT/PSA/PSA-078-44-72-aligned.usfm
 done
 ```
 
@@ -379,9 +379,9 @@ done
 ```
 
 Examples:
-- `PSA-078-aligned.usfm` (whole chapter)
-- `PSA-078-44-72-aligned.usfm` (verses 44-72 only)
-- `GEN-01-aligned.usfm` (whole chapter)
+- `output/AI-ULT/PSA/PSA-078-aligned.usfm` (whole chapter)
+- `output/AI-ULT/PSA/PSA-078-44-72-aligned.usfm` (verses 44-72 only)
+- `output/AI-ULT/GEN/GEN-01-aligned.usfm` (whole chapter)
 
 Use zero-padded chapter numbers: 3 digits for Psalms (150 chapters), 2 digits for all other books.
 
@@ -391,7 +391,7 @@ After creating the final aligned USFM, run the curly quotes script:
 
 ```bash
 python3 .claude/skills/utilities/scripts/curly_quotes.py \
-  output/AI-ULT/{BOOK}-{CHAPTER}-aligned.usfm --in-place
+  output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm --in-place
 ```
 
 This converts:

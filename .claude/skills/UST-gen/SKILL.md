@@ -320,14 +320,14 @@ Ensure proper USFM formatting:
 Save to `output/AI-UST/` with naming convention:
 
 ```
-output/AI-UST/[BOOK]-[CHAPTER].usfm
+output/AI-UST/[BOOK]/[BOOK]-[CHAPTER].usfm
 ```
 
 ### Step 7.5: Write Alignment Hints
 
 After writing the UST USFM, write a hints JSON that records which Hebrew words you rendered in each English phrase. As you generated each phrase, you knew which Hebrew concepts you were rendering -- capture that mapping now.
 
-Output path: `output/AI-UST/hints/<BOOK>-<CH>.json`
+Output path: `output/AI-UST/hints/<BOOK>/<BOOK>-<CH>.json`
 
 Format:
 ```json
@@ -359,7 +359,7 @@ Run the curly quotes script to convert straight quotes to curly quotes:
 
 ```bash
 python3 .claude/skills/utilities/scripts/curly_quotes.py \
-  output/AI-UST/[BOOK]-[CHAPTER].usfm --in-place
+  output/AI-UST/[BOOK]/[BOOK]-[CHAPTER].usfm --in-place
 ```
 
 This converts:

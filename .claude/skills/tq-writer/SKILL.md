@@ -71,18 +71,18 @@ Rules for AI updates:
 - Follow tq-guidelines.md for content rules (third person, present tense, ESL level, etc.)
 - If a row already matches the current ULT/UST, leave it unchanged
 
-Write the result as a TSV file to `output/tq/{BOOK}-{CHAPTER}.tsv` (zero-padded chapter, e.g., `PSA-150.tsv`), or `output/tq/{BOOK}.tsv` for whole-book processing.
+Write the result as a TSV file to `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` (zero-padded chapter, e.g., `PSA/PSA-150.tsv`), or `output/tq/{BOOK}/{BOOK}.tsv` for whole-book processing.
 
 ### Step 5: Post-Process Quotes
 
 ```bash
-python3 .claude/skills/utilities/scripts/curly_quotes.py output/tq/PSA-150.tsv --in-place
+python3 .claude/skills/utilities/scripts/curly_quotes.py output/tq/PSA/PSA-150.tsv --in-place
 ```
 
 ### Step 6: Verify Output
 
 ```bash
-python3 .claude/skills/tq-writer/scripts/verify_tq.py output/tq/PSA-150.tsv \
+python3 .claude/skills/tq-writer/scripts/verify_tq.py output/tq/PSA/PSA-150.tsv \
     --input-json /tmp/claude/prepared_tq.json
 ```
 
@@ -94,13 +94,13 @@ Reuse `insert_tn_rows.py` from repo-insert -- it works on TQ files too since bot
 # Dry run first
 python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
     --book-file /mnt/c/Users/benja/Documents/GitHub/en_tq/tq_PSA.tsv \
-    --source-file output/tq/PSA-150.tsv \
+    --source-file output/tq/PSA/PSA-150.tsv \
     --dry-run
 
 # Apply
 python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
     --book-file /mnt/c/Users/benja/Documents/GitHub/en_tq/tq_PSA.tsv \
-    --source-file output/tq/PSA-150.tsv \
+    --source-file output/tq/PSA/PSA-150.tsv \
     --backup
 ```
 

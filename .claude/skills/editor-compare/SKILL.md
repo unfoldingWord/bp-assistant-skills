@@ -102,7 +102,7 @@ Strong,Hebrew,Rendering,Book,Context,Notes,Date
 
 ### Step 6: Write comparison report
 
-Save to `output/editor-compare/{BOOK}-{CHAPTER:03d}-{type}.md` with sections:
+Save to `output/editor-compare/{BOOK}/{BOOK}-{CHAPTER:03d}-{type}.md` with sections:
 - Summary stats (total verses, changed count, unchanged count)
 - Editor comments (if present from editor-feedback file)
 - Vocabulary preferences (with Strong's where identified)

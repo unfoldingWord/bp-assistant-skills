@@ -121,7 +121,7 @@ Validation-only: checks substitution quality of existing notes output. No note g
 Check these locations in order:
 1. `/tmp/claude/prepared_notes.json` AND `/tmp/claude/generated_notes.json` (both must exist)
 2. `{output_root}/output/notes/PSA/PSA-{ch}.tsv`
-3. `{output_root}/output/notes/PSA-{ch}.tsv`
+3. `{output_root}/output/notes/PSA/PSA-{ch}.tsv` (same as #2)
 
 If none found, report clearly and skip this test.
 

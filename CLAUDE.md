@@ -1,4 +1,4 @@
-Check your environment. You are probably in windows. You may be in WSL.
+You may be running locally (Windows/WSL) or headlessly inside a Docker container on an OCI ARM64 server via a Zulip bot.
 Don't use emojis, it breaks windows terminal.
 
 ## Workflow Expectations
@@ -57,7 +57,7 @@ All paths relative to project root. These directories exist locally but should n
 - `output/` - Generated files and reports 
 - `tmp/` - Temporary processing files - you are often in sandbox mode and should use this
 
-**Output Folder Organization**: When any output folder exceeds ~10 files, sort into book subfolders (e.g., `output/AI-ULT/PSA/PSA-061.usfm` instead of `output/AI-ULT/PSA-061.usfm`). Smaller collections can stay flat. The `hints/` subfolder under `AI-UST` is always a subfolder regardless of count.
+**Output Folder Organization**: Always use book subfolders (e.g., `output/AI-ULT/PSA/PSA-061.usfm`, `output/issues/PSA/PSA-061.tsv`, `output/notes/PSA/PSA-061.tsv`). Never put files flat in the type directory. This applies to all output subdirectories: `AI-ULT`, `AI-UST`, `AI-UST/hints`, `issues`, `notes`, `tq`, `quality`, `review`, `editor-compare`.
 
 #### Other files
 - `translation-issues.csv` - All 94 translation issues (complete)

@@ -432,13 +432,13 @@ See `reference/ambiguity_patterns.md` for detailed examples from published notes
 After identifying issues, output a tab-separated file to `output/issues/`:
 
 ```
-output/issues/[BOOK]-[CHAPTER].tsv
+output/issues/[BOOK]/[BOOK]-[CHAPTER].tsv
 ```
 
 Examples:
-- `output/issues/PSA-063.tsv` - Psalm 63
-- `output/issues/GEN-01.tsv` - Genesis 1
-- `output/issues/2SA-01.tsv` - 2 Samuel 1
+- `output/issues/PSA/PSA-063.tsv` - Psalm 63
+- `output/issues/GEN/GEN-01.tsv` - Genesis 1
+- `output/issues/2SA/2SA-01.tsv` - 2 Samuel 1
 
 Use three-letter book codes and three-digit chapter numbers (zero-padded).
 

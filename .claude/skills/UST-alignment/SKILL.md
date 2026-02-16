@@ -250,7 +250,7 @@ vs ULT mode where brackets go inside `\w` tags:
 
 ```bash
 # Create header
-cat > output/AI-UST/PSA-001-aligned.usfm << 'EOF'
+cat > output/AI-UST/PSA/PSA-001-aligned.usfm << 'EOF'
 \id PSA EN_UST - Aligned
 \usfm 3.0
 \ide UTF-8
@@ -266,17 +266,17 @@ for v in $(seq 1 6); do
   node .claude/skills/utilities/scripts/usfm/create_aligned_usfm.js \
     --hebrew data/hebrew_bible/19-PSA.usfm \
     --mapping alignments/PSA-001-${vpad}.json \
-    --source output/AI-UST/PSA-001.usfm \
+    --source output/AI-UST/PSA/PSA-001.usfm \
     --ust \
-    --chapter 1 --verse $v 2>/dev/null | sed -n '/^\\[vqdstb]/,/^$/p' >> output/AI-UST/PSA-001-aligned.usfm
+    --chapter 1 --verse $v 2>/dev/null | sed -n '/^\\[vqdstb]/,/^$/p' >> output/AI-UST/PSA/PSA-001-aligned.usfm
 done
 ```
 
 ### Naming Convention
 
 ```
-{BOOK}-{CHAPTER}-aligned.usfm              # whole chapter
-{BOOK}-{CHAPTER}-{START}-{END}-aligned.usfm  # partial chapter
+output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm              # whole chapter
+output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-{START}-{END}-aligned.usfm  # partial chapter
 ```
 
 ### Convert to Curly Quotes
@@ -285,7 +285,7 @@ After creating the final aligned USFM:
 
 ```bash
 python3 .claude/skills/utilities/scripts/curly_quotes.py \
-  output/AI-UST/{BOOK}-{CHAPTER}-aligned.usfm --in-place
+  output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm --in-place
 ```
 
 ## Verification
@@ -300,7 +300,7 @@ python3 .claude/skills/utilities/scripts/extract_ult_english.py \
   --force
 
 # Compare extracted text with original unaligned UST
-diff <(cat /tmp/verify-alignment/BOOK.usfm) <(cat output/AI-UST/BOOK-unaligned.usfm)
+diff <(cat /tmp/verify-alignment/BOOK.usfm) <(cat output/AI-UST/BOOK/BOOK-unaligned.usfm)
 ```
 
 ### Step 2: Verify Bracket Placement

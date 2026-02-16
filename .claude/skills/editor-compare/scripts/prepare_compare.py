@@ -212,20 +212,15 @@ def resolve_editor_source(book, chapter, text_type, editor_file=None):
 def resolve_ai_source(book, chapter, text_type):
     """Read AI-generated USFM from output directory.
 
-    Expected path: output/AI-{ULT|UST}/{BOOK}-{CHAPTER:03d}.usfm
+    Expected path: output/AI-{ULT|UST}/{BOOK}/{BOOK}-{CHAPTER:03d}.usfm
     """
     normalized = normalize_book(book)
     type_upper = text_type.upper()
     filename = f"{normalized}-{int(chapter):03d}.usfm"
-    ai_path = os.path.join(PROJECT_ROOT, "output", f"AI-{type_upper}", filename)
+    ai_path = os.path.join(PROJECT_ROOT, "output", f"AI-{type_upper}", normalized, filename)
 
-    # Also check book subfolder (e.g., output/AI-ULT/PSA/PSA-069.usfm)
-    ai_path_sub = os.path.join(PROJECT_ROOT, "output", f"AI-{type_upper}", normalized, filename)
-
-    if os.path.exists(ai_path_sub):
-        ai_path = ai_path_sub
-    elif not os.path.exists(ai_path):
-        print(f"Error: AI output not found: {ai_path} or {ai_path_sub}", file=sys.stderr)
+    if not os.path.exists(ai_path):
+        print(f"Error: AI output not found: {ai_path}", file=sys.stderr)
         sys.exit(1)
 
     with open(ai_path, "r", encoding="utf-8") as f:

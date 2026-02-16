@@ -11,9 +11,9 @@ After humans edit the ULT/UST, adapt existing issues to match their changes.
 
 - **Book**: 3-letter abbreviation (PSA, GEN, 2SA, etc.)
 - **Chapter**: number
-- AI-generated ULT/UST (from `output/AI-ULT/`, `output/AI-UST/`)
+- AI-generated ULT/UST (from `output/AI-ULT/{BOOK}/`, `output/AI-UST/{BOOK}/`)
 - Human-edited ULT/UST (from repo or provided files)
-- Existing issues TSV (from `output/issues/`)
+- Existing issues TSV (from `output/issues/{BOOK}/`)
 
 ## When This Runs
 
@@ -65,9 +65,9 @@ Lighter-weight than the initial pipeline -- this is review, not full generation.
 ## Flow
 
 ```
-Input:  AI-generated ULT/UST (from output/AI-ULT/, output/AI-UST/)
+Input:  AI-generated ULT/UST (from output/AI-ULT/{BOOK}/, output/AI-UST/{BOOK}/)
         Human-edited ULT/UST (from repo or provided files)
-        Existing issues TSV (output/issues/)
+        Existing issues TSV (output/issues/{BOOK}/)
 
 Agent 1: Diff Analyzer ──────┐
                               │
@@ -79,8 +79,8 @@ Output:  - Updated issues TSV
 
 ## Outputs
 
-1. `output/issues/<BOOK>-<CHAPTER>.tsv` -- updated issues matching human ULT
-2. `output/review/<BOOK>-<CHAPTER>-changelog.tsv` -- what changed and why
+1. `output/issues/<BOOK>/<BOOK>-<CHAPTER>.tsv` -- updated issues matching human ULT
+2. `output/review/<BOOK>/<BOOK>-<CHAPTER>-changelog.tsv` -- what changed and why
 
 ## Edge Cases
 

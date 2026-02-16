@@ -343,13 +343,13 @@ For tricola (three-part verses), use `\q1` + `\q2` + `\q2`:
 Save the completed ULT to `output/AI-ULT/` with the naming convention:
 
 ```
-output/AI-ULT/[BOOK]-[CHAPTER].usfm
+output/AI-ULT/[BOOK]/[BOOK]-[CHAPTER].usfm
 ```
 
 Examples:
-- `output/AI-ULT/NAM-01.usfm` - Nahum chapter 1
-- `output/AI-ULT/PSA-023.usfm` - Psalm 23
-- `output/AI-ULT/GEN-01.usfm` - Genesis chapter 1
+- `output/AI-ULT/NAM/NAM-01.usfm` - Nahum chapter 1
+- `output/AI-ULT/PSA/PSA-023.usfm` - Psalm 23
+- `output/AI-ULT/GEN/GEN-01.usfm` - Genesis chapter 1
 
 Use three-letter book codes and two-digit chapter numbers (zero-padded).
 
@@ -359,7 +359,7 @@ Run the curly quotes script to convert straight quotes to curly quotes:
 
 ```bash
 python3 .claude/skills/utilities/scripts/curly_quotes.py \
-  output/AI-ULT/[BOOK]-[CHAPTER].usfm --in-place
+  output/AI-ULT/[BOOK]/[BOOK]-[CHAPTER].usfm --in-place
 ```
 
 This converts:
