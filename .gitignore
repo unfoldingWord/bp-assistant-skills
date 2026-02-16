@@ -27,6 +27,8 @@
 # # Archived/old files
 # .old/
 
+noAI/
+
 # Environment/secrets
 .env
 

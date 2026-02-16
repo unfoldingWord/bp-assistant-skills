@@ -37,6 +37,12 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | אֶמֶת | H0571 | trustworthiness | faithfulness | editor PSA 71:22 |
 | גְּדוּלָה | H1420 | honor | greatness | editor PSA 71:21 |
 | כָּרַע | H3766 | kneel | bow down | editor PSA 72:9 |
+| מִקְדָּשׁ | H4720 | sanctuary | holy place | editor PSA 74:3,7 |
+| תַּנִּין | H8577 | sea monsters | sea creatures | editor PSA 74:13 |
+| גְּבוּלָה | H1367 | borders | boundaries | editor PSA 74:17 |
+| קֶדֶם | H6924 | ancient times | of old | editor PSA 74:2,12 |
+| נָאַץ | H5006 | blaspheme | despise | editor PSA 74:18; also "treat with contempt" in 74:10 |
+| תּוֹר | H8449 | dove | turtledove | editor PSA 74:19 |
 
 ## Phrases
 
@@ -44,7 +50,7 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 |----------------|-----|-----|-------|
 | צַר־לִי | trouble to me | my distress | preserve prepositional structure |
 | מָגִנֵּנוּ אֲדֹנָי | Lord our shield | our shield, Lord | preserve vocative order |
-| וַאֲנִי + verb | I, I [verb] | I [verb] | preserve emphatic pronoun; but PSA 71 editor drops doubling (71:14,22) -- context-dependent |
+| וַאֲנִי + verb | I, I [verb] | I [verb] | preserve emphatic pronoun; but editors drop doubling (PSA 71:14,22; 74:13-15,17) -- use single pronoun |
 | הַמִּתְקוֹמְמַי | the ones rising up against me | who rise up against me | participle as noun |
 | יוֹם יוֹם | day, day | day {by} day | preserve doubling without added words |
 | כֵּן (adverbial) | Thus | So | formal connector |
