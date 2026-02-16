@@ -123,6 +123,7 @@ Before generating UST, check for any pre-identified translation issues:
    - **figs-metaphor/figs-simile**: Express the meaning
    - **figs-idiom**: Explain rather than preserve
    - **figs-rquestion**: Consider if rhetorical function is clear
+   - **figs-apostrophe**: Convert direct address to third person ("this city" not "you, O city")
 
 3. Use identified issues to guide your transformation decisions in Step 4
 
@@ -277,7 +278,7 @@ If T4T starts sentences with "And" or "But", replace:
 
 Cross-check with:
 - `reference/ust_patterns.md` - transformation patterns
-- `../ULT-gen/reference/gl_guidelines.md` - shared style rules (formality, numbers, spelling, comparisons)
+- `../reference/gl_guidelines.md` - shared style rules (formality, numbers, spelling, comparisons)
 
 **{Brackets} - Use Sparingly:**
 - Most clarifying information should be woven into natural prose without brackets
@@ -470,7 +471,7 @@ Before finalizing UST output, verify:
 | UST Strong's Index | `data/cache/ust_index.json` | Published UST renderings by Strong's number |
 | UST Decisions | `data/quick-ref/ust_decisions.csv` | Prior UST vocabulary decisions |
 | UST Patterns | `reference/ust_patterns.md` | Transformation rules |
-| Style Guide | `../ULT-gen/reference/gl_guidelines.md` | Shared style rules |
+| Style Guide | `../reference/gl_guidelines.md` | Shared style rules |
 
 **Note:** `data/published_ust/` contains older UST that may not meet current standards. Use T4T as your base, not published UST. The UST Strong's index is still useful for seeing how published UST renders specific Hebrew words -- treat it as precedent to consider, not authority to follow.
 

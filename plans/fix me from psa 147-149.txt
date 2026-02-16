@@ -1,0 +1,131 @@
+tweaks i'm noticing need to happen, do adjust these outputs, but priority is to find ways to tweak prompts and guidelines. I'm being really nitpicky here, i want you to cover these but don't over correct. also, other things were great like alignment and ult rendering.
+I think what i'm seeing is that you need a separate agent at the end of any process that just checks that you did all of what you were told to do. for instance, i had to go back and get the tns inserted into the repo, and the first time you told me, it's already there. so we have a truth and completeness issue.
+a few times in here, i'm talking about highlighting. see the screenshots in the plans folder to see what i mean. find a good way to capture what i mean in your general project knowledge.
+
+:
+
+# psa 147:1
+- ult - too many {}, first off the {is} shouldn't be in brackets (see copula rules). second, `{it} {is}` type things should be merged to `{it is}`. should have another \q2 before the second 'for'
+- ust - pleasant & fitting are the same as ult, should have changed. ust is also significantly adjusted from t4t, which should have been used as baseline
+- note 17a7 has backwards hebrew. notes 04f8 & 1763 could be combined. also, the note ids MUST start with [a-z]. other chars can be [az] or [0-9] (this should/could be script generated or verified)
+
+# 147:2 
+- ult: no {} for `is`; ... pattern continues in 3 as well, I will not comment on this further but it needs to go
+- tns: 19fe - maybe not really parallelism, but better to over identify; might be better to express similar clarification guidance as explicit or metaphor (tough case honestly)
+- good form/meaning with 'building Jerusalem'/'rebuilding Jerusalem' 
+
+# 147:3
+- tns: 2414 (again, must start with [a-z]) you cannot bold `healed` or `bound up` because they are not EXACT quotes from the ULT. 2c3b - broken of heart would be a figure of speech not a passive
+- ult: align 'the' with 'broken of' instead of the verb
+- ust: should be more explicit, more different from ust, needs to start from t4t and minimally edit. retained broken hearts and went literal on bandaging, it's like it didn't pick up on the figurative speech at all
+
+# 147:4
+- ust alignment: each one should align with the hebrew for 'to all them' לְ֝⁠כֻלָּ֗⁠ם
+
+# 147:5
+- ult: combine adjacent {} `{there} {is}` => {there is}` (however, again, is doesn't need bracketing, and in this case 'there' is in the meaning of אֵ֣ין
+- ust: great, seems like you did mostly bring over t4t but thanks for actually using lord since hebrew had adonai.
+- tn: 3789 love that you said yahweh even though this particular verse has lord, it's great to keep the translators connected to context like that. 3a62: AT fit: needs to start with 'and'. 
+
+# 147:6
+- ust: great small tweaks to improve t4t! i might have found a way to more explicate the 'lift up/support' metaphort there
+- tns: 40f4 we do not write notes to antithetical parallelism. 5627 AT is same as UST (honestly, what else were you going to do? maybe use a synonym for humble... though it'd be best to have 'humble people' in that note and 'oppressed people' in the ust b/c that keeps the note focused). 6430 same. needed another note like 6248 for the first half of the verse.
+
+# 147:7
+- ust: alignment of sing and thank are fliped, should be on the opposite hebrew words. i would have merged the hebrew words זַמְּר֖וּ  & בְ⁠כִנּֽוֹר to align `play the harp as you make music `  all together
+- tns: 7fe1 - AT fit. 
+
+# 147:8
+- ult: could have been a continuation of the sentence from v7 starting each phrase with 'who' (judgement call)
+- tns/ust: these lines are parallel: `He {is} covering the heavens with clouds, \q2 preparing rain for the earth,` ... and then this is a goal: `\q2 making grass sprout {on} the mountains.` 
+
+# 147:9
+- ust: could find a synonym for 'cry'
+- tns: idiom note should have caused the possession note not to be written (also, sons of is too obvious to bother with a possession note, i know the issues resolved says to write the idiom note for `sons of`)
+- ult: most literal would translate לַחְמָ֑⁠הּ as 'their bread' and write a metonymy note for bread.
+
+# 147:10
+- ult: yoda speak.
+- ust great! might have aligned the two verbs together and just put the `or` on the second hebrew negation, but that could go either way really
+- tn: 835a - AT also yoda speech. other ATs... hard to get a true feel for b/c the ULT is so Yoda. 855f makes 87d4 unecessary. 8984 AT would need to start with 'in'. 8ff5: ok here's a place where i'm not sure we have a template but it is important. some languages (russian) 'alienable' and 'inalienable' possession. body parts are 'inalienable' and they form the possessive differently than 'my car'. love to see you spin off a subagent to research that and put some information in the figs-possession file the help us get good issue id and notes on these things.
+
+# 147:11
+ust: t4t did a better job with hesed, no passive (seeming) construction, no abstract nouns in `to continue to faithfully love them`
+- ult & ust alignment: should have not merged יְרֵאָ֑י⁠ו  & הַֽ⁠מְיַחֲלִ֥ים 
+- tn: 9413 AT fit should start with 'in'. 9256: hesed is hard, but it'd be better to suggest a verbal phrase, and the AT doesn't fit.
+
+# 147:12
+- tns: 98bd quote and alignment issue becaue the direct object marker wasn't aligned. we tend to align the direct object marker with the noun it goes with and then you'd probably pick it up. theoretically, if the hebrew DO marker isn't aligned and you leave it out of the quote field you can place a `&` in there and highlighting works.
+- ult: consider translating שַׁבְּחִ֣י & הַֽלְלִ֖י  differently unless there's other guidance in a human glossary or decision
+
+# 147:13
+- ust: would have been better to explicate like t4t
+- tn: ad82 - better to have been a figure of speech and dropped the possession. Sons should have a gender note
+
+# 147:14
+-ult: would be good to consider if this (and following verses) should have been in the same sentence as v13. it seems like you need occassionaly to take a broader discourse look since not every verse is it's own sentence. related, probably needed to bracket {He}. nice catch on 'fat'
+
+
+# 147:15
+-ult : same sentence? extra {}{}. 
+-tn: bed1 AT fit.
+- ust alignment second stanza a bit mixed up. 'his word' aligned to 'destination' seems off
+
+# 147:16 
+- really good! to be very nitpicky, I might have tried to find a synonym for 'scatters' for the ust
+
+# 147:17
+- tn d490 AT fit: works without it but should start with 'his'.
+
+# 147:18
+- tn db1u: 'The writer' in psalms we either use the attributed author or 'The psalmist'. Wait, you didn't write that one. ok, important. when you are inserting to the repo you need to remove all old notes. however... this is a valid note. that you missed. 
+- ust alignment: english gives should go with hebrew יִשְׁלַ֣ח  (in this case)
+
+# 147:19
+- ult k/q: our hebrew has the k reading so you should have used singular 'word'
+- ust: just make sure key legal terms you're doing a double check on rendering with glossary, decisions, and published work. 
+- tn: missed an ellipse in the 2nd half 'he is declaring his statutues and his judgments'. (ust seems to model a clarifying pattern which might be why you didn't do it, so i can see it as defensible.)
+
+# 147:20
+- tn ec99. does the contrast template have an AT? anyway, bad AT all you did was change `thus` to `this`. f9d2. perfect place for a 'see how' note pointing back to v1. need abstract noun note for judgments.
+
+# 148:1
+ust- has a \q2 \q1 after one another, it also didn't put the \q tag in the right place between stanzas
+tn lyly AT doesn't really model something terribly different - similar in v7. but honestly i don't know how you'd model a 'call to worship'
+ult alignment - hebrw direct object marker goes with yahweh not praise (ust also). separate 'from' from 'the heavens'
+
+# 148:4
+- tns: you had an apostrophe note in 148:3, but didn't write one for the heavens and the waters. both of those could also be considered for personificatoin
+
+# 148:5
+- tn fh50 has the missing direct object in  quote field issue (it's aligned as it should be). o7d2: so the main reason for a 'result' note is to suggest rearranging the clause order, so in this case i'd say, grab the whole verse as a quote and rearrange it.. or, rearrange the UST and offer the AT but also put at the end of the note 'as modeled by the UST'. og8t: AT fit
+- ust alignment: merge name with Yahweh not with the verb. b/c those are the connected concepts that you're smoothing out by omiting the metonymy
+
+# 148:6
+-ust: consider verbing 'decree'
+-tn for decree?
+- tq - well obviously, but what command, the command for the celestials to stay where they are forever
+
+# 148:7
+- tn sokl: good job finding the litany, but the reference needs to be 148:7-12. and then you can grab all the hebrew from all the verses... or you can just set occurance to 0 and say something like `starting from sea creatures to the end of verse 12`
+
+# 148:8
+- tns: why is the second personification and the first apostrophe? i mean, i may agree, but just make sure both are getting looks in these types of psalms. you're missing a doublet/parallelism within the first stanza (technically a chiasm).
+
+# 148:9
+- tn o2mx: need a bigger hebrew quote.... perhaps b/c the ult didn't get fully aligned (ust also). seems like we need a personification or apostrophe note here
+
+# 148:10
+- tns: could combine the merism notes. seems like we need a personification or apostrophe note here (probably apostrophe b/c technically, animals can make sounds, which if birds can certainly seem like praise) (so... in a case like this, we could have one in verse 8 or wherever the series starts that says, this also applies through v 10, and make sure it's mentioned in the chatper intro). probably also need a note for 'the wild animal' as generic noun.
+
+# 148:11
+- not completely aligned. in this and the last case it was the 'all' that seemed to be the problem.
+
+# 148:13
+- tn vzip missing DOmarker so not highlighting.  missed passive 'is exalted' (ust correctly removed it). earth & heavens is another merism that should also have gotten smoothed out in the ust
+ust - again, align name with Yahweh not with verb
+
+# 148:14
+- ult, bad stanza break: `And he has raised up a horn for his \q2 people, {a} praise for all of his faithful ones,` should be after people.
+- ust: more grouping of hebrew in alignment than strictly necessary.
+- tn fxly: you suggested abstract nouns for an abstract noun issue.

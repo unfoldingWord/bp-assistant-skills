@@ -265,7 +265,7 @@ Brackets mark words added for English grammar not present in Hebrew.
 
 ### Step 5: Apply Style Rules
 
-Apply all shared style rules from `reference/gl_guidelines.md` (formality, numbers, punctuation, capitalization, spelling). ULT-specific rules below:
+Apply all shared style rules from `../reference/gl_guidelines.md` (formality, numbers, punctuation, capitalization, spelling). ULT-specific rules below:
 
 **Word Order:**
 - Use English standard SVO order; do not woodenly follow Hebrew word order
@@ -488,7 +488,7 @@ Before finalizing ULT output, verify:
 | Quick-Ref Decisions | `data/quick-ref/ult_decisions.csv` | Prior ULT-gen vocabulary decisions |
 | Strong's Index | `data/cache/strongs_index.json` | Aggregated Strong's -> rendering map |
 | Published ULT | `data/published_ult_english/*.usfm` | Parallel patterns |
-| Style Guide | `reference/gl_guidelines.md` | Detailed style rules |
+| Style Guide | `../reference/gl_guidelines.md` | Detailed style rules |
 
 ---
 

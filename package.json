@@ -1,0 +1,15 @@
+{
+  "name": "cskillbp-prompt-over-code",
+  "version": "1.0.0",
+  "description": "AI-assisted creation of unfoldingWord Book Package (BP) items including translation notes, ULT, and UST.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "usfm-js": "^3.4.3"
+  }
+}

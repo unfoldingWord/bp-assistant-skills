@@ -1,14 +1,6 @@
-# ULT (unfoldingWord Literal Text) Guidelines
+# Gateway Language Style Guide
 
-Reference document extracted from the [Gateway Language Manual](https://gl-manual.readthedocs.io/en/latest/gl_guidelines.html) and [Appendix A: Style Sheet](https://gl-manual.readthedocs.io/en/latest/gl_appendixA.html).
-
-## Core Principles
-
-The ULT should **follow the original language literally** to give users insight into the original form. Exceptions apply when:
-- Literal translation would produce **wrong meaning**
-- English would be **ungrammatical and incomprehensible**
-
-The ULT helps users understand **what the original says** rather than what it means (that's UST's role).
+Shared style rules for all generated English content (ULT, UST, translation notes, translation questions, chapter intros). Reference document extracted from the [Gateway Language Manual](https://gl-manual.readthedocs.io/en/latest/gl_guidelines.html) and [Appendix A: Style Sheet](https://gl-manual.readthedocs.io/en/latest/gl_appendixA.html).
 
 ## Vocabulary & Style
 
@@ -16,7 +8,6 @@ The ULT helps users understand **what the original says** rather than what it me
 |------|---------|
 | No contractions | "do not" not "don't" |
 | Use common, translatable vocabulary | Prefer simple words over rare ones |
-| Differentiate from UST | Use different vocabulary than UST to help translators see options |
 | Formal, established usage | Prefer formal over informal English |
 | Avoid split infinitives | "to understand clearly" not "to clearly understand" |
 | Use "whom" not "who" (formal) | "the man whom you saw" |
@@ -48,6 +39,7 @@ Lowercase except at sentence start and "I" (always capitalized).
 
 ## Quotation Marks
 
+- Use **curly/smart quotes** (" ") and apostrophes (' '), not straight (" ')
 - Use **only at beginning and ending** of direct speech
 - Do NOT put quotes at the start of each verse in continuous speech
 - American English: double quotes first, single quotes for nested
@@ -72,10 +64,9 @@ Use the serial comma: "red, white, **and** blue"
 
 ## Word Order & Grammar
 
-- May **differ from Hebrew/Greek** when needed for clear English
-- Grammar should be **standard English** while reflecting original structure
-- Don't sacrifice meaning for literalness
-- Grammar may reflect translation issues in source languages
+- Grammar should be **standard English**
+- May differ from Hebrew/Greek word order when needed for clarity
+- Maintain parallel structure in compound constructions
 
 ## Curly Brackets {supplied words}
 
@@ -117,12 +108,10 @@ Follow **American English**:
 ## Conjunctions
 
 - Avoid starting sentences with conjunctions when possible
-- Maintain parallel structure in compound constructions
 - "Not only...but also" requires parallel elements
 
 ## Formal Register
 
-The ULT maintains a **formal register**:
 - Use subjunctive mood ("If he were..." not "If he was...")
 - Use adverbs properly ("She spoke quietly" not "She spoke quiet")
 - Use "whom" as object pronoun

@@ -10,12 +10,9 @@ Only respond with the note, not with any other text or explanation.
 
 ## Shared Style Rules
 
-Follow `../../ULT-gen/reference/gl_guidelines.md` for shared style rules (formality, numbers, spelling, comparisons). TN-specific rules below.
+Follow `../../reference/gl_guidelines.md` for shared style rules (formality, numbers, spelling, comparisons). TN-specific rules below.
 
 ## Formatting
-
-### Quotes
-Use curly/smart quotes instead of straight quotes.
 
 ### Bold
 In the note, put in markdown bold formatting any words or phrases that you quote from the given text or from the rest of the verse. Only use quotation marks where there may be quotation marks in the original text that you are quoting. Use markdown bold formatting only for the first occurrence of quoted words or phrases. Quotations from other verses in the Bible should be put in quotation marks. Do not bold anything except an exact quote from the verse.
@@ -28,9 +25,6 @@ In the templates you will find words that are in all capital letters. These word
 
 ### Slashes in Templates
 If there are slashes between words expressing similar or different ideas in a template, discern which word or two applies and instead of using all of that part of the template, use the word(s) you have chosen as applicable in this circumstance and write it as a natural sentence using "and" or "or", not a slash.
-
-### Numbers
-Spell out 1-10, use digits for 11+.
 
 ## Alternate Translations
 

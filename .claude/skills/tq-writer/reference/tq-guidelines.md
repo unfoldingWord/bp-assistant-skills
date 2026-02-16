@@ -77,18 +77,14 @@ TQ answers should capture the *idea* of the content so that any translation deri
 
 ## Formatting
 
-Follow `../../ULT-gen/reference/gl_guidelines.md` for shared style rules (formality, numbers, spelling, comparisons). TQ-specific rules below.
-
-### Capitalization
-- Do not capitalize divine pronouns (use "he/him/his" not "He/Him/His" when referring to God)
+Follow `../../reference/gl_guidelines.md` for shared style rules (formality, numbers, spelling, comparisons). TQ-specific rules below.
 
 ### Voice
 - Use active voice where possible
 - Avoid passive constructions unless they match the ULT phrasing
 
 ### Quotes
-- Use curly/smart quotes, not straight quotes
-- The post-processing script handles this automatically
+- The post-processing script handles curly quote conversion automatically
 
 ### Column Structure
 TQ TSV files have 7 columns:
