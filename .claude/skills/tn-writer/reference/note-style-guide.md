@@ -23,6 +23,9 @@ When you quote words or phrases from the given text or the rest of the verse, ma
 ### ALL CAPS in Templates
 In the templates you will find words that are in all capital letters. These words need to be replaced by the appropriate information from the verse or the verse's context. These may or may not be direct quotes.
 
+### Preserve Template Wording
+Replace ALL CAPS placeholders and resolve slashes, but keep all other template wording intact. Do not rephrase, condense, or substitute your own wording for the template's fixed phrases. For example, if the template says "you could express the same idea in another way," write exactly that -- do not change it to "you could express the same idea with a verb" or any other variation. Each note for the same issue type should use the same template phrasing; do not let one note's wording drift and then carry that drift into subsequent notes.
+
 ### Slashes in Templates
 If there are slashes between words expressing similar or different ideas in a template, discern which word or two applies and instead of using all of that part of the template, use the word(s) you have chosen as applicable in this circumstance and write it as a natural sentence using "and" or "or", not a slash.
 
