@@ -120,11 +120,17 @@ def _parse_plain_verses(plain_output):
 
 def _clean_plain(text):
     """Strip residual USFM markers from parse_usfm.js plain output."""
+    # Remove Selah markers: \qs...\qs* (paired) then \qs (unpaired from parse_usfm.js)
+    text = re.sub(r'\\qs\s+(.*?)\\qs\*', r'\1', text)
+    text = re.sub(r'\\qs\s+', '', text)
+    # Remove paragraph/poetry/section markers (\p, \q1, \q2, \s, \m, \d, \b, \r)
     text = re.sub(r'\\[pqsmd]\d?\s*', '', text)
     text = re.sub(r'\\b\s*', '', text)
     text = re.sub(r'\\r\s*', '', text)
+    # Remove footnotes and cross-references
     text = re.sub(r'\\f\s+.*?\\f\*', '', text)
     text = re.sub(r'\\x\s+.*?\\x\*', '', text)
+    # Catch-all for remaining markers
     text = re.sub(r'\\[a-z]+\*?', '', text)
     text = re.sub(r'\s+', ' ', text)
     return text.strip()

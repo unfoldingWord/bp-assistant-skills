@@ -45,6 +45,11 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | תּוֹר | H8449 | dove | turtledove | editor PSA 74:19 |
 | יָתוֹם | H3490 | orphan | fatherless | in Psalms context; editor PSA 82:3 |
 | אָכֵן | H0403 | But | Surely | adversative use in contrast context; editor PSA 82:7 |
+| נָבַט | H5027 | regard | look at | imperative habbet; editor PSA 82:9, 84:9 |
+| יְדִיד | H3039a | amiable | beloved | editor PSA 84:1 corrected AI prediction |
+| יְרֵכָה | H3411 | recesses | innermost parts | editor PSA 128:3 corrected AI prediction |
+| תַּחֲנוּן | H8469 | supplications | pleas | editor PSA 130:2 corrected AI prediction |
+| סָפַר | H5608a | recount | count | editor PSA 87:6 corrected AI prediction |
 
 ## Phrases
 
@@ -61,4 +66,10 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | Concessive waw | Though...yet | And...and | discretionary: read waw as concessive in contrast contexts; editor PSA 69:10-11,20 |
 | Fronted predicate | subject-first | predicate-first | discretionary: editor normalizes Hebrew fronted predicates to English SVO; PSA 69:4,33; 70:2,4,5; 82:3,4,5 |
 | 3rd person jussive (prayer) | May he/they [verb] | He/they will [verb] | read yiqtol as jussive in petitionary psalms; editor PSA 72 throughout (16 of 20 verses) |
-| Participial noun phrase | those who [verb] | the ones [verb]ing | prefer relative clause over participle-as-noun; editor PSA 71:4,10,13,24 |
+| Participial noun phrase | those [verb]ing | the ones [verb]ing | prefer "those" over "the ones" for substantive participles; editor PSA 71:4,10,13,24; 83:7; 84:4,11; 87:7; 125:1,5; 129:8. Agent nouns (dwellers, singers) also acceptable |
+| Jussive positive | May they [verb] | Let them [verb] | use "May they" for positive jussive/wish forms; editor PSA 83:16-18; 126:6 |
+| Partitive kol | all of the [noun] | all the [noun] | add "of" after "all" with definite nouns; editor PSA 82:5,8; 83:11,18 |
+| Hebrew perfect (ongoing) | present tense | past/perfect tense | render Hebrew perfect as English present when context is ongoing/habitual/devotional; editor PSA 120:5; 122:2,4,5; 126:3; 130:1,5 |
+| hayah (stative) | {are} | have been | for stative uses of hayah perfect, use present "{are}" not "have been"; editor PSA 82:8; 83:8 |
+| Article in construct | bare noun | the [noun] | drop English "the" before nouns in construct chains and before abstract nouns; editor PSA 121:2; 125:3,5; 126:1,6; 127:2; 130:4,7 |
+| Superscription | include in v1 | omit | always include psalm superscription text in verse 1; editor corrected all 16 chapters reviewed |
