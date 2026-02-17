@@ -142,6 +142,7 @@ Process one item at a time:
    - The AT must differ from the UST phrasing in `ust_verse`
    - Use minimal changes to the ULT wording; only change what the translation issue requires
    - For items flagged as narrow in Step 4: the narrow gl_quote is still correct in the prompt (it focuses the note body on the issue). But write the initial AT with the surrounding phrase context in mind, since the quote boundary may be expanded for AT fit in Step 7.
+   - If the gl_quote boundary creates an orphaned preposition or conjunction, the preferred fix is to expand the gl_quote in Step 7, not to include the orphaned word only in the AT.
 
 4. For items with `tcm_mode: true`:
    - Present multiple interpretations using the "This could mean:" format

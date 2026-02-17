@@ -81,6 +81,7 @@ Output:  - Updated issues TSV
 
 1. `output/issues/<BOOK>/<BOOK>-<CHAPTER>.tsv` -- updated issues matching human ULT
 2. `output/review/<BOOK>/<BOOK>-<CHAPTER>-changelog.tsv` -- what changed and why
+3. Update `output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}.usfm` with the editor's text so downstream tools (tn-writer) use the authoritative version rather than stale AI text
 
 ## Edge Cases
 

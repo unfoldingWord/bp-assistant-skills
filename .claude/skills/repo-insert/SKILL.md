@@ -17,13 +17,15 @@ as the base for creating branches.
 
 ## Configuration
 
-Uses `.env` in the project root (already in `.gitignore`):
+Uses `.env` in the project root (already in `.gitignore`). On the OCI server, the file lives at `config/.env` instead -- check there as a fallback if the project-root `.env` is missing.
 
 ```
-DOOR43_TOKEN=<gitea-api-token>       # Only needed for PR creation
+DOOR43_TOKEN=<gitea-api-token>       # Only needed for PR creation (may be stored as GITEA_TOKEN)
 DOOR43_USERNAME=deferredreward
 DOOR43_REPOS_PATH=/mnt/c/Users/benja/Documents/GitHub
 ```
+
+The token variable may be named `GITEA_TOKEN` rather than `DOOR43_TOKEN` depending on the environment. The scripts accept either name.
 
 - **Git operations** (clone, push, pull): HTTPS with token (`https://${DOOR43_USERNAME}:${DOOR43_TOKEN}@git.door43.org/unfoldingWord/{repo}.git`)
 - **PR creation**: Needs a Gitea API token (see `reference/gitea-api.md`)

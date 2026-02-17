@@ -128,13 +128,15 @@ The script runs these 13 checks:
 | 4 | empty_quote / no_hebrew | error | Quote column has Hebrew characters |
 | 5 | at_syntax | error | ATs use `[square brackets]` |
 | 6 | at_matches_ust | error/warn | AT text is not identical to UST phrasing |
-| 7 | gl_quote_not_in_ult | error | gl_quote appears in ULT verse |
+| 7 | gl_quote_not_in_ult | error | gl_quote appears in ULT verse (expected for discontinuous quotes using `...` notation) |
 | 8 | bold_not_in_ult | error | Bolded text appears verbatim in ULT verse |
 | 9 | rc_link_in_note | error | Note column has no `rc://` links |
 | 10 | orphaned_conjunction/prep | warning | No orphaned words before AT in substitution |
 | 11 | writer_in_psalms | warning | Uses "the psalmist", not "the writer" (PSA only) |
 | 12 | straight_quotes | warning | No straight quote characters |
 | 13 | at_capitalization | warning | AT capitalization matches sentence position |
+
+**Note on orphaned preposition/conjunction warnings after gl_quote expansion**: When a gl_quote has been expanded to include a leading preposition or conjunction (the correct fix for orphaned words at the AT boundary), the script may still report `orphaned_conjunction` or `orphaned_prep` warnings. These are false positives -- the word now appears both in the expanded gl_quote and at the start of the AT, which is the intended behavior. During the deep semantic review (Step 3c), verify the actual substitution reads naturally rather than trusting these warnings at face value.
 
 ## When to Run
 
