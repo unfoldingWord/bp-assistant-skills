@@ -5,14 +5,17 @@ prepare_compare.py - Prepare verse-by-verse comparison between editor and AI USF
 Compares editor-edited text (from Door43 master or editor-feedback files) against
 AI-generated output, producing structured JSON for analysis.
 
+Uses parse_usfm.js (AST-based) for USFM plain text extraction instead of regex.
+
 Usage:
   python3 prepare_compare.py PSA 65 --type ult
   python3 prepare_compare.py PSA 66 --type ult --editor-file "data/editor-feedback/Psalm 66 ULT.usfm"
   python3 prepare_compare.py PSA 67 --type ult --output /tmp/claude/compare.json
+  python3 prepare_compare.py PSA 81 --type ult --editor-usfm /tmp/claude/editor_ult.usfm
 
 Editor source resolution (in order):
-  1. --editor-file if provided
-  2. Local git clone at $DOOR43_REPOS_PATH/en_{type}/ (from .env)
+  1. --editor-file if provided (editor-feedback file with possible prose comments)
+  2. --editor-usfm if provided (pre-fetched full-book USFM, for multi-chapter mode)
   3. HTTP fetch from unfoldingWord/en_{type} master
 """
 
@@ -33,43 +36,98 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(SKILLS_DIR))
 UTILITIES_SCRIPTS = os.path.join(SKILLS_DIR, "utilities", "scripts")
 sys.path.insert(0, UTILITIES_SCRIPTS)
 
-from extract_ult_english import strip_alignment_markers
-from fetch_door43 import BOOK_NUMBERS, normalize_book, get_filename, build_url, fetch_usfm
+PARSE_USFM_JS = os.path.join(SKILLS_DIR, "utilities", "scripts", "usfm", "parse_usfm.js")
+
+from fetch_door43 import normalize_book, fetch_usfm
 
 
-def load_env():
-    """Read .env file from project root, return dict of key=value pairs."""
-    env = {}
-    env_path = os.path.join(PROJECT_ROOT, ".env")
-    if os.path.exists(env_path):
-        with open(env_path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    key, val = line.split("=", 1)
-                    env[key.strip()] = val.strip().strip('"').strip("'")
-    return env
+def usfm_to_verses(usfm_content, chapter_num):
+    """Convert USFM content to {verse_num_int: plain_text} dict using parse_usfm.js.
 
+    Pipes content through `node parse_usfm.js --stdin --plain-only --chapter N`
+    and parses the plain text output into a verse dictionary.
 
-def extract_chapter(content, chapter_num):
-    """Extract a single chapter from full-book USFM content.
-
-    Returns the text from \\c N up to the next \\c or end of file.
+    Handles both aligned USFM (with \\zaln markers) and unaligned USFM.
     """
-    pattern = rf"\\c\s+{chapter_num}\b"
-    match = re.search(pattern, content)
-    if not match:
-        return None
+    result = subprocess.run(
+        ["node", PARSE_USFM_JS, "--stdin", "--plain-only", "--chapter", str(chapter_num)],
+        input=usfm_content, capture_output=True, text=True, timeout=30
+    )
 
-    start = match.start()
-    # Find next \c marker
-    next_c = re.search(r"\\c\s+\d+", content[match.end():])
-    if next_c:
-        end = match.end() + next_c.start()
-    else:
-        end = len(content)
+    if result.returncode != 0:
+        print(f"Warning: parse_usfm.js stderr: {result.stderr}", file=sys.stderr)
+        if not result.stdout.strip():
+            return {}
 
-    return content[start:end]
+    return _parse_plain_verses(result.stdout)
+
+
+def _parse_plain_verses(plain_output):
+    """Parse plain USFM output from parse_usfm.js into {verse_int: text} dict.
+
+    Adapted from compare_ult_ust.py:parse_plain_usfm_verses(). Filters out
+    \\v front pseudo-verse (psalm superscriptions).
+    """
+    verses = {}
+    current_verse = None
+    current_text = []
+
+    for line in plain_output.split('\n'):
+        line = line.strip()
+
+        # Skip chapter/paragraph markers
+        if line.startswith('\\c ') or line.startswith('\\p'):
+            continue
+
+        # Verse marker
+        verse_match = re.match(r'\\v\s+(\S+)\s*(.*)', line)
+        if verse_match:
+            # Save previous verse
+            if current_verse is not None and current_text:
+                verses[current_verse] = ' '.join(current_text).strip()
+
+            verse_id = verse_match.group(1)
+
+            # Filter out \v front (psalm superscription pseudo-verse)
+            if verse_id == 'front':
+                current_verse = None
+                current_text = []
+                continue
+
+            try:
+                current_verse = int(verse_id.split('-')[0])
+            except ValueError:
+                current_verse = None
+                current_text = []
+                continue
+
+            remaining = verse_match.group(2)
+            current_text = [_clean_plain(remaining)] if remaining else []
+            continue
+
+        # Continuation lines (poetry markers, etc.)
+        if current_verse is not None:
+            cleaned = _clean_plain(line)
+            if cleaned:
+                current_text.append(cleaned)
+
+    # Don't forget last verse
+    if current_verse is not None and current_text:
+        verses[current_verse] = ' '.join(current_text).strip()
+
+    return verses
+
+
+def _clean_plain(text):
+    """Strip residual USFM markers from parse_usfm.js plain output."""
+    text = re.sub(r'\\[pqsmd]\d?\s*', '', text)
+    text = re.sub(r'\\b\s*', '', text)
+    text = re.sub(r'\\r\s*', '', text)
+    text = re.sub(r'\\f\s+.*?\\f\*', '', text)
+    text = re.sub(r'\\x\s+.*?\\x\*', '', text)
+    text = re.sub(r'\\[a-z]+\*?', '', text)
+    text = re.sub(r'\s+', ' ', text)
+    return text.strip()
 
 
 def extract_prose_comments(content, chapter_num):
@@ -86,59 +144,11 @@ def extract_prose_comments(content, chapter_num):
     if not preamble:
         return None
 
-    # Filter out blank lines, return cleaned text
     lines = [l.strip() for l in preamble.splitlines() if l.strip()]
     if not lines:
         return None
 
     return "\n".join(lines)
-
-
-def parse_verses(chapter_text):
-    """Parse \\v markers from chapter text into {verse_num: plain_text} dict.
-
-    Strips USFM formatting markers to produce plain text for comparison.
-    """
-    verses = {}
-
-    # Split on \v markers
-    parts = re.split(r"\\v\s+(\d+)\s+", chapter_text)
-    # parts[0] is before first \v (chapter header, \d, etc.)
-    # Then alternating: verse_num, verse_text, verse_num, verse_text...
-
-    for i in range(1, len(parts) - 1, 2):
-        verse_num = int(parts[i])
-        verse_text = parts[i + 1]
-
-        # Strip USFM formatting markers but keep text content
-        plain = strip_usfm_to_plain(verse_text)
-        verses[verse_num] = plain
-
-    return verses
-
-
-def strip_usfm_to_plain(text):
-    """Strip USFM formatting markers, leaving plain text with {implied} words."""
-    # Remove \qs ...\qs* (Selah markers) - keep the text inside
-    text = re.sub(r"\\qs\s*\*?", "", text)
-    text = re.sub(r"\\qs\*", "", text)
-
-    # Remove \ts\* markers
-    text = re.sub(r"\\ts\\\*", "", text)
-
-    # Remove common formatting markers: \q1, \q2, \q, \p, \m, \d, \b, \nb, \pi
-    text = re.sub(r"\\(?:q[12]?|p|m|d|b|nb|pi|li\d?|s\d?)\s*", "", text)
-
-    # Remove \f ... \f* (footnotes)
-    text = re.sub(r"\\f\s.*?\\f\*", "", text)
-
-    # Remove remaining backslash markers we might have missed
-    text = re.sub(r"\\[a-z]+\d?\s*\*?", "", text)
-
-    # Normalize whitespace
-    text = re.sub(r"\s+", " ", text).strip()
-
-    return text
 
 
 def word_diff(ai_text, editor_text):
@@ -160,19 +170,17 @@ def word_diff(ai_text, editor_text):
     return ops
 
 
-def resolve_editor_source(book, chapter, text_type, editor_file=None):
+def resolve_editor_source(book, chapter, text_type, editor_file=None, editor_usfm=None):
     """Resolve editor USFM content. Returns (content, source_label).
 
     Resolution order:
-    1. --editor-file if provided
-    2. Local git clone (with git pull)
-    3. HTTP fetch from Door43
+    1. --editor-file if provided (editor-feedback file)
+    2. --editor-usfm if provided (pre-fetched full-book USFM)
+    3. HTTP fetch from unfoldingWord/en_{type} master
     """
-    normalized = normalize_book(book)
-    filename = get_filename(book)
     repo_name = f"en_{text_type}"
 
-    # 1. Explicit editor file
+    # 1. Explicit editor-feedback file
     if editor_file:
         if not os.path.exists(editor_file):
             print(f"Error: Editor file not found: {editor_file}", file=sys.stderr)
@@ -180,27 +188,15 @@ def resolve_editor_source(book, chapter, text_type, editor_file=None):
         with open(editor_file, "r", encoding="utf-8") as f:
             return f.read(), "editor_file"
 
-    # 2. Local git clone
-    env = load_env()
-    repos_path = env.get("DOOR43_REPOS_PATH")
-    if repos_path:
-        local_repo = os.path.join(repos_path, repo_name)
-        local_file = os.path.join(local_repo, filename)
-        if os.path.isdir(local_repo):
-            # Pull latest
-            try:
-                subprocess.run(
-                    ["git", "-C", local_repo, "pull"],
-                    capture_output=True, timeout=30
-                )
-            except Exception as e:
-                print(f"Warning: git pull failed for {local_repo}: {e}", file=sys.stderr)
+    # 2. Pre-fetched full-book USFM (multi-chapter mode)
+    if editor_usfm:
+        if not os.path.exists(editor_usfm):
+            print(f"Error: Editor USFM file not found: {editor_usfm}", file=sys.stderr)
+            sys.exit(1)
+        with open(editor_usfm, "r", encoding="utf-8") as f:
+            return f.read(), "pre_fetched"
 
-            if os.path.exists(local_file):
-                with open(local_file, "r", encoding="utf-8") as f:
-                    return f.read(), "local_clone"
-
-    # 3. HTTP fetch
+    # 3. HTTP fetch from unfoldingWord Door43 master
     try:
         content = fetch_usfm(book, repo=repo_name, branch="master")
         return content, "http_fetch"
@@ -236,6 +232,7 @@ Examples:
   %(prog)s PSA 65 --type ult
   %(prog)s PSA 66 --type ult --editor-file "data/editor-feedback/Psalm 66 ULT.usfm"
   %(prog)s PSA 67 --type ult --output /tmp/claude/compare.json
+  %(prog)s PSA 81 --type ult --editor-usfm /tmp/claude/editor_ult.usfm
 """,
     )
     parser.add_argument("book", help="Book abbreviation (e.g., PSA, GEN, 1JN)")
@@ -243,7 +240,9 @@ Examples:
     parser.add_argument("--type", "-t", default="ult", choices=["ult", "ust"],
                         help="Text type (default: ult)")
     parser.add_argument("--output", "-o", help="Output JSON path (default: stdout)")
-    parser.add_argument("--editor-file", help="Explicit path to editor USFM file")
+    parser.add_argument("--editor-file", help="Explicit path to editor-feedback USFM file")
+    parser.add_argument("--editor-usfm",
+                        help="Path to pre-fetched full-book editor USFM (multi-chapter mode)")
 
     args = parser.parse_args()
 
@@ -251,7 +250,7 @@ Examples:
 
     # Resolve editor source
     editor_raw, source = resolve_editor_source(
-        args.book, args.chapter, args.type, args.editor_file
+        args.book, args.chapter, args.type, args.editor_file, args.editor_usfm
     )
 
     # Extract prose comments (only meaningful for editor-feedback files)
@@ -259,25 +258,20 @@ Examples:
     if args.editor_file:
         editor_comments = extract_prose_comments(editor_raw, args.chapter)
 
-    # Strip alignment markers (master has zaln markers; no-op if already plain)
-    editor_clean = strip_alignment_markers(editor_raw)
-
-    # Extract target chapter from editor
-    editor_chapter = extract_chapter(editor_clean, args.chapter)
-    if not editor_chapter:
-        print(f"Error: Chapter {args.chapter} not found in editor source", file=sys.stderr)
+    # Parse verses via parse_usfm.js (handles aligned and unaligned USFM)
+    editor_verses = usfm_to_verses(editor_raw, args.chapter)
+    if not editor_verses:
+        print(f"Error: No verses found for chapter {args.chapter} in editor source",
+              file=sys.stderr)
         sys.exit(1)
 
-    # Read AI source
+    # Read AI source and parse verses
     ai_raw = resolve_ai_source(args.book, args.chapter, args.type)
-    ai_chapter = extract_chapter(ai_raw, args.chapter)
-    if not ai_chapter:
-        print(f"Error: Chapter {args.chapter} not found in AI output", file=sys.stderr)
+    ai_verses = usfm_to_verses(ai_raw, args.chapter)
+    if not ai_verses:
+        print(f"Error: No verses found for chapter {args.chapter} in AI output",
+              file=sys.stderr)
         sys.exit(1)
-
-    # Parse verses
-    editor_verses = parse_verses(editor_chapter)
-    ai_verses = parse_verses(ai_chapter)
 
     # Build comparison
     all_verse_nums = sorted(set(list(editor_verses.keys()) + list(ai_verses.keys())))
@@ -325,7 +319,8 @@ Examples:
     output_json = json.dumps(result, indent=2, ensure_ascii=False)
 
     if args.output:
-        os.makedirs(os.path.dirname(args.output), exist_ok=True) if os.path.dirname(args.output) else None
+        if os.path.dirname(args.output):
+            os.makedirs(os.path.dirname(args.output), exist_ok=True)
         with open(args.output, "w", encoding="utf-8") as f:
             f.write(output_json)
         print(f"Written to {args.output}", file=sys.stderr)

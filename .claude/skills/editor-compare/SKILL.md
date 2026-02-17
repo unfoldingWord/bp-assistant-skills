@@ -11,9 +11,9 @@ Compare editor-edited text against AI-generated ULT/UST to identify vocabulary, 
 ## Prerequisites
 
 - AI output in `output/AI-ULT/` or `output/AI-UST/` (from ULT-gen or UST-gen)
-- Editor source: Door43 master (local clone or HTTP) or editor-feedback file
+- Editor source: Door43 master (HTTP fetch) or editor-feedback file
 
-## Workflow
+## Single-Chapter Mode
 
 ### Step 1: Run the comparison script
 
@@ -30,10 +30,7 @@ python3 .claude/skills/editor-compare/scripts/prepare_compare.py <BOOK> <CHAPTER
     --editor-file "<path>" --output /tmp/claude/compare_<type>.json
 ```
 
-**Important**: The script automatically handles aligned USFM with `\zaln` markers via `extract_ult_english.py`. Do not manually parse aligned USFM. If you need plain English text outside the script:
-```bash
-python3 .claude/skills/utilities/scripts/extract_ult_english.py <file.usfm>
-```
+The script uses `parse_usfm.js` (AST-based parser) for plain text extraction. It handles both aligned USFM (with `\zaln` markers from Door43 master) and unaligned USFM (AI output) through the same code path.
 
 ### Step 2: Read the comparison JSON
 
@@ -111,9 +108,60 @@ Save to `output/editor-compare/{BOOK}/{BOOK}-{CHAPTER:03d}-{type}.md` with secti
 - Voice/form changes
 - Memory updates applied (list what was written to glossary/quick-ref)
 
+
+## Multi-Chapter Mode
+
+Use when comparing multiple chapters at once (e.g., "editor-compare PSA 81-84, 87").
+
+### Phase 0: Fetch editor USFM once
+
+Fetch the full-book USFM from Door43 master once per type. The Door43 file is per-book (e.g., `19-PSA.usfm` contains all 150 chapters), so one fetch covers all chapters.
+
+```bash
+python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> --type <ult|ust> --output /tmp/claude/editor_<type>.usfm
+```
+
+Do this for each type being compared (ULT, UST, or both).
+
+### Phase 1: Parallel per-chapter comparison
+
+Parse the chapter spec (e.g., "81-84, 87, 120-130") into a flat list of chapter numbers.
+
+Run `prepare_compare.py` for each chapter in parallel, passing the pre-fetched file via `--editor-usfm`:
+
+```bash
+# Run all chapters in parallel (each as a separate subagent or background shell)
+python3 .claude/skills/editor-compare/scripts/prepare_compare.py <BOOK> <CH> --type <type> \
+    --editor-usfm /tmp/claude/editor_<type>.usfm \
+    --output /tmp/claude/compare_<type>_<CH>.json
+```
+
+For each chapter, after reading its comparison JSON:
+- Write a per-chapter report to `output/editor-compare/{BOOK}/{BOOK}-{CH:03d}-{type}.md`
+- Do NOT write memory updates yet -- that happens in Phase 2
+
+### Phase 2: Consolidated analysis
+
+Read all per-chapter comparison JSONs together. Perform cross-chapter pattern detection:
+
+1. **Count occurrences**: For each vocabulary/structure preference, count how many chapters show it
+2. **Confidence levels**:
+   - **High** (3+ chapters): Strong pattern, write to memory
+   - **Medium** (2 chapters): Likely pattern, write to memory
+   - **Low** (1 chapter): Note only, do not write to memory
+3. **Check existing memory**: Skip preferences already captured in glossary/quick-ref
+4. **Write memory updates**: For high and medium confidence only (Steps 4-5 from single-chapter mode)
+5. **Write consolidated report**: Save to `output/editor-compare/{BOOK}/{BOOK}-multi-{type}.md` with:
+   - Per-chapter summaries (changed/unchanged counts)
+   - Cross-chapter patterns with confidence levels and chapter citations
+   - Memory updates applied
+   - Low-confidence observations (noted but not written to memory)
+
 ## Key Design Points
 
-- **Script-first**: The Python script handles fetching, parsing, alignment stripping, and diffing. The AI handles pattern analysis and memory writes.
-- **Local clone preferred**: The script tries local git clone first (with `git pull`), then falls back to HTTP fetch. Editor-feedback files are provided via `--editor-file` only.
+- **Script-first**: The Python script handles fetching, AST-based parsing (via parse_usfm.js), and diffing. The AI handles pattern analysis and memory writes.
+- **HTTP fetch**: The script fetches from unfoldingWord Door43 master via HTTP. Editor-feedback files are provided via `--editor-file`. Pre-fetched USFM (for multi-chapter mode) is provided via `--editor-usfm`.
+- **AST parsing**: Both aligned and unaligned USFM go through `parse_usfm.js --plain-only` for consistent plain text extraction, replacing the old regex chain.
 - **Inference-based**: The common case has no prose feedback. Infer all editor preferences from verse diffs alone. When prose comments are available, they carry high weight.
+- **Two-phase multi-chapter**: Phase 1 runs chapters in parallel without writing to shared files. Phase 2 consolidates findings and writes memory updates, ensuring cross-chapter patterns are detected before committing to memory.
 - **Light hand**: The report suggests patterns; the human decides what to adopt. Note confidence levels (multi-verse pattern vs. single occurrence).
