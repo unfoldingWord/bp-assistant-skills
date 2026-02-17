@@ -6,7 +6,7 @@ allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 
 # Chapter Introduction
 
-Generate a chapter introduction that orients translators to a psalm's structure, type, key concepts, and translation challenges. Run this after the pipeline (ULT-gen, issue-identification, UST-gen) has completed for a chapter.
+Generate a brief chapter introduction that orients translators to a psalm's type, key concepts, and any distinctive translation challenges. Target length: 300-600 characters. Run this after the pipeline (ULT-gen, issue-identification, UST-gen) has completed for a chapter.
 
 ## Arguments
 
@@ -46,151 +46,57 @@ Read the following files. Not all may exist; work with what's available.
 - Translation Words for key terms: use `python3 .claude/skills/issue-identification/scripts/check_tw_headwords.py "term1" "term2"` or browse `data/en_tw/`
 - Translation Academy for psalm type definitions: `data/ta-flat/`
 
-### Step 2: Determine Psalm Type and Context
+### Step 2: Determine Psalm Type
 
-Parse the superscription (verse 1 or "front" matter) looking for:
-- Authorship attribution ("Of David", "Of Asaph", "Of the sons of Korah")
-- Genre markers ("maskil", "miktam", "song of ascents", "a prayer")
-- Performance instructions ("For the chief musician", "On a stringed instrument")
-- Historical occasion ("When he fled from Absalom")
+Parse the superscription (verse 1 or "front" matter) for authorship, genre markers, and performance instructions.
 
-Classify the psalm type:
-- **Lament** (individual or communal) -- complaint, petition, trust, praise
-- **Praise/Hymn** -- celebration of Yahweh's character or deeds
-- **Thanksgiving** -- response to specific deliverance
-- **Wisdom** -- instruction, contrast of righteous/wicked
-- **Royal/Messianic** -- about the king, enthronement
-- **Trust/Confidence** -- expression of reliance on Yahweh
-- **Worship** -- liturgical, temple-focused (e.g., Psalms 95-100)
-- **Imprecatory** -- appeals against enemies
-- **Penitential** -- confession and plea for mercy
-
-Check if the psalm belongs to a known group:
-- Psalms 95-100: worship psalms
-- Psalms 103-107: praise psalms
+Classify the psalm type (lament, praise/hymn, thanksgiving, wisdom, royal/messianic, trust/confidence, worship, imprecatory, penitential). Check known groups:
 - Psalms 120-134: songs of ascents
 - Psalms 146-150: Hallel psalms
 
-### Step 3: Analyze Structure
+This feeds the 1-2 sentence classification in the Structure and Formatting section.
 
-Read through the ULT (or Hebrew if ULT unavailable) and identify natural divisions:
-- Thematic shifts (complaint -> petition -> praise)
-- Speaker changes (psalmist -> God -> congregation)
-- Selah markers as possible section breaks
-- Stanza patterns in poetic sections
-- Shifts in addressee (speaking to God vs. speaking about God)
+### Step 3: Draft the Introduction
 
-Create a numbered outline with verse ranges and brief descriptions:
-- Format: `1. Description of section content (verse-range)`
-- Keep descriptions concise (one phrase or short sentence)
-- Use inclusive verse ranges with en-dashes: `(1-5)` not `(1-4)`
-- Cover all verses with no gaps or overlaps
-- If a superscription exists, it can be its own section or included with the first section
+Write a short intro using the template below. The entire intro should be 300-600 characters. Each section is 1-2 sentences. Only include the Translation Issues section when there is a genuinely distinctive challenge (extended metaphor spanning multiple verses, speaker ambiguity, acrostic pattern, etc.). Most psalms will not need it.
 
-### Step 4: Identify Key Concepts
+Use `[[rc://*/tw/dict/bible/kt/<term>]]` or `[[rc://*/tw/dict/bible/other/<term>]]` for Translation Word links. Use `[Book Chapter](../book/chapter/verse.md)` for cross-references.
 
-Scan the issues TSV for recurring patterns:
-- Multiple metaphors around the same concept = extended metaphor worth mentioning
-- Recurring metonymy with body parts = pattern worth noting
-- Abstract nouns clustering around a theme (righteousness, faithfulness, etc.)
-
-Identify cultural/religious concepts translators need context for:
-- Covenant language (hesed/steadfast love, name, way)
-- Temple/worship references (Zion, sanctuary, offerings)
-- Historical allusions
-- Theological claims about God's nature
-- Concepts that may not translate directly across cultures
-
-For key theological terms, check Translation Words:
-```bash
-python3 .claude/skills/issue-identification/scripts/check_tw_headwords.py "covenant" "righteous" "salvation"
-```
-
-Use `[[rc://*/tw/dict/bible/kt/<term>]]` format for Translation Word links.
-
-### Step 5: Check for Translation Issues
-
-Only include a "Translation Issues" section when genuinely distinctive challenges exist:
-- Extended metaphors spanning multiple verses
-- Singular/plural shifts in referents
-- Hebrew poetry patterns that affect translation (acrostic, chiasm)
-- Speaker ambiguity or changes
-- Text-critical issues or debated interpretations
-- Unusual wordplay that translators should be aware of
-
-Do NOT include this section for routine issues that are already covered in verse-level notes. Most psalms will not need this section.
-
-### Step 6: Draft the Introduction
-
-Follow the template below. Use the **detailed format** for most psalms. Use the **brief format** only for psalms that are part of a well-known group AND have straightforward content (e.g., Psalms 96-100).
-
-#### Detailed Format Template
+#### Template
 
 ```
 # Psalm N Introduction
 
 ## Structure and Formatting
 
-[One sentence classifying the psalm type. Link to tA or tW if helpful.]
-
-  1. [Section description] ([verse-range])
-  2. [Section description] ([verse-range])
-  ...
-
-[Optional: note about superscription genre term, e.g., "See the introduction to Psalm 6 for a discussion of the word 'miktam.'"]
-
-## About the Psalm
-
-[1-2 paragraphs: historical context, authorship, occasion if known, relationship to other psalms or biblical passages. Cross-references use markdown links: [2 Samuel 22](../2sa/22/01.md). Keep this translator-oriented, not devotional commentary.]
-
-## Religious and Cultural Concepts in This Psalm
-
-### [Concept Name]
-
-[1-2 sentences explaining the concept and why it matters for translators.]
-
-### [Additional concepts as needed]
-
-[...]
-
-## Translation Issues
-
-### [Issue Name]
-
-[Only include if there are distinctive translation challenges beyond normal verse-level notes.]
-```
-
-#### Brief Format Template (for grouped psalms)
-
-```
-# Psalm NNN General Notes
-
-## Type of Psalm
-
-[One sentence classifying the psalm and its group membership.]
+[1-2 sentences: psalm type classification and brief characterization. Include a tW or tA link.]
 
 ## Religious and Cultural Concepts in This Chapter
 
 ### [Concept Name]
 
+[1-2 sentences explaining the concept.]
+
+### [Optional second concept]
+
 [1-2 sentences.]
+
+## Translation Issues in This Chapter (optional)
+
+### [Issue Name]
+
+[1-2 sentences. Only include for distinctive challenges.]
 ```
 
-**Decision rule:** Use detailed format unless the psalm is part of a well-known group AND the content is straightforward. When in doubt, use detailed.
+#### Quality Checks
 
-#### Quality Checks Before Finalizing
-
-- Structure outline covers all verses (no gaps)
-- Verse ranges don't overlap
 - Psalm type matches actual content
-- tW links use `[[rc://*/tw/dict/bible/kt/<term>]]` or `[[rc://*/tw/dict/bible/other/<term>]]` format
-- Cross-references use `[Book Chapter](../book/chapter/verse.md)` format
-- Content is translator-oriented, not devotional commentary
-- No verse-level detail that belongs in translation notes instead
-- Tone is informative and measured, not dramatic
-- Follow shared style rules in `../reference/gl_guidelines.md`
+- tW links use correct `[[rc://...]]` format
+- Content is translator-oriented, not devotional
+- No verse-level detail that belongs in translation notes
+- Total length stays in the 300-600 character range
 
-### Step 7: Format and Insert into Issue File
+### Step 4: Format and Insert into Issue File
 
 **Format the intro for TSV storage:**
 1. Escape all newlines as literal `\n` (two characters: backslash + n)
