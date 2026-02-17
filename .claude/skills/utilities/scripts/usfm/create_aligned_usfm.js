@@ -746,8 +746,8 @@ for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
 
       const lines = verseContent.split('\n');
 
-      // Collect all aligned words with their line indices
-      // Each line has one word, so we need to match across consecutive lines
+      // Collect all aligned words with their line indices and character offsets
+      // Lines may contain multiple words (e.g. supplied {words} adjacent to aligned words)
       const alignedWords = [];
       for (let i = 1; i < lines.length; i++) {  // Start at 1 to skip verse line
         const line = lines[i];
@@ -757,13 +757,15 @@ for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
         for (const match of wordMatches) {
           alignedWords.push({
             word: match[1].toLowerCase().replace(/[.,;:!?'"]/g, ''),
-            lineIndex: i
+            lineIndex: i,
+            matchOffset: match.index
           });
         }
       }
 
       // Find where startWords sequence begins
       let targetLineIndex = -1;
+      let targetWordIdx = -1;
       for (let i = 0; i <= alignedWords.length - markerObj.startWords.length; i++) {
         let matches = true;
         for (let j = 0; j < markerObj.startWords.length; j++) {
@@ -774,12 +776,58 @@ for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
         }
         if (matches) {
           targetLineIndex = alignedWords[i].lineIndex;
+          targetWordIdx = i;
           break;
         }
       }
 
       if (targetLineIndex > 0) {
-        lines[targetLineIndex] = `\\${markerObj.marker} ` + lines[targetLineIndex];
+        // Check if the target word shares its line with earlier words
+        const targetOffset = alignedWords[targetWordIdx].matchOffset;
+        let hasEarlierWords = false;
+        for (let k = 0; k < targetWordIdx; k++) {
+          if (alignedWords[k].lineIndex === targetLineIndex) {
+            hasEarlierWords = true;
+            break;
+          }
+        }
+
+        if (hasEarlierWords) {
+          // The target word is not the first word on its line - need to split
+          // Find the outermost \zaln-s for the target word by scanning backward
+          // Stop when we hit a \zaln-e (which closes a different word's alignment)
+          const line = lines[targetLineIndex];
+          let groupStart = targetOffset;
+          let searchPos = targetOffset;
+
+          while (searchPos > 0) {
+            const zalnPos = line.lastIndexOf('\\zaln-s', searchPos - 1);
+            if (zalnPos === -1) break;
+            const between = line.substring(zalnPos, groupStart);
+            if (between.includes('\\zaln-e')) break;
+            groupStart = zalnPos;
+            searchPos = zalnPos;
+          }
+
+          // Check for preceding { (supplied text marker)
+          if (groupStart > 0) {
+            let checkPos = groupStart - 1;
+            while (checkPos >= 0 && line[checkPos] === ' ') checkPos--;
+            if (checkPos >= 0 && line[checkPos] === '{') {
+              groupStart = checkPos;
+            }
+          }
+
+          // Split: previous words stay on current line, target starts new line with marker
+          const firstPart = line.substring(0, groupStart).replace(/\s+$/, '');
+          const secondPart = line.substring(groupStart);
+
+          lines[targetLineIndex] = firstPart;
+          lines.splice(targetLineIndex + 1, 0, `\\${markerObj.marker} ` + secondPart);
+        } else {
+          lines[targetLineIndex] = `\\${markerObj.marker} ` + lines[targetLineIndex];
+        }
+
         const newVerseContent = lines.join('\n');
         outputUsfm = outputUsfm.slice(0, verseStart) + newVerseContent + outputUsfm.slice(verseEnd);
       }
