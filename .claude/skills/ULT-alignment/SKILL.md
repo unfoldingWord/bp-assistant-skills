@@ -88,10 +88,50 @@ Example: Hebrew וַ⁠יִּקַ֖ץ אֲדֹנָי means "and-he-awoke the-Lor
 ```
 Output will be: "And" ... "the Lord" ... "awoke" (correct English order), not "And awoke the Lord"
 
-### Superscription Alignment (`d_text` and `section`)
+### Superscription Alignment
 
-Some psalms have a superscription (`\d` line) whose text is aligned to Hebrew words that are part of verse 1. When this occurs, use the `d_text` field and `"section": "d"` on relevant alignment entries:
+There are two cases depending on how the ULT source structures the superscription:
 
+#### Case 1: Superscription is part of verse 1 (e.g., Psalms 120-134)
+
+When the ULT source has the superscription inside `\v 1` (with an empty `\d` marker):
+```
+\d
+\v 1 A song of ascents
+\q1 Remember, Yahweh, for David,
+```
+
+Do NOT use `d_text` or `section: "d"`. Include all words (superscription + body) in `english_text` and use normal alignment entries:
+```json
+{
+  "reference": "PSA 132:1",
+  "hebrew_words": [
+    {"index": 0, "word": "...", "strong": "H7892a", "lemma": "שִׁיר"},
+    {"index": 1, "word": "...", "strong": "d:H4609b", "lemma": "מַעֲלָה"},
+    {"index": 2, "word": "...", "strong": "H2142", "lemma": "זָכַר"},
+    {"index": 3, "word": "...", "strong": "H3068", "lemma": "יְהֹוָה"}
+  ],
+  "english_text": "A song of ascents Remember, Yahweh, for David, all of his afflictions,",
+  "alignments": [
+    {"hebrew_indices": [0], "english": ["A", "song"]},
+    {"hebrew_indices": [1], "english": ["of", "ascents"]},
+    {"hebrew_indices": [2], "english": ["Remember"]},
+    {"hebrew_indices": [3], "english": ["Yahweh"]}
+  ]
+}
+```
+
+The script picks up the empty `\d` and `\q1`/`\q2` markers from the ULT source file automatically.
+
+#### Case 2: Superscription on `\d` line, separate from verse 1 (`d_text` and `section`)
+
+When the ULT source has the superscription text on the `\d` line (Hebrew v1 is only superscription, body starts at Hebrew v2 mapped to English v1):
+```
+\d For the chief musician. A song. A psalm.
+\v 1 Shout to God, all the earth!
+```
+
+Use the `d_text` field and `"section": "d"` on relevant alignment entries:
 ```json
 {
   "reference": "PSA 66:1",
@@ -130,6 +170,7 @@ The script automatically detects and preserves inter-verse markers from the sour
 - `\s1 <text>`, `\s2 <text>` (section headings)
 - `\b` (blank line markers)
 - `\d <text>` (superscriptions, when not using `d_text` for aligned output)
+- `\d` (empty superscription paragraph marker, when superscription is part of `\v 1`)
 - `\cl <text>` (chapter labels)
 
 These markers are inserted on their own lines before the verse they precede. No manual insertion is needed.

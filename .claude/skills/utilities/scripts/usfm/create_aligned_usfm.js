@@ -185,7 +185,7 @@ function extractUsfmMarkers(ultContent, chapter, verse, hasDText = false) {
       for (let i = 0; i < betweenLines.length; i++) {
         const trimmed = betweenLines[i].trim();
         if (!trimmed) continue;  // skip blank lines
-        const isInterVerseMarker = trimmed.match(/^\\(qa\s|ts\\\*|s[12]\s|d\s|b\s*$|cl\s)/);
+        const isInterVerseMarker = trimmed.match(/^\\(qa\s|ts\\\*|s[12]\s|d\s|d$|b\s*$|cl\s)/);
         if (!isInterVerseMarker) {
           lastTextLine = i;
         }
@@ -201,7 +201,7 @@ function extractUsfmMarkers(ultContent, chapter, verse, hasDText = false) {
   const interVerseLines = interVerseText.split('\n');
 
   // Match inter-verse markers
-  const interVerseMarkerPattern = /^(\\qa\s+.+|\\ts\\\*|\\s[12]\s+.+|\\b\s*$|\\cl\s+.+|\\d\s+.+)/;
+  const interVerseMarkerPattern = /^(\\qa\s+.+|\\ts\\\*|\\s[12]\s+.+|\\b\s*$|\\cl\s+.+|\\d\s+.+|\\d\s*$)/;
   for (const line of interVerseLines) {
     const trimmed = line.trim();
     if (!trimmed) continue;

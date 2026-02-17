@@ -198,17 +198,28 @@ Per psalms_reference.csv: Nominal adjectives like "the righteous," "the wicked,"
 Separate superscription elements with periods, not commas:
 - "For the chief musician. On a stringed instrument. Of David."
 
-**Superscription verse anchoring (critical):**
+**Superscription verse anchoring:**
 Do not assume all psalm headings belong in `\d` before verse 1. Anchor placement to the Hebrew chapter structure:
 
-1. **If Hebrew starts with `\v 1` and the superscription words are inside that verse** (e.g., Psalm 120/121 "song of ascents"), keep that heading content in **` \v 1` text**, not a standalone `\d`.
-2. **If Hebrew has a standalone `\d` block before the first verse line** (often with `\va 1\va*`), keep it as `\d` before `\v 1` in output.
-3. **If Hebrew shows verse-offset markers (`\va`)** where prose/poetry starts at Hebrew v2 while English uses v1, preserve the established output versification and keep the heading in `\d`; do not force heading words into English `\v 1`.
+1. **If Hebrew `\v 1` contains both superscription and body text** (e.g., Psalms 120-134 "song of ascents" + body), the superscription is part of verse 1. Output as:
+   ```
+   \d
+   \v 1 A song of ascents
+   \q1 Remember, Yahweh, for David,
+   \q2 all of his afflictions,
+   ```
+   `\d` is an empty paragraph-style marker (tells renderers to style what follows as a superscription). `\v 1` contains just the superscription text. `\q1` starts the poetry body, still part of verse 1. Do NOT put text on the `\d` line, do NOT put `\d` after `\v 1`, and do NOT omit `\d`.
+
+2. **If Hebrew has superscription words only in `\v 1`** (no body text until `\v 2`), with verse-offset markers (`\va`) showing English versification is shifted (Hebrew v2 = English v1), keep the superscription on `\d` with its text and start body at English `\v 1`:
+   ```
+   \d For the chief musician. A psalm. Of David.
+   \v 1 [body text from Hebrew v2]
+   ```
 
 Quick check at chapter start:
 - Read the first 5-10 lines after `\c N` in Hebrew.
-- Determine whether the heading is embedded in `\v 1` or separated as `\d`.
-- Mirror that structure in generated ULT.
+- If `\v 1` has both superscription words AND body text: use format 1 (empty `\d`, superscription in `\v 1`).
+- If `\v 1` has only superscription words and body starts at `\v 2`: use format 2 (`\d` with text, body at English `\v 1`).
 
 #### G. Comparatives with מִן
 
