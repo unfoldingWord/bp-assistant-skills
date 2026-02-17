@@ -34,6 +34,10 @@ If `--verses <start>-<end>` is specified:
 
 After running all chunks, concatenate the chunk TSVs (stripping any duplicate headers) into the final `output/issues/<BOOK>/<BOOK>-<CH>.tsv`.
 
+## Chapter Padding
+
+Zero-pad the chapter number for all filenames: 3 digits for PSA (e.g., `067`), 2 digits for other books (e.g., `03`). Use `<CH>` below to mean the padded form. This matches makeBP's convention so output files are found by downstream phases.
+
 ## Setup (orchestrator runs directly)
 
 ### Working Directory
@@ -245,10 +249,10 @@ The human ULT/UST is authoritative. Issues adapt to the text, not the other way 
 
 ## Output
 
-Without verse range: `output/issues/<BOOK>/<BOOK>-<CHAPTER>.tsv`
-With verse range: `output/issues/<BOOK>/<BOOK>-<CHAPTER>-v<START>-<END>.tsv`
+Without verse range: `output/issues/<BOOK>/<BOOK>-<CH>.tsv`
+With verse range: `output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv`
 
-After all chunks are complete, concatenate into `output/issues/<BOOK>/<BOOK>-<CHAPTER>.tsv` (strip duplicate headers, preserve verse ordering).
+After all chunks are complete, concatenate into `output/issues/<BOOK>/<BOOK>-<CH>.tsv` (strip duplicate headers, preserve verse ordering).
 
 Same format as base issue-identification:
 ```
