@@ -33,10 +33,18 @@ def parse_verse_range(spec):
     return v, v
 
 
+INTER_VERSE_MARKERS = re.compile(r'^\\(d\b|cl\b|ts\\\*|s\d+\s|qa\s|b\s*$)')
+
+
 def strip_source_header(lines):
-    """Remove header lines from source, return content from first \\v onward."""
+    """Remove header lines from source, return content from first \\v onward.
+
+    Preserves inter-verse markers (\\d, \\cl, \\ts\\*, etc.) that appear
+    between the headers and the first verse.
+    """
     result = []
     found_verse = False
+    pre_verse_markers = []
     for line in lines:
         stripped = line.strip()
         if not found_verse:
@@ -44,13 +52,19 @@ def strip_source_header(lines):
                 continue
             if stripped == '':
                 continue
+            # Preserve inter-verse markers that come before \v 1
+            if INTER_VERSE_MARKERS.match(stripped):
+                pre_verse_markers.append(line)
+                continue
             # Check if this line or any part of it contains \v
             if '\\v ' in stripped:
                 found_verse = True
+                result.extend(pre_verse_markers)
                 result.append(line)
             # Also accept lines that start with \q markers followed by \v
             elif re.match(r'^\\q\d?\s', stripped) and '\\v ' in stripped:
                 found_verse = True
+                result.extend(pre_verse_markers)
                 result.append(line)
         else:
             result.append(line)
@@ -106,13 +120,16 @@ def find_verse_boundaries(lines, start_idx, end_idx, verse_start, verse_end):
         # Find start of our verse range
         if replace_start is None and verse_start_pat.search(line):
             replace_start = i
-            # Check if previous line is a section marker (\ts\*, \s5, \s1, etc.)
-            # that belongs to this verse -- but only standalone markers, not
-            # ones attached to a previous verse's content
-            if i > start_idx:
-                prev = lines[i - 1].strip()
-                if prev in ('\\ts\\*', '\\s5') or re.match(r'^\\s\d+\s*$', prev):
-                    replace_start = i - 1
+            # Walk backward past inter-verse markers (\cl, \d, \ts\*, \s1, etc.)
+            # that belong to this verse rather than the previous verse's content
+            while replace_start > start_idx:
+                prev = lines[replace_start - 1].strip()
+                if (prev in ('\\ts\\*', '\\s5')
+                        or re.match(r'^\\s\d+\s', prev)
+                        or re.match(r'^\\(cl|d)\b', prev)):
+                    replace_start -= 1
+                else:
+                    break
 
         # Find start of the verse AFTER our range
         if replace_start is not None and next_verse_pat.search(line):
