@@ -105,5 +105,11 @@ Reword using verb, adverb, or adjective:
 The alternate translation must actually resolve the abstract noun into a non-abstract form (verb, adjective, adverb, or clause). Do not replace one abstract noun with another abstract noun. For example:
 - BAD: "obedience" -> "faithful obedience" (still abstract)
 - BAD: "salvation" -> "deliverance" (still abstract)
+- BAD: "covenant faithfulness" -> "faithful love" ("love" is still abstract)
+- BAD: "covenant faithfulness" -> "loyal love" ("love" is still abstract)
 - GOOD: "obedience" -> "obeying him"
 - GOOD: "salvation" -> "how God saves people"
+- GOOD: "covenant faithfulness" -> "being faithful to his covenant"
+- GOOD: "covenant faithfulness" -> "always faithfully keeping his promises"
+
+Note: "covenant faithfulness" (chesed) is itself an abstract noun. When writing ATs for it, the result must not contain "love" or any other abstract noun. Verbalize it: "being faithful," "always keeping his promises," "faithfully doing what he promised," etc.

@@ -438,6 +438,34 @@ def check_writer_in_psalms(row, book_code):
     return None
 
 
+def check_abstract_noun_at(row, prepared_items):
+    """Check 14: figs-abstractnouns ATs must not contain abstract nouns."""
+    sref = row.get('SupportReference', '')
+    if 'figs-abstractnouns' not in sref:
+        return []
+    note = row.get('Note', '')
+    ats = extract_ats(note)
+    if not ats:
+        return []
+
+    # Get the gl_quote to know what abstract noun we're resolving
+    item = prepared_items.get(row.get('ID', ''))
+    gl_quote = ''
+    if item:
+        gl_quote = item.get('gl_quote_roundtripped') or item.get('gl_quote', '')
+
+    findings = []
+    # Specific known problem: "covenant faithfulness" AT using "love"
+    if gl_quote and 'covenant faithfulness' in gl_quote.lower():
+        for at in ats:
+            if re.search(r'\blove\b', at, re.IGNORECASE):
+                findings.append({
+                    'severity': 'error', 'category': 'abstract_noun_in_at',
+                    'message': f'AT [{at}] for "covenant faithfulness" uses abstract noun "love" -- verbalize instead (e.g. "being faithful to his covenant")'
+                })
+    return findings
+
+
 def check_curly_quotes(row):
     """Check 12: No straight quotes should remain."""
     if row.get('Occurrence') == '0':
@@ -603,6 +631,10 @@ def main():
 
         # Check 13: AT capitalization
         for f in check_at_capitalization(row, prepared_items):
+            row_findings.append(f)
+
+        # Check 14: Abstract noun ATs must not contain abstract nouns
+        for f in check_abstract_noun_at(row, prepared_items):
             row_findings.append(f)
 
         # Annotate each finding with row context

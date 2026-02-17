@@ -132,7 +132,7 @@ Similarly, do not borrow wording from templates belonging to other issue types. 
 - **figs-imperative**: Do not add explanatory sentences about the specific imperative content or context
 - **grammar-connect-logic-result**: Do not identify specific phrases, keep to the template
 - **figs-ellipsis**: Do not explain the missing words/phrase
-- **figs-abstractnouns**: Do not define the words. The AT must resolve the abstract noun into a non-abstract form (verb, adjective, clause) -- do not replace one abstract noun with another (e.g., "obedience" -> "faithful obedience" is wrong; "obedience" -> "obeying him" is correct)
+- **figs-abstractnouns**: Do not define the words. The AT must resolve the abstract noun into a non-abstract form (verb, adjective, clause) -- do not replace one abstract noun with another (e.g., "obedience" -> "faithful obedience" is wrong; "obedience" -> "obeying him" is correct; "covenant faithfulness" -> "faithful love" is wrong because "love" is abstract; "covenant faithfulness" -> "being faithful to his covenant" is correct)
 
 ## Terminology
 
