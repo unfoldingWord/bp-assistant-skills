@@ -256,17 +256,28 @@ The UST should make clear who or what is being described.
 
 (See Active Voice above for passive → active conversion)
 
-**Superscription verse anchoring (must follow Hebrew structure):**
-Do not place every psalm heading in `\d` by default. Check the Hebrew chapter start and mirror its anchoring:
+**Superscription verse anchoring:**
+Do not assume all psalm headings belong in `\d` before verse 1. Anchor placement to the Hebrew chapter structure:
 
-1. **If Hebrew has superscription wording inside `\v 1`** (for example, Psalm 120/121 "song of ascents"), keep that content in **UST `\v 1`** rather than moving it to `\d`.
-2. **If Hebrew has a standalone `\d` heading block before the first verse**, keep a standalone `\d` before `\v 1` in UST.
-3. **If Hebrew includes verse-offset markers (`\va`) indicating heading-versification differences**, preserve standard output versification and keep heading placement consistent with the Hebrew structure (do not collapse offset distinctions).
+1. **If Hebrew `\v 1` contains both superscription and body text** (e.g., Psalms 120-134 "song of ascents" + body), the superscription is part of verse 1. Output as:
+   ```
+   \d
+   \v 1 A song of ascents.
+   \q1 Yahweh, remember David
+   \q2 and all of the difficulties that he had.
+   ```
+   `\d` is an empty paragraph-style marker (tells renderers to style what follows as a superscription). `\v 1` contains just the superscription text. `\q1` starts the poetry body, still part of verse 1. Do NOT put text on the `\d` line, do NOT put `\d` after `\v 1`, and do NOT omit `\d`.
 
-Quick check:
-- Read the first 5-10 lines after `\c N` in Hebrew (`data/hebrew_bible/*.usfm`).
-- Decide: embedded-in-`v1` or standalone-`\d`.
-- Apply the same structure in UST output.
+2. **If Hebrew has superscription words only in `\v 1`** (no body text until `\v 2`), with verse-offset markers showing English versification is shifted (Hebrew v2 = English v1), keep the superscription on `\d` with its text and start body at English `\v 1`:
+   ```
+   \d This is for the chief musician. It is a psalm of David.
+   \v 1 All the people on the earth, shout joyfully to God!
+   ```
+
+Quick check at chapter start:
+- Read the first 5-10 lines after `\c N` in Hebrew.
+- If `\v 1` has both superscription words AND body text: use format 1 (empty `\d`, superscription in `\v 1`).
+- If `\v 1` has only superscription words and body starts at `\v 2`: use format 2 (`\d` with text, body at English `\v 1`).
 
 #### H. Initial Conjunctions
 

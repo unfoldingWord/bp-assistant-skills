@@ -89,6 +89,76 @@ Same JSON structure as ULT alignment:
   - `{word}` for implied information
 - `section`: (Optional) Set to `"d"` for superscription entries
 
+### Superscription Alignment
+
+There are two cases depending on how the UST source structures the superscription:
+
+#### Case 1: Superscription is part of verse 1 (e.g., Psalms 120-134)
+
+When the UST source has the superscription inside `\v 1` (with an empty `\d` marker):
+```
+\d
+\v 1 A song of ascents.
+\q1 Yahweh, remember David
+```
+
+Do NOT use `d_text` or `section: "d"`. Include all words (superscription + body) in `english_text` and use normal alignment entries:
+```json
+{
+  "reference": "PSA 132:1",
+  "hebrew_words": [
+    {"index": 0, "word": "...", "strong": "H7892a", "lemma": "שִׁיר"},
+    {"index": 1, "word": "...", "strong": "d:H4609b", "lemma": "מַעֲלָה"},
+    {"index": 2, "word": "...", "strong": "H2142", "lemma": "זָכַר"},
+    {"index": 3, "word": "...", "strong": "H3068", "lemma": "יְהֹוָה"}
+  ],
+  "english_text": "A song of ascents. Yahweh, remember David and all of the difficulties that he had.",
+  "alignments": [
+    {"hebrew_indices": [0], "english": ["A", "song"]},
+    {"hebrew_indices": [1], "english": ["of", "ascents."]},
+    {"hebrew_indices": [2], "english": ["remember"]},
+    {"hebrew_indices": [3], "english": ["Yahweh"]}
+  ]
+}
+```
+
+The script picks up the empty `\d` and `\q1`/`\q2` markers from the UST source file automatically.
+
+#### Case 2: Superscription on `\d` line, separate from verse 1 (`d_text` and `section`)
+
+When the UST source has the superscription text on the `\d` line (Hebrew v1 is only superscription, body starts at Hebrew v2 mapped to English v1):
+```
+\d This is for the chief musician. It is a psalm of David.
+\v 1 All the people on the earth, shout joyfully to God!
+```
+
+Use the `d_text` field and `"section": "d"` on relevant alignment entries:
+```json
+{
+  "reference": "PSA 66:1",
+  "hebrew_words": [
+    {"index": 0, "word": "...", "strong": "l:H5329", "lemma": "נָצַח"},
+    {"index": 1, "word": "...", "strong": "H7892a", "lemma": "שִׁיר"},
+    {"index": 2, "word": "...", "strong": "H4210", "lemma": "מִזְמוֹר"},
+    {"index": 3, "word": "...", "strong": "H7321", "lemma": "רוּעַ"},
+    {"index": 4, "word": "...", "strong": "l:H0430", "lemma": "אֱלֹהִים"},
+    {"index": 5, "word": "...", "strong": "H3605", "lemma": "כֹּל"},
+    {"index": 6, "word": "...", "strong": "d:H0776", "lemma": "אֶרֶץ"}
+  ],
+  "d_text": "This is for the chief musician. It is a psalm of David.",
+  "english_text": "All the people on the earth, shout joyfully to God!",
+  "alignments": [
+    {"hebrew_indices": [0], "english": ["for", "the", "chief", "musician."], "section": "d"},
+    {"hebrew_indices": [1], "english": ["a"], "section": "d"},
+    {"hebrew_indices": [2], "english": ["a", "psalm", "of", "David."], "section": "d"},
+    {"hebrew_indices": [3], "english": ["shout", "joyfully"]},
+    {"hebrew_indices": [4], "english": ["to", "God"]},
+    {"hebrew_indices": [5], "english": ["All", "the"]},
+    {"hebrew_indices": [6], "english": ["people", "on", "the", "earth"]}
+  ]
+}
+```
+
 ### Critical: `english_text` Controls Output Word Order
 
 The `english_text` field is **authoritative** for the final output word order, just as with ULT. Alignment array order doesn't matter.
