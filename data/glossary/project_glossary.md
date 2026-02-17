@@ -43,6 +43,8 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | קֶדֶם | H6924 | ancient times | of old | editor PSA 74:2,12 |
 | נָאַץ | H5006 | blaspheme | despise | editor PSA 74:18; also "treat with contempt" in 74:10 |
 | תּוֹר | H8449 | dove | turtledove | editor PSA 74:19 |
+| יָתוֹם | H3490 | orphan | fatherless | in Psalms context; editor PSA 82:3 |
+| אָכֵן | H0403 | But | Surely | adversative use in contrast context; editor PSA 82:7 |
 
 ## Phrases
 
@@ -50,13 +52,13 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 |----------------|-----|-----|-------|
 | צַר־לִי | trouble to me | my distress | preserve prepositional structure |
 | מָגִנֵּנוּ אֲדֹנָי | Lord our shield | our shield, Lord | preserve vocative order |
-| וַאֲנִי + verb | I, I [verb] | I [verb] | preserve emphatic pronoun; but editors drop doubling (PSA 71:14,22; 74:13-15,17) -- use single pronoun |
+| וַאֲנִי + verb | I, I [verb] | I [verb] | emphatic pronoun doubling: preserve the doubled pronoun to reflect Hebrew emphasis (e.g., "I, I said" 82:6, "you, you will inherit" 82:8) |
 | הַמִּתְקוֹמְמַי | the ones rising up against me | who rise up against me | participle as noun |
 | יוֹם יוֹם | day, day | day {by} day | preserve doubling without added words |
 | כֵּן (adverbial) | Thus | So | formal connector |
 | יָרוּם מִמֶּנִּי | higher than I | high away from me | comparative with מִן |
 | Jussive negative | may you not [verb] | do not [verb] | form-based: use jussive for 2nd person negative wishes, not imperative; editor PSA 69:6,17; 70:5 |
 | Concessive waw | Though...yet | And...and | discretionary: read waw as concessive in contrast contexts; editor PSA 69:10-11,20 |
-| Fronted predicate | subject-first | predicate-first | discretionary: editor normalizes Hebrew fronted predicates to English SVO; PSA 69:4,33; 70:2,4,5 |
+| Fronted predicate | subject-first | predicate-first | discretionary: editor normalizes Hebrew fronted predicates to English SVO; PSA 69:4,33; 70:2,4,5; 82:3,4,5 |
 | 3rd person jussive (prayer) | May he/they [verb] | He/they will [verb] | read yiqtol as jussive in petitionary psalms; editor PSA 72 throughout (16 of 20 verses) |
 | Participial noun phrase | those who [verb] | the ones [verb]ing | prefer relative clause over participle-as-noun; editor PSA 71:4,10,13,24 |

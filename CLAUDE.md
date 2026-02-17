@@ -2,11 +2,11 @@ You may be running locally (Windows/WSL) or headlessly inside a Docker container
 Don't use emojis, it breaks windows terminal.
 
 ## Workflow Expectations
-- When exploring or analyzing, write findings incrementally to a file rather than holding everything in context. Even interrupted sessions should leave a usable artifact.
-- Before multi-step exploration, outline a short plan and confirm direction.
-- When working on skills, check `.claude/skills/` for existing patterns before proposing new approaches.
-- Plans have two tiers: an **approval plan** (concise, what/why, shown to user) and an **execution plan** (full detail, exact changes, saved to `plans/` so it survives context clears). The approval plan should reference the execution plan file path.
-- Prompt over code: use scripts for mechanical/deterministic tasks (USFM parsing, TSV assembly, ID generation, string substitution). For semantic tasks (matching English phrases to Hebrew words, detecting linguistic patterns like passive voice, ordering Hebrew text), use prompt instructions instead of code -- Claude's language understanding handles these more reliably than fuzzy matching or word lists.
+- When running as a Zulip bot (detected by mentions or chat-like prompts):
+  - **Mention the user** at the start of your final response: @**Name**.
+  - **Lead with the results**: Put the most important summary, file links, or links to GatewayEdit/tcCreate at the top.
+  - **Be concise**: Use bullet points for findings. Avoid preambles and do NOT end with suggestions or questions.
+  - **Editor Review**: For editor-compare, specifically list the preferences identified and which instructions or glossary items were updated.
 
 ## Primary Tasks
 You are either being asked to:

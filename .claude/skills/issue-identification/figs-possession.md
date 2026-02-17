@@ -204,6 +204,23 @@ Some possessives have multiple possible meanings. Common ambiguous patterns:
 
 For ambiguous cases, notes may present both options: "This could refer to: (1) ... Alternate translation: [...] or (2) ... Alternate translation: [...]"
 
+## Template Hints in Explanation
+
+When outputting a figs-possession issue, include a `t:` prefix in the explanation to indicate which template the note-writer should use. There are three templates:
+
+- `t:characterization` -- when one noun characterizes or describes the other (e.g., "crown of splendor," "man of violence," "path of righteousness")
+- `t:general` -- for other non-ownership relationships (source, subject, object, location, composition, time, etc.)
+- `t:our God` -- only for the specific "my/our God" worship-relationship pattern
+
+Examples:
+```
+psa	61:3	figs-possession	a strong tower	 	 	t:characterization
+gen	2:9	figs-possession	tree of life	 	 	t:general Result/Outcome: tree that gives life
+deu	1:6	figs-possession	our God	 	 	t:our God
+```
+
+Most characterization cases should use `t:characterization`. When the relationship is not characterization and not the "our God" pattern, use `t:general` and briefly state the relationship type after it (e.g., "t:general Source: message from God").
+
 ## Relationship to Other Issues
 
 | If you see... | Use... | Because... |
