@@ -89,6 +89,7 @@ Follow **American English**:
 - curb (not kerb)
 - worshiped (not worshipped)
 - program (not programme)
+- judgment (not judgement)
 
 ## Spacing
 
