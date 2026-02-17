@@ -102,6 +102,26 @@ For figs-metaphor, multiple templates may be available (generic, poetry, and spe
 - **Use `poetry` only when**: The metaphor involves a sustained, vivid image where preserving the imagery is the preferred translation strategy (e.g., God as a rock, a fortress, a shield, a shepherd). The poetry template says "If this image communicates well... If not, you could express this as a comparison" -- this is appropriate only when the image itself is the point.
 - **Use specialized templates**: When a specific template matches (heart, turn, way/path, fathers, brothers, house, sons, behold), prefer it over both generic and poetry.
 
+### Possession Template Selection
+
+For figs-possession, there are three templates: `characterization`, `general`, and `our God`. Each serves a distinct purpose:
+
+- **Use `characterization`** when one noun describes or characterizes the other (e.g., "crown of splendor" = splendorous crown, "man of violence" = violent man, "path of righteousness" = righteous path). This is the most common type. The template says "SPEAKER is using the possessive form to describe a **text** that is characterized by **text**."
+- **Use `general`** for other non-ownership relationships (source, subject, object, location, composition, time, etc.) that don't fit characterization. The template says "SPEAKER is using this possessive form to mean IDEA."
+- **Use `our God`** only for the specific pattern of "my/our God" expressing a worship relationship rather than ownership. This template references Moses and the Israelites -- adapt the speaker reference to the actual context, but only use it when the possessive form is about a social/worship relationship with God.
+
+If the explanation contains a `t:` prefix hinting at the template type, follow that hint.
+
+## "Could mean" Restriction
+
+Do not use the phrase "could mean" in notes. This phrasing is reserved exclusively for TCM (This Could Mean) mode, which presents multiple interpretations for genuinely ambiguous passages. In regular notes, state the meaning with confidence: "SPEAKER is using this possessive form to mean..." not "this could mean..."
+
+## Technical Language Restriction
+
+Do not introduce linguistic or grammatical terminology that does not appear in the template being used. Terms like "cognate accusative," "genitive of source," "objective genitive," etc. are not part of the translation note vocabulary. Use only the language modeled in the templates. If a template says "possessive form," say "possessive form" -- do not substitute a more technical term.
+
+Similarly, do not borrow wording from templates belonging to other issue types. Each note should follow only the template(s) provided for its own support reference.
+
 ## Issue-Specific Restrictions
 
 - **writing-background & writing-newevent**: No elaboration on narrative function or context
@@ -109,7 +129,7 @@ For figs-metaphor, multiple templates may be available (generic, poetry, and spe
 - **figs-imperative**: Do not add explanatory sentences about the specific imperative content or context
 - **grammar-connect-logic-result**: Do not identify specific phrases, keep to the template
 - **figs-ellipsis**: Do not explain the missing words/phrase
-- **figs-abstractnouns**: Do not define the words
+- **figs-abstractnouns**: Do not define the words. The AT must resolve the abstract noun into a non-abstract form (verb, adjective, clause) -- do not replace one abstract noun with another (e.g., "obedience" -> "faithful obedience" is wrong; "obedience" -> "obeying him" is correct)
 
 ## Terminology
 

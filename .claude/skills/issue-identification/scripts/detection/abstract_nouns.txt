@@ -26,7 +26,6 @@ evil
 repentance
 holiness
 confidence
-testimony
 endurance
 service
 justice
@@ -38,7 +37,6 @@ works
 affliction
 understanding
 darkness
-commandment
 obedience
 forgiveness
 fellowship
@@ -61,16 +59,12 @@ thanksgiving
 transgression
 sorrow
 trespasses
-teaching
-tradition
 self-control
 jealousy
 circumcision
 uncircumcision
-promise
 sanctification
 freedom
-promises
 comfort
 faithfulness
 royalty
@@ -182,7 +176,6 @@ vanity
 agreement
 persecution
 deceitfulness
-commandments
 concern
 abomination
 desolation
@@ -242,7 +235,6 @@ deliverance
 terror
 corruption
 measure
-doctrines
 depth
 repayment
 marriage
@@ -263,7 +255,6 @@ religion
 care
 hindrance
 apostleship
-witness
 ungodliness
 full awareness
 malice
@@ -286,7 +277,6 @@ severity
 judgments
 compassions
 thought
-instruction
 offering
 deed
 divisions
@@ -378,7 +368,6 @@ blasphemies
 worries
 visibility
 openness
-testimonies
 insurrection
 kingship
 stature
@@ -444,7 +433,6 @@ distraction
 custom
 boast
 admonition
-traditions
 disgrace
 directions
 ministries
@@ -496,8 +484,6 @@ profitable
 working
 full assurance
 philosophy
-decrees
-teachings
 indulgence
 complaint
 examples

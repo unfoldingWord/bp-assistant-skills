@@ -20,7 +20,7 @@ python3 fetch_door43.py 1JN | \
 ```
 
 **Script**: `.claude/skills/issue-identification/scripts/detection/detect_abstract_nouns.py`
-**Word list**: `.claude/skills/issue-identification/scripts/detection/abstract_nouns.txt` (591 words)
+**Word list**: `.claude/skills/issue-identification/scripts/detection/abstract_nouns.txt` (577 words)
 
 ### Detection signals:
 - English word matches abstract noun list
@@ -72,6 +72,14 @@ sin, evil, truth, wisdom, knowledge, obedience
 **Concrete nouns**: Physical objects even when symbolic
 - "throne", "temple", "bread"
 
+**Words for spoken or written communication**: Terms that refer to things people say, write, or enact are not abstract nouns -- they denote concrete communicative acts or their written/spoken products. Do not flag these:
+- "commandment(s)", "statute(s)", "precept(s)", "ordinance(s)", "decree(s)"
+- "testimony/testimonies", "law(s)", "rule(s)", "regulation(s)"
+- "word(s)" (when referring to what someone said or wrote), "saying(s)", "promise(s)"
+- "instruction(s)", "charge", "covenant", "oath"
+
+These words may appear in doublets (figs-doublet) or parallelism but should not receive figs-abstractnouns notes. Even though some end in abstract-looking suffixes (-ment, -tion), they refer to concrete things that people speak, write, or establish.
+
 ---
 
 ## Examples from Published TNs
@@ -93,3 +101,9 @@ Reword using verb, adverb, or adjective:
 - "faith" -> "trusting God"
 - "his love" -> "how much he loves us"
 - "godliness with contentment" -> "being godly and content"
+
+The alternate translation must actually resolve the abstract noun into a non-abstract form (verb, adjective, adverb, or clause). Do not replace one abstract noun with another abstract noun. For example:
+- BAD: "obedience" -> "faithful obedience" (still abstract)
+- BAD: "salvation" -> "deliverance" (still abstract)
+- GOOD: "obedience" -> "obeying him"
+- GOOD: "salvation" -> "how God saves people"
