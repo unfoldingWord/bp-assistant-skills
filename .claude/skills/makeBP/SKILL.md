@@ -28,7 +28,7 @@ all phases.
 |----------|---------|-------------|
 | book | psa | Book abbreviation (3-letter) |
 | chapter | 149 | Chapter number |
-| username | deferredreward | Door43 username for branch naming |
+| username | deferredreward | Door43 username for commit message attribution |
 | --lite | (flag) | Use 2 issue-id analysts instead of 4 (optional) |
 
 ## Setup
@@ -37,7 +37,7 @@ Normalize parameters:
 - `BOOK` = uppercase 3-letter code (PSA)
 - `CHAPTER` = plain number (149)
 - `CH` = zero-padded for filenames (3 digits for PSA: `149`, 2 digits for other books: `03`)
-- `USERNAME` = as provided
+- `USERNAME` = as provided (used in commit messages for attribution)
 
 Load environment:
 ```bash
@@ -154,20 +154,20 @@ between our AI-generated ULT and the published Door43 master.
 Wait for this agent plus any remaining Phase 2 agents to complete before
 proceeding.
 
-## Phase 4: Repo Insert
+## Phase 4: Repo Insert (Push to Master)
 
 After all agents complete, insert each content type into Door43 repos.
 Launch four **Task subagents** in parallel (each touches a different repo).
 
 All repos are under the **unfoldingWord** organization on Door43. Never push
-to a personal fork. Never touch the master branch.
+to a personal fork.
 
 | Content | Source | Repo | Branch | Insert script |
 |---------|--------|------|--------|---------------|
-| ULT (aligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ult | `auto-{user}-{BOOK}` | `insert_usfm_verses.py` |
-| UST (aligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ust | `auto-{user}-{BOOK}` | `insert_usfm_verses.py` |
-| TN | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` | unfoldingWord/en_tn | `{user}-tc-create-1` | `insert_tn_rows.py` |
-| TQ | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` | unfoldingWord/en_tq | `auto-{user}-{BOOK}` | `insert_tn_rows.py` |
+| ULT (aligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ult | `AI-{BOOK}-{CH}` (staging) -> master | `insert_usfm_verses.py` |
+| UST (aligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ust | `AI-{BOOK}-{CH}` (staging) -> master | `insert_usfm_verses.py` |
+| TN | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` | unfoldingWord/en_tn | `AI-{BOOK}-{CH}` (staging) -> master | `insert_tn_rows.py` |
+| TQ | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` | unfoldingWord/en_tq | `AI-{BOOK}-{CH}` (staging) -> master | `insert_tn_rows.py` |
 
 ### Git procedure for each repo (strict order)
 
@@ -177,21 +177,28 @@ to a personal fork. Never touch the master branch.
    git remote set-url origin "https://${DOOR43_USERNAME}:${DOOR43_TOKEN}@git.door43.org/unfoldingWord/{repo}.git"
    ```
 2. **Fetch** -- `git fetch origin`
-3. **Create or checkout branch from origin/master** -- always branch from
-   `origin/master` so the branch has the full repo contents. Never create a
-   branch from scratch or from a local-only state.
-   - If the branch exists remotely: `git checkout {BRANCH} && git merge origin/master --no-edit`
-   - If the branch does not exist: `git checkout -b {BRANCH} origin/master`
-   - If a stale local branch exists, delete it first: `git branch -D {BRANCH}`
+3. **Create staging branch from origin/master** -- always branch from
+   `origin/master`. Delete any stale local branch with the same name first.
+   ```bash
+   git checkout --detach 2>/dev/null
+   git branch -D "$BRANCH" 2>/dev/null || true
+   git checkout -b "$BRANCH" origin/master
+   ```
 4. **Insert** -- run the appropriate script with `--backup`
    - USFM: `--chapter {CHAPTER} --verses {FIRST}-{LAST_VERSE}`
    - TSV: no verse filter needed (script matches by reference)
 5. **Verify** -- log `git diff --stat` output
 6. **Commit** -- `git add {file} && git commit -m "AI {content_type} for {BOOK} {CHAPTER}"`
-7. **Push** -- `git push origin {BRANCH}`
-
-Never commit to master. Never checkout master for editing. Master is only used
-as the base for creating branches.
+7. **Merge to master and push**:
+   ```bash
+   git checkout master
+   git merge origin/master --ff-only
+   git merge "$BRANCH" --no-edit
+   git push origin master
+   git branch -D "$BRANCH"
+   ```
+8. **If push fails** (remote advanced): `git pull origin master --no-edit` then retry push once
+9. **If merge conflict or second push fails**: stop and report error to admin
 
 ### Repo-insert commands reference
 
@@ -226,12 +233,12 @@ PSA = `19-PSA.usfm`, GEN = `01-GEN.usfm`, etc.
 
 ## Output Summary
 
-| Content | Local path | Repo | Branch |
-|---------|-----------|------|--------|
-| ULT (aligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | en_ult | `auto-{user}-{BOOK}` |
-| UST (aligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` | en_ust | `auto-{user}-{BOOK}` |
-| TN | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` | en_tn | `{user}-tc-create-1` |
-| TQ | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` | en_tq | `auto-{user}-{BOOK}` |
+| Content | Local path | Repo | Pushed to |
+|---------|-----------|------|-----------|
+| ULT (aligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | en_ult | master |
+| UST (aligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` | en_ust | master |
+| TN | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` | en_tn | master |
+| TQ | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` | en_tq | master |
 | Issues | `output/issues/{BOOK}/{BOOK}-{CH}.tsv` | -- | working file only |
 | ULT (unaligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}.usfm` | -- | not inserted |
 | UST (unaligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}.usfm` | -- | not inserted |
@@ -242,7 +249,7 @@ If any phase fails:
 1. Stop the pipeline and report which phases completed vs failed
 2. All completed outputs remain in `output/` for inspection
 3. Repo insertions only happen after all generation phases succeed
-4. Any partially-pushed repos can be rolled back with `git checkout -- <file>`
+4. If a push to master fails after one retry, stop and report to admin
 
 ## Unattended Operation
 

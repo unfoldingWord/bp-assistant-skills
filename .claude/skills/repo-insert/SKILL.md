@@ -1,26 +1,26 @@
 ---
 name: repo-insert
-description: Insert generated ULT, UST, or TN content into Door43 repo clones, commit, and optionally create PRs.
+description: Insert generated ULT, UST, or TN content into Door43 repo clones, commit, merge to master, and push.
 allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 ---
 
 # Repo Insert
 
-Insert AI-generated content (ULT, UST, or TN) into local clones of git.door43.org repos, commit, push, and optionally create pull requests.
+Insert AI-generated content (ULT, UST, or TN) into local clones of git.door43.org repos, commit on a temporary staging branch, merge to master, and push.
 
 ## Organization Rule
 
 All repos belong to the **unfoldingWord** organization on Door43. Never push to a
 personal fork. Always verify the remote URL contains `git.door43.org/unfoldingWord/`
-before any git operation. Never commit to or checkout master -- master is only used
-as the base for creating branches.
+before any git operation. Use a temporary AI-named branch for staging, then merge
+to master and push.
 
 ## Configuration
 
 Uses `.env` in the project root (already in `.gitignore`). On the OCI server, the file lives at `config/.env` instead -- check there as a fallback if the project-root `.env` is missing.
 
 ```
-DOOR43_TOKEN=<gitea-api-token>       # Only needed for PR creation (may be stored as GITEA_TOKEN)
+DOOR43_TOKEN=<gitea-api-token>
 DOOR43_USERNAME=deferredreward
 DOOR43_REPOS_PATH=/mnt/c/Users/benja/Documents/GitHub
 ```
@@ -28,7 +28,6 @@ DOOR43_REPOS_PATH=/mnt/c/Users/benja/Documents/GitHub
 The token variable may be named `GITEA_TOKEN` rather than `DOOR43_TOKEN` depending on the environment. The scripts accept either name.
 
 - **Git operations** (clone, push, pull): HTTPS with token (`https://${DOOR43_USERNAME}:${DOOR43_TOKEN}@git.door43.org/unfoldingWord/{repo}.git`)
-- **PR creation**: Needs a Gitea API token (see `reference/gitea-api.md`)
 
 ## Parameters
 
@@ -36,19 +35,17 @@ The token variable may be named `GITEA_TOKEN` rather than `DOOR43_TOKEN` dependi
 |-----------|---------|-------|
 | Content type | `ult`, `ust`, `tn` | User specifies |
 | Book | `PSA` | Standard abbreviation |
+| Chapter | `30` or `33-34` | Single chapter or range |
 | Verse range | `119:100-104` | Chapter:start-end |
-| Username | `deferredreward` | From user or `.env` |
+| Username | `deferredreward` | For commit message attribution |
 | Source file | `output/AI-ULT/PSA/PSA-119-100-104-aligned.usfm` | Locate in `output/` |
-| Create PR? | yes/no | User specifies |
-| PR base branch | working branch or master | User chooses when PR requested |
 
 ### Derived Values
 
 - **Repo**: `en_ult` / `en_ust` / `en_tn` (from content type)
-- **Working branch**: ULT/UST = `auto-{username}-{BOOK}`, TN = `{username}-tc-create-1`
+- **Staging branch**: `AI-{BOOK}-{CH}` for single chapter (e.g. `AI-PSA-030`, `AI-ISA-33`), `AI-{BOOK}-{CH1}-{CH2}` for range (e.g. `AI-PSA-030-031`). PSA uses 3-digit padding, all other books use 2-digit.
 - **Filename in repo**: `{BOOK_NUMBER}-{BOOK}.usfm` for ULT/UST, `tn_{BOOK}.tsv` for TN
   - Book numbers from `fetch_door43.py` BOOK_NUMBERS mapping (e.g., PSA -> `19-PSA.usfm`)
-- **PR branch** (when basing on master): Auto-derived like `psa-119-100-104`, or user-specified
 
 ## Workflow
 
@@ -56,9 +53,8 @@ The token variable may be named `GITEA_TOKEN` rather than `DOOR43_TOKEN` dependi
 
 Determine from the user or context:
 1. Content type (ult/ust/tn)
-2. Book and verse range
+2. Book and chapter (or range)
 3. Source file path (check `output/` directories)
-4. Whether to create a PR
 
 Load `.env` for `DOOR43_REPOS_PATH` and `DOOR43_USERNAME`:
 ```bash
@@ -112,26 +108,18 @@ fi
 git fetch origin
 ```
 
-**Create or checkout the working branch.** Check whether the branch already
-exists on the remote before deciding how to set it up. Never create a branch
-from scratch or from a local-only state.
+**Create the staging branch from origin/master.** Always start fresh from
+origin/master. Never resume a remote branch.
 
 ```bash
-BRANCH="auto-deferredreward-PSA"  # or {username}-tc-create-1 for TN
+BRANCH="AI-PSA-030"  # Derived from book + chapter(s)
 
 # Detach HEAD first so we can safely delete the local branch if it exists
 git checkout --detach 2>/dev/null
 git branch -D "$BRANCH" 2>/dev/null || true
 
-# Check if branch exists on remote
-if git ls-remote --heads origin "$BRANCH" | grep -q "$BRANCH"; then
-  # Branch exists remotely -- checkout from remote and merge latest master
-  git checkout -b "$BRANCH" "origin/$BRANCH"
-  git merge origin/master --no-edit
-else
-  # Branch doesn't exist -- create fresh from origin/master
-  git checkout -b "$BRANCH" origin/master
-fi
+# Create fresh from origin/master every time
+git checkout -b "$BRANCH" origin/master
 ```
 
 ### Step 3: Show Existing Content
@@ -190,40 +178,44 @@ Check:
 - Adjacent content untouched
 - No stray formatting issues
 
-### Step 6: Commit and Push
+### Step 6: Commit and Merge to Master
 
-Never commit to master. The working branch was set up in Step 2.
+Commit on the staging branch, then merge into master and push:
 
 ```bash
 cd "$REPOS_PATH/$REPO"
+
+# 1. Commit on the staging branch
 git add 19-PSA.usfm  # or tn_PSA.tsv
-git commit -m "Insert AI ULT for PSA 119:100-104"
-git push origin "$BRANCH"
+git commit -m "AI ULT for PSA 30 (attribution: deferredreward)"
+
+# 2. Verify the changes
+git diff HEAD~1 --stat
+
+# 3. Checkout master and fast-forward from origin
+git checkout master
+git merge origin/master --ff-only
+
+# 4. Merge the staging branch into master
+git merge "$BRANCH" --no-edit
+
+# 5. Push master
+git push origin master
+
+# 6. Clean up the staging branch
+git branch -D "$BRANCH"
 ```
 
-### Step 7: Optional PR Creation
-
-If the user wants a PR:
-
-**If basing on the working branch** (the common case): the content was already pushed to the working branch in step 6. The user works on that branch directly -- no PR needed for this case unless they want to merge the working branch into master.
-
-**If basing on master** (or any other branch): create a named branch from the current position and PR it:
-
+**If push fails** (remote advanced while we were working):
 ```bash
-PR_BRANCH="psa-119-100-104"  # auto-derived or user-specified
-git checkout -b "$PR_BRANCH"
-git push origin "$PR_BRANCH"
-
-python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
-  --repo "$REPO" \
-  --head "$PR_BRANCH" \
-  --base master \
-  --title "PSA 119:100-104 AI ULT"
+# Pull and retry once
+git pull origin master --no-edit
+git push origin master
 ```
 
-The script prints the PR URL on success.
-
-If the user doesn't have a `DOOR43_TOKEN`, direct them to create one at `https://git.door43.org/user/settings/applications` and add it to `.env`.
+If the retry also fails or there is a merge conflict: **stop immediately** and
+report the error to the admin. Never force-push. Include the repo name, book,
+chapter, and error output in the report.
 
 ## Scripts Reference
 
@@ -263,7 +255,7 @@ python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
 - `--references` filters to specific references from the source file
 
 ### gitea_pr.py
-Creates a pull request via the Gitea API.
+Creates a pull request via the Gitea API. Kept for manual use if PRs are ever needed.
 
 ```
 python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
@@ -296,6 +288,7 @@ script and `assemble_notes.py` both enforce this ordering.
 - Always show `git diff` after insertion
 - Backup files created automatically with `--backup`
 - Rollback: `git checkout -- <file>` if something goes wrong
+- Never force-push
 
 ## Book Number Reference
 
