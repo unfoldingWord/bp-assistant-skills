@@ -15,10 +15,14 @@ Spawn both alignment agents in parallel and wait for both to complete.
 - **Book**: 3-letter abbreviation (PSA, GEN, 2SA, etc.)
 - **Chapter**: number
 
+## Model
+
+This skill is coordination only -- run it as **haiku**. The alignment subagents require linguistic judgment -- spawn each with `model: "sonnet"`.
+
 ## What Happens
 
-1. Spawns `ult-align` subagent (runs ULT-alignment skill)
-2. Spawns `ust-align` subagent (runs UST-alignment skill)
+1. Spawns `ult-align` subagent (`model: "sonnet"`, runs ULT-alignment skill)
+2. Spawns `ust-align` subagent (`model: "sonnet"`, runs UST-alignment skill)
 3. Waits for both to complete
 4. Reports when both alignments are done
 

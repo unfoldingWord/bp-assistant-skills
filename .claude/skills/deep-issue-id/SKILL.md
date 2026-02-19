@@ -7,6 +7,10 @@ description: Multi-agent adversarial issue identification against human ULT/UST 
 
 Adversarial multi-agent issue identification against human-authored ULT/UST from repo master. Same analytical depth as initial-pipeline waves 2-3-4a, but skips AI text generation since the human text already exists.
 
+## Model
+
+The orchestrator itself handles merge logic -- run it as **sonnet**. Analyst subagents require deep Hebrew linguistic classification -- spawn with `model: "opus"`. The challenger does structured deduplication and ruling -- spawn with `model: "sonnet"`.
+
 ## Inputs
 
 - **Book**: 3-letter abbreviation (PSA, GEN, 2SA, etc.)
@@ -123,7 +127,7 @@ Do:
 
 ## Wave 2: Issue Identification (4 team analysts)
 
-Spawn 4 teammates (`subagent_type: "issue-identification"`, with `team_name` set). Each analyst reads:
+Spawn 4 teammates (`subagent_type: "issue-identification"`, `model: "opus"`, with `team_name` set). Each analyst reads:
 - Human ULT (`$TMP/ult_plain.usfm`)
 - Human UST (`$TMP/ust_plain.usfm`) if available
 - Alignment JSON (`$TMP/alignments.json`)
@@ -168,7 +172,7 @@ Wait for all 4 analysts to send their "file written" messages to team-lead. Do N
 
 ### Lite Mode: 2 Analysts
 
-If `--lite`, spawn 2 teammates instead of 4 (`subagent_type: "issue-identification"`, with `team_name` set). Same inputs, cross-reading, hold protocol, and output format as full mode.
+If `--lite`, spawn 2 teammates instead of 4 (`subagent_type: "issue-identification"`, `model: "opus"`, with `team_name` set). Same inputs, cross-reading, hold protocol, and output format as full mode.
 
 #### Structure Analyst (teammate name: "structure")
 Grammar and discourse structure, from macro to micro level. Discourse markers, participant tracking, paragraph structure, connectors between clauses, quotation structure, genre indicators, passives, abstract nouns, possession, pronouns, ellipsis, word-level syntax. Integrates abstract noun detection output; identifies passives during analysis (see figs-activepassive.md). Focuses on writing-*, grammar-connect-*, figs-activepassive, figs-abstractnouns, figs-possession, writing-pronouns, figs-ellipsis, and similar structural issues.
@@ -186,7 +190,7 @@ Wait for both analysts to send their "file written" messages. Do NOT mark Wave 2
 
 ## Wave 3: Challenge and Defend
 
-Spawn the Challenger as a 5th teammate (name: "challenger"). The Wave 2 analysts stay alive for this round.
+Spawn the Challenger as a 5th teammate (`model: "sonnet"`, name: "challenger"). The Wave 2 analysts stay alive for this round.
 
 ### Challenge Phase
 The Challenger:

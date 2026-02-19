@@ -107,7 +107,7 @@ Do:
 
 ## Wave 1: ULT Draft
 
-Spawn `ult-gen` as a teammate (`subagent_type: "general-purpose"`, with `team_name` set, name: "ult-gen").
+Spawn `ult-gen` as a teammate (`subagent_type: "general-purpose"`, `model: "opus"`, with `team_name` set, name: "ult-gen").
 
 The ULT agent:
 1. Translates Hebrew to literal English for the chapter (following ULT-gen skill)
@@ -131,7 +131,7 @@ UST is NOT generated here. UST needs the issue-id output to know what translatio
 
 ## Wave 2: Issue Identification (2 teammates)
 
-Spawn 2 teammates (`subagent_type: "issue-identification"`, with `team_name` set). Each analyst reads:
+Spawn 2 teammates (`subagent_type: "issue-identification"`, `model: "opus"`, with `team_name` set). Each analyst reads:
 - ULT draft from Wave 1 (`output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`)
 - Published TN index (via `build_tn_index.py --lookup`/`--issue`)
 
@@ -163,7 +163,7 @@ Wait for both analysts to send their "file written" messages. Do NOT proceed to 
 
 ### Heavy Mode: 4 Analysts
 
-If `--heavy`, spawn 4 teammates instead of 2 (`subagent_type: "issue-identification"`, with `team_name` set). Same inputs, cross-reading, hold protocol, and output format as default mode.
+If `--heavy`, spawn 4 teammates instead of 2 (`subagent_type: "issue-identification"`, `model: "opus"`, with `team_name` set). Same inputs, cross-reading, hold protocol, and output format as default mode.
 
 #### Discourse Analyst (teammate name: "discourse")
 Macro-level grammar and structure. Discourse markers, participant tracking, paragraph structure, connectors between clauses, quotation structure, genre indicators. Focuses on writing-* and grammar-connect-* issue types.
@@ -191,7 +191,7 @@ Wait for all 4 analysts to send their "file written" messages to team-lead. Do N
 
 ## Wave 3: Challenge and Defend
 
-Spawn the Challenger as a teammate (name: "challenger"). The Wave 2 analysts and ULT agent are all still alive.
+Spawn the Challenger as a teammate (`model: "sonnet"`, name: "challenger"). The Wave 2 analysts and ULT agent are all still alive.
 
 ### Challenge Phase
 The Challenger:
@@ -283,7 +283,7 @@ Before writing to output/issues/, verify ordering within each verse: first-to-la
 
 ## Wave 6: UST Generation
 
-Spawn `ust-gen` as a teammate (`subagent_type: "general-purpose"`, with `team_name` set, name: "ust-gen").
+Spawn `ust-gen` as a teammate (`subagent_type: "general-purpose"`, `model: "opus"`, with `team_name` set, name: "ust-gen").
 
 The UST agent reads:
 - The final revised ULT (draft 2) at `output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`
