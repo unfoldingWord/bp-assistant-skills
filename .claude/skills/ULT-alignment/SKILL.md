@@ -506,9 +506,9 @@ grep -oE '\\w [^|]+\|' aligned.usfm | sed 's/\\w //;s/|//' | tr '\n' ' '
 # Should match original ULT text word-for-word
 ```
 
-## Gemini Review (optional, default on)
+## Gemini Review (optional, activation only)
 
-After validation, run Gemini as an independent reviewer. Skip if `--skip-gemini` is passed.
+After validation, run Gemini as an independent reviewer. Only run if `--gemini` is explicitly passed. Skip by default.
 
 ```bash
 python3 .claude/skills/utilities/scripts/gemini_review.py --stage alignment-ult --book <BOOK> --chapter <CHAPTER>

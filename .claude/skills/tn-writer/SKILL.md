@@ -243,9 +243,9 @@ Read the assembled TSV alongside the aligned ULT. For each row, verify:
 
 Fix any issues found and rewrite the TSV row(s) if needed. This is a lightweight review pass, not a regeneration -- just catch structural problems the scripts can't judge.
 
-### Step 11: Gemini Review (optional, default on)
+### Step 11: Gemini Review (optional, activation only)
 
-Skip if `--skip-gemini` is passed.
+Skip unless `--gemini` is explicitly passed.
 
 ```bash
 python3 .claude/skills/utilities/scripts/gemini_review.py --stage notes --book <BOOK> --chapter <CHAPTER>

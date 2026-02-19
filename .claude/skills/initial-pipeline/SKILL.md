@@ -198,9 +198,9 @@ The UST agent:
 3. Writes alignment hints to `output/AI-UST/hints/<BOOK>/<BOOK>-<CH>.json` (per UST-gen Step 7.5)
 4. Sends message to team-lead: "UST complete"
 
-## Wave 7: Gemini Review (optional, default on)
+## Wave 7: Gemini Review (optional, activation only)
 
-Read `gemini-review-wave.md`. After Wave 6, run Gemini as independent reviewer. Skip if `--skip-gemini` is passed.
+Read `gemini-review-wave.md`. Only run if `--gemini` is explicitly passed. Skip by default.
 
 Pipeline runs three stages: `ult`, `issues`, and `ust`.
 
@@ -212,7 +212,7 @@ python3 .claude/skills/utilities/scripts/gemini_review.py --stage ust --book <BO
 
 ## Cleanup
 
-After Wave 7 (or Wave 6 if `--skip-gemini`):
+After Wave 7 (or Wave 6 if Gemini was not requested):
 1. Send `shutdown_request` to all live teammates (ult-gen, structure, rhetoric, ust-gen; and challenger if still alive)
 2. Wait for shutdown confirmations
 3. `TeamDelete` to clean up team resources

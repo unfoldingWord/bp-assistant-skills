@@ -120,9 +120,9 @@ Read `merge-procedure.md`. The orchestrator merges all findings, applies rulings
 Output: `output/issues/<BOOK>/<BOOK>-<CH>.tsv`
 With verse range: `output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv`
 
-## Gemini Review
+## Gemini Review (optional, activation only)
 
-Read `gemini-review-wave.md`. After the merge writes the final issues TSV, run Gemini as independent reviewer. Only the `issues` stage applies (deep-issue-id doesn't generate ULT/UST).
+Only run if `--gemini` is explicitly passed. Skip by default. If running: read `gemini-review-wave.md`. Only the `issues` stage applies (deep-issue-id doesn't generate ULT/UST).
 
 ```bash
 python3 .claude/skills/utilities/scripts/gemini_review.py --stage issues --book <BOOK> --chapter <CHAPTER>
