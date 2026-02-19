@@ -1,6 +1,6 @@
 ---
 name: repo-insert
-description: Insert generated ULT, UST, or TN content into Door43 repo clones, commit, merge to master, and push.
+description: Insert generated ULT, UST, TN, or TQ content into Door43 repo clones, commit, merge to master, and push.
 allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 ---
 
@@ -178,9 +178,10 @@ Check:
 - Adjacent content untouched
 - No stray formatting issues
 
-### Step 6: Commit and Merge to Master
+### Step 6: Commit, Push Branch, Create PR, and Merge
 
-Commit on the staging branch, then merge into master and push:
+Commit on the staging branch, push it, create a PR via the API, then merge it.
+Master is a protected branch on Door43 — direct pushes to master are rejected.
 
 ```bash
 cd "$REPOS_PATH/$REPO"
@@ -192,30 +193,27 @@ git commit -m "AI ULT for PSA 30 (attribution: deferredreward)"
 # 2. Verify the changes
 git diff HEAD~1 --stat
 
-# 3. Checkout master and fast-forward from origin
-git checkout master
-git merge origin/master --ff-only
-
-# 4. Merge the staging branch into master
-git merge "$BRANCH" --no-edit
-
-# 5. Push master
-git push origin master
-
-# 6. Clean up the staging branch
-git branch -D "$BRANCH"
+# 3. Push the staging branch
+git push origin "$BRANCH"
 ```
 
-**If push fails** (remote advanced while we were working):
+Then create, merge, and delete the branch in one command:
+
 ```bash
-# Pull and retry once
-git pull origin master --no-edit
-git push origin master
+python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
+  --repo "$REPO" --head "$BRANCH" --base master \
+  --title "AI TN for PSA 30 [deferredreward]" \
+  --merge
+# Prints: "PR #NNNN created / merged / branch deleted"
 ```
 
-If the retry also fails or there is a merge conflict: **stop immediately** and
-report the error to the admin. Never force-push. Include the repo name, book,
-chapter, and error output in the report.
+`--merge` creates the PR and immediately merges it. The head branch is deleted
+automatically after merge (pass `--no-delete` to skip).
+
+If the PR already exists (API 409), the script reuses it and still merges.
+
+If the merge fails or there is a conflict: **stop immediately** and report the
+error to the admin. Include the repo name, book, chapter, and error output.
 
 ## Scripts Reference
 
