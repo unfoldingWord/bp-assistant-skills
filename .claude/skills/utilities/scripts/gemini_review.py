@@ -75,7 +75,7 @@ def resolve_paths(stage: str, book: str, chapter: int) -> dict:
         },
         'notes': {
             'review_target': notes_tsv,
-            'cross_refs': [ult_usfm, ust_usfm],
+            'cross_refs': [],
             'guidelines': [note_style, prompt_templates],
         },
         'alignment-ult': {
