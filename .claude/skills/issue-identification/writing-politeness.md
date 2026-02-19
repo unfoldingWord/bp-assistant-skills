@@ -116,8 +116,9 @@ The expression "behold me" has different interpretations based on context:
 |-----------|--------|
 | Speaker referring to self in third person | About person shift, not politeness |
 | Addressing someone in third person | May overlap but 123person primary |
+| "your servant" in Psalms/prayers (self-reference) | Person shift is the translation concern |
 
-**Note**: figs-123person and writing-politeness can overlap. When "your servant" is used for humble self-reference AND involves third-person reference, writing-politeness is usually the primary issue since the politeness is the translation concern.
+**Note on overlap**: figs-123person and writing-politeness can overlap for "your servant." In Psalms and prayers where the psalmist addresses God as "your servant" meaning himself, use **figs-123person** -- the translation concern is the third-person self-reference, and published TNs consistently classify it that way. Reserve writing-politeness for narrative contexts where the social dynamics of the polite expression are the main concern (e.g., Jacob to Esau, Ruth to Boaz).
 
 ### Use figs-idiom for:
 | Situation | Reason |

@@ -235,6 +235,7 @@ The goal is coverage: it's easier for reviewers to delete a suggested issue than
 - **figs-explicit**: Covenant concepts (hesed, name, way) may need explanation
 - **figs-parallelism vs figs-doublet**: If synonymous expressions fall on different poetic lines, classify as parallelism not doublet. For 3-line parallel verses, one parallelism note covers all lines. Quote the full parallel lines, not just key words.
 - **figs-ellipsis with parallelism**: Check parallel lines for omitted words, but skip if ULT already supplies them in `{}`.
+- **figs-123person for "your servant"**: When the psalmist addresses God using "your servant" to refer to himself, flag as figs-123person (Type 1: self-reference for humility). This is common in Psalms (e.g., PSA 19:11, 19:13, 119:17, 119:49, 119:65, 119:122, 119:125, 119:135, 119:176) and needs its own note even when the verse also has another issue like figs-imperative or figs-metaphor. Do not use writing-politeness for this pattern in Psalms.
 
 **For Proverbs**: Check:
 - **figs-imperative**: Imperative + result = conditional ("Do X, and Y" = "If X, then Y")
