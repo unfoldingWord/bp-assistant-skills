@@ -34,14 +34,14 @@ all phases.
 
 ## Arguments
 
-`/makeBP <book> <chapter> <username> [--lite]`
+`/makeBP <book> <chapter> <username>`
 
 | Argument | Example | Description |
 |----------|---------|-------------|
 | book | psa | Book abbreviation (3-letter) |
 | chapter | 149 | Chapter number |
 | username | deferredreward | Door43 username for commit message attribution |
-| --lite | (flag) | Use 2 issue-id analysts instead of 4 (optional) |
+| *(no mode flags)* | | *Issue-id always uses 2 analysts* |
 
 ## Setup
 
@@ -81,8 +81,7 @@ Total subagents across the run: 10 (sequential phases, not all at once).
 ## Phase 1: Initial Pipeline
 
 Launch a **Task subagent** (`subagent_type: general-purpose`, `model: "sonnet"`) with a prompt to
-invoke `/initial-pipeline {BOOK} {CHAPTER}` (append `--lite` if the flag was
-passed to makeBP) and follow its SKILL.md. The initial-pipeline skill manages
+invoke `/initial-pipeline {BOOK} {CHAPTER}` and follow its SKILL.md. The initial-pipeline skill manages
 its own internal 6-wave team (ULT draft, adversarial issue-id,
 challenge/defend, merge, ULT revision, verification, UST generation).
 

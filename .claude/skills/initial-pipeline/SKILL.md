@@ -1,31 +1,26 @@
 ---
 name: initial-pipeline
-description: Orchestrate ULT-gen, issue-id, and UST-gen as a coordinated team for a chapter. 6-wave pipeline with adversarial issue identification and ULT feedback loop. Supports --heavy for 4-agent issue identification.
+description: Orchestrate ULT-gen, issue-id, and UST-gen as a coordinated team for a chapter. 6-wave pipeline with adversarial issue identification and ULT feedback loop.
 ---
 
 # Initial Pipeline Orchestrator
 
 Coordinates ULT-gen, issue-id, and UST-gen as a persistent team for a chapter. All agents are teammates that can interact across waves -- the ULT agent stays alive to revise its own work and answer queries, and the UST agent can consult anyone when it starts in Wave 6.
 
+This skill orchestrates issue-identification agents. Shared orchestration
+patterns are in sibling reference files (read each at the relevant stage):
+- `orchestration-conventions.md` (start)
+- `analyst-domains.md` (Wave 2)
+- `challenger-protocol.md` (Wave 3)
+- `merge-procedure.md` (Wave 4a)
+- `gemini-review-wave.md` (Wave 7)
+
+Analysts receive `.claude/agents/issue-identification.md` when spawned.
+
 ## Inputs
 
 - **Book**: 3-letter abbreviation (PSA, GEN, 2SA, etc.)
 - **Chapter**: number
-- **Mode**: `--heavy` (optional) -- use 4 specialist analysts instead of the default 2
-
-### Chapter Padding Convention
-
-Zero-pad the chapter number for all filenames: 3 digits for PSA (e.g., `061`), 2 digits for other books (e.g., `03`). Use `<CH>` below to mean the padded form. This matches makeBP's convention so output files are found by downstream phases.
-
-## Mode
-
-Default (no flag): 2 analysts ("structure" and "rhetoric").
-
-If `--heavy` is specified:
-- Wave 2 uses 4 specialist analysts ("discourse", "grammar", "figurative", "speech")
-- Wave 3 challenger reviews 4 TSVs instead of 2
-- Wave 5 verification contacts 4 analysts instead of 2 (if Wave 5 runs)
-- All other waves unchanged (ULT-gen, merge, ULT revision, UST-gen)
 
 ## Why Run Together
 
@@ -37,7 +32,7 @@ These three stages benefit from cross-checking:
 
 ## Team Setup
 
-Create a team for the full pipeline:
+Read `orchestration-conventions.md` for chapter padding, model assignments, and patience rules. Pipeline-specific: only send `shutdown_request` after Wave 6 output is written.
 
 ```
 TeamCreate "pipeline-<BOOK>-<CHAPTER>"
@@ -45,16 +40,12 @@ TeamCreate "pipeline-<BOOK>-<CHAPTER>"
 
 Team name pattern: `pipeline-PSA-061`, `pipeline-GEN-01`, etc.
 
-All agents below are spawned as teammates in this team.
-
 ### Working Directory
 
 ```bash
 TMP=tmp/pipeline-<BOOK>-<CHAPTER>
 mkdir -p $TMP
 ```
-
-All intermediate files below use `$TMP` as the working directory.
 
 ### Build Published TN Index
 
@@ -68,19 +59,6 @@ python3 .claude/skills/utilities/scripts/build_tn_index.py --issue figs-metaphor
 python3 .claude/skills/utilities/scripts/build_tn_index.py --lookup "tongue"
 ```
 
-## Orchestrator Patience
-
-Agents take time. Do not:
-- Send shutdown requests until ALL waves are complete and final outputs are written
-- Send duplicate messages or nudge too quickly
-- Proceed to the next wave until the current wave's agents confirm completion
-
-Do:
-- Wait for each agent's confirmation message before proceeding
-- Allow agents time to cross-read and interact
-- Only send shutdown_request after Wave 6 output is written
-- You may gently nudge agents, or ask what they are waiting for if they seem stuck
-
 ## Teammate Lifetimes
 
 | Teammate | Spawn | Active Work | Passive/Queryable | Shutdown |
@@ -88,18 +66,6 @@ Do:
 | ult-gen | Wave 1 | Waves 1, 4b | Waves 2-3, 5-6 | After cleanup |
 | structure | Wave 2 | Waves 2, 3, 5 | Wave 6 | After cleanup |
 | rhetoric | Wave 2 | Waves 2, 3, 5 | Wave 6 | After cleanup |
-| challenger | Wave 3 | Wave 3 | -- | After Wave 3 rulings |
-| ust-gen | Wave 6 | Wave 6 | -- | After cleanup |
-
-### Heavy Mode Lifetimes
-
-| Teammate | Spawn | Active Work | Passive/Queryable | Shutdown |
-|----------|-------|-------------|-------------------|----------|
-| ult-gen | Wave 1 | Waves 1, 4b | Waves 2-3, 5-6 | After cleanup |
-| discourse | Wave 2 | Waves 2, 3, 5 | Wave 6 | After cleanup |
-| grammar | Wave 2 | Waves 2, 3, 5 | Wave 6 | After cleanup |
-| figurative | Wave 2 | Waves 2, 3, 5 | Wave 6 | After cleanup |
-| speech | Wave 2 | Waves 2, 3, 5 | Wave 6 | After cleanup |
 | challenger | Wave 3 | Wave 3 | -- | After Wave 3 rulings |
 | ust-gen | Wave 6 | Wave 6 | -- | After cleanup |
 
@@ -129,118 +95,42 @@ Do NOT spawn Wave 2 until the ULT draft message is received.
 
 UST is NOT generated here. UST needs the issue-id output to know what translation issues exist so it can model handling them.
 
-## Wave 2: Issue Identification (2 teammates)
+## Wave 2: Issue Identification
 
-Spawn 2 teammates (`subagent_type: "issue-identification"`, `model: "opus"`, with `team_name` set). Each analyst reads:
+Read `analyst-domains.md` for domain assignments and cross-reading protocol. Spawn both analysts with `subagent_type: "issue-identification"`, `model: "opus"`, and `team_name` set.
+
+Each analyst reads:
 - ULT draft from Wave 1 (`output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`)
 - Published TN index (via `build_tn_index.py --lookup`/`--issue`)
 
-Each writes their TSV to `$TMP/wave2_*.tsv`. As they work, they read each other's output files for cross-checking. When they find genuine disagreements, they send DMs to the relevant analyst using SendMessage.
+Each writes their TSV to `$TMP/wave2_*.tsv`.
 
-Include in each analyst's prompt:
-- The output format guardrail (see Output Format section below)
-- Instruction to read the other analyst's TSV file as it appears
-- Instruction to use SendMessage for disagreements worth flagging
-- **Hold protocol**: After writing your TSV, send a message to team-lead confirming your file is written, then wait. You will receive:
-  - Challenges from the challenger agent (Wave 3) -- defend your classifications
-  - Verification requests from team-lead (Wave 5) -- re-check against revised ULT (only if ULT was revised)
-  - Queries from the UST agent (Wave 6) -- clarify issues as needed
+**Hold protocol**: After writing your TSV, send a message to team-lead confirming your file is written, then wait. You will receive:
+- Challenges from the challenger agent (Wave 3) -- defend your classifications
+- Verification requests from team-lead (Wave 5) -- re-check against revised ULT (only if ULT was revised)
+- Queries from the UST agent (Wave 6) -- clarify issues as needed
 - Do not mark your task as completed until you receive a shutdown request
-
-### Structure Analyst (teammate name: "structure")
-Grammar and discourse structure, from macro to micro level. Discourse markers, participant tracking, paragraph structure, connectors between clauses, quotation structure, genre indicators, passives, abstract nouns, possession, pronouns, ellipsis, word-level syntax. Integrates automated detection output first. Focuses on writing-*, grammar-connect-*, figs-activepassive, figs-abstractnouns, figs-possession, writing-pronouns, figs-ellipsis, and similar structural issues.
-
-Output: `$TMP/wave2_structure.tsv`
-
-### Rhetoric Analyst (teammate name: "rhetoric")
-Figures of speech, speech acts, and cultural references. Metaphor, metonymy, simile, synecdoche, personification, merism, hendiadys, doublet, idiom, rhetorical questions, imperatives, exclamations, irony, hyperbole, litotes, euphemism, poetry markers, parallelism. Cross-references the biblical imagery classification lists in figs-metonymy.md and figs-metaphor.md.
-
-Output: `$TMP/wave2_rhetoric.tsv`
-
-As you work, read the other analyst's TSV file when it appears. If you find the same phrase classified differently, send a DM to flag the disagreement.
 
 Wait for both analysts to send their "file written" messages. Do NOT proceed to Wave 3 until both files exist.
 
-### Heavy Mode: 4 Analysts
-
-If `--heavy`, spawn 4 teammates instead of 2 (`subagent_type: "issue-identification"`, `model: "opus"`, with `team_name` set). Same inputs, cross-reading, hold protocol, and output format as default mode.
-
-#### Discourse Analyst (teammate name: "discourse")
-Macro-level grammar and structure. Discourse markers, participant tracking, paragraph structure, connectors between clauses, quotation structure, genre indicators. Focuses on writing-* and grammar-connect-* issue types.
-
-Output: `$TMP/wave2_discourse.tsv`
-
-#### Grammar Analyst (teammate name: "grammar")
-Micro-level grammar within clauses. Passives, abstract nouns, possession, pronouns, ellipsis, word-level syntax. Focuses on figs-activepassive, figs-abstractnouns, figs-possession, writing-pronouns, figs-ellipsis, and similar word/phrase-level issues.
-
-Output: `$TMP/wave2_grammar.tsv`
-
-#### Figurative Language Analyst (teammate name: "figurative")
-Figures of speech. Metaphor, metonymy, simile, synecdoche, personification, merism, hendiadys, doublet, idiom. Cross-references the biblical imagery classification lists in figs-metonymy.md and figs-metaphor.md. Focuses on figs-* issue types.
-
-Output: `$TMP/wave2_figurative.tsv`
-
-#### Speech Acts & Literary Analyst (teammate name: "speech")
-Rhetorical devices and speech acts. Rhetorical questions, imperatives, exclamations, irony, hyperbole, litotes, euphemism, poetry markers, parallelism. Focuses on figs-rquestion, figs-imperative, figs-exclamations, figs-hyperbole, writing-poetry, and figs-parallelism.
-
-Output: `$TMP/wave2_speech.tsv`
-
-Each agent has a primary domain but overlaps with the others. When agents identify the same phrase, they should compare classifications. Disagreement is productive -- it's better to surface a conflict than to let a wrong classification pass unchallenged.
-
-Wait for all 4 analysts to send their "file written" messages to team-lead. Do NOT proceed to Wave 3 until all 4 files exist.
-
 ## Wave 3: Challenge and Defend
 
-Spawn the Challenger as a teammate (`model: "sonnet"`, name: "challenger"). The Wave 2 analysts and ULT agent are all still alive.
+Read `challenger-protocol.md`. Spawn the challenger (`model: "sonnet"`, name: "challenger"). The Wave 2 analysts and ULT agent are all still alive.
 
-### Challenge Phase
-The Challenger:
-1. Reads all wave 2 TSVs
-2. Identifies issues to challenge (misclassifications, missed overlaps, ULT coherence failures)
-3. Groups challenges by analyst
-4. Sends one batch DM to each analyst with their challenges
-5. DMs `ult-gen` to ask about specific rendering decisions when relevant (e.g., "In v3 you rendered the construct chain as X -- was that a deliberate structural preservation?")
+Pipeline-specific additions:
+- The challenger also DMs `ult-gen` to ask about specific rendering decisions when relevant (e.g., "In v3 you rendered the construct chain as X -- was that a deliberate structural preservation?")
+- **ULT coherence heuristic**: If Hebrew has a named grammatical structure (construct chain, passive, etc.), ULT should preserve it literally. If it's just word order with no structural name, ULT can use natural English.
+- The challenger notes any ULT revisions needed (passed to orchestrator for Wave 4b).
 
-Challenge criteria:
-- Is this the right issue type? Could it be a commonly confused alternative?
-- Tests: metaphor vs metonymy, doublet vs hendiadys, idiom vs metaphor, doublet vs parallelism
-- Cross-references issues_resolved and the biblical imagery classification lists
-- Does NOT find new issues -- only challenges existing ones
-- Pays special attention to disagreements surfaced in wave 2
-- Resolves disagreements between Wave 2 agents
-- Identifies duplicates where multiple agents flagged the same issue
-- **ULT coherence check**: For each issue, does it match what the AI ULT actually renders? Uses DMs to `ult-gen` to understand rendering intent. If the ULT rendering already handles a construct naturally, flag the ULT for adjustment or drop the note as appropriate.
-  - Heuristic: If Hebrew has a named grammatical structure (construct chain, passive, etc.), ULT should preserve it literally. If it's just word order with no structural name, ULT can use natural English.
-- **Grammar issues are independent**: Abstract nouns, passives (figs-abstractnouns,
-  figs-activepassive) are script-detected and AI-verified. They cannot be subsumed
-  by, merged into, or dropped in favor of figurative issues on the same phrase.
-  Keep both layers. Other grammar-level issues (figs-possession, figs-ellipsis,
-  figs-nominaladj) should also generally not be dropped or merged with figurative
-  issues.
-
-### Defend Phase
-Each analyst wakes up, reads their challenges, and sends a defense DM back to the Challenger. The ULT agent responds to any queries about its rendering decisions. One round only -- no infinite back-and-forth.
-
-### Ruling Phase
-The Challenger reads all defenses and ULT agent responses, makes final rulings: KEEP, DROP, RECLASSIFY, or MERGE_DUPLICATE for each challenged issue. Also notes any ULT revisions needed (passed to the orchestrator for Wave 4b).
-
-Output: `$TMP/wave3_challenges.tsv` (all items with resolutions)
-
-After writing rulings, the Challenger sends a DM to each analyst: "Rulings complete." (Analysts continue holding for Wave 5.)
+After writing rulings, the challenger sends "Rulings complete" to each analyst. Analysts continue holding for Wave 5.
 
 Send `shutdown_request` to the challenger after rulings are written -- it has no further role.
 
+Output: `$TMP/wave3_challenges.tsv`
+
 ## Wave 4a: Merge
 
-Orchestrator merges all findings:
-- Merges all wave 2 findings
-- Applies wave 3 challenge outcomes (rulings override wave 2)
-- Resolves remaining conflicts
-- Deduplicates (same phrase, same issue type only -- different issue types on the same phrase are not duplicates)
-- Grammar issues (abstract nouns, passives, possession, ellipsis, nominaladj) always survive alongside figurative issues on the same phrase
-- Orders: first-to-last by ULT position within each verse, longest-to-shortest when phrases nest
-- Enforces the output format guardrail (brief hints only)
-- Writes `$TMP/merged_issues.tsv`
+Read `merge-procedure.md`. Orchestrator merges all findings. Writes `$TMP/merged_issues.tsv`.
 
 ## Wave 4b: ULT Revision
 
@@ -274,7 +164,7 @@ Each analyst:
 4. Writes verification notes to `$TMP/wave5_*.tsv`
 5. Sends message to team-lead: "Verification complete"
 
-Wait for all analysts to confirm (2 default, 4 in heavy mode), then update the merged issues based on verification feedback.
+Wait for both analysts to confirm, then update the merged issues based on verification feedback.
 
 Final issues written to `output/issues/<BOOK>/<BOOK>-<CH>.tsv`.
 
@@ -299,7 +189,7 @@ These queries are optional -- only when the UST agent genuinely needs clarificat
 
 Include in the UST agent's prompt:
 - Invoke the UST-gen skill for the chapter
-- You have access to the ULT agent and the issue analysts as teammates (2 default, 4 in heavy mode). If the issues TSV or ULT text leaves something ambiguous, DM them to clarify before guessing.
+- You have access to the ULT agent and the issue analysts as teammates. If the issues TSV or ULT text leaves something ambiguous, DM them to clarify before guessing.
 - UST models how to handle each identified issue -- it shows the translator what the text means in natural language, with figures unpacked, implicit info made explicit, passives made active, etc.
 
 The UST agent:
@@ -310,7 +200,9 @@ The UST agent:
 
 ## Wave 7: Gemini Review (optional, default on)
 
-After Wave 6, run Gemini as an independent reviewer for ULT, issues, and UST. Skip if `--skip-gemini` is passed.
+Read `gemini-review-wave.md`. After Wave 6, run Gemini as independent reviewer. Skip if `--skip-gemini` is passed.
+
+Pipeline runs three stages: `ult`, `issues`, and `ust`.
 
 ```bash
 python3 .claude/skills/utilities/scripts/gemini_review.py --stage ult --book <BOOK> --chapter <CHAPTER>
@@ -318,18 +210,10 @@ python3 .claude/skills/utilities/scripts/gemini_review.py --stage issues --book 
 python3 .claude/skills/utilities/scripts/gemini_review.py --stage ust --book <BOOK> --chapter <CHAPTER>
 ```
 
-For each stage:
-1. If exit code 2 (Gemini failed/rate-limited): log and continue, don't block
-2. If exit code 0: no findings, continue
-3. If exit code 1: read `output/review/<BOOK>/<BOOK>-<CH>-{stage}-gemini.md`
-4. For each finding: check it against the actual guideline doc. If legit, fix the output file. If false positive, ignore.
-
-This is an evaluate-and-fix loop -- Claude reads each finding, judges it, and applies corrections where warranted. Not a pass-through report.
-
 ## Cleanup
 
 After Wave 7 (or Wave 6 if `--skip-gemini`):
-1. Send `shutdown_request` to all live teammates (default: ult-gen, structure, rhetoric, ust-gen; in heavy mode: ult-gen, discourse, grammar, figurative, speech, ust-gen; and challenger if still alive)
+1. Send `shutdown_request` to all live teammates (ult-gen, structure, rhetoric, ust-gen; and challenger if still alive)
 2. Wait for shutdown confirmations
 3. `TeamDelete` to clean up team resources
 
@@ -339,37 +223,6 @@ After Wave 7 (or Wave 6 if `--skip-gemini`):
 2. `output/AI-UST/<BOOK>/<BOOK>-<CH>.usfm` -- UST (informed by issues)
 3. `output/AI-UST/hints/<BOOK>/<BOOK>-<CH>.json` -- alignment hints from UST generator
 4. `output/issues/<BOOK>/<BOOK>-<CH>.tsv` -- verified issues (post-ULT-revision check)
-
-## Output Format (Firewall)
-
-The explanation column in issue TSVs is a brief classification hint. It describes WHY the issue exists, not HOW to handle it. This applies to every agent (Wave 2 analysts, Challenger, and Merger).
-
-Rules:
-- 1-10 words maximum
-- Why the issue exists, not how to handle it
-- No "If your language..." phrasing
-- No "Alternate translation:" suggestions
-- No translation note templates or proto-notes
-- No advice to the translator -- that is the TN writer's job
-
-Good:
-```
-metonymy - lip represents speech
-rhetorical question - declares certainty of punishment
-abstract noun - could be verb
-doublet - two words for emphasis
-metaphor - refuge as physical shelter
-passive - agent is God
-```
-
-Bad (never produce these):
-```
-If your language does not use abstract nouns, you could express "salvation" as a verb
-Alternate translation: "the things he says"
-This is a metaphor. The psalmist speaks of God as if he were a fortress.
-```
-
-Include these rules in every agent prompt (Wave 2 analysts, Challenger batch, Merger).
 
 ## Flow
 
@@ -412,51 +265,8 @@ Wave 6:   ust-gen (teammate) ───── reads final ULT + issues
           |
           | "UST complete"
           v
-Cleanup:  shutdown_request all -> TeamDelete
-```
-
-### Heavy Mode Flow
-
-```
-Setup:    TeamCreate "pipeline-<BOOK>-<CHAPTER>"
-          mkdir working directory, build TN index
-
-Wave 1:   ult-gen (teammate) ──── generates ULT draft, holds
+Wave 7:   Gemini review (ult, issues, ust stages)
           |
-          | "ULT draft written"
-          v
-Wave 2:   discourse ──────────┐
-          grammar ────────────┤  (4 teammates, cross-read files,
-          figurative ─────────┤   DM on disagreements, hold)
-          speech ─────────────┘
-          |
-          | all 4 "file written"
-          v
-Wave 3:   challenger (teammate) ── challenges analysts via DM
-          analysts defend ──────── one round of defend/respond
-          challenger <-> ult-gen ── queries about rendering intent
-          challenger rules ─────── writes rulings, notifies analysts
-          |
-          v
-Wave 4a:  orchestrator merges ──── (applies rulings, deduplicates)
-Wave 4b:  team-lead -> ult-gen ─── (revision instructions via DM)
-          ult-gen revises ──────── (writes ULT draft 2)
-          |
-          |── if ULT revised ──────────────────────────┐
-          |                                             v
-          |                              Wave 5: analysts re-check
-          |                                             |
-          |── if ULT unchanged ─── skip Wave 5 ────────┤
-          |                                             |
-          v                                             v
-          orchestrator writes final issues TSV
-
-Wave 6:   ust-gen (teammate) ───── reads final ULT + issues
-          ust-gen <-> ult-gen ──── (optional: rendering queries)
-          ust-gen <-> analysts ─── (optional: issue clarification)
-          ust-gen writes UST
-          |
-          | "UST complete"
           v
 Cleanup:  shutdown_request all -> TeamDelete
 ```
