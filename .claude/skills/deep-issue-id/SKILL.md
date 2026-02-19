@@ -103,6 +103,8 @@ python3 .claude/skills/utilities/scripts/build_tn_index.py --issue figs-metaphor
 python3 .claude/skills/utilities/scripts/build_tn_index.py --lookup "tongue"
 ```
 
+**Precedent evidence is positive-only.** Finding published TN examples supports a classification. Finding *none* is only meaningful if the book/chapter you searched actually has published TNs. Psalms is partially published — many chapters (including PSA 119) have no published TNs because AI drafting was adopted before they were completed. Never cite "no results in this chapter" as evidence against a classification without first confirming that chapter has published data.
+
 ## Team Setup
 
 Call `TeamCreate` directly as the orchestrator (it is a tool call, not a shell command, not delegated to a subagent):

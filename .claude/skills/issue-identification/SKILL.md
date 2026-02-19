@@ -345,6 +345,8 @@ python3 .claude/skills/utilities/scripts/build_tn_index.py --issue figs-metaphor
 
 Source: `data/cache/tn_index.json` (built from `data/published-tns/`)
 
+**Precedent evidence is positive-only.** Finding examples in the index supports a classification. Finding none is only meaningful if the chapter you searched actually has published TNs. Psalms is partially published — many chapters have no published TNs because AI drafting was adopted before they were completed. Do not cite "no results in this chapter" as evidence against a classification.
+
 ### Issue Decisions
 Accumulated classification decisions from prior runs. Check before re-deriving:
 
