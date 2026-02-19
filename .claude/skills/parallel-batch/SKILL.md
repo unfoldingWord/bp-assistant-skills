@@ -7,6 +7,10 @@ description: Split a long chapter's issue TSV into verse-range chunks, run tn-wr
 
 Split a chapter's issue TSV into verse-range chunks, run `/tn-writer` on each chunk in parallel via Task subagents, then merge the output notes TSVs into a single file.
 
+## Model
+
+This orchestrator only splits and merges -- run it as **haiku**. Each tn-writer chunk requires deep reasoning -- spawn with `model: "opus"`.
+
 ## When to Use
 
 - Long chapters where running tn-writer on the full issue TSV would exceed context or take too long
@@ -47,6 +51,7 @@ For each chunk file from Step 1, launch a Task subagent:
 Task: "Write notes for <BOOK> <CH>:<START>-<END>"
 Prompt: "/tn-writer <BOOK> <CH>:<START>-<END> --issues output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv"
 subagent_type: "general-purpose"
+model: "opus"
 ```
 
 Launch all subagents in parallel (multiple Task calls in a single message). Each subagent:

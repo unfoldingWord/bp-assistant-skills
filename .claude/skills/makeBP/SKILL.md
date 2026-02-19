@@ -7,6 +7,18 @@ description: End-to-end Book Package for a chapter. Orchestrates ULT, issues, US
 
 Generate a complete Book Package for a single chapter and push to Door43.
 
+## Model Assignments
+
+| Phase | Skill | Model | Rationale |
+|-------|-------|-------|-----------|
+| 1 | initial-pipeline | sonnet | Coordination + Wave 4a merge logic |
+| 2 | chapter-intro | sonnet | Short templated writing, medium complexity |
+| 2 | tq-writer | sonnet | Updating existing Q&A, constrained task |
+| 2 | ULT-alignment | sonnet | Rule-based with linguistic judgment |
+| 2 | UST-alignment | sonnet | Hints-guided phrase mapping |
+| 3 | tn-writer | **opus** | Primary deliverable; Hebrew quote matching and AT writing require deep reasoning |
+| 4 | repo-insert (x4) | **haiku** | Pure git operations, no reasoning needed |
+
 ## Context Window Strategy
 
 The orchestrator (this agent) stays lightweight. Every generation phase runs as
@@ -68,7 +80,7 @@ Total subagents across the run: 10 (sequential phases, not all at once).
 
 ## Phase 1: Initial Pipeline
 
-Launch a **Task subagent** (`subagent_type: general-purpose`) with a prompt to
+Launch a **Task subagent** (`subagent_type: general-purpose`, `model: "sonnet"`) with a prompt to
 invoke `/initial-pipeline {BOOK} {CHAPTER}` (append `--lite` if the flag was
 passed to makeBP) and follow its SKILL.md. The initial-pipeline skill manages
 its own internal 6-wave team (ULT draft, adversarial issue-id,
@@ -104,12 +116,12 @@ Launch four **Task subagents** in parallel (`subagent_type: general-purpose`).
 Each agent gets a prompt telling it to invoke the skill and providing all
 file paths. Each runs in its own context window.
 
-| Agent | Skill to invoke | Key inputs | Output |
-|-------|----------------|-----------|--------|
-| Chapter Intro | `/chapter-intro {BOOK} {CHAPTER}` | ULT, UST, issues from Phase 1 | Inserts intro row into `output/issues/{BOOK}/{BOOK}-{CH}.tsv` |
-| TQ Writer | `/tq-writer` | ULT, UST | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` |
-| ULT Alignment | `/ULT-alignment` | `output/AI-ULT/{BOOK}/{BOOK}-{CH}.usfm` + Hebrew source | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` |
-| UST Alignment | `/UST-alignment` | `output/AI-UST/{BOOK}/{BOOK}-{CH}.usfm` + Hebrew source + `output/AI-UST/hints/{BOOK}/{BOOK}-{CH}.json` | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` |
+| Agent | Skill to invoke | Model | Key inputs | Output |
+|-------|----------------|-------|-----------|--------|
+| Chapter Intro | `/chapter-intro {BOOK} {CHAPTER}` | sonnet | ULT, UST, issues from Phase 1 | Inserts intro row into `output/issues/{BOOK}/{BOOK}-{CH}.tsv` |
+| TQ Writer | `/tq-writer` | sonnet | ULT, UST | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` |
+| ULT Alignment | `/ULT-alignment` | sonnet | `output/AI-ULT/{BOOK}/{BOOK}-{CH}.usfm` + Hebrew source | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` |
+| UST Alignment | `/UST-alignment` | sonnet | `output/AI-UST/{BOOK}/{BOOK}-{CH}.usfm` + Hebrew source + `output/AI-UST/hints/{BOOK}/{BOOK}-{CH}.json` | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` |
 
 **Each agent prompt should include:**
 - Book, chapter, and padded chapter values
@@ -147,9 +159,9 @@ quotes directly from the aligned ULT instead of roundtripping through
 `lang_convert.js`. This eliminates QUOTE_NOT_FOUND errors caused by differences
 between our AI-generated ULT and the published Door43 master.
 
-| Agent | Skill to invoke | Key inputs | Output |
-|-------|----------------|-----------|--------|
-| TN Writer | `/tn-writer` | `output/issues/{BOOK}/{BOOK}-{CH}.tsv` (with intro), `/tmp/claude/ult_plain.usfm`, `/tmp/claude/ust_plain.usfm`, `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` |
+| Agent | Skill to invoke | Model | Key inputs | Output |
+|-------|----------------|-------|-----------|--------|
+| TN Writer | `/tn-writer` | **opus** | `output/issues/{BOOK}/{BOOK}-{CH}.tsv` (with intro), `/tmp/claude/ult_plain.usfm`, `/tmp/claude/ust_plain.usfm`, `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` |
 
 Wait for this agent plus any remaining Phase 2 agents to complete before
 proceeding.
@@ -157,7 +169,7 @@ proceeding.
 ## Phase 4: Repo Insert (Push to Master)
 
 After all agents complete, insert each content type into Door43 repos.
-Launch four **Task subagents** in parallel (each touches a different repo).
+Launch four **Task subagents** in parallel (`model: "haiku"` -- pure git operations, no reasoning needed).
 
 All repos are under the **unfoldingWord** organization on Door43. Never push
 to a personal fork.
