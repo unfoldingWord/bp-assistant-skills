@@ -197,8 +197,8 @@ def main():
     parser.add_argument('--output', help='Override output file path')
     parser.add_argument('--model', default='gemini-2.5-flash',
                         help='Gemini model (default: gemini-2.5-flash)')
-    parser.add_argument('--timeout', type=int, default=180,
-                        help='Subprocess timeout in seconds (default: 180)')
+    parser.add_argument('--timeout', type=int, default=600,
+                        help='Subprocess timeout in seconds (default: 600)')
 
     args = parser.parse_args()
     book = args.book.upper()
