@@ -63,7 +63,67 @@ grep "<Strong's number>" data/quick-ref/ust_decisions.csv 2>/dev/null
 
 If the editor's preference already matches what's in memory, skip it -- the system is already calibrated. Only write genuinely new findings.
 
-### Step 5: Write to memory
+### Step 5: Write full comparison report
+
+Save to `output/editor-compare/{BOOK}/{BOOK}-{CHAPTER:03d}-{type}.md` with sections:
+- Summary stats (total verses, changed count, unchanged count)
+- Editor comments (if present from editor-feedback file)
+- Vocabulary preferences (with Strong's where identified)
+- Structural preferences
+- Bracket changes
+- Voice/form changes
+
+Do NOT write to glossary, quick-ref, or any memory files yet. That happens after the editor approves in the adjudication protocol below.
+
+### Step 6: Format discrepancy list for Zulip
+
+Produce a numbered list of discrepancies for the editor to review. Rank by frequency/impact -- patterns appearing in 3+ verses first, then 2, then 1.
+
+Each item shows:
+1. **Number** (sequential)
+2. **Verse reference** (chapter:verse; include chapter if multi-chapter review)
+3. **Side-by-side**: AI original | Editor edit (only the changed phrase, not the full verse)
+4. **One-line hypothesis** about why the editor changed it
+5. **Category tag**: vocabulary / structure / brackets / voice
+
+Example format:
+```
+1. **147:3** "he heals" -> "he is the one who heals" -- adds emphasis on agency (structure)
+2. **147:5** "great" -> "mighty" -- stronger rendering of H1419 gadol (vocabulary, 3x in ch)
+3. **147:8** "{rain}" -> "{showers}" -- bracket wording preference (brackets)
+```
+
+End with:
+> Reply with which items to ignore (e.g. "not 2, 8"), mark as situational (e.g. "10 is situational"), or say "all good" to accept all. No @-mention needed.
+
+Do NOT write to memory yet. Wait for the editor's response.
+
+## Adjudication Protocol (Multi-Turn)
+
+This skill runs as a multi-turn conversation. The system prompt handles the overall protocol; the steps below describe what to do at each turn.
+
+### Turn 1 -- Present discrepancy list
+
+Run Steps 1-6 above. Present the numbered discrepancy list in Zulip. Do not write to any memory/guidance files.
+
+### Turn 2 -- Parse editor response and confirm
+
+Parse the editor's natural language response. Supported patterns:
+- "don't do 2, 8" / "not 2, 8" / "ai was right on 2, 8" -- ignore those items (keep AI version)
+- "all good" / "yes to all" -- accept all human edits
+- "for 10, that's situational" / "10 is situational" -- flag as context-dependent
+- "1, 3-7, 9 only" -- accept only those, ignore the rest
+
+Default rule: if an item is not explicitly mentioned as ignored or situational, the human edit is accepted.
+
+Confirm back in plain language:
+> Applying human edits for items 1, 3-7, 9. Ignoring 2, 8 (keeping AI version, no glossary update). Item 10 flagged as situational. Anything to adjust?
+
+Wait for the editor to approve before proceeding.
+
+### Turn 3 -- Execute after approval
+
+**For accepted items** -- write to memory using the logic below:
 
 Ensure the quick-ref directory exists and CSV files have headers:
 
@@ -82,31 +142,32 @@ If `data/quick-ref/ust_decisions.csv` doesn't exist, create it with header:
 Strong,Hebrew,Rendering,Book,Context,Notes,Date
 ```
 
-**ULT vocabulary preferences** -- append to `data/glossary/project_glossary.md` Words table:
+ULT vocabulary preferences -- append to `data/glossary/project_glossary.md` Words table:
 ```
 | <Hebrew> | <Strong's> | <editor rendering> | <AI rendering> | editor <BOOK> <CH>:<VS> |
 ```
 
-**ULT decisions with Strong's** -- append to `data/quick-ref/ult_decisions.csv`:
+ULT decisions with Strong's -- append to `data/quick-ref/ult_decisions.csv`:
 ```
 <Strong's>,<Hebrew>,<editor rendering>,<BOOK>,<CH>:<VS> context description,<notes>,<date>
 ```
 
-**UST decisions with Strong's** -- append to `data/quick-ref/ust_decisions.csv` (same format):
+UST decisions with Strong's -- append to `data/quick-ref/ust_decisions.csv` (same format):
 ```
 <Strong's>,<Hebrew>,<editor rendering>,<BOOK>,<CH>:<VS> context description,<notes>,<date>
 ```
 
-### Step 6: Write comparison report
+**For ignored items** (AI was right) -- log to `data/editor-feedback/proofreader_patterns.csv`:
+```
+<date>,<BOOK>,<CH>,<VS>,<Strong's>,<Hebrew>,<proofreader edit>,<AI original>,<hypothesis>,ignored
+```
+This surfaces proofreader patterns without corrupting the glossary/quick-ref.
 
-Save to `output/editor-compare/{BOOK}/{BOOK}-{CHAPTER:03d}-{type}.md` with sections:
-- Summary stats (total verses, changed count, unchanged count)
-- Editor comments (if present from editor-feedback file)
-- Vocabulary preferences (with Strong's where identified)
-- Structural preferences
-- Bracket changes
-- Voice/form changes
-- Memory updates applied (list what was written to glossary/quick-ref)
+**For situational items** -- add conditional entries with context:
+- In quick-ref: add a notes field like "use X when Y, use Z when W"
+- In glossary: note the condition in the source column
+
+Report what was done (how many items updated, how many logged, how many situational). End with "Review complete."
 
 
 ## Multi-Chapter Mode
@@ -146,16 +207,15 @@ Read all per-chapter comparison JSONs together. Perform cross-chapter pattern de
 
 1. **Count occurrences**: For each vocabulary/structure preference, count how many chapters show it
 2. **Confidence levels**:
-   - **High** (3+ chapters): Strong pattern, write to memory
-   - **Medium** (2 chapters): Likely pattern, write to memory
-   - **Low** (1 chapter): Note only, do not write to memory
+   - **High** (3+ chapters): Strong pattern
+   - **Medium** (2 chapters): Likely pattern
+   - **Low** (1 chapter): Note only
 3. **Check existing memory**: Skip preferences already captured in glossary/quick-ref
-4. **Write memory updates**: For high and medium confidence only (Steps 4-5 from single-chapter mode)
-5. **Write consolidated report**: Save to `output/editor-compare/{BOOK}/{BOOK}-multi-{type}.md` with:
+4. **Write consolidated report**: Save to `output/editor-compare/{BOOK}/{BOOK}-multi-{type}.md` with:
    - Per-chapter summaries (changed/unchanged counts)
    - Cross-chapter patterns with confidence levels and chapter citations
-   - Memory updates applied
-   - Low-confidence observations (noted but not written to memory)
+   - Low-confidence observations
+5. **Present discrepancy list**: Use Step 6 format (numbered, ranked by frequency). Then follow the Adjudication Protocol for Turns 2-3. Memory writes only happen after editor approval.
 
 ## Key Design Points
 
