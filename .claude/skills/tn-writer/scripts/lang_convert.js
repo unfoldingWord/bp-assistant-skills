@@ -11,7 +11,7 @@
  *   node lang_convert.js roundtrip <bible_link> <book_code> <tsv_content_or_->
  */
 
-const CONVERTER_PATH = '/home/bmw/Documents/dev/tsv-quote-converters/dist/tsv-quote-converters.mjs';
+const CONVERTER_PATH = '/workspace/.claude/skills/tn-writer/scripts/tsv-quote-converters.mjs';
 
 const fs = require('fs');
 

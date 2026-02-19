@@ -1,7 +1,7 @@
 ---
 name: ULT-gen
 
-description: Transform Hebrew USFM into unfoldingWord Literal Text (ULT) - a highly literal translation that preserves the form and structure of the original Hebrew while producing clear English.
+description: Transform Hebrew USFM into unfoldingWord Literal Text (ULT), preserving the form and structure of the original Hebrew. Use when asked to translate Hebrew to ULT, generate literal text, or create ULT for a chapter.
 
 allowed-tools: Read, Grep, Glob, Bash
 ---

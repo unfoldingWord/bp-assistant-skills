@@ -1,6 +1,6 @@
 ---
 name: tn-writer
-description: Generate translation notes from issue identification TSV. Runs deterministic preparation script then AI generates notes following the style guide.
+description: Generate translation notes from issue identification TSV. Uses prompt-over-code: scripts handle mechanical extraction, prompts handle semantic content. Use when asked to write translation notes, create TN from issues, or generate notes for a chapter.
 ---
 
 # Translation Note Writer
@@ -11,7 +11,7 @@ Generate translation notes from issue identification output. A preparation scrip
 
 - Input TSV in `output/issues/` (from issue-identification)
 - Plain ULT and UST USFM files (from issue-identification or fetched fresh)
-- `tsv-quote-converters` built at `/home/bmw/Documents/dev/tsv-quote-converters/`
+- The tsv-quote-converters tool (path resolved automatically by the script)
 
 ## Workflow
 
@@ -257,6 +257,13 @@ python3 .claude/skills/utilities/scripts/gemini_review.py --stage notes --book <
 4. For each finding: check it against the note-style-guide and prompt-templates. If legit, fix the notes TSV. If false positive, ignore.
 
 This is complementary to tn-quality-check -- Gemini does semantic/judgment review while the quality check script handles mechanical validation.
+
+## Troubleshooting
+
+- **Empty orig_quote after Step 2c**: The Hebrew quote extraction found no match. Check that the issue row's Book/Chapter/Verse matches the Hebrew USFM. Re-run with `--verbose` to see candidate matches.
+- **verify_at_fit.py ERRORS**: The alignment token check failed. Common causes: stale ULT (re-fetch with fetch_door43.py), or orig_quote spans a verse boundary. Fix the quote and re-run verification.
+- **assemble_notes.py missing items**: Rows were filtered out during assembly. Check that every row has a non-empty SupportReference and that the issue type matches a known TA article.
+- **QUOTE_NOT_FOUND from lang_convert.js**: The Greek/Hebrew quote could not be located in the source text. Verify the quote is copied exactly from the USFM (including cantillation marks for Hebrew).
 
 ## Input Format
 

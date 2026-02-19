@@ -1,6 +1,6 @@
 ---
 name: makeBP
-description: End-to-end Book Package for a chapter. Orchestrates ULT, issues, UST, chapter intro, TN, TQ, alignments, and repo insertion with maximum parallelization.
+description: End-to-end Book Package generation for a chapter, orchestrating all pipeline stages from ULT through repo-insert. Use when asked to make a book package, run everything for a chapter, or generate and push all content.
 ---
 
 # Make Book Package

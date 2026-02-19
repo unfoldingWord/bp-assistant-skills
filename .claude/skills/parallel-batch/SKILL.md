@@ -1,6 +1,6 @@
 ---
 name: parallel-batch
-description: Split a long chapter's issue TSV into verse-range chunks, run tn-writer in parallel on each chunk, then merge output notes. Respects stanza boundaries (PSA 119 = 8-verse Hebrew alphabet stanzas).
+description: Split a long chapter's issue TSV into chunks and process them in parallel for note generation. Use when writing notes for long chapters (50+ issues) like PSA 119.
 ---
 
 # Parallel Batch Note Writer

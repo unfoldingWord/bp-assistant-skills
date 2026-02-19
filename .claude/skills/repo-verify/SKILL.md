@@ -1,6 +1,6 @@
 ---
 name: repo-verify
-description: Verify that a repo-insert push actually landed on the Door43 remote. Checks branch existence and file content via git ls-remote and shallow clone.
+description: Verify that a repo-insert push landed on Door43 by comparing local and remote content. Use when asked to verify a push or confirm content is on Door43.
 allowed-tools: Bash, Read
 ---
 

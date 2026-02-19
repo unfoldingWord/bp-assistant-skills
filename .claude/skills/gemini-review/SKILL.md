@@ -1,6 +1,6 @@
 ---
 name: gemini-review
-description: Run Gemini CLI as an independent second-opinion reviewer for pipeline output. Catches blindspots from single-model review.
+description: Run Gemini CLI as an independent second-opinion reviewer across ULT, issues, UST, notes, and alignment stages. Use when asked to get a second opinion on output or run an external review.
 ---
 
 # Gemini Independent Review

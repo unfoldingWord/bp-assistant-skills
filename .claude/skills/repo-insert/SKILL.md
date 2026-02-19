@@ -1,6 +1,6 @@
 ---
 name: repo-insert
-description: Insert generated ULT, UST, TN, or TQ content into Door43 repo clones, commit, merge to master, and push.
+description: Insert generated ULT, UST, TN, or TQ content into Door43 repo clones, commit, and create pull requests. Use when asked to push to Door43, insert into repos, or deliver content to the remote.
 allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 ---
 
@@ -22,7 +22,7 @@ Uses `.env` in the project root (already in `.gitignore`). On the OCI server, th
 ```
 DOOR43_TOKEN=<gitea-api-token>
 DOOR43_USERNAME=deferredreward
-DOOR43_REPOS_PATH=/mnt/c/Users/benja/Documents/GitHub
+DOOR43_REPOS_PATH=/path/to/your/door43/repos
 ```
 
 The token variable may be named `GITEA_TOKEN` rather than `DOOR43_TOKEN` depending on the environment. The scripts accept either name.
@@ -287,6 +287,13 @@ script and `assemble_notes.py` both enforce this ordering.
 - Backup files created automatically with `--backup`
 - Rollback: `git checkout -- <file>` if something goes wrong
 - Never force-push
+
+## Troubleshooting
+
+- **Push rejected (non-fast-forward)**: The remote branch has new commits. Pull with `git pull --rebase` before retrying. If conflicts arise, resolve them manually and re-push.
+- **Merge conflict**: The target branch diverged from your working branch. Fetch latest, rebase onto the target, resolve conflicts, and force-push your feature branch (never force-push master/main).
+- **Authentication error (403)**: The Door43 token may be expired or missing. Check `.env` for `DOOR43_TOKEN` and verify it has push access to the target organization.
+- **Wrong remote (personal fork)**: Verify `git remote -v` shows the unfoldingWord org URL, not a personal fork. Use `git remote set-url origin <correct-url>` to fix.
 
 ## Book Number Reference
 

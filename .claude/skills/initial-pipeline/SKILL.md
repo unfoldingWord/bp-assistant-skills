@@ -1,6 +1,6 @@
 ---
 name: initial-pipeline
-description: Orchestrate ULT-gen, issue-id, and UST-gen as a coordinated team for a chapter. 6-wave pipeline with adversarial issue identification and ULT feedback loop.
+description: Orchestrate ULT-gen, issue-id, and UST-gen as a multi-agent pipeline for a single chapter. Use when asked to run the pipeline, generate content for a chapter, or start a new chapter.
 ---
 
 # Initial Pipeline Orchestrator
@@ -216,6 +216,12 @@ After Wave 7 (or Wave 6 if `--skip-gemini`):
 1. Send `shutdown_request` to all live teammates (ult-gen, structure, rhetoric, ust-gen; and challenger if still alive)
 2. Wait for shutdown confirmations
 3. `TeamDelete` to clean up team resources
+
+## Troubleshooting
+
+- **Agent never sends "file written" message**: The sub-agent may have stalled or encountered an error silently. Check the agent's output log. If the agent is idle, send it a follow-up message asking for status. Restart the agent if unresponsive after 2 attempts.
+- **ULT agent does not respond to revision requests**: The agent may have lost context. Re-send the revision request with the full file path and specific line numbers. If still unresponsive, terminate and re-spawn the agent.
+- **Team cleanup fails**: Orphaned agent processes can remain after pipeline completion. Use `TeamDelete` to clean up, or manually check `~/.claude/teams/` for stale team files.
 
 ## Outputs
 

@@ -1,6 +1,6 @@
 ---
 name: editor-compare
-description: Compare editor-edited ULT/UST against AI output to identify editor preferences and feed them back into memory.
+description: Compare editor-edited ULT/UST against AI output to identify systematic preferences. Feeds findings back into glossary and quick-ref. Use when asked to compare editor changes or learn from editing patterns.
 allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 ---
 

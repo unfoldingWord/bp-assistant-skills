@@ -1,6 +1,6 @@
 ---
 name: tq-writer
-description: Update translation questions to align with current ULT/UST. Runs preparation script then AI reviews and updates Q&A content following the guidelines.
+description: Update translation questions to align with current ULT/UST. Use when asked to update translation questions or generate TQ for a chapter.
 ---
 
 # Translation Question Writer
@@ -9,7 +9,11 @@ Update existing Translation Questions (TQs) to align with current ULT/UST texts.
 
 ## Prerequisites
 
-- en_tq repo cloned at `/mnt/c/Users/benja/Documents/GitHub/en_tq`
+```bash
+source .env  # provides $DOOR43_REPOS_PATH
+```
+
+- en_tq repo cloned at `$DOOR43_REPOS_PATH/en_tq`
 - ULT/UST available (output/ files, repo clones, or fetched from Door43)
 
 ## Workflow
@@ -17,7 +21,7 @@ Update existing Translation Questions (TQs) to align with current ULT/UST texts.
 ### Step 1: Ensure en_tq Clone
 
 ```bash
-TQ_REPO="/mnt/c/Users/benja/Documents/GitHub/en_tq"
+TQ_REPO="$DOOR43_REPOS_PATH/en_tq"
 if [ ! -d "$TQ_REPO" ]; then
   git clone git@git.door43.org:unfoldingWord/en_tq.git "$TQ_REPO"
 fi
@@ -39,7 +43,7 @@ python3 .claude/skills/tq-writer/scripts/prepare_tq.py PSA --whole-book \
 
 The script auto-detects ULT/UST from:
 1. `output/AI-ULT/` and `output/AI-UST/` (AI-generated files)
-2. Repo clones at `/mnt/c/Users/benja/Documents/GitHub/en_ult` and `en_ust`
+2. Repo clones at `$DOOR43_REPOS_PATH/en_ult` and `en_ust`
 3. Door43 fetch as fallback
 
 Override with `--ult-path` or `--ust-path` if needed.
@@ -93,13 +97,13 @@ Reuse `insert_tn_rows.py` from repo-insert -- it works on TQ files too since bot
 ```bash
 # Dry run first
 python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
-    --book-file /mnt/c/Users/benja/Documents/GitHub/en_tq/tq_PSA.tsv \
+    --book-file $DOOR43_REPOS_PATH/en_tq/tq_PSA.tsv \
     --source-file output/tq/PSA/PSA-150.tsv \
     --dry-run
 
 # Apply
 python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
-    --book-file /mnt/c/Users/benja/Documents/GitHub/en_tq/tq_PSA.tsv \
+    --book-file $DOOR43_REPOS_PATH/en_tq/tq_PSA.tsv \
     --source-file output/tq/PSA/PSA-150.tsv \
     --backup
 ```

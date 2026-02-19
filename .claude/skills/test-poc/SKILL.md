@@ -1,6 +1,6 @@
 ---
 name: test-poc
-description: A/B test comparing prompt-over-code vs old script approaches for Hebrew quote extraction and AT fit.
+description: A/B test comparing prompt-over-code vs old script approaches for quote extraction in translation notes. Use when asked to run the test-poc or compare quote extraction methods.
 allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 ---
 

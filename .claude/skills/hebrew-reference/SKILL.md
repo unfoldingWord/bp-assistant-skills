@@ -1,3 +1,8 @@
+---
+name: hebrew-reference
+description: Reference material for Hebrew language patterns and vocabulary. Placeholder - to be developed. Use when looking up Hebrew idioms or grammatical structures.
+---
+
 # Hebrew Reference
 
 ## Purpose

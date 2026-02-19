@@ -1,6 +1,6 @@
 ---
 name: chapter-intro
-description: Write chapter introductions for biblical text chapters. Run after pipeline (ULT-gen, issue-id, UST-gen) to produce translator-oriented intros.
+description: Write chapter introductions for biblical text chapters summarizing themes and key content. Use when asked to write a chapter introduction or after pipeline completes.
 allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 ---
 

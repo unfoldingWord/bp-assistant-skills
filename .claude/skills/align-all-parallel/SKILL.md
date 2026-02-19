@@ -1,7 +1,7 @@
 ---
 name: align-all-parallel
 
-description: Run ULT-alignment and UST-alignment in parallel as subagents for a chapter.
+description: Run ULT-alignment and UST-alignment in parallel for a single chapter. Use when asked to align both ULT and UST or run all alignments for a chapter.
 
 allowed-tools: Task, Bash
 ---

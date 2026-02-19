@@ -1,3 +1,8 @@
+---
+name: pipeline-overview
+description: Overview of the unfoldingWord Book Package pipeline. Use when asking which skill handles a task, how pipeline stages connect, or what the workflow order is.
+---
+
 # Pipeline Overview
 
 ## Purpose
@@ -22,7 +27,7 @@ Analyze biblical text to identify translation issues that require notes - figure
 
 **Agent**: `.claude/agents/issue-identification.md`
 **Invoke**: Use the Task tool with `subagent_type: issue-identification`
-**Status**: Active (93 issue types documented)
+**Status**: Active (94 issue types documented)
 
 ### Stage 3: Simplified Transform (UST)
 Transform source text into unfoldingWord Simplified Text - a meaning-based translation that makes implicit information explicit and restructures for clarity.
@@ -51,13 +56,13 @@ Generate translation notes from identified issues. A preparation script handles 
 ### Hebrew Reference
 Reference material for Hebrew language patterns and vocabulary.
 
-**Skill**: `.claude\skills\hebrew-reference\SKILL.md`
+**Skill**: `.claude/skills/hebrew-reference/SKILL.md`
 **Status**: To be developed
 
 ### Utilities
 Tools for fetching resources, creating new issue skills, and other supporting functions.
 
-**Skill**: `.claude\skills\utilities\SKILL.md`
+**Skill**: `.claude/skills/utilities/SKILL.md`
 **Status**: Active
 
 ## Orchestrators

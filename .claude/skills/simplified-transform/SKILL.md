@@ -1,3 +1,8 @@
+---
+name: simplified-transform
+description: Legacy placeholder. For UST generation, use UST-gen instead. Do not invoke directly.
+---
+
 # Simplified Transform (UST)
 
 ## Purpose

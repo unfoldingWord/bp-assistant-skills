@@ -79,3 +79,22 @@ name: my-skill
 ```
 
 This runs the command **before** Claude sees the skill content.
+
+## Anthropic Best Practices (Jan 2026 Guide)
+
+Key additions from Anthropic's "Complete Guide to Building Skills for Claude":
+
+### Description Field Pattern
+Use the format: `[What the skill does] + [When to invoke / trigger phrases] + [Key capabilities]`
+- Good: `Generate translation notes from issue TSV. Use when asked to write translation notes or create TN from issues.`
+- Bad: `Translation note generation tool`
+
+### Optional Frontmatter Fields
+- `metadata:` -- author, version, last-updated for tracking
+- `compatibility:` -- environment requirements (e.g., requires Node.js 18+, specific CLI tools)
+
+### Structural Guidelines
+- No README.md files inside skill folders (use SKILL.md as the single entry point)
+- Keep SKILL.md under 500 lines; extract large reference sections to `reference/` subfolder
+- Add `## Troubleshooting` sections to skills with known failure modes
+- Use progressive disclosure: brief overview in SKILL.md, details in linked reference files

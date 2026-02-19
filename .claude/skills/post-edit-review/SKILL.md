@@ -1,6 +1,6 @@
 ---
 name: post-edit-review
-description: After humans edit ULT/UST, adapt existing issues to match their changes. Diff-based review that drops, updates, or adds issues without re-running full identification.
+description: After humans edit ULT/UST, adapt existing issues and notes to match the edited text. Use when humans have edited ULT/UST and issues need reconciliation.
 ---
 
 # Post-Human-Edit Review Orchestrator

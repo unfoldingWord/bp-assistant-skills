@@ -1,7 +1,7 @@
 ---
 name: UST-gen
 
-description: Transform T4T (Translation for Translators) into unfoldingWord Simplified Text (UST) - a meaning-based translation that clearly communicates the meaning of the original text in natural English.
+description: Transform T4T into unfoldingWord Simplified Text (UST), communicating the original meaning in natural English. Use when asked to create UST, generate simplified text, or transform T4T.
 
 allowed-tools: Read, Grep, Glob, Bash
 ---

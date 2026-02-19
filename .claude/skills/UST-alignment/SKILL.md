@@ -1,7 +1,7 @@
 ---
 name: UST-alignment
 
-description: Create meaning-based alignments between Hebrew source and English UST text. AI produces an index-based mapping JSON that a script converts to properly formatted aligned USFM. Unlike ULT alignment, UST alignment is phrase-to-phrase with radical restructuring and implied information handling.
+description: Create meaning-based alignments between Hebrew source and English UST text. Handles radical restructuring and implied information. Use when asked to align UST or produce aligned UST USFM.
 
 allowed-tools: Read, Grep, Glob, Bash
 ---
@@ -414,7 +414,7 @@ python3 .claude/skills/utilities/scripts/gemini_review.py --stage alignment-ust 
 
 ## Related Skills
 
-- [UST-gen](../simplified-transform/SKILL.md) - Create the English UST text
+- [UST-gen](../UST-gen/SKILL.md) - Create the English UST text
 - [ULT-alignment](../ULT-alignment/SKILL.md) - Word-level ULT alignment (different approach)
 - [Pipeline Overview](../pipeline-overview/SKILL.md) - Where alignment fits in workflow
 

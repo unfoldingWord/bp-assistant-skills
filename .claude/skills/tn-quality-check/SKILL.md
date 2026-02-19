@@ -1,6 +1,6 @@
 ---
 name: tn-quality-check
-description: Check AI-generated translation notes for quality issues. Script handles mechanical checks (ID format, Hebrew quotes, AT syntax, bold accuracy). Deep mode adds semantic review (template adherence, AT naturalness, note suppression).
+description: Check AI-generated translation notes for quality issues including missing quotes, broken references, and style problems. Use when asked to quality-check notes, validate TN output, or review notes before delivery.
 ---
 
 # Translation Note Quality Checker

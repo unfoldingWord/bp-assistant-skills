@@ -1,6 +1,6 @@
 ---
 name: deep-issue-id
-description: Multi-agent adversarial issue identification against human ULT/UST from Door43 master. 2 parallel domain analysts + challenger debate, without AI text generation. Supports --verses for chunked analysis of long chapters.
+description: Multi-agent adversarial issue identification for human-authored ULT/UST. Use when asked to find issues in human-authored text or analyze human ULT/UST for translation concerns.
 ---
 
 # Deep Issue Identification (Human ULT/UST)
