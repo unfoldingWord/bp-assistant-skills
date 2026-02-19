@@ -70,6 +70,14 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | גִּבּוֹר | H1368 | warrior | mighty one | editor PSA 89:19; Davidic military context |
 | מָגַר | H4048 | cast | cast down | editor PSA 89:44; without redundant "down" when "to the ground" follows |
 | עָטָה (Hiphil) | H5844a | covered over | covered | editor PSA 89:45; Hiphil + al preposition warrants "over" |
+| נִדְחֵי | H1760a | scattered | outcasts | editor PSA 147:2; those driven away/dispersed |
+| עַצְּבוֹת | H6094 | wounds | sorrows | editor PSA 147:3; physical injury context |
+| עוֹדֵד | H5749a | lifting up | supporting | editor PSA 147:6; Polel participle |
+| בְּהֵמָה | H0929 | beast | animal | editor PSA 147:9; more register-appropriate in poetry |
+| אִמְרָה | H0565a | command | word | editor PSA 147:15 (first occurrence); use "word" when referring to speech, "command" when referring to directive action |
+| קֶרַח | H7140 | hail | ice | editor PSA 147:17; contextual (scattered/cast precipitation) |
+| פַּת | H6595a | crumbs | morsels | editor PSA 147:17; small pieces, parallels scattered imagery |
+| יָחַל | H3176 | hoping | waiting | editor PSA 147:11; active expectation, not passive waiting |
 
 ## Phrases
 
@@ -100,3 +108,4 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | אִם oath formula | 'If I should [verb]! | I will not [verb] | Hebrew אִם + imperfect in oath context = self-imprecatory formula with unstated apodosis; editor PSA 89:35 |
 | Explicit subject in negated clauses | and they do not [verb] | and do not [verb] | add explicit pronoun subject in coordinated negative clauses for clarity; editor PSA 89:30,31 |
 | Substantive adjective | chosen / anointed | chosen one / anointed one | drop "one" from substantive adjectives used as nouns; editor PSA 89:3,51 |
+| Articled singular divine participle | the one [verb]ing | He {is} [verb]ing | when a singular articled participle describes Yahweh's ongoing action as a divine title/attribute (e.g., הַמְכַסֶּה "the one covering"), render as "the one [verb]ing" not as a predicate with implied copula; editor PSA 147:8,14,15,16,17 (5x) |
