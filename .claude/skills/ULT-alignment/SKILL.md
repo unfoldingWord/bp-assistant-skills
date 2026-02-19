@@ -506,6 +506,19 @@ grep -oE '\\w [^|]+\|' aligned.usfm | sed 's/\\w //;s/|//' | tr '\n' ' '
 # Should match original ULT text word-for-word
 ```
 
+## Gemini Review (optional, default on)
+
+After validation, run Gemini as an independent reviewer. Skip if `--skip-gemini` is passed.
+
+```bash
+python3 .claude/skills/utilities/scripts/gemini_review.py --stage alignment-ult --book <BOOK> --chapter <CHAPTER>
+```
+
+1. If exit code 2 (Gemini failed/rate-limited): log and continue
+2. If exit code 0: no findings, continue
+3. If exit code 1: read `output/review/<BOOK>/<BOOK>-<CH>-alignment-ult-gemini.md`
+4. For each finding: check against alignment_rules.md. If legit, fix the alignment. If false positive, ignore.
+
 ## Related Skills
 
 - [ULT-gen](../ULT-gen/SKILL.md) - Create the English ULT text

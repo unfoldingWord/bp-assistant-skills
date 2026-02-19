@@ -308,9 +308,27 @@ The UST agent:
 3. Writes alignment hints to `output/AI-UST/hints/<BOOK>/<BOOK>-<CH>.json` (per UST-gen Step 7.5)
 4. Sends message to team-lead: "UST complete"
 
+## Wave 7: Gemini Review (optional, default on)
+
+After Wave 6, run Gemini as an independent reviewer for ULT, issues, and UST. Skip if `--skip-gemini` is passed.
+
+```bash
+python3 .claude/skills/utilities/scripts/gemini_review.py --stage ult --book <BOOK> --chapter <CHAPTER>
+python3 .claude/skills/utilities/scripts/gemini_review.py --stage issues --book <BOOK> --chapter <CHAPTER>
+python3 .claude/skills/utilities/scripts/gemini_review.py --stage ust --book <BOOK> --chapter <CHAPTER>
+```
+
+For each stage:
+1. If exit code 2 (Gemini failed/rate-limited): log and continue, don't block
+2. If exit code 0: no findings, continue
+3. If exit code 1: read `output/review/<BOOK>/<BOOK>-<CH>-{stage}-gemini.md`
+4. For each finding: check it against the actual guideline doc. If legit, fix the output file. If false positive, ignore.
+
+This is an evaluate-and-fix loop -- Claude reads each finding, judges it, and applies corrections where warranted. Not a pass-through report.
+
 ## Cleanup
 
-After Wave 6 output is confirmed:
+After Wave 7 (or Wave 6 if `--skip-gemini`):
 1. Send `shutdown_request` to all live teammates (default: ult-gen, structure, rhetoric, ust-gen; in heavy mode: ult-gen, discourse, grammar, figurative, speech, ust-gen; and challenger if still alive)
 2. Wait for shutdown confirmations
 3. `TeamDelete` to clean up team resources

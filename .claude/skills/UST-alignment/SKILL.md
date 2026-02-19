@@ -399,6 +399,19 @@ Before finalizing alignment JSON:
 - [ ] Hebrew words copied exactly from source (not typed manually)
 - [ ] Names and proper nouns mapped 1:1 where possible
 
+## Gemini Review (optional, default on)
+
+After validation, run Gemini as an independent reviewer. Skip if `--skip-gemini` is passed.
+
+```bash
+python3 .claude/skills/utilities/scripts/gemini_review.py --stage alignment-ust --book <BOOK> --chapter <CHAPTER>
+```
+
+1. If exit code 2 (Gemini failed/rate-limited): log and continue
+2. If exit code 0: no findings, continue
+3. If exit code 1: read `output/review/<BOOK>/<BOOK>-<CH>-alignment-ust-gemini.md`
+4. For each finding: check against ust_alignment_rules.md. If legit, fix the alignment. If false positive, ignore.
+
 ## Related Skills
 
 - [UST-gen](../simplified-transform/SKILL.md) - Create the English UST text

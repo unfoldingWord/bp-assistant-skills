@@ -243,6 +243,21 @@ Read the assembled TSV alongside the aligned ULT. For each row, verify:
 
 Fix any issues found and rewrite the TSV row(s) if needed. This is a lightweight review pass, not a regeneration -- just catch structural problems the scripts can't judge.
 
+### Step 11: Gemini Review (optional, default on)
+
+Skip if `--skip-gemini` is passed.
+
+```bash
+python3 .claude/skills/utilities/scripts/gemini_review.py --stage notes --book <BOOK> --chapter <CHAPTER>
+```
+
+1. If exit code 2 (Gemini failed/rate-limited): log and continue
+2. If exit code 0: no findings, continue
+3. If exit code 1: read `output/review/<BOOK>/<BOOK>-<CH>-notes-gemini.md`
+4. For each finding: check it against the note-style-guide and prompt-templates. If legit, fix the notes TSV. If false positive, ignore.
+
+This is complementary to tn-quality-check -- Gemini does semantic/judgment review while the quality check script handles mechanical validation.
+
 ## Input Format
 
 Issue TSV (no headers, 7 columns):
