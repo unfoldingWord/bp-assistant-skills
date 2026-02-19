@@ -63,11 +63,11 @@ H6718b,tsayid,provisions,PSA,her provisions,dominant rendering 54.5% of 11 occ,2
 H3468,yesha,salvation,PSA,her priests I will clothe with salvation,dominant rendering across Psalms,2026-02-12
 H5145,nezer,crown,PSA,his crown will flourish,dominant rendering 57% of 7 occ,2026-02-12
 H2534,חֵמָה,wrath,PSA,"88:7 God's anger on psalmist","heat (21% general), rage (PSA 6:1), wrath (PSA 90:7). Psalmic lament context = wrath.",2026-02-16
-H5564,סָמַךְ,leaned,PSA,"88:7 wrath leaned upon me","Qal: lean/rest upon. Not sacrificial 'lay' context.",2026-02-16
-H7496,רָפָא,spirits of the dead,PSA,"88:10 rhetorical question","50% dominant rendering. Transliteration 'Rephaim' also possible.",2026-02-16
+H5564,סָמַךְ,rests heavily,PSA,"88:7 wrath rests heavily on me","UPDATED: editor corrected 'leaned' to 'rests heavily'. Qal perfect.",2026-02-17
+H7496,רָפָא,Rephaites,PSA,"88:10 Or will the Rephaites arise?","UPDATED: editor corrected 'spirits of the dead' to 'Rephaites'. Transliterated proper noun.",2026-02-17
 H0353,אֱיָל,strength,PSA,"88:4 man without strength","Hapax in published ULT. Lexical: strength/help.",2026-02-16
-H6323,פּוּן,numb,PSA,"88:15 I am numb","Hapax. Cohortative form. Meaning uncertain: numb/dazed/in despair.",2026-02-16
-H1669,דָּאַב,wastes away,PSA,"88:9 eye wastes away from affliction","Not in index. Lexical: languish/waste away.",2026-02-16
+H6323,פּוּן,must despair,PSA,"88:15 I must despair","UPDATED: editor corrected 'numb' to 'must despair'. Hapax. Cohortative form.",2026-02-17
+H1669,דָּאַב,mourns,PSA,"88:9 My eye mourns from affliction","UPDATED: editor corrected 'wastes away' to 'mourns'.",2026-02-17
 H0530,emunah,faithfulness,PSA,your faithfulness / in my faithfulness,dominant rendering 25% - psalms use faithfulness consistently,2026-02-16
 H4905,maskil,maskil,PSA,A maskil of,dominant rendering 71% of 7 occ,2026-02-16
 H6918,qadosh,holy ones,PSA,assembly of the holy ones / council of the holy ones,psalms context for divine council,2026-02-16
@@ -112,3 +112,44 @@ H3411,יְרֵכָה,recesses,PSA,"128:3 in the recesses of your house","UPDATED
 H8469,תַּחֲנוּן,supplications,PSA,"130:2 voice of my supplications","UPDATED: editor corrected AI 'pleas' to 'supplications'. Overrides 2026-02-12 entry.",2026-02-17
 H5608a,סָפַר,recount,PSA,"87:6 Yahweh will recount in the writing","UPDATED: editor corrected AI 'count' to 'recount'. Overrides 2026-02-12 entry.",2026-02-17
 H4060a,מִדָּה,garments,PSA,133:2 mouth of his garments,pi middotav - collar/opening of garments - literal rendering preserves peh idiom,2026-02-17
+H5273a,נָעִים,pleasant,PSA,133:1 how pleasant,dominant rendering 20% of 10 occ; fits adjective in parallel with tov,,2026-02-17
+H2803,חָשַׁב,reckoned,PSA,"88:4 I am reckoned with the ones going down","Niphal. Editor corrected 'counted' to 'reckoned'.",2026-02-17
+H5060,נָגַע,come near,PSA,"88:3 my life has come near to Sheol","Hiphil. Editor corrected 'reached' to 'come near'.",2026-02-17
+H7368,רָחַק,distanced,PSA,"88:8,18 You have distanced my acquaintances","Hiphil causative as single English verb. Not 'made far'. 2 occurrences.",2026-02-17
+H4867,מִשְׁבָּר,waves,PSA,"88:7 all of your waves","Editor corrected 'breakers' to 'waves'.",2026-02-17
+H2740,חָרוֹן,indignations,PSA,"88:16 Your indignations pass over me","Plural matching Hebrew plural. Not 'burning anger'.",2026-02-17
+H5362b,נָקַף,close in upon,PSA,"88:17 they close in upon me together","Hiphil. Editor corrected 'encircled' to 'close in upon'.",2026-02-17
+H6923,קָדַם,precedes,PSA,"88:13 my prayer precedes you","Piel imperfect. Single verb preferred over 'comes before'.",2026-02-17
+H5387b,נָשִׂיא,clouds,PSA,135:7 meteorological context,PRO 25:14 100% "Clouds"; mist/vapors rising,,2026-02-17
+H1300b,בָּרָק,lightning bolts,PSA,135:7 plural,JOB 38:35 "lightning bolts"; PSA 97:4 "His lightning",,2026-02-17
+H6091,עָצָב,idols,PSA,135:15 nations' idols,PSA 115:4 "Their idols"; 60% dominant rendering,,2026-02-17
+H5459,סְגֻלָּה,possession,PSA,135:4 Israel as possession,60% dominant "possession" across 5 occ,,2026-02-17
+H1777,דִּין,vindicates,PSA,135:14 parallel DEU 32:36,DEU 32:36 pub ULT "vindicates his people",,2026-02-17
+H5162,נָחַם (Hitpael),has compassion on,PSA,135:14 parallel DEU 32:36,DEU 32:36 pub ULT "has compassion on his servants",,2026-02-17
+H0214,אוֹצָר,storehouses,PSA,135:7 wind from storehouses,JOB 38:22 "storehouses" 2 occ; DEU 28:12 "treasure",,2026-02-17
+H7554,רָקַע,spreading out,PSA,"136:6 spreading out the earth","Participle form. Only 3 occ in published; no dominant rendering for participle context.",2026-02-17
+H1504,גָּזַר,dividing,PSA,"136:13 dividing the Sea of Reeds","Participle form. Published has 'Divide' (1KI 3:25-26).",2026-02-17
+H5287,נָעַר,shook off,PSA,"136:15 shook off Pharaoh","Piel perfect. Matches EXO 14:27 published 'shook off'.",2026-02-17
+H8216,שֶׁפֶל,humiliation,PSA,"136:23 in our humiliation","Not in Strong's index. Only published match: EZR 9:5 'humiliation'.",2026-02-17
+H6561,פָּרַק,tore away,PSA,"136:24 tore us away from our adversaries","Wayyiqtol. Published has 'tearing apart' (PSA 7:2). Context = rescue.",2026-02-17
+H8629,תֵּקַע,blast,PSA,150:1 blast of a shofar,Only occ in OT; noun from root tq' (to thrust/blow),2026-02-18
+H4234,מָחוֹל,dance,PSA,150:4 tambourine and dance,No published ULT occ; standard lexical meaning,2026-02-18
+H6767d,צְלָצַל,cymbals,PSA,150:5 cymbals of sound,1 published occ (2SA 6:5 'with cymbals'),2026-02-18
+H8088a,שֵׁמַע,sound,PSA,150:5 cymbals of sound,Published as 'hearing' in JOB 42:5 and 'report' elsewhere; 'sound' fits instrument context,2026-02-18
+H1792,דָּכָא,shattered,PSA,89:10 You shattered Rahab,editor prefers "shattered" over "crushed" in cosmic battle context,2026-02-18
+H2491a,חָלָל,slain,PSA,89:10 like a slain one,primary sense = killed; not "pierced",2026-02-18
+H3988a,מָאַס,spurned,PSA,89:38 rejected and spurned,more precise than "despised" for divine rejection,2026-02-18
+H5010,נָאַר,voided,PSA,89:39 voided the covenant,legal sense covenant annulment; not "repudiated",2026-02-18
+H5674b,עָבַר (Hitpael),passed yourself over from,PSA,89:38 passed yourself over from your anointed,literal Hitpael reflexive; not "been angry with",2026-02-18
+H0539,אָמַן (Niphal ptc),attested / confirmed,PSA,"89:28 covenant confirmed; 89:37 attested witness",forensic/evidentiary sense; distinguish from adjective "faithful",2026-02-18
+H7723,שָׁוְא,emptiness,PSA,89:47 for what emptiness,more literal than "vanity",2026-02-18
+H1368,גִּבּוֹר,warrior,PSA,89:19 help on a warrior,specific military term; not generic "mighty one",2026-02-18
+H4048,מָגַר,cast,PSA,89:44 cast his throne to the ground,without redundant "down" when directional phrase follows,2026-02-18
+H5844a,עָטָה (Hiphil),covered over,PSA,89:45 covered him over with shame,Hiphil + al preposition warrants "over",2026-02-18
+H7692,shigyonot,shigyonoth,HAB,superscription musical term; transliterated,unique term only in HAB 3:1 and PSA 7:1,2026-02-18
+H2253,chebyon,the hiding of,HAB,4:4 rare word; no index entry; hiding/concealment,2026-02-18
+H4128,mud,measured (Hiphil),HAB,6 Hiphil wayyiqtol; no index entry; measure/survey earth,2026-02-18
+H5425a,nathar,spring apart (Hiphil),HAB,6 made nations spring/leap apart; no index entry,2026-02-18
+H6518,paraz,warriors (of open country),HAB,14 fighters/warriors; rare word; Qere variant,2026-02-18
+H2073,zebul,habitation,HAB,11 sun/moon stand in their habitation; only 2 occ in index,2026-02-18
+H1979,halikah,goings,HAB,6 His goings are everlasting; his ways/marches,2026-02-18
