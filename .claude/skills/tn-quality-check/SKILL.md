@@ -14,13 +14,19 @@ Check AI-generated translation notes for quality issues before delivery. Two mod
 - Plain ULT and UST USFM files
 - Book code (for master TN ID collision check)
 
+## Parameters
+
+- `<BOOK>` = uppercase 3-letter book code (e.g., `PSA`)
+- `<CHAPTER>` = plain chapter number (e.g., `71`)
+- `<CH>` = zero-padded chapter for filenames: 3 digits for PSA (e.g., `071`), 2 digits for other books (e.g., `03`)
+
 ## Workflow
 
 ### Step 1: Run Mechanical Checks
 
 ```bash
 python3 .claude/skills/tn-quality-check/scripts/check_tn_quality.py \
-    output/notes/<BOOK>/<BOOK>-<CHAPTER>.tsv \
+    output/notes/<BOOK>/<BOOK>-<CH>.tsv \
     --prepared-json /tmp/claude/prepared_notes.json \
     --ult-usfm /tmp/claude/ult_plain.usfm \
     --ust-usfm /tmp/claude/ust_plain.usfm \
@@ -92,7 +98,7 @@ If a note starts with "Here, ", verify the next content is a **bolded quote from
 
 ### Step 4: Write Report
 
-Write the final quality report to `output/quality/<BOOK>/<BOOK>-<CHAPTER>-quality.md`:
+Write the final quality report to `output/quality/<BOOK>/<BOOK>-<CH>-quality.md`:
 
 ```markdown
 # TN Quality Report: <BOOK> <CHAPTER>
