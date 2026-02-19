@@ -10,12 +10,13 @@ Usage:
     --title "AI TN for PSA 120 [deferredreward]" \
     --merge
 
-Token lookup order:
-  1. DOOR43_TOKEN env var
-  2. DOOR43_TOKEN in project-root .env (walks up from script location)
-  3. GITEA_TOKEN in project-root .env
-  4. DOOR43_TOKEN in config/.env
-  5. GITEA_TOKEN in config/.env
+Token lookup order (.env files first -- env vars may be stale in Docker):
+  1. DOOR43_TOKEN in project-root .env (walks up from script location)
+  2. GITEA_TOKEN in project-root .env
+  3. DOOR43_TOKEN in config/.env
+  4. GITEA_TOKEN in config/.env
+  5. DOOR43_TOKEN env var (lowest priority)
+  6. GITEA_TOKEN env var (lowest priority)
 """
 
 import argparse
@@ -59,22 +60,33 @@ def find_project_env():
 
 
 def get_token():
-    """Return the API token, trying multiple variable names and paths."""
-    # 1. Explicit env var
-    token = os.environ.get('DOOR43_TOKEN') or os.environ.get('GITEA_TOKEN')
-    if token:
-        return token
+    """Return the API token, trying multiple sources.
 
-    # 2-3. Project-root .env
-    project_env = load_env(find_project_env())
+    .env files are checked first because env vars may be inherited stale
+    from a Docker image while .env files are mounted fresh.
+    """
+    # 1-2. Project-root .env (highest priority -- user-controlled file)
+    proj_path = find_project_env()
+    project_env = load_env(proj_path)
     token = project_env.get('DOOR43_TOKEN') or project_env.get('GITEA_TOKEN')
     if token:
+        key = 'DOOR43_TOKEN' if project_env.get('DOOR43_TOKEN') else 'GITEA_TOKEN'
+        print(f"Token: {key} from {proj_path}", file=sys.stderr)
         return token
 
-    # 4-5. Server config .env
+    # 3-4. Server config .env
     server_env = load_env(SERVER_ENV)
     token = server_env.get('DOOR43_TOKEN') or server_env.get('GITEA_TOKEN')
     if token:
+        key = 'DOOR43_TOKEN' if server_env.get('DOOR43_TOKEN') else 'GITEA_TOKEN'
+        print(f"Token: {key} from {SERVER_ENV}", file=sys.stderr)
+        return token
+
+    # 5-6. Env vars (lowest priority -- may be stale in Docker)
+    token = os.environ.get('DOOR43_TOKEN') or os.environ.get('GITEA_TOKEN')
+    if token:
+        key = 'DOOR43_TOKEN' if os.environ.get('DOOR43_TOKEN') else 'GITEA_TOKEN'
+        print(f"Token: {key} from environment variable (may be stale)", file=sys.stderr)
         return token
 
     return None

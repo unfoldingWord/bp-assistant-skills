@@ -180,8 +180,12 @@ Check:
 
 ### Step 6: Commit, Push Branch, Create PR, and Merge
 
-Commit on the staging branch, push it, create a PR via the API, then merge it.
-Master is a protected branch on Door43 — direct pushes to master are rejected.
+Commit on the staging branch, push it, then create and merge a PR via the API.
+Master is a protected branch on Door43 -- direct pushes to master are rejected.
+You must use `gitea_pr.py --merge` to land changes on master.
+
+All four operations (commit, push, PR create, PR merge) must complete. The task
+is not done until `gitea_pr.py` prints "PR #NNNN merged."
 
 ```bash
 cd "$REPOS_PATH/$REPO"
@@ -195,20 +199,15 @@ git diff HEAD~1 --stat
 
 # 3. Push the staging branch
 git push origin "$BRANCH"
-```
 
-Then create, merge, and delete the branch in one command:
-
-```bash
+# 4. Create PR, merge it, and delete the staging branch (all in one call)
 python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
   --repo "$REPO" --head "$BRANCH" --base master \
   --title "AI TN for PSA 30 [deferredreward]" \
   --merge
-# Prints: "PR #NNNN created / merged / branch deleted"
+# Expected output: "PR #NNNN created" then "PR #NNNN merged." then "Branch ... deleted."
+# If you do not see "merged" in the output, the insert FAILED -- report the error.
 ```
-
-`--merge` creates the PR and immediately merges it. The head branch is deleted
-automatically after merge (pass `--no-delete` to skip).
 
 If the PR already exists (API 409), the script reuses it and still merges.
 
@@ -253,16 +252,20 @@ python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
 - `--references` filters to specific references from the source file
 
 ### gitea_pr.py
-Creates a pull request via the Gitea API. Kept for manual use if PRs are ever needed.
+Creates a PR via the Gitea API and optionally merges it. This is the primary
+mechanism for landing changes on master (protected branch, no direct push).
 
 ```
 python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
   --repo <repo-name> --head <source-branch> --base <target-branch> \
-  --title "PR title"
+  --title "PR title" --merge
 ```
 
-- Reads `DOOR43_TOKEN` from `.env` or environment
-- Prints the PR URL on success
+- `--merge`: creates PR, merges it, and deletes the staging branch
+- Reads token from `.env` files first (project root, then config/.env),
+  falls back to env vars. Logs which token source is used.
+- Prints the PR URL, merge status, and branch deletion on success
+- Exits non-zero on failure
 
 ## Note Ordering (TN)
 

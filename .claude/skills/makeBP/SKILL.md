@@ -182,6 +182,10 @@ to a personal fork.
 
 ### Git procedure for each repo (strict order)
 
+Master is a protected branch on Door43 -- direct pushes are rejected. Use
+`gitea_pr.py --merge` to land changes. See repo-insert SKILL.md Step 6 for
+the canonical procedure.
+
 1. **Ensure remote points to unfoldingWord** -- verify the origin URL contains
    `git.door43.org/unfoldingWord/{repo}`. If it points to a fork, fix it:
    ```bash
@@ -200,16 +204,16 @@ to a personal fork.
    - TSV: no verse filter needed (script matches by reference)
 5. **Verify** -- log `git diff --stat` output
 6. **Commit** -- `git add {file} && git commit -m "AI {content_type} for {BOOK} {CHAPTER}"`
-7. **Merge to master and push**:
+7. **Push branch and merge via PR** (all in one block):
    ```bash
-   git checkout master
-   git merge origin/master --ff-only
-   git merge "$BRANCH" --no-edit
-   git push origin master
-   git branch -D "$BRANCH"
+   git push origin "$BRANCH"
+   python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
+     --repo "$REPO" --head "$BRANCH" --base master \
+     --title "AI {content_type} for {BOOK} {CHAPTER} [${USERNAME}]" \
+     --merge
+   # Must see "PR #NNNN merged." in output. If not, the insert FAILED.
    ```
-8. **If push fails** (remote advanced): `git pull origin master --no-edit` then retry push once
-9. **If merge conflict or second push fails**: stop and report error to admin
+8. **If merge fails or there is a conflict**: stop and report error to admin
 
 ### Repo-insert commands reference
 
