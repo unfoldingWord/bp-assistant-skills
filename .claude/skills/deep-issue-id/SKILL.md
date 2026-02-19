@@ -1,6 +1,6 @@
 ---
 name: deep-issue-id
-description: Multi-agent adversarial issue identification against human ULT/UST from Door43 master. 4 parallel domain analysts + challenger debate, without AI text generation. Supports --lite for 2-agent mode and --verses for chunked analysis of long chapters.
+description: Multi-agent adversarial issue identification against human ULT/UST from Door43 master. 2 parallel domain analysts + challenger debate by default, without AI text generation. Supports --heavy for 4-agent mode and --verses for chunked analysis of long chapters.
 ---
 
 # Deep Issue Identification (Human ULT/UST)
@@ -16,16 +16,16 @@ The orchestrator itself handles merge logic -- run it as **sonnet**. Analyst sub
 - **Book**: 3-letter abbreviation (PSA, GEN, 2SA, etc.)
 - **Chapter**: number
 - **Verses**: `--verses 1-40` (optional) -- restrict analysis to a verse range within the chapter. Useful for long chapters (e.g., PSA 119 at 176 verses) that benefit from chunked runs.
-- **Mode**: `--lite` (optional) -- use 2 combined analysts instead of 4 for reduced token usage
+- **Mode**: `--heavy` (optional) -- use 4 specialized analysts instead of 2 for maximum coverage
 
 ## Mode
 
-If `--lite` is specified:
-- Wave 2 uses 2 analysts ("structure" and "rhetoric") instead of 4
-- Wave 3 challenger reviews 2 TSVs instead of 4
-- All other setup and merge steps unchanged
+Default: 2 analysts ("structure" and "rhetoric").
 
-If no mode flag: default (4 analysts).
+If `--heavy` is specified:
+- Wave 2 uses 4 analysts (discourse, grammar, figurative, speech) instead of 2
+- Wave 3 challenger reviews 4 TSVs instead of 2
+- All other setup and merge steps unchanged
 
 ## Verse Range
 
@@ -125,9 +125,9 @@ Do:
 - Only send shutdown_request after the merge is written to output/issues/
 - You may gently nudge agents, or ask what they are waiting for if they seem stuck.
 
-## Wave 2: Issue Identification (4 team analysts)
+## Wave 2: Issue Identification
 
-Spawn 4 teammates (`subagent_type: "issue-identification"`, `model: "opus"`, with `team_name` set). Each analyst reads:
+Default: spawn 2 teammates (structure, rhetoric). With `--heavy`: spawn 4 teammates (discourse, grammar, figurative, speech). Use `subagent_type: "issue-identification"`, `model: "opus"`, with `team_name` set. Each analyst reads:
 - Human ULT (`$TMP/ult_plain.usfm`)
 - Human UST (`$TMP/ust_plain.usfm`) if available
 - Alignment JSON (`$TMP/alignments.json`)
@@ -146,33 +146,7 @@ Include in each analyst's prompt:
 - Instruction to use SendMessage for disagreements worth flagging
 - **Hold for Wave 3**: After writing your TSV, do NOT mark your task as completed. Send a message to team-lead confirming your file is written, then wait for DMs from the challenger agent. You will receive challenges to defend -- respond with one defense DM back to the challenger. After the challenger confirms rulings are complete, then mark your task completed.
 
-### Discourse Analyst (teammate name: "discourse")
-Macro-level grammar and structure. Discourse markers, participant tracking, paragraph structure, connectors between clauses, quotation structure, genre indicators. Focuses on writing-* and grammar-connect-* issue types.
-
-Output: `$TMP/wave2_discourse.tsv`
-
-### Grammar Analyst (teammate name: "grammar")
-Micro-level grammar within clauses. Passives, abstract nouns, possession, pronouns, ellipsis, word-level syntax. Integrates abstract noun detection output; identifies passives during analysis (see figs-activepassive.md). Focuses on figs-activepassive, figs-abstractnouns, figs-possession, writing-pronouns, figs-ellipsis.
-
-Output: `$TMP/wave2_grammar.tsv`
-
-### Figurative Language Analyst (teammate name: "figurative")
-Figures of speech. Metaphor, metonymy, simile, synecdoche, personification, merism, hendiadys, doublet, idiom. Cross-references the biblical imagery classification lists in figs-metonymy.md and figs-metaphor.md. Focuses on figs-* issue types.
-
-Output: `$TMP/wave2_figurative.tsv`
-
-### Speech Acts & Literary Analyst (teammate name: "speech")
-Rhetorical devices and speech acts. Rhetorical questions, imperatives, exclamations, irony, hyperbole, litotes, euphemism, poetry markers, parallelism. Focuses on figs-rquestion, figs-imperative, figs-exclamations, figs-hyperbole, writing-poetry, figs-parallelism.
-
-Output: `$TMP/wave2_speech.tsv`
-
-Each agent has a primary domain but overlaps with the others. When agents identify the same phrase, they should compare classifications. Disagreement is productive -- it's better to surface a conflict than to let a wrong classification pass unchallenged.
-
-Wait for all 4 analysts to send their "file written" messages to team-lead. Do NOT mark Wave 2 tasks complete yet -- analysts must stay active to defend challenges in Wave 3. Only proceed to Wave 3 once all 4 files exist.
-
-### Lite Mode: 2 Analysts
-
-If `--lite`, spawn 2 teammates instead of 4 (`subagent_type: "issue-identification"`, `model: "opus"`, with `team_name` set). Same inputs, cross-reading, hold protocol, and output format as full mode.
+### Default Mode: 2 Analysts
 
 #### Structure Analyst (teammate name: "structure")
 Grammar and discourse structure, from macro to micro level. Discourse markers, participant tracking, paragraph structure, connectors between clauses, quotation structure, genre indicators, passives, abstract nouns, possession, pronouns, ellipsis, word-level syntax. Integrates abstract noun detection output; identifies passives during analysis (see figs-activepassive.md). Focuses on writing-*, grammar-connect-*, figs-activepassive, figs-abstractnouns, figs-possession, writing-pronouns, figs-ellipsis, and similar structural issues.
@@ -186,7 +160,33 @@ Output: `$TMP/wave2_rhetoric.tsv`
 
 As you work, read the other analyst's TSV file when it appears. If you find the same phrase classified differently, send a DM to flag the disagreement.
 
-Wait for both analysts to send their "file written" messages. Do NOT mark Wave 2 tasks complete yet -- analysts must stay active to defend challenges in Wave 3. Only proceed to Wave 3 once both files exist.
+Wait for both analysts to send their "file written" messages to team-lead. Do NOT mark Wave 2 tasks complete yet -- analysts must stay active to defend challenges in Wave 3. Only proceed to Wave 3 once both files exist.
+
+### Heavy Mode: 4 Analysts
+
+If `--heavy`, spawn these 4 analysts instead of structure/rhetoric. Each agent has a primary domain but overlaps with the others. Disagreement is productive -- it's better to surface a conflict than to let a wrong classification pass unchallenged.
+
+#### Discourse Analyst (teammate name: "discourse")
+Macro-level grammar and structure. Discourse markers, participant tracking, paragraph structure, connectors between clauses, quotation structure, genre indicators. Focuses on writing-* and grammar-connect-* issue types.
+
+Output: `$TMP/wave2_discourse.tsv`
+
+#### Grammar Analyst (teammate name: "grammar")
+Micro-level grammar within clauses. Passives, abstract nouns, possession, pronouns, ellipsis, word-level syntax. Integrates abstract noun detection output; identifies passives during analysis (see figs-activepassive.md). Focuses on figs-activepassive, figs-abstractnouns, figs-possession, writing-pronouns, figs-ellipsis.
+
+Output: `$TMP/wave2_grammar.tsv`
+
+#### Figurative Language Analyst (teammate name: "figurative")
+Figures of speech. Metaphor, metonymy, simile, synecdoche, personification, merism, hendiadys, doublet, idiom. Cross-references the biblical imagery classification lists in figs-metonymy.md and figs-metaphor.md. Focuses on figs-* issue types.
+
+Output: `$TMP/wave2_figurative.tsv`
+
+#### Speech Acts & Literary Analyst (teammate name: "speech")
+Rhetorical devices and speech acts. Rhetorical questions, imperatives, exclamations, irony, hyperbole, litotes, euphemism, poetry markers, parallelism. Focuses on figs-rquestion, figs-imperative, figs-exclamations, figs-hyperbole, writing-poetry, figs-parallelism.
+
+Output: `$TMP/wave2_speech.tsv`
+
+Wait for all 4 analysts to send their "file written" messages to team-lead. Do NOT mark Wave 2 tasks complete yet -- analysts must stay active to defend challenges in Wave 3. Only proceed to Wave 3 once all 4 files exist.
 
 ## Wave 3: Challenge and Defend
 
@@ -243,7 +243,7 @@ Before writing to output/issues/, verify ordering within each verse: first-to-la
 ## Cleanup
 
 After Merger completes:
-1. Send `shutdown_request` to all teammates (in lite mode: structure, rhetoric, challenger; in full mode: discourse, grammar, figurative, speech, challenger)
+1. Send `shutdown_request` to all teammates (default: structure, rhetoric, challenger; heavy: discourse, grammar, figurative, speech, challenger)
 2. Wait for shutdown confirmations
 3. `TeamDelete` to clean up team resources
 
@@ -305,10 +305,9 @@ Setup:    Fetch human ULT/UST from Door43 master
 
 Team:     TeamCreate "deep-issue-<BOOK>-<CHAPTER>"
 
-Wave 2:   Discourse ──────────┐
-          Grammar ────────────┤  (4 teammates, cross-read files,
-          Figurative ─────────┤   DM on disagreements,
-          Speech ─────────────┘   stay alive for Wave 3)
+Wave 2:   Structure ───────────┐  (2 teammates, cross-read files,
+          Rhetoric ────────────┘   DM on disagreements,
+                                   stay alive for Wave 3)
 
 Wave 3:   Challenger spawns ──── challenges each analyst via DM
           Analysts defend ──────  one round of defend/respond
@@ -320,7 +319,7 @@ Wave 4:   Merger ─────────────── (applies rulings,
 Cleanup:  shutdown_request all → TeamDelete
 ```
 
-### Lite Mode Flow
+### Heavy Mode Flow
 
 ```
 Setup:    Fetch human ULT/UST from Door43 master
@@ -328,9 +327,10 @@ Setup:    Fetch human ULT/UST from Door43 master
 
 Team:     TeamCreate "deep-issue-<BOOK>-<CHAPTER>"
 
-Wave 2:   Structure ───────────┐  (2 teammates, cross-read files,
-          Rhetoric ────────────┘   DM on disagreements,
-                                   stay alive for Wave 3)
+Wave 2:   Discourse ──────────┐
+          Grammar ────────────┤  (4 teammates, cross-read files,
+          Figurative ─────────┤   DM on disagreements,
+          Speech ─────────────┘   stay alive for Wave 3)
 
 Wave 3:   Challenger spawns ──── challenges each analyst via DM
           Analysts defend ──────  one round of defend/respond
