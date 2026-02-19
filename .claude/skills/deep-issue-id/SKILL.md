@@ -32,7 +32,7 @@ If `--heavy` is specified:
 If `--verses <start>-<end>` is specified:
 - Pass `--verse <start>-<end>` to both `parse_usfm.js` calls (filters alignment JSON and plain text)
 - Downstream scripts (compare, detect) automatically operate on the filtered data
-- Use verse-range suffix in tmp directory: `$TMP` becomes `tmp/deep-issue-id-v<start>-<end>`
+- Use verse-range suffix in tmp directory: `TMP=tmp/deep-issue-id/<BOOK>-<CH>-v<START>-<END>`
 - Output file uses verse range: `output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv`
 - Team name includes range: `deep-issue-<BOOK>-<CH>-v<START>-<END>`
 
@@ -46,11 +46,13 @@ Zero-pad the chapter number for all filenames: 3 digits for PSA (e.g., `067`), 2
 
 ### Working Directory
 
-Use a project-local tmp directory (sandbox may block `/tmp/claude/`):
+Use a book/chapter-scoped tmp directory to avoid collisions across parallel runs:
 ```bash
-TMP=tmp/deep-issue-id
+TMP=tmp/deep-issue-id/<BOOK>-<CH>       # e.g. tmp/deep-issue-id/PSA-119
 mkdir -p $TMP
 ```
+
+With verse range: `TMP=tmp/deep-issue-id/<BOOK>-<CH>-v<START>-<END>` (e.g. `tmp/deep-issue-id/PSA-119-v42-42`)
 
 All paths below use `$TMP` as the working directory.
 
@@ -103,7 +105,7 @@ python3 .claude/skills/utilities/scripts/build_tn_index.py --lookup "tongue"
 
 ## Team Setup
 
-Create a team for cross-agent interaction:
+Call `TeamCreate` directly as the orchestrator (it is a tool call, not a shell command, not delegated to a subagent):
 
 ```
 TeamCreate "deep-issue-<BOOK>-<CHAPTER>"
@@ -111,7 +113,7 @@ TeamCreate "deep-issue-<BOOK>-<CHAPTER>"
 
 Team name pattern: `deep-issue-PSA-120`, `deep-issue-GEN-01`, etc. With verse range: `deep-issue-PSA-119-v1-40`.
 
-All agents below are spawned as teammates in this team.
+All agents below are spawned as teammates in this team. `SendMessage` and `TeamDelete` are likewise direct orchestrator tool calls — never delegate them to a subagent.
 
 ## Orchestrator Patience
 
@@ -127,7 +129,11 @@ Do:
 
 ## Wave 2: Issue Identification
 
-Default: spawn 2 teammates (structure, rhetoric). With `--heavy`: spawn 4 teammates (discourse, grammar, figurative, speech). Use `subagent_type: "issue-identification"`, `model: "opus"`, with `team_name` set. Each analyst reads:
+Default: spawn 2 teammates (structure, rhetoric). With `--heavy`: spawn 4 teammates (discourse, grammar, figurative, speech).
+
+Spawn each analyst with `subagent_type: "issue-identification"`, `model: "opus"`, and **`team_name` set to the team name** (e.g. `"deep-issue-PSA-119"`). Without `team_name`, agents are not real team members and cannot receive DMs from the challenger.
+
+Each analyst reads:
 - Human ULT (`$TMP/ult_plain.usfm`)
 - Human UST (`$TMP/ust_plain.usfm`) if available
 - Alignment JSON (`$TMP/alignments.json`)
