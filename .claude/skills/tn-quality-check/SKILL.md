@@ -72,6 +72,7 @@ For each note with an AT: mentally substitute the AT for the gl_quote in the ULT
 - Have verb agreement problems
 - Leave dangling modifiers or orphaned words at the boundary
 - Don't actually resolve the translation issue
+- AT introduces closing punctuation (period, comma, question mark) that is not in the gl_quote, unless the note is specifically proposing a punctuation change to the ULT
 
 This is the semantic complement to the script's mechanical AT fit check (Check 7 + 10).
 
@@ -95,6 +96,14 @@ Flag notes in the same verse that:
 #### 3g. "Here" rule compliance
 
 If a note starts with "Here, ", verify the next content is a **bolded quote from the verse** starting with a lowercase letter. Flag violations like "Here David is saying..." or "Here the author is speaking..."
+
+#### 3h. Restructuring quote scope
+
+For figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result, or any note suggesting text reordering: verify the gl_quote spans the entire area being restructured, and the AT shows the full restructured text. Flag notes where the quote captures only a fragment of the reordering.
+
+#### 3i. Parallelism quote scope
+
+For figs-parallelism notes: verify the gl_quote includes both complete parallel phrases, not just key words. Flag notes where only nouns or fragments are quoted. Also check whether the parallelism involves ellipsis (words implied from the other phrase) — if so, flag that a figs-ellipsis note may also be needed.
 
 ### Step 4: Write Report
 
@@ -124,7 +133,7 @@ Write the final quality report to `output/quality/<BOOK>/<BOOK>-<CH>-quality.md`
 
 ## Mechanical Checks Reference
 
-The script runs these 13 checks:
+The script runs these 16 checks:
 
 | # | Category | Severity | What it checks |
 |---|----------|----------|----------------|
@@ -141,6 +150,9 @@ The script runs these 13 checks:
 | 11 | writer_in_psalms | warning | Uses "the psalmist", not "the writer" (PSA only) |
 | 12 | straight_quotes | warning | No straight quote characters |
 | 13 | at_capitalization | warning | AT capitalization matches sentence position |
+| 14 | abstract_noun_in_at | error | figs-abstractnouns AT must not contain abstract nouns |
+| 15 | at_ending_punctuation | warning | AT does not introduce ending punctuation absent from gl_quote |
+| 16 | narrow_parallelism_quote | warning | figs-parallelism gl_quote covers both full parallel phrases |
 
 **Note on orphaned preposition/conjunction warnings after gl_quote expansion**: When a gl_quote has been expanded to include a leading preposition or conjunction (the correct fix for orphaned words at the AT boundary), the script may still report `orphaned_conjunction` or `orphaned_prep` warnings. These are false positives -- the word now appears both in the expanded gl_quote and at the start of the AT, which is the intended behavior. During the deep semantic review (Step 3c), verify the actual substitution reads naturally rather than trusting these warnings at face value.
 

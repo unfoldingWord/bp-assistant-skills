@@ -52,6 +52,7 @@ account for this:
 Match the sentence position of the gl_quote:
 - Verse/sentence start: capitalize first word → [He traveled to the city]
 - Mid-sentence: lowercase → [he traveled to the city]
+- The first word of the AT must match the capitalization of the first word of the gl_quote in the ULT. If the gl_quote starts with a lowercase word like "for", the AT must also start with a lowercase word — don't substitute a different word with different casing (e.g., don't replace "for" with "So").
 
 ### Quotation Marks in ATs
 Do not use quotation marks in the alternate translation(s) unless that text contains opening or closing quotation marks or both. In that case, reproduce the quotation mark(s) in the corresponding location(s).
@@ -63,10 +64,18 @@ Check the UST for the same verse. Make sure your alternate translation is not th
 The AT should be the smallest change to the ULT text that resolves the translation issue. Keep ULT wording where possible, change only what is needed. For figures of speech (metaphors, idioms, etc.), more substantial rewording may be needed to express the plain meaning -- this is expected.
 
 ### Punctuation in ATs
-Do not include closing punctuation (period, comma, question mark) in the AT brackets unless the note is specifically suggesting a punctuation change.
+Do not include closing punctuation (period, comma, question mark) in the AT brackets unless the note is specifically proposing a change to the ULT's punctuation (e.g., changing a period to a question mark). If the AT is simply rephrasing text, do not add ending punctuation — even if the ULT text being replaced ends with a period or question mark. The AT replaces the *words*, not the surrounding punctuation.
 
 ### Discontinuous ATs
 When an AT covers non-adjacent text, use a single pair of brackets with a true ellipsis character between the parts: `[I desire peace … they desire war]` (spaces around the ellipsis).
+
+### Restructuring Notes
+For issue types that suggest reordering text (figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result, grammar-connect-condition-fact, or any note suggesting putting one part of the verse before another), the gl_quote must cover the **entire area** being restructured, and the AT must show the full restructured result. For example, if the note says "put the second half of the verse before the first half," the gl_quote should be approximately the whole verse and the AT should be the whole verse reordered. Do not quote only one fragment of a reordering — the reader needs to see both the original order and the proposed new order.
+
+### Parallelism Quote Scope
+For figs-parallelism notes, the gl_quote must include the **entirety of both parallel phrases**, not just the key parallel nouns or words. For example, if the verse says "Your mercy is great … your truth reaches to the clouds," do not quote just "mercy … truth" — quote the full "Your mercy is great … your truth reaches to the clouds." The reader needs to see both complete phrases to understand the parallelism.
+
+Always check for figs-ellipsis in parallel phrases. If one phrase omits words that are understood from the other phrase, this is an ellipsis within the parallelism and should be noted separately.
 
 ## Author References
 When referring to the author or writer of a biblical text, use "the author" instead of "the writer."

@@ -466,6 +466,65 @@ def check_abstract_noun_at(row, prepared_items):
     return findings
 
 
+def check_at_ending_punctuation(row, prepared_items):
+    """Check 15: AT should not introduce ending punctuation unless proposing a punctuation change."""
+    note = row.get('Note', '')
+    ats = extract_ats(note)
+    if not ats:
+        return []
+
+    item = prepared_items.get(row.get('ID', ''))
+    if not item:
+        return []
+    gl_quote = item.get('gl_quote_roundtripped') or item.get('gl_quote', '')
+    if not gl_quote:
+        return []
+
+    findings = []
+    for at in ats:
+        at_stripped = at.rstrip()
+        if not at_stripped:
+            continue
+        last_char = at_stripped[-1]
+        if last_char in '.?,!':
+            # Check if the gl_quote also ends with that punctuation
+            gl_stripped = gl_quote.rstrip()
+            if not gl_stripped or gl_stripped[-1] != last_char:
+                findings.append({
+                    'severity': 'warning', 'category': 'at_ending_punctuation',
+                    'message': f'AT [{at}] ends with "{last_char}" but gl_quote does not — '
+                               f'remove unless proposing a punctuation change'
+                })
+    return findings
+
+
+def check_parallelism_quote_scope(row, prepared_items):
+    """Check 16: Parallelism notes should quote both full parallel phrases."""
+    sref = row.get('SupportReference', '')
+    if 'figs-parallelism' not in sref:
+        return []
+
+    item = prepared_items.get(row.get('ID', ''))
+    if not item:
+        return []
+    gl_quote = item.get('gl_quote_roundtripped') or item.get('gl_quote', '')
+    ult_verse = item.get('ult_verse', '')
+    if not gl_quote or not ult_verse:
+        return []
+
+    # Heuristic: if the gl_quote is very short relative to the verse, it likely
+    # captures only key words rather than full parallel phrases
+    quote_words = len(gl_quote.split())
+    verse_words = len(ult_verse.split())
+    if verse_words > 0 and quote_words < 4 and verse_words > 8:
+        return [{
+            'severity': 'warning', 'category': 'narrow_parallelism_quote',
+            'message': f'Parallelism gl_quote is only {quote_words} words in a '
+                       f'{verse_words}-word verse — verify both full parallel phrases are quoted'
+        }]
+    return []
+
+
 def check_curly_quotes(row):
     """Check 12: No straight quotes should remain."""
     if row.get('Occurrence') == '0':
@@ -635,6 +694,14 @@ def main():
 
         # Check 14: Abstract noun ATs must not contain abstract nouns
         for f in check_abstract_noun_at(row, prepared_items):
+            row_findings.append(f)
+
+        # Check 15: AT ending punctuation
+        for f in check_at_ending_punctuation(row, prepared_items):
+            row_findings.append(f)
+
+        # Check 16: Parallelism quote scope
+        for f in check_parallelism_quote_scope(row, prepared_items):
             row_findings.append(f)
 
         # Annotate each finding with row context

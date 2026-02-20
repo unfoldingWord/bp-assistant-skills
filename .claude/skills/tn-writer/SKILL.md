@@ -143,6 +143,8 @@ Process one item at a time:
    - Use minimal changes to the ULT wording; only change what the translation issue requires
    - For items flagged as narrow in Step 4: the narrow gl_quote is still correct in the prompt (it focuses the note body on the issue). But write the initial AT with the surrounding phrase context in mind, since the quote boundary may be expanded for AT fit in Step 7.
    - If the gl_quote boundary creates an orphaned preposition or conjunction, the preferred fix is to expand the gl_quote in Step 7, not to include the orphaned word only in the AT.
+   - For restructuring issue types (figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result, grammar-connect-condition-fact): if the note suggests reordering parts of the verse, ensure the gl_quote spans the full area being restructured. The AT must show the complete restructured text, not just a fragment.
+   - For figs-parallelism: ensure the gl_quote captures both full parallel phrases, not just the key parallel terms. Check whether the parallelism involves ellipsis (words omitted in one phrase that are understood from the other) — if so, a separate figs-ellipsis note may be needed.
 
 4. For items with `tcm_mode: true`:
    - Present multiple interpretations using the "This could mean:" format
@@ -207,6 +209,10 @@ When reviewing each substitution line from verify_at_fit.py, check specifically:
 
 4. **Read the full result sentence**: Does it parse as natural English? Watch for
    broken grammar at the boundaries.
+
+5. **Restructuring scope**: For infostructure/logic notes (figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result), verify the gl_quote and AT cover the full restructured area. If only a fragment is quoted, expand to include the complete reordering.
+
+6. **Parallelism scope**: For parallelism notes (figs-parallelism), verify the gl_quote includes both entire parallel phrases. If only key words are quoted, expand to capture the full parallel structures.
 
 Also check:
 - Fix any ERRORS (gl_quote not found -- usually a curly brace or case issue)

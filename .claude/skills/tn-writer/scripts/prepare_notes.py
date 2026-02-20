@@ -63,6 +63,12 @@ CRITICAL AT RULES:
 - Match the capitalization of the first word position. If the gl_quote appears at
   the start of the verse or after a period, capitalize the first word of your AT.
   If it appears mid-sentence, use lowercase.
+- Do not include closing punctuation (period, comma, question mark) in the AT unless
+  you are specifically proposing a change to the ULT's punctuation.
+- For restructuring issues (infostructure, logic-goal, logic-result): make sure your
+  gl_quote and AT cover the full area being restructured.
+- For parallelism: make sure your quote covers both full parallel phrases, not just the
+  key parallel words. Check for ellipsis.
 - Mentally substitute your AT into the verse and read the full sentence aloud.
   Does it flow? Is anything orphaned or missing?
 
