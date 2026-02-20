@@ -21,7 +21,7 @@ Uses `.env` in the project root (already in `.gitignore`). On the OCI server, th
 
 ```
 DOOR43_TOKEN=<gitea-api-token>
-DOOR43_USERNAME=deferredreward
+DOOR43_USERNAME=benjamin-test
 DOOR43_REPOS_PATH=/path/to/your/door43/repos
 ```
 
@@ -37,7 +37,7 @@ The token variable may be named `GITEA_TOKEN` rather than `DOOR43_TOKEN` dependi
 | Book | `PSA` | Standard abbreviation |
 | Chapter | `30` or `33-34` | Single chapter or range |
 | Verse range | `119:100-104` | Chapter:start-end |
-| Username | `deferredreward` | For commit message attribution |
+| Username | `benjamin-test` | For commit message attribution |
 | Source file | `output/AI-ULT/PSA/PSA-119-100-104-aligned.usfm` | Locate in `output/` |
 
 ### Derived Values
@@ -192,7 +192,7 @@ cd "$REPOS_PATH/$REPO"
 
 # 1. Commit on the staging branch
 git add 19-PSA.usfm  # or tn_PSA.tsv
-git commit -m "AI ULT for PSA 30 (attribution: deferredreward)"
+git commit -m "AI ULT for PSA 30 (attribution: benjamin-test)"
 
 # 2. Verify the changes
 git diff HEAD~1 --stat
@@ -203,7 +203,7 @@ git push origin "$BRANCH"
 # 4. Create PR, merge it, and delete the staging branch (all in one call)
 python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
   --repo "$REPO" --head "$BRANCH" --base master \
-  --title "AI TN for PSA 30 [deferredreward]" \
+  --title "AI TN for PSA 30 [benjamin-test]" \
   --merge
 # Expected output: "PR #NNNN created" then "PR #NNNN merged." then "Branch ... deleted."
 # If you do not see "merged" in the output, the insert FAILED -- report the error.
