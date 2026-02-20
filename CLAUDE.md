@@ -77,3 +77,7 @@ find data/ -name "*.usfm"
 - ALWAYS `git add` and `git commit` new files immediately after creating them (not in output, data, tmp folders)
 - Run `git status` before any branch operation (checkout, reset, merge, rebase)
 - NEVER do `git reset --hard` or `git clean` without checking for untracked files first
+- After making changes to skills or config, always suggest a commit to the user.
+
+## Bot Safety
+- The bot runs as a Docker container. Before any rebuild/restart, always check `sudo docker logs zulip-bot --tail 30` for active pipelines. Look for `[notes] Running`, `[generate] Processing`, or `[claude-runner] Starting` without a corresponding completion. A restart kills in-progress work.
