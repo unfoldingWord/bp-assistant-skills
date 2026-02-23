@@ -78,6 +78,10 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | קֶרַח | H7140 | hail | ice | editor PSA 147:17; contextual (scattered/cast precipitation) |
 | פַּת | H6595a | crumbs | morsels | editor PSA 147:17; small pieces, parallels scattered imagery |
 | יָחַל | H3176 | hoping | waiting | editor PSA 147:11; active expectation, not passive waiting |
+| הָדָר | H1926 | splendor | majesty | editor PSA 145:5,12; consistently "splendor" for hadar |
+| שָׂבַר | H7663b | wait for | look to | editor PSA 145:15; Piel = hope/wait, not merely "look" |
+| תְּהִלָּה | H8416 | psalm (in superscription) | praise | use "psalm" in superscription context; "praise" in body text; editor PSA 145:1 |
+| יָדָה | H3034 | thank | praise | Hiphil yadah = "thank"; editor preference PSA 145:10 |
 
 ## Phrases
 
@@ -92,11 +96,11 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | יָרוּם מִמֶּנִּי | higher than I | high away from me | comparative with מִן |
 | Jussive negative | may you not [verb] | do not [verb] | form-based: use jussive for 2nd person negative wishes, not imperative; editor PSA 69:6,17; 70:5 |
 | Concessive waw | Though...yet | And...and | discretionary: read waw as concessive in contrast contexts; editor PSA 69:10-11,20 |
-| Fronted predicate | subject-first | predicate-first | discretionary: editor normalizes Hebrew fronted predicates to English SVO; PSA 69:4,33; 70:2,4,5; 82:3,4,5; 89:1,15,20,23,34,44 |
+| Fronted predicate | subject-first | predicate-first | discretionary: editor normalizes Hebrew fronted predicates to English SVO; PSA 69:4,33; 70:2,4,5; 82:3,4,5; 89:1,15,20,23,34,44; 145:3,8,9,17,18 (HIGH FREQ in PSA 145) |
 | 3rd person jussive (prayer) | May he/they [verb] | He/they will [verb] | read yiqtol as jussive in petitionary psalms; editor PSA 72 throughout (16 of 20 verses) |
-| Participial noun phrase | those [verb]ing / the ones [verb]ing | who [verb] | both "those" and "the ones" acceptable for substantive participles; "those" in PSA 71:4,10,13,24; 83:7; 84:4,11; 87:7; 125:1,5; 129:8; "the ones" in PSA 88:4,5,10,18. Avoid relative clause "who [verb]". Agent nouns (dwellers, singers) also acceptable |
+| Participial noun phrase | agent noun preferred (fearers, dwellers, singers) | who [verb] | default to English agent-noun -er forms; fall back to "those [verb]ing" or "the ones [verb]ing" when no natural agent noun exists. Avoid relative clause "who [verb]". Expanding agent nouns to full phrases is editor discretion, not an AI rule (some like "callers" or "lovers" may need expansion in context) |
 | Jussive positive | May they [verb] | Let them [verb] | use "May they" for positive jussive/wish forms; editor PSA 83:16-18; 126:6 |
-| Partitive kol | all of the [noun] | all the [noun] | add "of" after "all" with definite nouns; editor PSA 82:5,8; 83:11,18; 89:16,41,47 |
+| Partitive kol | all of the [noun] | all the [noun] | add "of" after "all" with definite nouns; editor PSA 82:5,8; 83:11,18; 89:16,41,47; 145:9,14,17,18,20 (HIGH FREQ in PSA 145) |
 | Hebrew perfect (ongoing) | present tense | past/perfect tense | render Hebrew perfect as English present when context is ongoing/habitual/devotional or lament; editor PSA 88:1,7,9,13,16,17 (12 instances -- strongest evidence); also PSA 120:5; 122:2,4,5; 126:3; 130:1,5 |
 | hayah (stative) | {are} | have been | for stative uses of hayah perfect, use present "{are}" not "have been"; editor PSA 82:8; 83:8 |
 | Article in construct | bare noun | the [noun] | drop English "the" before nouns in construct chains and before abstract nouns; editor PSA 121:2; 125:3,5; 126:1,6; 127:2; 130:4,7 |
@@ -109,3 +113,8 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | Explicit subject in negated clauses | and they do not [verb] | and do not [verb] | add explicit pronoun subject in coordinated negative clauses for clarity; editor PSA 89:30,31 |
 | Substantive adjective | chosen / anointed | chosen one / anointed one | drop "one" from substantive adjectives used as nouns; editor PSA 89:3,51 |
 | Articled singular divine participle | the one [verb]ing | He {is} [verb]ing | when a singular articled participle describes Yahweh's ongoing action as a divine title/attribute (e.g., הַמְכַסֶּה "the one covering"), render as "the one [verb]ing" not as a predicate with implied copula; editor PSA 147:8,14,15,16,17 (5x) |
+| OVS -> SVO | They will [verb] the [object] | [object] they will [verb] | move fronted objects to post-verb position; editor PSA 145:4,7,11,21 (4x). Applies when Hebrew fronts object before verb+subject |
+| Copula brackets in participle clauses | is [verb]ing | {is} [verb]ing | remove brackets on copula ("is"/"are") when required by English participle predicate; editor PSA 145:14,15,20 (3x) |
+| Adversative waw (contrast) | but | and | use "but" for waw when clause contrasts with preceding (e.g., preserving faithful vs destroying wicked); editor PSA 145:20 |
+| Yiqtol gnomic/habitual | present tense | future tense | render yiqtol as English present (not future) in gnomic/attribute statements about God's character; editor PSA 145:19 (does/hears/saves) |
+| Niphal ptcp verbal form | [verb]ing [adjective] | [adjective] [noun] | render Niphal participle as verbal "making wonderful" / "making fearful" not adjectival "wonderful deeds" / "fearful deeds"; editor PSA 145:5,6 |

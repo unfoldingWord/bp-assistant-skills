@@ -49,6 +49,9 @@ For each changed verse, identify what the editor preferred. Use the `diff` field
 
 Look for patterns that appear 2+ times across verses (higher confidence). Single occurrences are noted but flagged as lower confidence.
 
+**Editor-discretion patterns**: Some changes reflect case-by-case editorial judgment, not systematic preferences. Do not write these to glossary/quick-ref as AI rules. Instead, flag them as "editor discretion" in the report and log as situational. Known editor-discretion areas:
+- **Participial noun expansion**: editor changes an agent noun to a fuller phrase (e.g., "his fearers" -> "the ones fearing him", "callers" -> "the ones calling"). The AI defaults to agent-noun -er forms; editors expand when context requires it. These are not vocabulary corrections.
+
 Where possible, identify the Hebrew word or Strong's number involved. Check the Hebrew source at `data/hebrew_bible/` if needed for Strong's lookup.
 
 ### Step 4: Check existing memory before writing

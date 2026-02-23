@@ -174,12 +174,12 @@ Participles should use "-ing" forms to preserve their verbal noun quality:
 - שֹׁמֵעַ -> "Who is hearing?" (not "Who hears?")
 
 **Substantive participles:**
-- לִירֵאֶיךָ -> "to the ones fearing you" (not "to those who fear you")
+Default to agent-noun forms when English has them:
+- יִרְאֵי שְׁמֶךָ -> "the fearers of your name"
+- יֹשְׁבֵי -> "the dwellers of"
+- שֹׁרְרַי -> "my watchers" / "my enemies"
 
-Use "the ones [verb]-ing" for participles functioning as nouns.
-
-**However**, prefer noun-like forms when available:
-- יִרְאֵי שְׁמֶךָ -> "the fearers of your name" (not "the ones fearing your name")
+Use "the ones [verb]-ing" or "those [verb]-ing" only as a fallback when no natural English agent noun exists. Do not systematically expand agent nouns to full phrases -- editors will adjust case-by-case when context requires it (e.g., "callers" or "lovers" may need expansion to avoid wrong meaning).
 
 Per psalms_reference.csv: Nominal adjectives like "the righteous," "the wicked," "the poor" do NOT need {ones}. Only add {ones} for participles when truly needed for grammar.
 
@@ -472,7 +472,7 @@ Before finalizing ULT output, verify:
 - [ ] Project glossary checked for editorial decisions
 - [ ] Prepositions marked with brackets when implied
 - [ ] Literalness patterns applied (see reference/literalness_patterns.md)
-- [ ] Substantive participles use noun-like form when available ("fearers" not "the ones fearing")
+- [ ] Substantive participles default to agent-noun form ("fearers"); expansion is editor discretion
 - [ ] Large numbers use numerals with commas (12,000)
 - [ ] Vocabulary scripts were run for key terms
 - [ ] Psalm superscriptions use "chief musician" and periods between elements
