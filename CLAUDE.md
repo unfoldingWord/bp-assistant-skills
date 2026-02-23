@@ -74,6 +74,7 @@ find data/ -name "*.usfm"
 ```
 
 ## Git Discipline
+- The remote is named `github`, not `origin`. Always use `git push github` (not `git push`).
 - ALWAYS `git add` and `git commit` new files immediately after creating them (not in output, data, tmp folders)
 - Run `git status` before any branch operation (checkout, reset, merge, rebase)
 - NEVER do `git reset --hard` or `git clean` without checking for untracked files first
