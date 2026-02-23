@@ -19,8 +19,9 @@ This is the linguistic issue - some languages require the reason to come first. 
 - "Do not fear, **for** you have borne a son" (command/result first, then reason)
 
 **Do NOT write a note for**:
-- Reason-result relationships where the order is already reason-first
+- Reason-result relationships where the order is already reason-first (reason then result is natural order; no reordering needed)
 - Cases where the connection is clear and natural
+- Verses where the result simply follows the reason -- this is the expected order and needs no note
 
 ---
 

@@ -26,6 +26,8 @@ In the templates you will find words that are in all capital letters. These word
 ### Preserve Template Wording
 Replace ALL CAPS placeholders and resolve slashes, but keep all other template wording intact. Do not rephrase, condense, or substitute your own wording for the template's fixed phrases. For example, if the template says "you could express the same idea in another way," write exactly that -- do not change it to "you could express the same idea with a verb" or any other variation. Each note for the same issue type should use the same template phrasing; do not let one note's wording drift and then carry that drift into subsequent notes.
 
+A note that conveys similar information to the template but uses different wording is not acceptable. The template is the note; you are filling in the blanks and making minor contextual adjustments. If every note for a given issue type were placed side by side, the fixed portions should be identical across all of them.
+
 ### Slashes in Templates
 If there are slashes between words expressing similar or different ideas in a template, discern which word or two applies and instead of using all of that part of the template, use the word(s) you have chosen as applicable in this circumstance and write it as a natural sentence using "and" or "or", not a slash.
 
@@ -64,7 +66,7 @@ Check the UST for the same verse. Make sure your alternate translation is not th
 The AT should be the smallest change to the ULT text that resolves the translation issue. Keep ULT wording where possible, change only what is needed. For figures of speech (metaphors, idioms, etc.), more substantial rewording may be needed to express the plain meaning -- this is expected.
 
 ### Punctuation in ATs
-Do not include closing punctuation (period, comma, question mark) in the AT brackets unless the note is specifically proposing a change to the ULT's punctuation (e.g., changing a period to a question mark). If the AT is simply rephrasing text, do not add ending punctuation — even if the ULT text being replaced ends with a period or question mark. The AT replaces the *words*, not the surrounding punctuation.
+Do not include punctuation at the start or end of the AT brackets unless the note is specifically proposing a change to the ULT's punctuation. If the gl_quote does not start with a comma or other punctuation, the AT should not either. Similarly, do not add ending punctuation (period, comma, question mark) even if the ULT text being replaced ends with one. The AT replaces the *words*, not the surrounding punctuation.
 
 ### Discontinuous ATs
 When an AT covers non-adjacent text, use a single pair of brackets with a true ellipsis character between the parts: `[I desire peace … they desire war]` (spaces around the ellipsis).
@@ -142,6 +144,7 @@ Similarly, do not borrow wording from templates belonging to other issue types. 
 - **grammar-connect-logic-result**: Do not identify specific phrases, keep to the template
 - **figs-ellipsis**: Do not explain the missing words/phrase
 - **figs-abstractnouns**: Do not define the words. The AT must resolve the abstract noun into a non-abstract form (verb, adjective, clause) -- do not replace one abstract noun with another (e.g., "obedience" -> "faithful obedience" is wrong; "obedience" -> "obeying him" is correct; "covenant faithfulness" -> "faithful love" is wrong because "love" is abstract; "covenant faithfulness" -> "being faithful to his covenant" is correct)
+- **writing-poetry (cognate accusative)**: Use the cognate accusative template exactly. Do not describe the poetic effect, explain the figure, or substitute other wording
 
 ## Terminology
 

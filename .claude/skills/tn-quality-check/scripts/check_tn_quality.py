@@ -125,6 +125,57 @@ def parse_usfm_verses(usfm_path):
     return verses
 
 
+def parse_hebrew_source_words(hebrew_path):
+    """Parse Hebrew source USFM into {chapter:verse -> [word_list]}.
+
+    Each word_list is a list of Hebrew word strings (with cantillation) in verse order.
+    """
+    if not hebrew_path or not os.path.exists(hebrew_path):
+        return {}
+
+    with open(hebrew_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    verses = {}
+    current_chapter = None
+    current_verse = None
+    current_words = []
+
+    def save():
+        nonlocal current_verse, current_words
+        if current_chapter and current_verse and current_words:
+            verses[f"{current_chapter}:{current_verse}"] = current_words
+        current_words = []
+
+    for line in content.split('\n'):
+        cm = re.match(r'\\c\s+(\d+)', line)
+        if cm:
+            save()
+            current_chapter = cm.group(1)
+            current_verse = None
+            continue
+        vm = re.match(r'\\v\s+(\d+[-\d]*)', line)
+        if vm and current_chapter:
+            save()
+            current_verse = vm.group(1)
+        # Extract \w word|...\w* entries
+        for m in re.finditer(r'\\w\s+([^|]+)\|[^\\]*?\\w\*', line):
+            word = m.group(1).strip()
+            if current_chapter and current_verse:
+                current_words.append(word)
+    save()
+    return verses
+
+
+def find_hebrew_usfm(book_code):
+    """Auto-detect Hebrew source USFM for a book code."""
+    import glob as globmod
+    hebrew_dir = os.path.join(PROJECT_ROOT, 'data', 'hebrew_bible')
+    pattern = os.path.join(hebrew_dir, f'*-{book_code.upper()}.usfm')
+    matches = globmod.glob(pattern)
+    return matches[0] if matches else None
+
+
 def strip_braces(text):
     """Remove {curly braces} used for implied words in ULT."""
     return re.sub(r'\{([^}]*)\}', r'\1', text)
@@ -538,6 +589,86 @@ def check_support_reference(row, valid_issues):
     return None
 
 
+def check_at_starting_punctuation(row, prepared_items):
+    """Check 18: AT should not start with punctuation unless proposing a change."""
+    note = row.get('Note', '')
+    ats = extract_ats(note)
+    if not ats:
+        return []
+
+    item = prepared_items.get(row.get('ID', ''))
+    if not item:
+        return []
+    gl_quote = item.get('gl_quote_roundtripped') or item.get('gl_quote', '')
+
+    findings = []
+    for at in ats:
+        at_stripped = at.lstrip()
+        if not at_stripped:
+            continue
+        first_char = at_stripped[0]
+        if first_char in '.,;:!?':
+            # Only flag if the gl_quote doesn't also start with that punctuation
+            gl_stripped = gl_quote.lstrip() if gl_quote else ''
+            if not gl_stripped or gl_stripped[0] != first_char:
+                findings.append({
+                    'severity': 'warning', 'category': 'at_starting_punctuation',
+                    'message': f'AT [{at}] starts with "{first_char}" — '
+                               f'remove unless proposing a punctuation change'
+                })
+    return findings
+
+
+def check_hebrew_quote_joiners(row, hebrew_verses):
+    """Check 19: Hebrew quotes spanning non-adjacent words should use & separators."""
+    if row.get('Occurrence') == '0':
+        return []
+    quote = row.get('Quote', '')
+    if not quote or not has_rtl(quote):
+        return []
+    # Skip quotes that already have & separators
+    if ' & ' in quote:
+        return []
+
+    findings = []
+    # Heuristic: extract Hebrew word tokens from the quote
+    heb_words = [w for w in quote.split() if has_rtl(w)]
+    if len(heb_words) < 2:
+        return []
+
+    # Check against the Hebrew verse if available
+    ref = row.get('Reference', '')
+    verse_words = hebrew_verses.get(ref, [])
+    if not verse_words:
+        return findings
+
+    # Find positions of each quote word in the verse
+    positions = []
+    for qw in heb_words:
+        # Strip cantillation marks for comparison
+        qw_clean = qw.strip()
+        for i, vw in enumerate(verse_words):
+            if vw.strip() == qw_clean:
+                if i not in positions:
+                    positions.append(i)
+                    break
+
+    if len(positions) >= 2:
+        # Check for gaps (non-consecutive positions)
+        positions_sorted = sorted(positions)
+        for i in range(1, len(positions_sorted)):
+            gap = positions_sorted[i] - positions_sorted[i - 1]
+            if gap > 1:
+                findings.append({
+                    'severity': 'warning', 'category': 'hebrew_quote_missing_joiner',
+                    'message': f'Hebrew quote may need & separator — {gap - 1} word(s) '
+                               f'skipped between positions {positions_sorted[i-1]} and '
+                               f'{positions_sorted[i]} in source verse'
+                })
+                break  # One warning per quote is enough
+    return findings
+
+
 def check_parallelism_quote_scope(row, prepared_items):
     """Check 16: Parallelism notes should quote both full parallel phrases."""
     sref = row.get('SupportReference', '')
@@ -644,6 +775,7 @@ def main():
     parser.add_argument('--ult-usfm', help='Path to plain ULT USFM')
     parser.add_argument('--ust-usfm', help='Path to plain UST USFM')
     parser.add_argument('--book', help='Book code (e.g. PSA) for master TN ID check')
+    parser.add_argument('--hebrew-usfm', help='Path to Hebrew source USFM (for quote validation)')
     parser.add_argument('--output', '-o', default='/tmp/claude/tn_quality_findings.json',
                         help='Output findings JSON path')
 
@@ -673,6 +805,16 @@ def main():
         with open(args.prepared_json) as f:
             pdata = json.load(f)
         book_code = pdata.get('book', '')
+
+    # Parse Hebrew source for quote validation
+    hebrew_path = args.hebrew_usfm
+    if not hebrew_path and book_code:
+        hebrew_path = find_hebrew_usfm(book_code)
+    hebrew_verses = parse_hebrew_source_words(hebrew_path) if hebrew_path else {}
+    if hebrew_verses:
+        print(f"  Loaded Hebrew source: {len(hebrew_verses)} verses", file=sys.stderr)
+    else:
+        print("  No Hebrew source available; skipping quote joiner check", file=sys.stderr)
 
     # Load valid issues once
     valid_issues = load_valid_issues()
@@ -753,6 +895,14 @@ def main():
         # Check 17: SupportReference slug must be in translation-issues.csv
         f = check_support_reference(row, valid_issues)
         if f:
+            row_findings.append(f)
+
+        # Check 18: AT starting punctuation
+        for f in check_at_starting_punctuation(row, prepared_items):
+            row_findings.append(f)
+
+        # Check 19: Hebrew quote missing & joiners
+        for f in check_hebrew_quote_joiners(row, hebrew_verses):
             row_findings.append(f)
 
         # Annotate each finding with row context

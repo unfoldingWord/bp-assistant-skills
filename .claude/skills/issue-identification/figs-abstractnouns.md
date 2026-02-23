@@ -49,6 +49,10 @@ Not every abstract noun needs a note. Create notes when:
 3. Theological significance warrants explanation
 4. Concept may be unfamiliar to readers
 
+### Combining Adjacent Abstract Nouns
+
+When two or more abstract nouns appear in the same verse or adjacent phrases, combine them into a single issue rather than creating separate notes. For example, if a verse contains both "justice" and "righteousness" as abstract nouns, create one issue that covers both. This avoids cluttering the notes with repetitive "If your language does not use an abstract noun..." text. The single note can address both nouns with a combined AT.
+
 ---
 
 ## Common Categories
