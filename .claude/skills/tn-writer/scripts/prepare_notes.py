@@ -667,6 +667,25 @@ def main():
         print(f"  Filtered {len(items) - len(tw_filtered)} items with tW articles", file=sys.stderr)
         items = tw_filtered
 
+    # Enforce single "first instance" parallelism note per chapter.
+    # Only the first figs-parallelism item keeps "t: first instance"; all later
+    # ones have that tag stripped so they use the shorter follow-up templates.
+    first_parallelism_seen = False
+    demoted = 0
+    for item in items:
+        if item['sref'] == 'figs-parallelism':
+            if not first_parallelism_seen:
+                first_parallelism_seen = True
+            else:
+                new_expl = re.sub(r't:\s*first\s+instance\b', '', item['explanation'],
+                                  flags=re.IGNORECASE).strip()
+                if new_expl != item['explanation']:
+                    item['explanation'] = new_expl
+                    demoted += 1
+    if demoted:
+        print(f"  Demoted {demoted} parallelism item(s) from 'first instance' to follow-up",
+              file=sys.stderr)
+
     # Extract chapter from filename for output metadata
     basename = os.path.basename(args.input_tsv)
     chapter_match = re.search(r'-(\d+)', basename)
