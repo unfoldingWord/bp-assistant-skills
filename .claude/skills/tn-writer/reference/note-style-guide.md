@@ -26,7 +26,7 @@ In the templates you will find words that are in all capital letters. These word
 ### Preserve Template Wording
 Replace ALL CAPS placeholders and resolve slashes, but keep all other template wording intact. Do not rephrase, condense, or substitute your own wording for the template's fixed phrases. For example, if the template says "you could express the same idea in another way," write exactly that -- do not change it to "you could express the same idea with a verb" or any other variation. Each note for the same issue type should use the same template phrasing; do not let one note's wording drift and then carry that drift into subsequent notes.
 
-A note that conveys similar information to the template but uses different wording is not acceptable. The template is the note; you are filling in the blanks and making minor contextual adjustments. If every note for a given issue type were placed side by side, the fixed portions should be identical across all of them.
+Occasionally context requires different wording, but this should be the exception. By default, the template is the note -- you are filling in the blanks and making minor contextual adjustments. If every note for a given issue type were placed side by side, the fixed portions should be nearly identical across all of them.
 
 ### Slashes in Templates
 If there are slashes between words expressing similar or different ideas in a template, discern which word or two applies and instead of using all of that part of the template, use the word(s) you have chosen as applicable in this circumstance and write it as a natural sentence using "and" or "or", not a slash.
