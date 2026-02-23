@@ -25,6 +25,23 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SKILL_DIR = os.path.dirname(SCRIPT_DIR)
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(SKILL_DIR)))
 
+TRANSLATION_ISSUES_CSV = os.path.join(PROJECT_ROOT, 'data', 'translation-issues.csv')
+
+
+def load_valid_issues():
+    """Load the set of valid issue slugs from translation-issues.csv."""
+    valid = set()
+    if not os.path.exists(TRANSLATION_ISSUES_CSV):
+        return None  # Can't check; file missing
+    with open(TRANSLATION_ISSUES_CSV, 'r', encoding='utf-8') as f:
+        for i, line in enumerate(f):
+            if i == 0:
+                continue  # skip header
+            slug = line.split(',')[0].strip()
+            if slug:
+                valid.add(slug)
+    return valid
+
 # Add tn-writer scripts to path for reuse
 TN_WRITER_SCRIPTS = os.path.join(PROJECT_ROOT, '.claude', 'skills', 'tn-writer', 'scripts')
 sys.path.insert(0, TN_WRITER_SCRIPTS)
@@ -498,6 +515,29 @@ def check_at_ending_punctuation(row, prepared_items):
     return findings
 
 
+def check_support_reference(row, valid_issues):
+    """Check 17: SupportReference must be a known issue from translation-issues.csv."""
+    if row.get('Occurrence') == '0':
+        return None
+    sref = row.get('SupportReference', '').strip()
+    if not sref:
+        return None  # Empty is allowed (some notes have no support reference)
+    if valid_issues is None:
+        return None  # Can't validate; CSV missing
+    # Support reference format: rc://*/ta/man/translate/SLUG
+    # May contain multiple entries separated by whitespace or semicolons
+    slugs = re.findall(r'rc://\*/ta/man/translate/([^\s;,]+)', sref)
+    if not slugs:
+        # Has a SupportReference but no rc:// links — flag it
+        return {'severity': 'warning', 'category': 'support_ref_format',
+                'message': f'SupportReference has no rc:// links: "{sref[:60]}"'}
+    unknown = [s for s in slugs if s not in valid_issues]
+    if unknown:
+        return {'severity': 'error', 'category': 'unknown_support_ref',
+                'message': f'SupportReference slug(s) not in translation-issues.csv: {unknown}'}
+    return None
+
+
 def check_parallelism_quote_scope(row, prepared_items):
     """Check 16: Parallelism notes should quote both full parallel phrases."""
     sref = row.get('SupportReference', '')
@@ -634,6 +674,12 @@ def main():
             pdata = json.load(f)
         book_code = pdata.get('book', '')
 
+    # Load valid issues once
+    valid_issues = load_valid_issues()
+    if valid_issues is None:
+        print("Warning: translation-issues.csv not found; skipping support reference check",
+              file=sys.stderr)
+
     all_findings = []
 
     # --- Per-row checks ---
@@ -702,6 +748,11 @@ def main():
 
         # Check 16: Parallelism quote scope
         for f in check_parallelism_quote_scope(row, prepared_items):
+            row_findings.append(f)
+
+        # Check 17: SupportReference slug must be in translation-issues.csv
+        f = check_support_reference(row, valid_issues)
+        if f:
             row_findings.append(f)
 
         # Annotate each finding with row context
