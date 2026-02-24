@@ -123,6 +123,26 @@ Review flagged items. These quotes are correct for focusing the note body on the
 
 Read `reference/note-style-guide.md` for the note writing rules.
 
+### Step 5a: Check canonical sources
+
+Before generating notes, check for content team decisions that affect this chapter's issues:
+
+```bash
+# Search for decisions about specific terms or issue types
+grep -i "<term or issue type>" data/issues_resolved.txt
+```
+
+Canonical vocabulary references (read-only -- never modify these):
+- `data/issues_resolved.txt` -- content team decisions, highest authority
+- `data/glossary/hebrew_ot_glossary.csv` -- standard ULT/UST renderings
+- `data/glossary/psalms_reference.csv` -- Psalms-specific terms
+- `data/glossary/sacrifice_terminology.csv` -- sacrifice/offering vocabulary
+- `data/glossary/biblical_measurements.csv` -- weights, volumes, distances
+- `data/glossary/biblical_phrases.csv` -- grammatical and prophetic phrases
+- `data/quick-ref/ult_decisions.csv` / `ust_decisions.csv` -- prior rendering decisions
+
+If `issues_resolved.txt` contains a decision about how a specific issue type should be handled, follow it. If a note references a Hebrew term, use the rendering from canonical CSVs unless `issues_resolved.txt` specifies otherwise.
+
 ### Step 6: Generate Notes (write keyed JSON, not TSV)
 
 Read `/tmp/claude/prepared_notes.json`. For each item, generate a note and write it to a JSON object keyed by the item's `id`. Write the result to `/tmp/claude/generated_notes.json`.

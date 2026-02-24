@@ -478,6 +478,9 @@ Before finalizing UST output, verify:
 | Issues Resolved | `data/issues_resolved.txt` | FINAL AUTHORITY - UST decisions |
 | Hebrew Glossary | `data/glossary/hebrew_ot_glossary.csv` | UST_GLOSS column |
 | Psalms Reference | `data/glossary/psalms_reference.csv` | UST_GLOSS column |
+| Sacrifice Terms | `data/glossary/sacrifice_terminology.csv` | UST_GLOSS column where available |
+| Measurements | `data/glossary/biblical_measurements.csv` | UST_GLOSS column where available |
+| Biblical Phrases | `data/glossary/biblical_phrases.csv` | UST_GLOSS column where available |
 | Published ULT | `data/published_ult_english/*.usfm` | Meaning verification |
 | UST Strong's Index | `data/cache/ust_index.json` | Published UST renderings by Strong's number |
 | UST Decisions | `data/quick-ref/ust_decisions.csv` | Prior UST vocabulary decisions |
