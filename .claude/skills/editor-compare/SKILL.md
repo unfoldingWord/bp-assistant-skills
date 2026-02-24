@@ -13,6 +13,20 @@ Compare editor-edited text against AI-generated ULT/UST to identify vocabulary, 
 - AI output in `output/AI-ULT/` or `output/AI-UST/` (from ULT-gen or UST-gen)
 - Editor source: Door43 master (HTTP fetch) or editor-feedback file
 
+## Protected Canonical Files -- NEVER modify
+
+These are fetched from Google Drive and represent content team decisions.
+Editor-compare must never write to, append to, or modify them.
+If an editor preference contradicts a canonical source, log the conflict
+and present it for escalation -- do not change the canonical file.
+
+- `data/issues_resolved.txt`
+- `data/glossary/hebrew_ot_glossary.csv`
+- `data/glossary/biblical_measurements.csv`
+- `data/glossary/psalms_reference.csv`
+- `data/glossary/sacrifice_terminology.csv`
+- `data/glossary/biblical_phrases.csv`
+
 ## Single-Chapter Mode
 
 ### Step 1: Run the comparison script
@@ -54,9 +68,11 @@ Look for patterns that appear 2+ times across verses (higher confidence). Single
 
 Where possible, identify the Hebrew word or Strong's number involved. Check the Hebrew source at `data/hebrew_bible/` if needed for Strong's lookup.
 
-### Step 4: Check existing memory before writing
+### Step 4: Check existing memory and canonical sources before writing
 
-Before adding any finding, check if it already exists:
+Before adding any finding, run a two-phase check:
+
+**Phase A -- Duplicate check** (existing memory):
 
 ```bash
 grep -i "<Strong's number or Hebrew word>" data/glossary/project_glossary.md
@@ -65,6 +81,32 @@ grep "<Strong's number>" data/quick-ref/ust_decisions.csv 2>/dev/null
 ```
 
 If the editor's preference already matches what's in memory, skip it -- the system is already calibrated. Only write genuinely new findings.
+
+**Phase B -- Canonical contradiction check**:
+
+For each proposed write, grep the Hebrew word/Strong's number against the protected canonical files:
+- `data/issues_resolved.txt` (highest authority, free-form text)
+- All 5 Google Drive glossary CSVs (structured data)
+
+Column mapping for canonical CSVs:
+- `hebrew_ot_glossary.csv`: col 0 = Hebrew, col 4 = ULT GLOSS, col 5 = UST GLOSS
+- `psalms_reference.csv`: col 0 = Hebrew, col 1 = ULT GLOSS, col 2 = UST GLOSS
+- `sacrifice_terminology.csv`: col 0 = Hebrew, col 4 = ULT GLOSS, col 5 = UST GLOSS
+- `biblical_phrases.csv`: col 1 = OrigL (Hebrew), col 4 = ULT GLOSS, col 5 = UST GLOSS
+
+Decision logic:
+- If a canonical source specifies a rendering and the editor's preference **contradicts** it: **block the write**. Log to `data/editor-feedback/proofreader_patterns.csv` with verdict `canonical_conflict`. Present the conflict in the Turn 3 report for escalation.
+- If no canonical source addresses this term: proceed normally.
+- If the canonical source matches the editor's preference: proceed (reinforces existing decision).
+
+### Step 4b: Classify context-specificity
+
+Between the Phase B check and Turn 3 writes, classify each accepted finding:
+
+- **Single-Chapter Mode**: finding in only 1 verse = `context-specific`
+- **Multi-Chapter Mode**: finding in only 1 chapter = `context-specific`; 2+ chapters = `general`
+
+Context-specific items get scoped annotations when written to memory (see Turn 3).
 
 ### Step 5: Write full comparison report
 
@@ -116,8 +158,9 @@ Parse the editor's natural language response. Supported patterns:
 - "all good" / "yes to all" -- accept all human edits
 - "for 10, that's situational" / "10 is situational" -- flag as context-dependent
 - "1, 3-7, 9 only" -- accept only those, ignore the rest
+- "3 is general" / "treat 3 as general" -- promotes a context-specific item to a general rule
 
-Default rule: if an item is not explicitly mentioned as ignored or situational, the human edit is accepted.
+Default rule: if an item is not explicitly mentioned as ignored or situational, the human edit is accepted. Items keep their inferred specificity level (from Step 4b) unless the editor explicitly promotes them with "is general" / "treat as general".
 
 Confirm back in plain language:
 > Applying human edits for items 1, 3-7, 9. Ignoring 2, 8 (keeping AI version, no glossary update). Item 10 flagged as situational. Anything to adjust?
@@ -149,16 +192,19 @@ ULT vocabulary preferences -- append to `data/glossary/project_glossary.md` Word
 ```
 | <Hebrew> | <Strong's> | <editor rendering> | <AI rendering> | editor <BOOK> <CH>:<VS> |
 ```
+For context-specific items, append to the Notes column: `context-specific: <BOOK> <CH>:<VS> only`
 
 ULT decisions with Strong's -- append to `data/quick-ref/ult_decisions.csv`:
 ```
 <Strong's>,<Hebrew>,<editor rendering>,<BOOK>,<CH>:<VS> context description,<notes>,<date>
 ```
+For context-specific items: use the Book column to scope (e.g., `PSA` not `ALL`) and add to Notes: `context-specific: applies to <BOOK> <CH>:<VS>; may differ elsewhere`
 
 UST decisions with Strong's -- append to `data/quick-ref/ust_decisions.csv` (same format):
 ```
 <Strong's>,<Hebrew>,<editor rendering>,<BOOK>,<CH>:<VS> context description,<notes>,<date>
 ```
+Same context-specificity rules as ULT decisions above.
 
 **For ignored items** (AI was right) -- log to `data/editor-feedback/proofreader_patterns.csv`:
 ```
@@ -170,7 +216,18 @@ This surfaces proofreader patterns without corrupting the glossary/quick-ref.
 - In quick-ref: add a notes field like "use X when Y, use Z when W"
 - In glossary: note the condition in the source column
 
-Report what was done (how many items updated, how many logged, how many situational). End with "Review complete."
+Report what was done (how many items updated, how many logged, how many situational, how many context-specific).
+
+If any items were blocked by canonical contradiction (Phase B), add a section:
+
+```
+**Canonical conflicts (not written to memory):**
+- Item 5: editor prefers "X" for H1234, but issues_resolved specifies "Y"
+  (decision date). Escalate to content team to update the Google Sheet
+  or issues_resolved if this should change.
+```
+
+End with "Review complete."
 
 
 ## Multi-Chapter Mode

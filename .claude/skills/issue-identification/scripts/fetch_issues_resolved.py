@@ -10,7 +10,7 @@ Usage:
 import requests
 import sys
 import os
-from datetime import date
+from datetime import date, timedelta
 
 DEFAULT_DOC_ID = "1C0C7Qsm78fM0tuLyVZEAs-IWtClNo9nqbsAZkAFeFio"
 # Resolve path relative to script location
@@ -33,15 +33,29 @@ def get_cached_date(filepath):
         pass
     return None
 
+def should_refresh_weekly(cached_date_str):
+    """Return True if cache predates the most recent Thursday."""
+    if not cached_date_str:
+        return True
+    try:
+        cached = date.fromisoformat(cached_date_str)
+    except ValueError:
+        return True
+    today = date.today()
+    days_since_thursday = (today.weekday() - 3) % 7
+    last_thursday = today - timedelta(days=days_since_thursday)
+    return cached < last_thursday
+
+
 def fetch_gdoc(doc_id=None, output_file=None, force=False):
     """Fetch a public Google Doc as plain text with daily caching."""
     doc_id = doc_id or DEFAULT_DOC_ID
     output_file = output_file or DEFAULT_OUTPUT
     today = date.today().isoformat()
 
-    # Check if we already fetched today
+    # Check if we already fetched today -- also refresh weekly on Thursdays
     cached_date = get_cached_date(output_file)
-    if cached_date == today and not force:
+    if cached_date == today and not force and not should_refresh_weekly(cached_date):
         with open(output_file, 'r', encoding='utf-8') as f:
             content = f.read()
         return content

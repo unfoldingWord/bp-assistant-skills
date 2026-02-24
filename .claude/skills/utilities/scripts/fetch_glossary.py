@@ -23,7 +23,7 @@ import argparse
 import os
 import sys
 import requests
-from datetime import date
+from datetime import date, timedelta
 
 # Script location and project root
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -57,15 +57,29 @@ def get_cached_date(filepath):
     return None
 
 
+def should_refresh_weekly(cached_date_str):
+    """Return True if cache predates the most recent Thursday."""
+    if not cached_date_str:
+        return True
+    try:
+        cached = date.fromisoformat(cached_date_str)
+    except ValueError:
+        return True
+    today = date.today()
+    days_since_thursday = (today.weekday() - 3) % 7
+    last_thursday = today - timedelta(days=days_since_thursday)
+    return cached < last_thursday
+
+
 def fetch_sheet(sheet_name, gid, output_dir, force=False):
     """Fetch a single sheet from the glossary spreadsheet."""
     output_path = os.path.join(output_dir, f"{sheet_name}.csv")
     today = date.today().isoformat()
 
-    # Check cache
+    # Check cache -- refresh weekly on Thursdays even if daily cache exists
     if not force:
         cached_date = get_cached_date(output_path)
-        if cached_date:
+        if cached_date and not should_refresh_weekly(cached_date):
             print(f"  {sheet_name}: Using cached version from {cached_date}")
             return True
 
