@@ -115,7 +115,32 @@ Scan for notes that reference or depend on interpretations from nearby verses. S
 
 Flag inconsistencies with the specific note IDs and the conflicting interpretations so the writer can reconcile them.
 
-### Step 4: Write Report
+### Step 4: Fix Issues (deep mode only)
+
+For each issue found in Steps 1-3, fix it directly in the source files. Do not just report — fix.
+
+**For note text issues** (template drift, wrong verbiage, AT naturalness, "Here" rule, wrong issue type, cross-verse inconsistency):
+- Edit `/tmp/claude/generated_notes.json` — update the note text for the affected ID(s).
+
+**For quote boundary issues** (restructuring scope, parallelism scope, orphaned words):
+- Edit `/tmp/claude/prepared_notes.json` — update `gl_quote`, `gl_quote_roundtripped`, and `orig_quote` for the affected item(s).
+
+**For removal** (antithetical parallelism notes, redundant structural notes):
+- Remove the row from the assembled TSV directly. Also remove the entry from `generated_notes.json`.
+
+After any changes to `generated_notes.json` or `prepared_notes.json`, re-run assembly and post-processing:
+
+```bash
+python3 .claude/skills/tn-writer/scripts/assemble_notes.py \
+    /tmp/claude/prepared_notes.json \
+    /tmp/claude/generated_notes.json \
+    --output output/notes/<BOOK>/<BOOK>-<CH>.tsv
+python3 .claude/skills/utilities/scripts/curly_quotes.py output/notes/<BOOK>/<BOOK>-<CH>.tsv --in-place
+```
+
+Then re-run the mechanical check script to confirm no new errors were introduced. Repeat until clean.
+
+### Step 5: Write Report
 
 Write the final quality report to `output/quality/<BOOK>/<BOOK>-<CH>-quality.md`:
 
@@ -124,21 +149,18 @@ Write the final quality report to `output/quality/<BOOK>/<BOOK>-<CH>-quality.md`
 
 ## Summary
 - Notes checked: N
-- Errors: N
+- Errors found: N (all fixed)
 - Warnings: N
 - Clean: N
 
-## Errors
-[list each error with reference, ID, category, message]
+## Fixes Applied
+[for each fix: reference, ID, what was wrong, what was changed]
 
-## Warnings
-[list each warning]
+## Remaining Warnings
+[warnings not fixed, with rationale for leaving them]
 
-## Semantic Review (deep mode)
-[findings from Step 3, grouped by category]
-
-## Recommended Fixes
-[for each error/warning, suggest the specific fix]
+## Semantic Review
+[findings from Step 3 grouped by category, noting which were fixed]
 ```
 
 ## Mechanical Checks Reference
