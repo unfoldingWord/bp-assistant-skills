@@ -301,16 +301,21 @@ After completing all identification, review your output:
 
 1. **Tag verification**: For each issue tagged, can you point to specific criteria in the skill definition it meets? If unsure, re-read the skill file.
 
-2. **Duplicate check**: Did you tag the same phrase twice for issues that are really one? (e.g., tagging both figs-doublet and figs-parallelism for the same word pair)
+2. **Cross-verse interpretive consistency**: Scan the full issue list for explanations that reference or depend on adjacent verses. Specifically check:
+   - **Pronoun resolution**: When a `writing-pronouns` issue resolves a referent from another verse (e.g., "it refers to X in the previous verse"), verify that your explanation of X in that other verse is compatible. If v9 says "inheritance" is a metaphor for people, v10 cannot say "it" refers to the land.
+   - **Carried figures**: When a metaphor, metonymy, or other figure in one verse is referenced by an issue in a nearby verse, ensure the interpretations agree on what the figure represents.
+   - **Ambiguous terms**: When the same Hebrew word or phrase is discussed in multiple verses, check that your explanations don't silently adopt different interpretations. If the interpretation is genuinely debatable, use a TCM note in the originating verse rather than letting different verses assume different answers.
 
-3. **Missing overlap check**: Are there phrases that genuinely need two tags? (e.g., a simile that also contains an abstract noun - both figs-simile AND figs-abstractnouns may apply)
+3. **Duplicate check**: Did you tag the same phrase twice for issues that are really one? (e.g., tagging both figs-doublet and figs-parallelism for the same word pair)
+
+4. **Missing overlap check**: Are there phrases that genuinely need two tags? (e.g., a simile that also contains an abstract noun - both figs-simile AND figs-abstractnouns may apply)
    Abstract nouns, passives (figs-abstractnouns, figs-activepassive) are script-detected
    and exist at a different analytical layer than figures of speech. They always coexist --
    a figurative issue on the same phrase does not replace a grammar issue. Other grammar-level
    issues (figs-possession, figs-ellipsis, figs-nominaladj) should also generally not be
    dropped or merged with figurative issues.
 
-4. **Keyword sweep**: Scan output for any keyword triggers above that you may have tagged incorrectly.
+5. **Keyword sweep**: Scan output for any keyword triggers above that you may have tagged incorrectly.
 
 ## Authoritative Sources
 

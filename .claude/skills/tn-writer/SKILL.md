@@ -127,7 +127,7 @@ Read `reference/note-style-guide.md` for the note writing rules.
 
 Read `/tmp/claude/prepared_notes.json`. For each item, generate a note and write it to a JSON object keyed by the item's `id`. Write the result to `/tmp/claude/generated_notes.json`.
 
-Process one item at a time:
+Process one item at a time. As you work through items, keep a mental map of interpretive commitments you have made (e.g., "in v9 I said inheritance = people"). When a note references or depends on a concept from a nearby verse, check that the interpretation is consistent with notes you already wrote. If you spot a conflict, resolve it before continuing -- adjust the current note or go back and revise the earlier one.
 
 1. Read the `system_prompt_key` field to know which persona to use:
    - `ai_writes_at_agent` -- Generate the note AND an alternate translation

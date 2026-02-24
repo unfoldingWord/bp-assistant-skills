@@ -105,6 +105,16 @@ For figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result
 
 For figs-parallelism notes: verify the gl_quote includes both complete parallel phrases, not just key words. Flag notes where only nouns or fragments are quoted. Also check whether the parallelism involves ellipsis (words implied from the other phrase) — if so, flag that a figs-ellipsis note may also be needed.
 
+#### 3j. Cross-verse interpretive consistency
+
+Scan for notes that reference or depend on interpretations from nearby verses. Specifically:
+
+- **Pronoun back-references**: When a `writing-pronouns` note says "it/they/this refers to X from verse N," check that the note on verse N interprets X the same way. For example, if a v9 note says "inheritance" is a metaphor for God's people, a v10 note cannot say "it refers to the land, that is, the inheritance."
+- **Carried figures**: When a note explains a metaphor or figure, and a later note references the same image, verify the interpretations match.
+- **Alternate translations across verses**: When two notes address the same concept (same Hebrew word, same referent), check that their ATs are compatible. If one AT renders a term as "people" and another renders the same referent as "land," flag the conflict.
+
+Flag inconsistencies with the specific note IDs and the conflicting interpretations so the writer can reconcile them.
+
 ### Step 4: Write Report
 
 Write the final quality report to `output/quality/<BOOK>/<BOOK>-<CH>-quality.md`:
