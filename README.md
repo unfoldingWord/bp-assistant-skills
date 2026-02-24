@@ -57,7 +57,8 @@ All skills live in `.claude/skills/`. Each has a `SKILL.md` defining the prompt 
 - **`pipeline-overview`** -- Guides to the appropriate skill for each stage
 
 ### Review & Feedback
-- **`editor-compare`** -- Compare editor-edited ULT/UST against AI output; identifies preferences and feeds them back into glossary and skill instructions
+- **`editor-compare`** -- Compare editor-edited ULT/UST against AI output; identifies preferences and feeds them back into glossary and skill instructions. Protects canonical files from modification with a write-guard and weekly refresh check.
+- **`gemini-review`** -- Independent Gemini-based second-opinion reviewer across all pipeline stages
 - **`test-poc`** -- A/B comparison of prompt-over-code vs previous script workflows
 
 ### Infrastructure
@@ -112,9 +113,18 @@ The Zulip bot runs via Docker Compose at `/srv/bot/`:
 Skills draw from these sources (in priority order):
 1. **Issues Resolved** (`data/issues_resolved.txt`) -- Content team decisions (final authority)
 2. **TN Templates** (`data/templates.csv`) -- Official note templates
-3. **Published Translation Notes** -- Human-identified examples
-4. **Translation Academy** (`data/ta-flat/`) -- Definitions and explanations
-5. **Editor Feedback** (`data/editor-feedback/`) -- Accumulated preferences from editor-compare runs
+3. **Canonical Glossary CSVs** (read-only; never modified by AI):
+   - `data/glossary/hebrew_ot_glossary.csv` -- Standard ULT/UST renderings
+   - `data/glossary/psalms_reference.csv` -- Psalms-specific terms
+   - `data/glossary/sacrifice_terminology.csv` -- Sacrifice and offering vocabulary
+   - `data/glossary/biblical_measurements.csv` -- Weights, volumes, distances
+   - `data/glossary/biblical_phrases.csv` -- Grammatical and prophetic phrases
+4. **Prior Rendering Decisions** (`data/quick-ref/ult_decisions.csv`, `ust_decisions.csv`) -- Accumulated per-run decisions
+5. **Published Translation Notes** -- Human-identified examples
+6. **Translation Academy** (`data/ta-flat/`) -- Definitions and explanations
+7. **Editor Feedback** (`data/editor-feedback/`) -- Accumulated preferences from editor-compare runs
+
+The 5 glossary CSVs and `issues_resolved.txt` are protected from modification. `editor-compare` enforces this with a write-guard; all generation skills (ULT-gen, UST-gen, tn-writer) treat them as read-only references.
 
 ## Dependencies
 
