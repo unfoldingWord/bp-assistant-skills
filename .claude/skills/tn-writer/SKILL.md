@@ -249,7 +249,59 @@ Read the assembled TSV alongside the aligned ULT. For each row, verify:
 
 Fix any issues found and rewrite the TSV row(s) if needed. This is a lightweight review pass, not a regeneration -- just catch structural problems the scripts can't judge.
 
-### Step 11: Gemini Review (optional, activation only)
+### Step 11: Deep Quality Check
+
+Run the full quality-check suite inline so issues are caught and fixed before output.
+
+#### 11a. Mechanical checks
+
+```bash
+python3 .claude/skills/tn-quality-check/scripts/check_tn_quality.py \
+    output/notes/<BOOK>/<BOOK>-<CH>.tsv \
+    --prepared-json /tmp/claude/prepared_notes.json \
+    --ult-usfm /tmp/claude/ult_plain.usfm \
+    --ust-usfm /tmp/claude/ust_plain.usfm \
+    --book <BOOK> \
+    --output /tmp/claude/tn_quality_findings.json
+```
+
+Read stderr for the summary and `/tmp/claude/tn_quality_findings.json` for full details. Fix every error (broken IDs, missing Hebrew quotes, bad AT syntax, rc:// links in note text, etc.).
+
+#### 11b. Semantic review (checks 3a-3j)
+
+Read the assembled TSV alongside the findings JSON. For each note, check the following — with emphasis on **3b** and **3j**:
+
+- **3a. Correct issue type**: Note uses the right verbiage for its SupportReference figure of speech (see style guide).
+- **3b. Template adherence**: Note follows the template shape for its issue type. Fixed phrases are preserved verbatim (e.g., figs-abstractnouns: "you could express the same idea in another way" — not "with a verb" or other drift). Flag notes that introduce non-template wording that subsequent notes repeat.
+- **3c. AT naturalness**: Mentally substitute the AT for the gl_quote in the ULT verse. Check for broken grammar, orphaned words, verb agreement issues, dangling modifiers, or introduced punctuation.
+- **3d. Antithetical parallelism**: If a `figs-parallelism` note covers two phrases expressing **opposite** ideas, flag it for removal (antithetical parallelism should not have a parallelism note).
+- **3e. Note suppression**: If a semantic note (idiom, metaphor) overlaps a structural note (possession, activepassive) on the same phrase, flag the structural one as potentially redundant.
+- **3f. Duplicate/combinable notes**: Flag notes in the same verse that overlap or could be merged.
+- **3g. "Here" rule**: If a note starts with "Here, " verify the next content is a bolded lowercase quote.
+- **3h. Restructuring quote scope**: For infostructure/logic notes, verify the gl_quote spans the full restructured area.
+- **3i. Parallelism quote scope**: For figs-parallelism, verify the gl_quote includes both complete parallel phrases. Check for ellipsis needing a separate figs-ellipsis note.
+- **3j. Cross-verse interpretive consistency**: Scan for notes that reference or depend on nearby verses:
+  - Pronoun back-references: "it/they/this refers to X from verse N" — check verse N interprets X the same way.
+  - Carried figures: A metaphor explained in one note must be interpreted consistently in later notes referencing the same image.
+  - ATs across verses: If two notes address the same Hebrew word or referent, their ATs must be compatible (not "people" in one and "land" in the other for the same referent).
+
+#### 11c. Fix issues
+
+- For mechanical errors or semantic issues that can be fixed by editing note text: update `/tmp/claude/generated_notes.json` directly.
+- For issues requiring quote boundary changes: update `/tmp/claude/prepared_notes.json` (gl_quote, orig_quote fields).
+- After any changes, re-run assembly and post-processing:
+
+```bash
+python3 .claude/skills/tn-writer/scripts/assemble_notes.py \
+    /tmp/claude/prepared_notes.json \
+    /tmp/claude/generated_notes.json \
+    --output output/notes/<BOOK>/<BOOK>-<CHAPTER>.tsv
+python3 .claude/skills/utilities/scripts/curly_quotes.py output/notes/<BOOK>/<BOOK>-<CHAPTER>.tsv --in-place
+```
+
+- Re-run the mechanical checks to confirm fixes. Repeat until clean.
+
+### Step 12: Gemini Review (optional, activation only)
 
 Skip unless `--gemini` is explicitly passed.
 
