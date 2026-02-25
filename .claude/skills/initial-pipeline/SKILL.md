@@ -47,6 +47,14 @@ TMP=tmp/pipeline-<BOOK>-<CHAPTER>
 mkdir -p $TMP
 ```
 
+### Fetch T4T for the Book
+
+```bash
+python3 .claude/skills/utilities/scripts/fetch_t4t.py --books <BOOK>
+```
+
+T4T is the base source for UST creation (Wave 6). All OT books are pre-fetched in `data/t4t/`, but run this to ensure the book is cached. The script skips if already cached.
+
 ### Build Published TN Index
 
 ```bash
