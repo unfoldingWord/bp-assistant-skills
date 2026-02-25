@@ -232,9 +232,9 @@ When English adds grammatical words not in Hebrew (marked with {brackets} in ULT
 
 The bracketed word attaches to whichever Hebrew word it grammatically supports.
 
-### 6. Construct Chains (Split Preferred)
+### 6. Construct Chains (Split Required)
 
-For construct chains, split at each word to maintain word-level precision:
+Each word in a construct chain MUST be its own alignment entry. Never combine construct chain words into a single `hebrew_indices` array. Split at each word to maintain word-level precision:
 
 Hebrew: בֵּית אֱלֹהִים (house of God)
 ```json

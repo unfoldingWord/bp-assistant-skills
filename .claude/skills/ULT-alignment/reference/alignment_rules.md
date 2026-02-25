@@ -155,9 +155,9 @@ The "he" is not bracketed because it's encoded in the Hebrew verb form.
 
 ## Construct Chains
 
-### Preferred: Split Strategy
+### Required: Split Strategy
 
-For two-word constructs, prefer splitting to maintain word-level precision:
+For two-word constructs, each word MUST be its own alignment entry:
 
 | Hebrew | English | Alignment |
 |--------|---------|-----------|

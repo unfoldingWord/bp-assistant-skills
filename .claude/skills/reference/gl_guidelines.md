@@ -54,7 +54,7 @@ Use the serial comma: "red, white, **and** blue"
 
 ### Dashes
 - En-dash (-): Number ranges, no spaces (30-40)
-- Em-dash (--): Interruptions or parenthetical material, use sparingly
+- Em-dash (—): Interruptions or parenthetical material, use sparingly. Use the Unicode em-dash character with no surrounding spaces: "word—word" not "word -- word"
 
 ### Apostrophes & Possessives
 - Singular: Add 's (father's house)

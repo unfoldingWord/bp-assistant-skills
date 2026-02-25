@@ -268,11 +268,9 @@ Brackets mark words added for English grammar not present in Hebrew.
 - צַר־לִי -> "trouble to me" (not "my distress")
 
 **DO NOT use brackets for:**
-- Participles with be-verbs: "Yahweh is giving" (not "Yahweh {is} giving")
+- **Participles with be-verbs are NEVER bracketed**: "Yahweh is giving" (not "Yahweh {is} giving"), "he was walking" (not "he {was} walking"), "they are dwelling" (not "they {are} dwelling"). The auxiliary verb is required English grammar for participle constructions.
 - Words within semantic range of Hebrew: "hill country" (not "hill {country}")
-- Articles: "the man" (not "{the} man")
-- Definite articles when Hebrew has them (even implied in construct): "the enemy" not "{the} enemy"
-- "the king" when מֶלֶךְ has article or is definite by context
+- **Articles are NEVER bracketed**: "the head" (not "{the} head"), "the land" (not "{the} land"). The definite article never needs brackets regardless of whether Hebrew has an explicit article.
 
 ### Step 5: Apply Style Rules
 
