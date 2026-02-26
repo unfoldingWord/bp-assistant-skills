@@ -130,6 +130,9 @@ If the explanation contains a `t:` prefix hinting at the template type, follow t
 
 Do not use the phrase "could mean" in notes. This phrasing is reserved exclusively for TCM (This Could Mean) mode, which presents multiple interpretations for genuinely ambiguous passages. In regular notes, state the meaning with confidence: "SPEAKER is using this possessive form to mean..." not "this could mean..."
 
+## Source Language Reference
+Do not use the word "Hebrew" (or "Greek," "Aramaic") in note text. If you need to refer to the source language, say "the original language" or "the original." For example, write "this expression in the original language means..." not "this Hebrew expression means..."
+
 ## Technical Language Restriction
 
 Do not introduce linguistic or grammatical terminology that does not appear in the template being used. Terms like "cognate accusative," "genitive of source," "objective genitive," etc. are not part of the translation note vocabulary. Use only the language modeled in the templates. If a template says "possessive form," say "possessive form" -- do not substitute a more technical term.

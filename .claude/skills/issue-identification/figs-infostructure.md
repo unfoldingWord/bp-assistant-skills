@@ -4,7 +4,7 @@
 Identify when word order, clause order, or information placement in the source text differs from what would be natural in many target languages.
 
 ## Definition
-Information structure concerns how languages arrange sentence elements. Different languages:
+Information structure concerns how languages arrange **larger blocks** of text -- clauses, phrases, or major sentence constituents. Different languages:
 - Place subject, verb, object in different orders
 - Position time phrases at beginning vs end
 - Put new/important information first vs last
@@ -26,10 +26,11 @@ Time expressions at end that languages may put first (or vice versa):
 - "**In the seventh month, on the seventeenth day** the ark rested"
 
 ### 2. Clause/Phrase Reordering
-Elements in non-standard order for many languages:
+Larger blocks in non-standard order for many languages:
 - "**Clouds and wind but without rain** is the man who boasts falsely" (image before referent)
 - "**To a mare among Pharaoh's chariots** I liken you, my darling" (comparison before subject)
-- "**Length of days and years of life**, they will add to you" (object before verb)
+
+Do not flag simple object-before-verb order. Moving an object to follow the verb is not a translation issue worth noting -- many languages place objects before verbs naturally, and the ULT reflects the source word order intentionally.
 
 ### 3. Negative-Positive Order
 "Not X, but Y" that languages may prefer as "Y, not X":
@@ -64,6 +65,8 @@ Information inserted mid-thought for emphasis (per Issues Resolved):
 - Parenthetical emphasis within a sentence
 
 ## NOT This Issue
+
+**Not for object-before-verb reordering**: Do not flag cases where the object precedes the verb. The ULT preserves source word order intentionally, and suggesting translators move objects after the verb is not a useful note.
 
 **Use writing-background** when: The issue is background/explanatory information, not word order
 
