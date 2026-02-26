@@ -87,7 +87,7 @@ Curly brackets mark words **added for English grammar** that are not in the orig
 Follow **American English**:
 - color (not colour)
 - curb (not kerb)
-- worshiped (not worshipped)
+- worship, worshiped, worshiper, worshiping (not worshipped, worshipper, worshipping — always one p)
 - program (not programme)
 - judgment (not judgement)
 

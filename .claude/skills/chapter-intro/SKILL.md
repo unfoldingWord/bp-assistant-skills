@@ -46,7 +46,11 @@ Read the following files. Not all may exist; work with what's available.
 - Translation Words for key terms: use `python3 .claude/skills/issue-identification/scripts/check_tw_headwords.py "term1" "term2"` or browse `data/en_tw/`
 - Translation Academy for psalm type definitions: `data/ta-flat/`
 
-### Step 2: Determine Psalm Type
+### Step 2: Read the Style Guide
+
+Read `.claude/skills/reference/gl_guidelines.md` for spelling, punctuation, and register rules that apply to all generated content (American English spelling, Oxford comma, curly quotes, formal register, etc.).
+
+### Step 3: Determine Psalm Type
 
 Parse the superscription (verse 1 or "front" matter) for authorship, genre markers, and performance instructions.
 
@@ -56,7 +60,7 @@ Classify the psalm type (lament, praise/hymn, thanksgiving, wisdom, royal/messia
 
 This feeds the 1-2 sentence classification in the Structure and Formatting section.
 
-### Step 3: Draft the Introduction
+### Step 4: Draft the Introduction
 
 Write a short intro using the template below. The entire intro should be 300-600 characters. Each section is 1-2 sentences. Only include the Translation Issues section when there is a genuinely distinctive challenge (extended metaphor spanning multiple verses, speaker ambiguity, acrostic pattern, etc.). Most psalms will not need it.
 
@@ -96,7 +100,7 @@ Use `[[rc://*/tw/dict/bible/kt/<term>]]` or `[[rc://*/tw/dict/bible/other/<term>
 - No verse-level detail that belongs in translation notes
 - Total length stays in the 300-600 character range
 
-### Step 4: Format and Insert into Issue File
+### Step 5: Format and Insert into Issue File
 
 **Format the intro for TSV storage:**
 1. Escape all newlines as literal `\n` (two characters: backslash + n)
