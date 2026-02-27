@@ -27,13 +27,19 @@ Result: Creates emphatic negation (stronger "never" or "certainly not")
 
 ### 2. Negative + Negative Verb
 Negative particle combined with a verb that has negative meaning.
-- "did not waver" (ou diekrithe)
-- "not refuse" (ouk ethelesen athetesai)
-- "not stopped" (ou dielipen)
-- "do not despise" (al-tim'as)
-- "will not reject" (lo yim'as)
+- "did not waver" (ou diekrithe) = remained steady
+- "not refuse" (ouk ethelesen athetesai) = allowed
+- "not stopped" (ou dielipen) = continued
+- "do not despise" (al-tim'as / lo bazah) = accept
+- "will not reject" (lo yim'as) = accept
+- "does not forget" / "do not forget" (lo shakach) = remembers
+- "did not rebel" (lo maru) = obeyed
+- "is not silent" (al-yecherash) = speaks
 
-Result: Creates positive meaning (continued, allowed, appreciate, accept)
+Result: Creates positive meaning (continued, allowed, appreciate, accept, remembers).
+The positive restatement is the plain opposite -- no intensifier needed.
+
+This is the most common pattern in Psalms. See "NOT This Issue" for how to distinguish from litotes.
 
 ### 3. Negative + "Without"
 - "not without honor" (ouk estin atimos)
@@ -65,10 +71,10 @@ Result: Emphatic negative or positive depending on construction
 ## NOT This Issue
 
 ### Use figs-litotes instead when:
-- Speaker deliberately UNDERSTATES to create EMPHASIS beyond plain positive
-- "no small disturbance" = great disturbance (not just "some disturbance")
-- "not the least" = very important (not just "important")
-- Test: Does the double negative create STRONGER meaning than the plain positive would?
+- The positive restatement needs an intensifier (very, great, completely) to capture the meaning
+- "no small disturbance" = GREAT disturbance (not just "some disturbance")
+- "I will lack nothing" = I will have EVERYTHING I need (goes beyond "enough")
+- "does not wither" = strong and green (goes beyond "stays alive")
 
 ### Other issues:
 - Simple negative statements (no double element) - no note needed
@@ -83,14 +89,16 @@ Is there a clause with two negative elements?
   +-- Are there two Greek negative particles (ou me, me ouk)?
   |     --> figs-doublenegatives (emphatic negation)
   |
-  +-- Is there negative + negative verb (not + refuse/reject/stop/lack)?
-  |     --> figs-doublenegatives (positive meaning)
+  +-- Is there negative + negative verb (not + refuse/reject/despise/forget/rebel)?
+  |     --> Apply the intensifier test: restate as positive.
+  |           |
+  |           +-- Plain opposite suffices ("does not despise" = accepts)
+  |           |     --> figs-doublenegatives
+  |           +-- Needs intensifier ("did not delight" = hated, "does not wither" = very green)
+  |                 --> figs-litotes
   |
   +-- Is there "not without" or "not + un-/im-/-less"?
-  |     --> Does it create meaning STRONGER than plain positive?
-  |           |
-  |           +-- Yes, emphatic understatement --> figs-litotes
-  |           +-- No, just grammatical positive --> figs-doublenegatives
+  |     --> Apply the intensifier test (same as above)
   |
   +-- Are there two negative pronouns/adverbs (no one...nothing)?
         --> figs-doublenegatives
@@ -98,15 +106,24 @@ Is there a clause with two negative elements?
 
 ## Examples from Published Notes
 
+**Psalms - negative + negative verb (most common pattern):**
+- PSA 9:12 "he does not forget" = he surely remembers
+- PSA 15:5 "will not be shaken" = will remain secure
+- PSA 16:8 "I will not be shaken" = he makes me live securely
+- PSA 50:3 "he is not silent" = he is going to speak
+- PSA 92:15 "no unrighteousness in him" = he is always righteous
+- PSA 102:17 "he does not despise their prayer" = he accepts their prayer
+- PSA 103:2 "do not forget" = remember
+- PSA 105:28 "they did not rebel" = they obeyed
+
 **Greek emphatic (ou me):**
 - Luke 1:15 "he must never drink" - emphatic prohibition
 - Luke 10:19 "nothing will harm you at all" - emphatic assurance
 
-**Negative + negative verb:**
+**Other negative + negative verb:**
 - Romans 4:20 "did not waver in unbelief" = remained believing
 - Mark 6:26 "did not want to refuse her" = had to allow
 - Job 5:17 "do not despise" = appreciate
-- Job 6:10 "I have not concealed" = I have obeyed
 
 **Not + without:**
 - Mark 6:4 "is not without honor" = is honored

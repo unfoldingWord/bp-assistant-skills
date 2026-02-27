@@ -19,9 +19,12 @@ Litotes expresses a strong positive meaning by negating a word that is the oppos
 | "did not refuse" = allowed | "not the least" = the greatest |
 | Creates neutral positive meaning | Creates STRONGER-than-positive meaning |
 
-**Test:** Does the double negative create meaning STRONGER than a plain positive would?
-- "not without honor" (just means "honored") = double negative
-- "no small disturbance" (means "GREAT disturbance") = litotes
+**The intensifier test:** Restate the expression as a positive. Does the positive restatement need an intensifier (very, great, completely, everything) to capture the full intended meaning?
+- "does not despise" = "accepts" (no intensifier needed) --> double negative
+- "does not wither" = "is strong and green" (goes beyond "stays alive") --> litotes
+- "I will lack nothing" = "I will have everything I need" (goes beyond "I will have enough") --> litotes
+- "does not forget" = "remembers" (no intensifier needed) --> double negative
+- "do not become few" = "become very many" (goes beyond "stay the same") --> litotes
 
 ## Common Patterns
 
@@ -42,16 +45,13 @@ Litotes expresses a strong positive meaning by negating a word that is the oppos
 - "will not remain blameless" = will certainly be guilty (Proverbs 6:29, 11:21)
 - "will not spare" = will be merciless (Proverbs 6:34)
 - "does not cease" = piles up/multiplies (Proverbs 10:19)
+- "did not delight in blessing" = hated blessing (PSA 109:17)
 
-### 5. "Do not forget/forsake" = Be very careful to remember/keep
-- "do not forget my teaching" = be very careful to remember (Proverbs 3:1)
-- "do not forsake her" = cling to her strongly (Proverbs 4:6)
-
-### 6. "Not far/long" = Very near/soon
+### 5. "Not far/long" = Very near/soon
 - "not far from the house" = very close (Luke 7:6)
 - "not many days" = only a few days (Luke 15:13)
 
-### 7. "No one greater" = The greatest
+### 6. "No one greater" = The greatest
 - "no one is greater than John" = John is the greatest (Luke 7:28)
 
 ## NOT This Issue
@@ -71,16 +71,17 @@ Litotes expresses a strong positive meaning by negating a word that is the oppos
 ```
 Is there a negative word + opposite-meaning word?
   |
-  +-- Does it create meaning STRONGER than plain positive?
+  +-- Apply the intensifier test: restate as positive.
+  |   Does the positive need "very/great/completely" to capture the meaning?
   |     |
-  |     +-- "no small X" = GREAT X (stronger than "some X") --> figs-litotes
-  |     +-- "not the least" = VERY IMPORTANT (stronger than "important") --> figs-litotes
-  |     +-- "does not love" = REALLY HATES (stronger than "dislikes") --> figs-litotes
-  |
-  +-- Does it just make grammatical positive without extra emphasis?
-        |
-        +-- "not without" = "with" (neutral) --> figs-doublenegatives
-        +-- "did not refuse" = "allowed" (neutral) --> figs-doublenegatives
+  |     +-- YES: "no small X" = GREAT X --> figs-litotes
+  |     +-- YES: "I will lack nothing" = I will have EVERYTHING --> figs-litotes
+  |     +-- YES: "does not love" = REALLY HATES --> figs-litotes
+  |     +-- YES: "do not become few" = become VERY MANY --> figs-litotes
+  |     |
+  |     +-- NO: "does not despise" = accepts (neutral) --> figs-doublenegatives
+  |     +-- NO: "does not forget" = remembers (neutral) --> figs-doublenegatives
+  |     +-- NO: "did not rebel" = obeyed (neutral) --> figs-doublenegatives
 ```
 
 ## Examples from Published Notes
@@ -97,9 +98,11 @@ Is there a negative word + opposite-meaning word?
 - Proverbs 15:12 "does not love" = really hates
 - Proverbs 6:34 "will not spare" = will be merciless
 
-**"Do not forget/forsake":**
-- Proverbs 3:1 "do not forget" = be very careful to remember
-- Proverbs 4:6 "do not forsake her" = cling to her strongly
+**Psalms emphatic patterns:**
+- PSA 1:3 "does not wither" = is strong and green (stronger than "stays alive")
+- PSA 23:1 "I will lack nothing" = I will have everything I need
+- PSA 107:38 "do not become few" = become very many
+- PSA 109:17 "did not delight in blessing" = hated blessing
 
 **Quantity emphasis:**
 - Luke 15:13 "not many days" = only a few days
