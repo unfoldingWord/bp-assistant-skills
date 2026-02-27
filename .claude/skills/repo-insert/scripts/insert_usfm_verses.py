@@ -23,6 +23,11 @@ import sys
 
 HEADER_MARKERS = re.compile(r'^\\(id|usfm|ide|h|toc\d?|mt\d?|c)\b')
 
+# Book-level markers that must never appear in inserted verse content.
+# These are stripped from the entire source, not just the header, because
+# aligned USFM sometimes scatters them throughout the file.
+BOOK_LEVEL_JUNK = re.compile(r'^\\(id|usfm|ide|h|toc\d?|mt\d?|cl)\b')
+
 
 def parse_verse_range(spec):
     """Parse '100-104' or '100' into (start, end) ints."""
@@ -33,7 +38,7 @@ def parse_verse_range(spec):
     return v, v
 
 
-INTER_VERSE_MARKERS = re.compile(r'^\\(d\b|cl\b|ts\\\*|s\d+\s|qa\s|b\s*$)')
+INTER_VERSE_MARKERS = re.compile(r'^\\(d\b|ts\\\*|s\d+\s|qa\s|b\s*$)')
 
 
 def strip_source_header(lines):
@@ -68,6 +73,10 @@ def strip_source_header(lines):
                 result.append(line)
         else:
             result.append(line)
+
+    # Final pass: remove any book-level markers that leaked into verse content.
+    # Aligned USFM sometimes scatters \toc*, \mt, \cl, etc. throughout the file.
+    result = [line for line in result if not BOOK_LEVEL_JUNK.match(line.strip())]
     return result
 
 
