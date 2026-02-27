@@ -23,7 +23,7 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | עֵדָה | H5713b | testimonies | decrees | Psa 119 master uses "testimonies" consistently; distinct from edut H5715 |
 | עָנִי | H6041 | poor / weak | afflicted | adjective, not passive participle; "poor" editor PSA 69:29,32; "weak" editor PSA 88:15 (context: physical frailty) |
 | עָנָו | H6035 | poor | afflicted | adjective, not passive participle; editor PSA 69:32; same as H6041 |
-| בּוּשׁ | H0954 | feel shame | be ashamed | active verb, not passive; editor PSA 69:6, 70:2. Note: PSA 71 editor uses "put to shame" (passive) -- may reflect different editorial pass |
+| בּוּשׁ | H0954 | have shame | be ashamed | per issues_resolved Feb 18: focus on standing in honor/shame culture, not subjective feeling. Not passive "be ashamed." PSA 69:6, 70:2. Note: PSA 71 editor uses "put to shame" (passive) -- may reflect different editorial pass |
 | שֵׁכָר | H7941 | beer | strong drink | editor PSA 69:12 |
 | אַף | H0639 | nose | anger | preserve body-part idiom literally; editor PSA 69:24 |
 | מָחָה | H4229a | wiped | blotted out | editor PSA 69:28; no "out" |
@@ -40,7 +40,7 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | מִקְדָּשׁ | H4720 | sanctuary | holy place | editor PSA 74:3,7 |
 | תַּנִּין | H8577 | sea monsters | sea creatures | editor PSA 74:13 |
 | גְּבוּלָה | H1367 | borders | boundaries | editor PSA 74:17 |
-| קֶדֶם | H6924 | ancient times | of old | editor PSA 74:2,12 |
+| קֶדֶם | H6924 | days of antiquity | of old | per issues_resolved Dec 10: "old" is adjective but Hebrew has noun; use "days of antiquity." PSA 74:2,12 |
 | נָאַץ | H5006 | blaspheme | despise | editor PSA 74:18; also "treat with contempt" in 74:10 |
 | תּוֹר | H8449 | dove | turtledove | editor PSA 74:19 |
 | יָתוֹם | H3490 | orphan | fatherless | in Psalms context; editor PSA 82:3 |
@@ -57,7 +57,7 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | חָרוֹן | H2740 | indignations | burning anger | editor PSA 88:16; plural matching Hebrew plural |
 | נָקַף (Hiphil) | H5362b | close in upon | encircled | editor PSA 88:17 |
 | קָדַם (Piel) | H6923 | precedes | comes before | editor PSA 88:13; single verb preferred |
-| רְפָאִים | H7496 | Rephaites | spirits of the dead | editor PSA 88:10; transliterated proper noun |
+| רְפָאִים | H7496 | Raphaites | spirits of the dead | per issues_resolved: "Raphaites" from Rapha, English pluralization. PSA 88:10 |
 | דָּאַב | H1669 | mourns | wastes away | editor PSA 88:9 |
 | פּוּן | H6323 | must despair | numb | editor PSA 88:15; hapax, cohortative form |
 | דָּכָא | H1792 | shattered | crushed | editor PSA 89:10; cosmic battle context |

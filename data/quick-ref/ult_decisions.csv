@@ -2,7 +2,7 @@ Strong,Hebrew,Rendering,Book,Context,Notes,Date
 H727,אֲרוֹן,Box,ALL,"Ark of the Covenant context","Capitalize 'Box'. Use 'Box of the Testimony' (Exodus) or 'Box of the Covenant' (Joshua+). Never 'ark'. See hebrew_ot_glossary.",2025-02-09
 H6041,עָנִי,poor,PSA,"69:29 poor and in pain","Form-based: adjective, not passive participle. Not 'afflicted'.",2025-02-10
 H6035,עָנָו,poor,PSA,"69:32 The poor will see","Form-based: adjective, not passive participle. Same as H6041.",2025-02-10
-H0954,בּוּשׁ,feel shame,PSA,"69:6 may...not feel shame; 70:2 feel shame","Form-based: active verb, do not represent as passive. Not 'be ashamed'.",2025-02-10
+H0954,בּוּשׁ,have shame,PSA,"69:6 may...not have shame; 70:2 have shame","Per issues_resolved Feb 18: focus on standing not feeling. Not 'be ashamed' or 'feel shame'.",2025-02-10
 H7941,שֵׁכָר,beer,PSA,"69:12 drinkers of beer","Not 'strong drink'. More specific.",2025-02-10
 H0639,אַף,nose,PSA,"69:24 burning of your nose","Preserve body-part idiom. Not 'anger'. Consistent with literal ULT philosophy.",2025-02-10
 H4229a,מָחָה,wiped,PSA,"69:28 wiped from the book","Not 'blotted out'. No additional preposition.",2025-02-10
@@ -64,7 +64,7 @@ H3468,yesha,salvation,PSA,her priests I will clothe with salvation,dominant rend
 H5145,nezer,crown,PSA,his crown will flourish,dominant rendering 57% of 7 occ,2026-02-12
 H2534,חֵמָה,wrath,PSA,"88:7 God's anger on psalmist","heat (21% general), rage (PSA 6:1), wrath (PSA 90:7). Psalmic lament context = wrath.",2026-02-16
 H5564,סָמַךְ,rests heavily,PSA,"88:7 wrath rests heavily on me","UPDATED: editor corrected 'leaned' to 'rests heavily'. Qal perfect.",2026-02-17
-H7496,רָפָא,Rephaites,PSA,"88:10 Or will the Rephaites arise?","UPDATED: editor corrected 'spirits of the dead' to 'Rephaites'. Transliterated proper noun.",2026-02-17
+H7496,רָפָא,Raphaites,PSA,"88:10 Or will the Raphaites arise?","Per issues_resolved: 'Raphaites' from Rapha, English pluralization convention.",2026-02-17
 H0353,אֱיָל,strength,PSA,"88:4 man without strength","Hapax in published ULT. Lexical: strength/help.",2026-02-16
 H6323,פּוּן,must despair,PSA,"88:15 I must despair","UPDATED: editor corrected 'numb' to 'must despair'. Hapax. Cohortative form.",2026-02-17
 H1669,דָּאַב,mourns,PSA,"88:9 My eye mourns from affliction","UPDATED: editor corrected 'wastes away' to 'mourns'.",2026-02-17
@@ -93,7 +93,7 @@ H7891,shir (Qal ptc),the ones singing,PSA,87:7 the ones singing,participle form;
 H4720,מִקְדָּשׁ,sanctuary,PSA,"74:3,7 your sanctuary","Not 'holy place'. Editor PSA 74.",2026-02-12
 H8577,תַּנִּין,sea monsters,PSA,"74:13 heads of the sea monsters","Not 'sea creatures'. Editor PSA 74.",2026-02-12
 H1367,גְּבוּלָה,borders,PSA,"74:17 all the borders of the earth","Not 'boundaries'. Editor PSA 74.",2026-02-12
-H6924,קֶדֶם,ancient times,PSA,"74:2,12 in ancient times / from ancient times","Not 'of old'. Editor PSA 74.",2026-02-12
+H6924,קֶדֶם,days of antiquity,PSA,"74:2,12 in days of antiquity / from days of antiquity","Per issues_resolved Dec 10: Hebrew has noun, not adjective. Not 'of old' or 'ancient times'.",2026-02-12
 H5006,נָאַץ,blaspheme,PSA,"74:18 has blasphemed your name","Not 'despise'. Also 'treat with contempt' (74:10). Editor PSA 74.",2026-02-12
 H8449,תּוֹר,dove,PSA,"74:19 the life of your dove","Not 'turtledove'. Editor PSA 74.",2026-02-12
 H4615,מַעֲמָק,depths,PSA,130:1 from the depths,Not in published ULT; standard meaning. Plural form.,2026-02-12
