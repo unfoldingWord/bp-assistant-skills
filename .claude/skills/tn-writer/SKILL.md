@@ -79,7 +79,7 @@ For each item in `/tmp/claude/prepared_notes.json` where `orig_quote` is empty:
 4. Read the Hebrew source verse from `data/hebrew_bible/*-<BOOK>.usfm` (find the `\c` and `\v` markers for the chapter:verse)
 5. Order the collected Hebrew words by their character offset in the Hebrew source verse: find each Hebrew word's position in the verse string (index of its first character), then sort ascending by that offset. Do NOT use `heb_pos` from the alignment data for ordering -- that reflects English word order in the USFM, not Hebrew reading order
 6. Verify EXACT Unicode match: each Hebrew word you collected must appear character-for-character as a `\w` token in the Hebrew source verse for that reference
-7. Join the Hebrew words with spaces and update `orig_quote` in the prepared JSON
+7. Extract `orig_quote` as the exact substring from the Hebrew source verse that spans from the first collected word to the last -- copy Unicode for Unicode. This preserves Maqqeph (־) and other connectors between words. Do not join words with spaces. Update `orig_quote` in the prepared JSON.
 
 **CRITICAL**: You MUST copy Hebrew text character-for-character from the source file. Do not generate Hebrew from memory. Read the source, find the words, copy them exactly.
 
