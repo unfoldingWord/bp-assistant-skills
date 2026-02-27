@@ -494,7 +494,12 @@ def check_orphaned_words(row, prepared_items):
 
 
 def check_writer_in_psalms(row, book_code):
-    """Check 11: 'The writer' should not appear in Psalms notes."""
+    """Check 11: 'The writer' and 'the author' should not appear in Psalms notes.
+
+    In Psalms, use the attributed name (David, Asaph, etc.) from the
+    superscription, or 'the psalmist' for anonymous psalms. Never 'the author'
+    or 'the writer'.
+    """
     if book_code.upper() != 'PSA':
         return None
     if row.get('Occurrence') == '0':
@@ -503,6 +508,9 @@ def check_writer_in_psalms(row, book_code):
     if re.search(r'\bthe writer\b', note, re.IGNORECASE):
         return {'severity': 'warning', 'category': 'writer_in_psalms',
                 'message': 'Uses "the writer" instead of "the psalmist" or attributed author'}
+    if re.search(r'\bthe author\b', note, re.IGNORECASE):
+        return {'severity': 'warning', 'category': 'author_in_psalms',
+                'message': 'Uses "the author" — use the attributed name (David, Asaph, etc.) or "the psalmist" for anonymous psalms'}
     return None
 
 
