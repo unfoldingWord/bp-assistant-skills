@@ -30,21 +30,60 @@ def strip_cantillation(word):
 def find_english_for_hebrew(hebrew_words, alignment_data, verse_ref):
     """Find English words aligned to the given Hebrew words.
 
+    Groups alignment entries by heb_pos. Uses exact Hebrew matching first
+    to disambiguate words that differ only in cantillation marks (e.g.,
+    two occurrences of the same root in one verse). Falls back to
+    cantillation-stripped matching only for words with no exact match.
+
     Returns list of English words in alignment-data order.
     """
     if verse_ref not in alignment_data:
         return []
 
     verse_alignments = alignment_data[verse_ref]
-    hebrew_set = set(hebrew_words)
-    # Also try stripped versions for fuzzy matching
-    hebrew_stripped = {strip_cantillation(w) for w in hebrew_words}
 
-    matched_english = []
+    # Group alignment entries by heb_pos (each position = one Hebrew word)
+    from collections import defaultdict
+    heb_groups = defaultdict(list)
     for entry in verse_alignments:
-        heb = entry.get('heb', '')
-        if heb in hebrew_set or strip_cantillation(heb) in hebrew_stripped:
-            matched_english.append(entry['eng'])
+        heb_groups[entry['heb_pos']].append(entry)
+
+    # Build group info: {heb_pos: (exact_heb, stripped_heb, [eng_words])}
+    group_info = {}
+    for pos, entries in heb_groups.items():
+        exact_heb = entries[0]['heb']
+        stripped_heb = strip_cantillation(exact_heb)
+        eng_words = [e['eng'] for e in entries]
+        group_info[pos] = (exact_heb, stripped_heb, eng_words)
+
+    used_positions = set()
+    matched_english = []
+
+    for heb_word in hebrew_words:
+        # Try exact match first (preserves cantillation disambiguation)
+        found = False
+        for pos in sorted(group_info.keys()):
+            if pos in used_positions:
+                continue
+            exact, stripped, engs = group_info[pos]
+            if exact == heb_word:
+                matched_english.extend(engs)
+                used_positions.add(pos)
+                found = True
+                break
+
+        if not found:
+            # Fallback: stripped match (first unused group with same root)
+            target_stripped = strip_cantillation(heb_word)
+            for pos in sorted(group_info.keys()):
+                if pos in used_positions:
+                    continue
+                exact, stripped, engs = group_info[pos]
+                if stripped == target_stripped:
+                    matched_english.extend(engs)
+                    used_positions.add(pos)
+                    found = True
+                    break
 
     return matched_english
 
@@ -64,9 +103,9 @@ def find_contiguous_span(ult_verse, english_words):
     if not tokens:
         return None
 
-    # For each token, strip braces for matching
+    # For each token, strip punctuation and quote marks for matching
     def clean_token(t):
-        return re.sub(r'[{},;:.!?\'""]', '', t)
+        return re.sub(r'[{},;:.!?\u0027\u0022\u2018\u2019\u201C\u201D\u2014\u2013]', '', t)
 
     # Find positions of all matched english words in the token list
     target_words = set(english_words)
