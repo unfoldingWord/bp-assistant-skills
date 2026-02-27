@@ -40,7 +40,7 @@ all phases.
 |----------|---------|-------------|
 | book | psa | Book abbreviation (3-letter) |
 | chapter | 149 | Chapter number |
-| username | deferredreward | Door43 username for commit message attribution |
+| username | benjamin-test | Door43 username for commit message attribution |
 | *(no mode flags)* | | *Issue-id always uses 2 analysts* |
 
 ## Setup

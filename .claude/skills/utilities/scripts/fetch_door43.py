@@ -4,7 +4,7 @@ fetch_door43.py - Fetch USFM files from Door43 git repositories
 
 Usage:
   python fetch_door43.py <book> [options]
-  python fetch_door43.py PSA --user deferredreward
+  python fetch_door43.py PSA --user benjamin-test
   python fetch_door43.py 1JN --output ./data/1jn.usfm
 
 Options:
@@ -23,7 +23,7 @@ URL Pattern:
 
 Examples:
   python fetch_door43.py PSA                          # Psalms from unfoldingWord/en_ult master
-  python fetch_door43.py 1JN --user deferredreward    # 1 John from user's fork
+  python fetch_door43.py 1JN --user benjamin-test    # 1 John from user's fork
   python fetch_door43.py MAT --type ust               # Matthew from en_ust
   python fetch_door43.py GEN --output gen.usfm        # Save to file
 """
@@ -125,7 +125,7 @@ def main():
         epilog="""
 Examples:
   %(prog)s PSA                          # Psalms from unfoldingWord/en_ult
-  %(prog)s 1JN --user deferredreward    # 1 John from user's fork
+  %(prog)s 1JN --user benjamin-test    # 1 John from user's fork
   %(prog)s MAT --type ust               # Matthew from en_ust
   %(prog)s GEN --output gen.usfm        # Save to file
 """

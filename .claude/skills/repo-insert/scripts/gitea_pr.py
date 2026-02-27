@@ -7,7 +7,7 @@ Usage:
     --repo en_tn \
     --head AI-PSA-120 \
     --base master \
-    --title "AI TN for PSA 120 [deferredreward]" \
+    --title "AI TN for PSA 120 [benjamin-test]" \
     --merge
 
 Token lookup order (.env files first -- env vars may be stale in Docker):
