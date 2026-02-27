@@ -65,6 +65,9 @@ Check the UST for the same verse. Make sure your alternate translation is not th
 ### Minimal Adjustment
 The AT should be the smallest change to the ULT text that resolves the translation issue. Keep ULT wording where possible, change only what is needed. For figures of speech (metaphors, idioms, etc.), more substantial rewording may be needed to express the plain meaning -- this is expected.
 
+### Supply Words in ATs
+Do not include the curly brace characters `{` or `}` in AT text. The words inside them are implied English words and may appear in the AT as plain text when needed. For example, if the ULT has `{am} poor and needy`, the AT may use "am" but must write it without braces: [am very poor].
+
 ### Punctuation in ATs
 Do not include punctuation at the start or end of the AT brackets unless the note is specifically proposing a change to the ULT's punctuation. If the gl_quote does not start with a comma or other punctuation, the AT should not either. Similarly, do not add ending punctuation (period, comma, question mark) even if the ULT text being replaced ends with one. The AT replaces the *words*, not the surrounding punctuation.
 
@@ -147,6 +150,7 @@ Similarly, do not borrow wording from templates belonging to other issue types. 
 - **grammar-connect-logic-result**: Do not identify specific phrases, keep to the template
 - **figs-ellipsis**: Do not explain the missing words/phrase
 - **figs-abstractnouns**: Do not define the words. The AT must resolve the abstract noun into a non-abstract form (verb, adjective, clause) -- do not replace one abstract noun with another (e.g., "obedience" -> "faithful obedience" is wrong; "obedience" -> "obeying him" is correct; "covenant faithfulness" -> "faithful love" is wrong because "love" is abstract; "covenant faithfulness" -> "being faithful to his covenant" is correct)
+- **figs-activepassive**: The AT must show the idea expressed with an active verb, not a passive verb with an agent added. "God drives them back" is correct; "be driven back by God" is wrong -- that is still passive. Identify the actor from context (usually God) and make them the grammatical subject of an active clause.
 - **writing-poetry (cognate accusative)**: Use the cognate accusative template exactly. Do not describe the poetic effect, explain the figure, or substitute other wording
 
 ## Terminology

@@ -789,6 +789,11 @@ def main():
             if gl_rt:
                 gl_quote_roundtripped = gl_rt
 
+        # Use the roundtripped gl_quote in the prompt so the AT is anchored
+        # to the exact ULT English span that the Hebrew Quote field maps to.
+        if gl_quote_roundtripped and gl_quote_roundtripped != item['gl_quote']:
+            item['gl_quote'] = gl_quote_roundtripped
+
         # Assign ID
         item_id = ''
         if ids and idx < len(ids):
