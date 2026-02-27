@@ -80,11 +80,22 @@ For each item in `/tmp/claude/prepared_notes.json` where `orig_quote` is empty:
 5. Order the collected Hebrew words by their character offset in the Hebrew source verse: find each Hebrew word's position in the verse string (index of its first character), then sort ascending by that offset. Do NOT use `heb_pos` from the alignment data for ordering -- that reflects English word order in the USFM, not Hebrew reading order
 6. Verify EXACT Unicode match: each Hebrew word you collected must appear character-for-character as a `\w` token in the Hebrew source verse for that reference
 7. Join the Hebrew words with spaces and update `orig_quote` in the prepared JSON
-8. Reverse-lookup to update `gl_quote`: using the alignment data, find all English words whose `heb` value matches any Hebrew word in `orig_quote`. Locate these English words in the ULT verse (`ult_verse`) in order, including any supply words `{...}` that fall within the span. Update `gl_quote` in the prepared JSON to this contiguous ULT English span. This ensures the AT will be anchored to the correct English span that matches what is highlighted in the tool.
 
 **CRITICAL**: You MUST copy Hebrew text character-for-character from the source file. Do not generate Hebrew from memory. Read the source, find the words, copy them exactly.
 
 After filling all items, write the updated prepared JSON back to `/tmp/claude/prepared_notes.json`.
+
+### Step 2d: Resolve gl_quote from alignment (script)
+
+After orig_quote is filled, run the reverse-lookup script to update gl_quote to the correct ULT English span:
+
+```bash
+python3 .claude/skills/tn-writer/scripts/resolve_gl_quotes.py \
+    /tmp/claude/prepared_notes.json \
+    /tmp/claude/alignment_data.json
+```
+
+This uses the alignment data to find English words mapped to the Hebrew in orig_quote, then locates the contiguous span in the ULT verse (including `{supply}` words). Review the output for any warnings about unmatched items.
 
 ### Step 3: Verify Hebrew Quotes
 
