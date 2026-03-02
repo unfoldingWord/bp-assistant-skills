@@ -197,6 +197,20 @@ def main():
               file=sys.stderr)
         sys.exit(1)
 
+    # Validate token before doing anything
+    status, result = api_request('GET', f"/repos/{ORG}/{args.repo}", token)
+    if status == 401 or status == 403:
+        print(f"ERROR: API token is invalid or expired (HTTP {status}).", file=sys.stderr)
+        print("Regenerate at: https://git.door43.org/user/settings/applications", file=sys.stderr)
+        sys.exit(1)
+
+    # Verify the head branch exists on the remote (push succeeded)
+    status, result = api_request('GET', f"/repos/{ORG}/{args.repo}/branches/{args.head}", token)
+    if status == 404:
+        print(f"ERROR: Branch '{args.head}' does not exist on {ORG}/{args.repo}.", file=sys.stderr)
+        print("The git push likely failed. Check authentication and try again.", file=sys.stderr)
+        sys.exit(1)
+
     pr_number, pr_url = create_or_get_pr(
         token, args.repo, args.head, args.base, args.title, args.body
     )
