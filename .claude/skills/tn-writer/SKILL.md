@@ -159,7 +159,9 @@ If `issues_resolved.txt` contains a decision about how a specific issue type sho
 
 Read `/tmp/claude/prepared_notes.json`. For each item, generate a note and write it to a JSON object keyed by the item's `id`. Write the result to `/tmp/claude/generated_notes.json`.
 
-Process one item at a time. As you work through items, keep a mental map of interpretive commitments you have made (e.g., "in v9 I said inheritance = people"). When a note references or depends on a concept from a nearby verse, check that the interpretation is consistent with notes you already wrote. If you spot a conflict, resolve it before continuing -- adjust the current note or go back and revise the earlier one.
+Process one item at a time. Each note addresses exactly one item from the prepared JSON, which corresponds to one issue in one verse. Never create summary notes that combine or reference multiple verse occurrences of the same pattern (e.g., do not write "The author uses synecdoche in verses 2, 5, and 6"). Each verse gets its own self-contained note even when the same figure recurs across the chapter.
+
+As you work through items, keep a mental map of interpretive commitments you have made (e.g., "in v9 I said inheritance = people"). This mental map is for consistency, not for creating cross-verse summaries. When a note references or depends on a concept from a nearby verse, check that the interpretation is consistent with notes you already wrote. If you spot a conflict, resolve it before continuing -- adjust the current note or go back and revise the earlier one.
 
 1. Read the `system_prompt_key` field to know which persona to use:
    - `ai_writes_at_agent` -- Generate the note AND an alternate translation

@@ -20,6 +20,9 @@ The Challenger:
   `skills/issue-identification/SKILL.md`)
 - Cross-references `data/issues_resolved.txt` and the biblical imagery
   classification lists in figs-metonymy.md and figs-metaphor.md
+- Does the same phrase carry multiple figurative tags? If so, these are
+  competing analyses -- challenge all but the best fit using the decision
+  hierarchy in "Competing Figurative Analyses" in SKILL.md.
 - Does NOT find new issues -- only challenges existing ones
 - Resolves disagreements between Wave 2 agents (e.g., one kept an issue
   another dropped)

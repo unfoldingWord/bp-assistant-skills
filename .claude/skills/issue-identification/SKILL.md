@@ -283,6 +283,7 @@ Before finalizing a tag, check if a related issue fits better:
 | writing-pronouns | figs-gendernotations | Unclear referent vs. generic masculine |
 | figs-metaphor | figs-simile | No comparison word vs. explicit "like/as" |
 | figs-metonymy | figs-synecdoche | Associated thing vs. part/whole relationship |
+| figs-idiom | figs-metonymy / figs-synecdoche | Fixed cultural expression vs. live figure (body-part triple) |
 | figs-doublet | figs-parallelism | Word-level pair vs. clause-level repetition |
 | figs-doublet | figs-hendiadys | Synonyms for emphasis vs. one modifies other |
 | figs-idiom | figs-metaphor | Fixed expression vs. live comparison |
@@ -290,6 +291,17 @@ Before finalizing a tag, check if a related issue fits better:
 | figs-rquestion | figs-exclamations | Question form vs. exclamation form |
 | figs-explicit | figs-ellipsis | Adding background info vs. supplying omitted words |
 | grammar-connect-logic-goal | grammar-connect-logic-result | Intended outcome vs. unintended consequence |
+
+### Competing Figurative Analyses (Pick One)
+
+When the same phrase could be classified under multiple figurative issue types (e.g., synecdoche, metonymy, and idiom for "a lip of falsehood"), these represent competing analyses of the same feature, not complementary layers. Pick the single best fit.
+
+Decision hierarchy for body-part and cultural expressions:
+1. Is it a fixed cultural expression where the literal meaning has faded? -> figs-idiom
+2. Is it association-based (thing for related thing, organ for its function)? -> figs-metonymy
+3. Is it part-for-whole (can the whole person be substituted)? -> figs-synecdoche
+
+This hierarchy reflects content team decisions in `data/issues_resolved.txt`. Grammar-layer issues (figs-abstractnouns, figs-activepassive, figs-possession) remain independent and always coexist alongside a figurative tag on the same phrase.
 
 ### Biblical Imagery Classification
 
@@ -307,6 +319,9 @@ After completing all identification, review your output:
    - **Ambiguous terms**: When the same Hebrew word or phrase is discussed in multiple verses, check that your explanations don't silently adopt different interpretations. If the interpretation is genuinely debatable, use a TCM note in the originating verse rather than letting different verses assume different answers.
 
 3. **Duplicate check**: Did you tag the same phrase twice for issues that are really one? (e.g., tagging both figs-doublet and figs-parallelism for the same word pair)
+   Also check for **competing figurative analyses**: if the same phrase has two or more
+   figurative tags (e.g., figs-synecdoche + figs-metonymy + figs-idiom), keep only the
+   single best fit using the decision hierarchy in "Competing Figurative Analyses" above.
 
 4. **Missing overlap check**: Are there phrases that genuinely need two tags? (e.g., a simile that also contains an abstract noun - both figs-simile AND figs-abstractnouns may apply)
    Abstract nouns, passives (figs-abstractnouns, figs-activepassive) are script-detected
@@ -314,6 +329,8 @@ After completing all identification, review your output:
    a figurative issue on the same phrase does not replace a grammar issue. Other grammar-level
    issues (figs-possession, figs-ellipsis, figs-nominaladj) should also generally not be
    dropped or merged with figurative issues.
+   But multiple figurative issue types on the same phrase (figurative+figurative, not
+   grammar+figurative) represent competing analyses -- see "Competing Figurative Analyses."
 
 5. **Keyword sweep**: Scan output for any keyword triggers above that you may have tagged incorrectly.
 

@@ -8,6 +8,9 @@ Return a translation note by adapting a template provided as closely as possible
 
 Only respond with the note, not with any other text or explanation.
 
+### One Note Per Verse
+Each note addresses a single translation issue in a single verse. Do not create notes that summarize or combine occurrences of the same pattern across multiple verses. Even when the same figure recurs in several verses, each verse gets its own independent note.
+
 ## Shared Style Rules
 
 Follow `../../reference/gl_guidelines.md` for shared style rules (formality, numbers, spelling, comparisons). TN-specific rules below.
