@@ -453,18 +453,33 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
     occurrences: occurrences.toString()
   });
 
-  const buildZalnMilestone = (hw, sourceWord, children) => ({
-    tag: 'zaln',
-    type: 'milestone',
-    strong: hw.strong,
-    lemma: hw.lemma,
-    morph: hw.morph || '',
-    occurrence: '1',
-    occurrences: '1',
-    content: sourceWord,
-    children: children,
-    endTag: 'zaln-e\\*'
-  });
+  // Count total occurrences of each Hebrew source word in this verse
+  // Key by the word string (the actual Hebrew text)
+  const hebrewWordTotalOccurrences = {};
+  for (const hw of (mapping.hebrew_words || [])) {
+    if (hw && hw.word) {
+      hebrewWordTotalOccurrences[hw.word] = (hebrewWordTotalOccurrences[hw.word] || 0) + 1;
+    }
+  }
+  // Track current occurrence per Hebrew word as we process alignments
+  const hebrewCurrentOccurrence = {};
+
+  const buildZalnMilestone = (hw, sourceWord, children) => {
+    // Track which occurrence of this Hebrew word we're emitting
+    hebrewCurrentOccurrence[sourceWord] = (hebrewCurrentOccurrence[sourceWord] || 0) + 1;
+    return {
+      tag: 'zaln',
+      type: 'milestone',
+      strong: hw.strong,
+      lemma: hw.lemma,
+      morph: hw.morph || '',
+      occurrence: hebrewCurrentOccurrence[sourceWord].toString(),
+      occurrences: (hebrewWordTotalOccurrences[sourceWord] || 1).toString(),
+      content: sourceWord,
+      children: children,
+      endTag: 'zaln-e\\*'
+    };
+  };
 
   // Pre-compute bracket status for each word position
   // Do a dry-run of occurrence counting to determine bracket status
