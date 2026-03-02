@@ -111,6 +111,22 @@ if (!ultFile) {
   process.exit(1);
 }
 
+// Sanity check: catch common mistake of passing the wrong source file for the mode
+if (ultFile) {
+  const isUltPath = /[/\\]AI-ULT[/\\]/.test(ultFile);
+  const isUstPath = /[/\\]AI-UST[/\\]/.test(ultFile);
+  if (ustMode && isUltPath) {
+    console.error(`Error: --ust mode is active but --source appears to be a ULT file: ${ultFile}`);
+    console.error('UST alignment requires --source to point to the UST file (output/AI-UST/BOOK/BOOK-CH.usfm)');
+    process.exit(1);
+  }
+  if (!ustMode && isUstPath) {
+    console.error(`Warning: --source appears to be a UST file but --ust flag is not set: ${ultFile}`);
+    console.error('If aligning UST, add the --ust flag. If aligning ULT, use --source output/AI-ULT/... instead.');
+    process.exit(1);
+  }
+}
+
 // Read inputs
 const hebrewContent = readFileSync(hebrewFile, 'utf8');
 const mappingData = JSON.parse(readFileSync(mappingFile, 'utf8'));

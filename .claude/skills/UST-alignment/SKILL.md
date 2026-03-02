@@ -287,11 +287,13 @@ Write to scratchpad or output directory:
 
 After creating the mapping JSON, run the conversion script:
 
+> **Critical:** `--source` MUST point to the **UST file** (`output/AI-UST/BOOK/...`). Never pass the ULT file here. If you pass the ULT file, the output will silently contain ULT English text and look structurally valid — the error will not be obvious.
+
 ```bash
 node .claude/skills/utilities/scripts/usfm/create_aligned_usfm.js \
   --hebrew data/hebrew_bible/19-PSA.usfm \
   --mapping /tmp/alignments/PSA-001-001.json \
-  --source output/AI-UST/PSA-001.usfm \
+  --source output/AI-UST/PSA/PSA-001.usfm \
   --ust \
   --chapter 1 --verse 1
 ```
@@ -359,6 +361,19 @@ python3 .claude/skills/utilities/scripts/curly_quotes.py \
 ```
 
 ## Verification
+
+### Step 0: Verify UST text differs from ULT (mandatory)
+
+Before anything else, confirm the aligned UST contains different English than the aligned ULT. If these are the same, the alignment was run against the ULT source — discard and redo.
+
+```bash
+# Extract English words from both aligned files and compare
+BOOK=HOS; CH=01
+diff \
+  <(grep -oE '\\w [^|]+\|' output/AI-UST/$BOOK/$BOOK-$CH-aligned.usfm | sed 's/\\w //;s/|//') \
+  <(grep -oE '\\w [^|]+\|' output/AI-ULT/$BOOK/$BOOK-$CH-aligned.usfm | sed 's/\\w //;s/|//') \
+  > /dev/null && echo "ERROR: UST and ULT aligned text are identical — wrong --source file was used" || echo "OK: UST and ULT text differ as expected"
+```
 
 ### Step 1: Verify English Text Preservation
 
