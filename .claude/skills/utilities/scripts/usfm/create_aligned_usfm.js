@@ -201,7 +201,7 @@ function extractUsfmMarkers(ultContent, chapter, verse, hasDText = false) {
       for (let i = 0; i < betweenLines.length; i++) {
         const trimmed = betweenLines[i].trim();
         if (!trimmed) continue;  // skip blank lines
-        const isInterVerseMarker = trimmed.match(/^\\(qa\s|ts\\\*|s[12]\s|d\s|d$|b\s*$|cl\s)/);
+        const isInterVerseMarker = trimmed.match(/^\\(qa\s|ts\\\*|s[12]\s|d\s|d$|b\s*$|cl\s|p\s*$)/);
         if (!isInterVerseMarker) {
           lastTextLine = i;
         }
@@ -217,7 +217,7 @@ function extractUsfmMarkers(ultContent, chapter, verse, hasDText = false) {
   const interVerseLines = interVerseText.split('\n');
 
   // Match inter-verse markers
-  const interVerseMarkerPattern = /^(\\qa\s+.+|\\ts\\\*|\\s[12]\s+.+|\\b\s*$|\\cl\s+.+|\\d\s+.+|\\d\s*$)/;
+  const interVerseMarkerPattern = /^(\\qa\s+.+|\\ts\\\*|\\s[12]\s+.+|\\b\s*$|\\cl\s+.+|\\d\s+.+|\\d\s*$|\\p\s*$)/;
   for (const line of interVerseLines) {
     const trimmed = line.trim();
     if (!trimmed) continue;
@@ -757,6 +757,10 @@ for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
     } else if (position === -2 && markerObj.markerLine) {
       // Inter-verse marker - insert on its own line before the verse line
       // Must go before any \q1/\q2 prefix on the verse line
+      // In prose chapters, usfm-js may render \v N inline after previous verse content.
+      // Ensure \v N is on its own line first before inserting the marker.
+      const inlineVersePattern = new RegExp(`([^\\n])\\s+((?:\\\\q[12]\\s+)?\\\\v\\s+${verse}\\s)`, 'g');
+      outputUsfm = outputUsfm.replace(inlineVersePattern, `$1\n$2`);
       const versePattern = new RegExp(`(^|\\n)((?:\\\\q[12]\\s+)?\\\\v\\s+${verse}\\s)`, 'm');
       outputUsfm = outputUsfm.replace(versePattern, `$1${markerObj.markerLine}\n$2`);
 
