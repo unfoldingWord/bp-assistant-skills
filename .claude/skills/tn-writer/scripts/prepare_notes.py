@@ -140,41 +140,70 @@ def parse_input_tsv(filepath):
     book_code = None
 
     with open(filepath, 'r', encoding='utf-8') as f:
-        for line_num, line in enumerate(f, start=1):
-            line = line.rstrip('\n')
-            if not line.strip():
-                continue
-            cols = line.split('\t')
-            while len(cols) < 7:
-                cols.append('')
+        all_lines = f.readlines()
 
-            # Skip header row
-            if line_num == 1 and cols[0].lower() == 'book':
-                continue
+    # Pre-process: rejoin intro rows that were broken by actual newlines.
+    # A valid TSV row starts with a book code + tab + reference pattern.
+    ref_pattern = re.compile(r'^[a-zA-Z0-9]{2,3}\t\d+:')
+    merged_lines = []
+    i = 0
+    while i < len(all_lines):
+        line = all_lines[i].rstrip('\n').rstrip('\r')
+        cols = line.split('\t')
+        if len(cols) >= 2 and ':intro' in cols[1]:
+            # Intro row — collect any continuation lines (no valid ref pattern)
+            j = i + 1
+            extra = []
+            while j < len(all_lines):
+                next_line = all_lines[j].rstrip('\n').rstrip('\r')
+                if not next_line.strip() or ref_pattern.match(next_line):
+                    break
+                extra.append(next_line)
+                j += 1
+            if extra:
+                print(f"WARNING: Rejoining {len(extra)} broken intro lines at line {i+1}",
+                      file=sys.stderr)
+                line = line + '\\n' + '\\n'.join(extra)
+            merged_lines.append(line)
+            i = j
+        else:
+            merged_lines.append(line)
+            i += 1
 
-            if book_code is None:
-                book_code = cols[0].upper()
+    for line_num, line in enumerate(merged_lines, start=1):
+        if not line.strip():
+            continue
+        cols = line.split('\t')
+        while len(cols) < 7:
+            cols.append('')
 
-            # Detect intro rows and store separately
-            if ':intro' in cols[1]:
-                intro_rows.append({
-                    'book': cols[0],
-                    'reference': cols[1].strip(),
-                    'content': cols[6].strip(),
-                })
-                continue
+        # Skip header row
+        if line_num == 1 and cols[0].lower() == 'book':
+            continue
 
-            items.append({
-                'book': cols[0].upper() if cols[0] else book_code,
-                'ref': cols[1].strip(),
-                'sref': cols[2].strip(),
-                'gl_quote': cols[3].strip(),
-                'go': cols[4].strip(),
-                'at': cols[5].strip(),
-                'explanation': cols[6].strip(),
-                'ai_tn': '',
-                'line_num': line_num,
+        if book_code is None:
+            book_code = cols[0].upper()
+
+        # Detect intro rows and store separately
+        if ':intro' in cols[1]:
+            intro_rows.append({
+                'book': cols[0],
+                'reference': cols[1].strip(),
+                'content': cols[6].strip(),
             })
+            continue
+
+        items.append({
+            'book': cols[0].upper() if cols[0] else book_code,
+            'ref': cols[1].strip(),
+            'sref': cols[2].strip(),
+            'gl_quote': cols[3].strip(),
+            'go': cols[4].strip(),
+            'at': cols[5].strip(),
+            'explanation': cols[6].strip(),
+            'ai_tn': '',
+            'line_num': line_num,
+        })
 
     # Detect book/chapter from filename as fallback
     if not book_code:

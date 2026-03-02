@@ -132,4 +132,6 @@ Columns:
 
 If the issue file already has an intro row (first line contains `:intro`), replace it rather than adding a duplicate.
 
-**Confirm the result** by reading back the first 3 lines of the file to verify the intro row is correctly placed and formatted.
+**Confirm the result** by reading back the first 3 lines of the file to verify:
+1. The intro row is correctly placed as the first data line
+2. The intro is a **single TSV line** — no actual newline characters in the content. All markdown line breaks must be literal two-character `\n` sequences. If you see the intro spanning multiple lines in the file, fix it immediately.

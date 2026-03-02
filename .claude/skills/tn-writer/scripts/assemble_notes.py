@@ -144,6 +144,9 @@ def main():
             # Use the reference from the source TSV (e.g. "78:intro"),
             # NOT "front:intro" which is the book-level intro slot
             intro_ref = intro.get('reference', 'front:intro')
+            # Intro content must be a single TSV line with literal \n for newlines
+            intro_content = intro.get('content', '')
+            intro_content = intro_content.replace('\r\n', '\\n').replace('\r', '\\n').replace('\n', '\\n')
             f.write('\t'.join([
                 intro_ref,
                 intro_id,
@@ -151,7 +154,7 @@ def main():
                 '',
                 '',
                 '0',
-                intro.get('content', '')
+                intro_content
             ]) + '\n')
             intro_count += 1
 
