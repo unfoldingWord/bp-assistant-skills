@@ -113,9 +113,28 @@ def is_apostrophe(text: str, pos: int) -> bool:
     return False
 
 
+def strip_braces_in_ats(text: str) -> str:
+    """Remove {curly braces} from inside Alternate Translation [brackets].
+
+    The AI sometimes wraps implied words in {} inside ATs, e.g.
+    Alternate translation: [he {will} praise]. This strips the braces
+    but keeps the content, producing [he will praise].
+    Only operates inside [...] that follow "Alternate translation:".
+    """
+    def remove_braces(m):
+        return re.sub(r'[{}]', '', m.group(0))
+
+    return re.sub(
+        r'(Alternate translation:\s*(?:"[^"]*"\s*or\s*)?)\[([^\]]*\{[^\]]*)\]',
+        lambda m: m.group(1) + '[' + re.sub(r'[{}]', '', m.group(2)) + ']',
+        text
+    )
+
+
 def process_file(input_path: Path, output_path: Path = None, in_place: bool = False) -> str:
     """Process a file and convert quotes."""
     text = input_path.read_text(encoding='utf-8')
+    text = strip_braces_in_ats(text)
     converted = convert_to_curly_quotes(text)
 
     if in_place:
