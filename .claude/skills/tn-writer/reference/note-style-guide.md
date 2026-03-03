@@ -74,7 +74,7 @@ Do not include the curly brace characters `{` or `}` in AT text. The words insid
 ### Punctuation in ATs
 Do not include punctuation at the start or end of the AT brackets unless the note is specifically proposing a change to the ULT's punctuation. If the gl_quote does not start with a comma or other punctuation, the AT should not either. Similarly, do not add ending punctuation (period, comma, question mark) even if the ULT text being replaced ends with one. The AT replaces the *words*, not the surrounding punctuation.
 
-**Exception -- rhetorical questions**: When a `figs-rquestion` note converts a question into a statement or exclamation, the AT must include its ending punctuation (usually `.` or `!`) because the punctuation change is the point of the note. The gl_quote ends with `?` and the AT replaces it with a different sentence type, so the new punctuation belongs inside the brackets.
+**Exception**: `figs-rquestion` ATs must include ending punctuation (`.` or `!`) since the `?` -> statement change is the point of the note.
 
 ### Discontinuous ATs
 When an AT covers non-adjacent text, use a single pair of brackets with a true ellipsis character between the parts: `[I desire peace … they desire war]` (spaces around the ellipsis).

@@ -582,6 +582,39 @@ def check_at_ending_punctuation(row, prepared_items):
     return findings
 
 
+def check_rquestion_at_punctuation(row, prepared_items):
+    """Check 21: figs-rquestion ATs must end with . or ! (not ? or no punctuation)."""
+    sref = row.get('SupportReference', '')
+    if 'figs-rquestion' not in sref:
+        return []
+    note = row.get('Note', '')
+    ats = extract_ats(note)
+    if not ats:
+        return []
+
+    item = prepared_items.get(row.get('ID', ''))
+    gl_quote = ''
+    if item:
+        gl_quote = item.get('gl_quote_roundtripped') or item.get('gl_quote', '')
+    # Only check when the gl_quote ends with ?
+    if not gl_quote or not gl_quote.rstrip().endswith('?'):
+        return []
+
+    findings = []
+    for at in ats:
+        at_stripped = at.rstrip()
+        if not at_stripped:
+            continue
+        last_char = at_stripped[-1]
+        if last_char not in '.!':
+            findings.append({
+                'severity': 'warning', 'category': 'rquestion_missing_punctuation',
+                'message': f'figs-rquestion AT [{at}] should end with . or ! '
+                           f'(currently ends with "{last_char}")'
+            })
+    return findings
+
+
 def check_support_reference(row, valid_issues):
     """Check 17: SupportReference must be a known issue from translation-issues.csv."""
     if row.get('Occurrence') == '0':
@@ -1047,6 +1080,10 @@ def main():
 
         # Check 19: Hebrew quote missing & joiners
         for f in check_hebrew_quote_joiners(row, hebrew_verses):
+            row_findings.append(f)
+
+        # Check 21: rquestion AT must end with . or !
+        for f in check_rquestion_at_punctuation(row, prepared_items):
             row_findings.append(f)
 
         # Annotate each finding with row context

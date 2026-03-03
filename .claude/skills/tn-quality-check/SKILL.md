@@ -185,6 +185,7 @@ The script runs these 16 checks:
 | 14 | abstract_noun_in_at | error | figs-abstractnouns AT must not contain abstract nouns |
 | 15 | at_ending_punctuation | warning | AT does not introduce ending punctuation absent from gl_quote (skips figs-rquestion `?` -> `.`/`!`) |
 | 16 | narrow_parallelism_quote | warning | figs-parallelism gl_quote covers both full parallel phrases |
+| 21 | rquestion_missing_punctuation | warning | figs-rquestion AT should end with `.` or `!` (not `?` or bare) |
 | 20 | multiverse_language | warning | Note text references multiple verses (e.g., "verses 2, 5, and 6") |
 | 20 | multiverse_backref | warning | Note back-references another verse (e.g., "as in verse 3") |
 | 20 | multiverse_duplicate | warning | Near-duplicate notes (same issue type, adjacent verses, 75%+ content overlap) |
