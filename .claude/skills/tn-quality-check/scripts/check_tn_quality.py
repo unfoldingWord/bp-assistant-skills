@@ -549,6 +549,10 @@ def check_at_ending_punctuation(row, prepared_items):
     if not ats:
         return []
 
+    # Rhetorical question notes intentionally change ? to . or !
+    sref = row.get('SupportReference', '')
+    is_rquestion = 'figs-rquestion' in sref
+
     item = prepared_items.get(row.get('ID', ''))
     if not item:
         return []
@@ -557,6 +561,7 @@ def check_at_ending_punctuation(row, prepared_items):
         return []
 
     findings = []
+    gl_stripped = gl_quote.rstrip()
     for at in ats:
         at_stripped = at.rstrip()
         if not at_stripped:
@@ -564,8 +569,11 @@ def check_at_ending_punctuation(row, prepared_items):
         last_char = at_stripped[-1]
         if last_char in '.?,!':
             # Check if the gl_quote also ends with that punctuation
-            gl_stripped = gl_quote.rstrip()
             if not gl_stripped or gl_stripped[-1] != last_char:
+                # For rquestion notes, the punctuation change (? -> . or !) is
+                # intentional -- only flag if the AT *also* ends with ?
+                if is_rquestion and gl_stripped and gl_stripped[-1] == '?' and last_char in '.!':
+                    continue
                 findings.append({
                     'severity': 'warning', 'category': 'at_ending_punctuation',
                     'message': f'AT [{at}] ends with "{last_char}" but gl_quote does not — '

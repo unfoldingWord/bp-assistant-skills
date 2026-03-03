@@ -183,7 +183,7 @@ The script runs these 16 checks:
 | 12 | straight_quotes | warning | No straight quote characters |
 | 13 | at_capitalization | warning | AT capitalization matches sentence position |
 | 14 | abstract_noun_in_at | error | figs-abstractnouns AT must not contain abstract nouns |
-| 15 | at_ending_punctuation | warning | AT does not introduce ending punctuation absent from gl_quote |
+| 15 | at_ending_punctuation | warning | AT does not introduce ending punctuation absent from gl_quote (skips figs-rquestion `?` -> `.`/`!`) |
 | 16 | narrow_parallelism_quote | warning | figs-parallelism gl_quote covers both full parallel phrases |
 | 20 | multiverse_language | warning | Note text references multiple verses (e.g., "verses 2, 5, and 6") |
 | 20 | multiverse_backref | warning | Note back-references another verse (e.g., "as in verse 3") |
