@@ -677,6 +677,134 @@ def check_hebrew_quote_joiners(row, hebrew_verses):
     return findings
 
 
+def check_multiverse_notes(rows):
+    """Check 20: Flag potential multi-verse note issues for review.
+
+    Detects three patterns:
+    (a) Notes that explicitly reference multiple verses (e.g., "verses 2, 5, and 6").
+    (b) Notes with cross-verse back-references (e.g., "as in verse 3").
+    (c) Near-duplicate notes: same issue type in adjacent verses with high text
+        similarity, suggesting a summary was split rather than independent notes written.
+
+    All findings are warnings (not errors) because adjacent-verse thoughts can
+    be legitimate.
+    """
+    findings = []
+
+    # --- Pattern (a): explicit multi-verse language ---
+    # "verses 2, 5, and 6", "verses 3-5", "in verses 2 and 3"
+    multi_verse_re = re.compile(
+        r'\bverses\s+\d+(?:\s*[-,]\s*\d+)*(?:\s*(?:,\s*)?and\s+\d+)',
+        re.IGNORECASE
+    )
+    # Also catch "in verses X-Y" range form
+    verse_range_re = re.compile(r'\bverses\s+\d+\s*[-\u2013]\s*\d+', re.IGNORECASE)
+
+    for row in rows:
+        if row.get('Occurrence') == '0':
+            continue
+        note = row.get('Note', '')
+        m = multi_verse_re.search(note) or verse_range_re.search(note)
+        if m:
+            findings.append({
+                'row': row['_line'],
+                'reference': row.get('Reference', ''),
+                'id': row.get('ID', ''),
+                'severity': 'warning',
+                'category': 'multiverse_language',
+                'message': f'Note references multiple verses: "{m.group(0)}" '
+                           f'— each verse should get its own independent note'
+            })
+
+    # --- Pattern (b): cross-verse back-references ---
+    # "as in verse 3", "see verse 5", "refers to ... verse 3"
+    back_ref_re = re.compile(
+        r'\b(?:as in|see|from|refers? to[^.]{0,30})\s+verse\s+\d+',
+        re.IGNORECASE
+    )
+
+    for row in rows:
+        if row.get('Occurrence') == '0':
+            continue
+        note = row.get('Note', '')
+        m = back_ref_re.search(note)
+        if m:
+            findings.append({
+                'row': row['_line'],
+                'reference': row.get('Reference', ''),
+                'id': row.get('ID', ''),
+                'severity': 'warning',
+                'category': 'multiverse_backref',
+                'message': f'Note back-references another verse: "{m.group(0)}" '
+                           f'— verify the note is self-contained'
+            })
+
+    # --- Pattern (c): near-duplicate notes in adjacent verses ---
+    # Group rows by issue type slug
+    def get_slug(row):
+        sref = row.get('SupportReference', '')
+        m = re.search(r'translate/([^\s;,]+)', sref)
+        return m.group(1) if m else ''
+
+    def get_verse_num(row):
+        ref = row.get('Reference', '')
+        m = re.match(r'(\d+):(\d+)', ref)
+        return int(m.group(2)) if m else -1
+
+    def note_words(row):
+        """Extract content words from a note for similarity comparison."""
+        note = row.get('Note', '')
+        # Remove bold markers, AT brackets, punctuation
+        clean = re.sub(r'\*\*[^*]+\*\*', '', note)
+        clean = re.sub(r'\[[^\]]+\]', '', clean)
+        clean = re.sub(r'[^\w\s]', '', clean.lower())
+        words = set(clean.split())
+        # Remove very common words to focus on content
+        stop = {'the', 'a', 'an', 'is', 'are', 'was', 'were', 'in', 'of', 'to',
+                'and', 'or', 'for', 'that', 'this', 'with', 'you', 'could',
+                'if', 'it', 'he', 'his', 'her', 'by', 'as', 'be', 'not',
+                'alternate', 'translation', 'here', 'means', 'way', 'idea',
+                'same', 'express', 'another'}
+        return words - stop
+
+    # Only check real note rows
+    note_rows = [r for r in rows if r.get('Occurrence') != '0']
+
+    for i in range(len(note_rows)):
+        for j in range(i + 1, len(note_rows)):
+            row_a = note_rows[i]
+            row_b = note_rows[j]
+            slug_a = get_slug(row_a)
+            slug_b = get_slug(row_b)
+            if not slug_a or slug_a != slug_b:
+                continue
+            v_a = get_verse_num(row_a)
+            v_b = get_verse_num(row_b)
+            if v_a < 0 or v_b < 0:
+                continue
+            # Only check adjacent or near-adjacent verses (within 2)
+            if abs(v_a - v_b) > 2:
+                continue
+            words_a = note_words(row_a)
+            words_b = note_words(row_b)
+            if not words_a or not words_b:
+                continue
+            overlap = len(words_a & words_b) / min(len(words_a), len(words_b))
+            if overlap >= 0.75:
+                findings.append({
+                    'row': row_b['_line'],
+                    'reference': f"{row_a.get('Reference', '')} / {row_b.get('Reference', '')}",
+                    'id': f"{row_a.get('ID', '')} / {row_b.get('ID', '')}",
+                    'severity': 'warning',
+                    'category': 'multiverse_duplicate',
+                    'message': f'Near-duplicate {slug_a} notes in adjacent verses '
+                               f'({overlap:.0%} content overlap) — verify each note '
+                               f'is independently written, not a multi-verse summary'
+                })
+
+    return findings
+
+
 def check_parallelism_quote_scope(row, prepared_items):
     """Check 16: Parallelism notes should quote both full parallel phrases."""
     sref = row.get('SupportReference', '')
@@ -924,6 +1052,9 @@ def main():
 
     # Check 2: ID uniqueness
     all_findings.extend(check_id_uniqueness(rows))
+
+    # Check 20: Multi-verse note detection
+    all_findings.extend(check_multiverse_notes(rows))
 
     # Check 3: ID collisions with master TN
     if book_code:

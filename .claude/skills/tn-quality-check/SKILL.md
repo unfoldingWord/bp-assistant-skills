@@ -185,6 +185,9 @@ The script runs these 16 checks:
 | 14 | abstract_noun_in_at | error | figs-abstractnouns AT must not contain abstract nouns |
 | 15 | at_ending_punctuation | warning | AT does not introduce ending punctuation absent from gl_quote |
 | 16 | narrow_parallelism_quote | warning | figs-parallelism gl_quote covers both full parallel phrases |
+| 20 | multiverse_language | warning | Note text references multiple verses (e.g., "verses 2, 5, and 6") |
+| 20 | multiverse_backref | warning | Note back-references another verse (e.g., "as in verse 3") |
+| 20 | multiverse_duplicate | warning | Near-duplicate notes (same issue type, adjacent verses, 75%+ content overlap) |
 
 **Note on orphaned preposition/conjunction warnings after gl_quote expansion**: When a gl_quote has been expanded to include a leading preposition or conjunction (the correct fix for orphaned words at the AT boundary), the script may still report `orphaned_conjunction` or `orphaned_prep` warnings. These are false positives -- the word now appears both in the expanded gl_quote and at the start of the AT, which is the intended behavior. During the deep semantic review (Step 3c), verify the actual substitution reads naturally rather than trusting these warnings at face value.
 
