@@ -100,7 +100,7 @@ def api_request(method, path, token, data=None):
     req.add_header('Content-Type', 'application/json')
     req.add_header('Authorization', f'token {token}')
     try:
-        with urllib.request.urlopen(req) as response:
+        with urllib.request.urlopen(req, timeout=30) as response:
             raw = response.read().decode('utf-8')
             return response.status, json.loads(raw) if raw.strip() else {}
     except urllib.error.HTTPError as e:
