@@ -44,7 +44,7 @@ def intra_verse_sort_key(item):
     ult_verse = item.get('ult_verse', '')
 
     if not gl_quote or not ult_verse:
-        return (0, 0)
+        return (9998, 0)
 
     # Find position of gl_quote in ULT verse (case-insensitive)
     pos = ult_verse.lower().find(gl_quote.lower())

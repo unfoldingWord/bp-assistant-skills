@@ -140,6 +140,7 @@ For TN:
 python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
   --book-file "$REPOS_PATH/$REPO/tn_PSA.tsv" \
   --source-file output/notes/PSA/PSA-058.tsv \
+  --chapter 58 \
   --dry-run
 ```
 
@@ -162,6 +163,7 @@ For TN:
 python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
   --book-file "$REPOS_PATH/$REPO/tn_PSA.tsv" \
   --source-file output/notes/PSA/PSA-058.tsv \
+  --chapter 58 \
   --backup
 ```
 
@@ -236,20 +238,23 @@ python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
 - Preserves original file line endings
 
 ### insert_tn_rows.py
-Surgically replaces TN rows by reference in a book-level TSV file.
+Verse-aware chapter replacement for TN rows in a book-level TSV file.
 
 ```
 python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
   --book-file <path-to-tn.tsv> \
   --source-file <path-to-source.tsv> \
+  --chapter <chapter-number> \
+  [--skip-intro] [--per-reference] \
   [--references 58:2,58:3] \
   [--dry-run] [--backup]
 ```
 
-- Matches rows by exact reference string (column 0)
-- Replaces existing rows or inserts at correct sort position
+- Default mode: detects which verses are in the source file, removes only those verses from the book file, preserves rows for verses not covered by the source
+- `--per-reference`: legacy mode that matches rows by exact reference string
+- `--skip-intro`: preserve existing intro row even if source has one
+- `--references`: filters to specific references (only with `--per-reference`)
 - Sort order within each chapter: `:intro` < `:front` < `:1` < `:2` < ... (see Note Ordering below)
-- `--references` filters to specific references from the source file
 
 ### gitea_pr.py
 Creates a PR via the Gitea API and optionally merges it. This is the primary
