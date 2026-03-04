@@ -629,7 +629,9 @@ const outputJson = {
   chapters: {}
 };
 
-// Copy headers from Hebrew source (modify id tag)
+// Copy headers from Hebrew source (modify id tag, skip toc/mt — they cause
+// duplicates when per-verse outputs are combined via sed)
+const SKIP_HEADER_TAGS = new Set(['toc1', 'toc2', 'toc3', 'mt']);
 for (const header of hebrewParsed.headers || []) {
   if (header.tag === 'id') {
     const bookId = header.content.split(' ')[0];
@@ -637,7 +639,7 @@ for (const header of hebrewParsed.headers || []) {
       tag: 'id',
       content: `${bookId} ${ustMode ? 'EN_UST' : 'EN_ULT'} - Aligned`
     });
-  } else {
+  } else if (!SKIP_HEADER_TAGS.has(header.tag)) {
     outputJson.headers.push(header);
   }
 }

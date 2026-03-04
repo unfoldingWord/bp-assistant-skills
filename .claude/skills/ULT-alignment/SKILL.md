@@ -402,12 +402,12 @@ for v in $(seq 44 72); do
     --hebrew data/hebrew_bible/19-PSA.usfm \
     --mapping alignments/PSA-078-${vpad}.json \
     --ult output/AI-ULT/PSA/PSA-078-44-72.usfm \
-    --chapter 78 --verse $v 2>/dev/null | sed -n '/^\\[vqdstb]/,/^$/p' >> output/AI-ULT/PSA/PSA-078-44-72-aligned.usfm
+    --chapter 78 --verse $v 2>/dev/null | sed -n '/^\\[vqdsb]\|^\\ts/,/^$/p' >> output/AI-ULT/PSA/PSA-078-44-72-aligned.usfm
 done
 ```
 
 **Notes:**
-- Use `sed -n '/^\\[vqdstb]/,/^$/p'` to capture verse line, inter-verse markers (`\qa`, `\ts\*`, `\d`, `\s1`, `\b`), and all alignment lines until blank
+- Use `sed -n '/^\\[vqdsb]\|^\\ts/,/^$/p'` to capture verse line, inter-verse markers (`\qa`, `\ts\*`, `\d`, `\s1`, `\b`), and all alignment lines until blank (do NOT use `[vqdstb]` — the `t` matches `\toc` headers)
 - Do NOT use `grep "^\v"` - this only gets the first line and truncates alignments
 - Use zero-padded verse numbers in mapping filenames (e.g., `PSA-078-044.json`)
 - Inter-verse markers (`\qa`, `\ts\*`, `\s1`, `\b`, etc.) and aligned `\d` lines are inserted automatically by the script -- no manual insertion needed

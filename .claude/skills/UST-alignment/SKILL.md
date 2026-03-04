@@ -340,7 +340,7 @@ for v in $(seq 1 6); do
     --mapping alignments/PSA-001-${vpad}.json \
     --source output/AI-UST/PSA/PSA-001.usfm \
     --ust \
-    --chapter 1 --verse $v 2>/dev/null | sed -n '/^\\[vqdstb]/,/^$/p' >> output/AI-UST/PSA/PSA-001-aligned.usfm
+    --chapter 1 --verse $v 2>/dev/null | sed -n '/^\\[vqdsb]\|^\\ts/,/^$/p' >> output/AI-UST/PSA/PSA-001-aligned.usfm
 done
 ```
 
