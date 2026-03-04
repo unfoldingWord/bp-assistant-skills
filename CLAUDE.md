@@ -1,6 +1,8 @@
 You may be running locally (Windows/WSL) or headlessly inside a Docker container on an OCI ARM64 server via a Zulip bot.
 Don't use emojis, it breaks windows terminal.
 
+**Knowledge domain**: `work` (Bible translation, unfoldingWord, Wycliffe).
+
 ## Workflow Expectations
 - When running as a Zulip bot (detected by mentions or chat-like prompts):
   - **Mention the user** at the start of your final response: @**Name**.
