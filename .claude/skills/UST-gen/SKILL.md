@@ -121,6 +121,7 @@ Before generating UST, check for any pre-identified translation issues:
    - **figs-abstractnouns**: Consider verbal/clausal forms
    - **figs-nominaladj**: Unpack nominalized adjectives
    - **figs-metaphor/figs-simile**: Express the meaning
+   - **figs-personification**: State the plain meaning; do not give the non-living thing an action verb
    - **figs-idiom**: Explain rather than preserve
    - **figs-rquestion**: Consider if rhetorical function is clear
    - **figs-apostrophe**: Convert direct address to third person ("this city" not "you, O city")

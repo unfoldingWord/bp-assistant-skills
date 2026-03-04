@@ -156,6 +156,7 @@ Similarly, do not borrow wording from templates belonging to other issue types. 
 - **figs-ellipsis**: Do not explain the missing words/phrase
 - **figs-abstractnouns**: Do not define the words. The AT must resolve the abstract noun into a non-abstract form (verb, adjective, clause) -- do not replace one abstract noun with another (e.g., "obedience" -> "faithful obedience" is wrong; "obedience" -> "obeying him" is correct; "covenant faithfulness" -> "faithful love" is wrong because "love" is abstract; "covenant faithfulness" -> "being faithful to his covenant" is correct)
 - **figs-activepassive**: The AT must show the idea expressed with an active verb, not a passive verb with an agent added. "God drives them back" is correct; "be driven back by God" is wrong -- that is still passive. Identify the actor from context (usually God) and make them the grammatical subject of an active clause.
+- **figs-personification**: Check that the AT does not still include personification. The non-living thing should not be given any verb that implies agency or living action.
 - **writing-poetry (cognate accusative)**: Use the cognate accusative template exactly. Do not describe the poetic effect, explain the figure, or substitute other wording
 
 ## Terminology
