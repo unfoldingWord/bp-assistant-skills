@@ -63,6 +63,17 @@ node .claude/skills/utilities/scripts/usfm/parse_usfm.js $TMP/book_ust.usfm \
   --plain-only > $TMP/ust_plain.usfm 2>/dev/null || true
 ```
 
+### Editor Notes
+
+```bash
+EDITOR_NOTES="data/editor-notes/<BOOK>.md"
+if [ -f "$EDITOR_NOTES" ]; then
+  cat "$EDITOR_NOTES"
+fi
+```
+
+If editor notes exist, read them and pass to both analysts as additional input. Each analyst should factor these human observations into their analysis.
+
 ### Compare, Detect, Index
 
 ```bash
@@ -98,6 +109,7 @@ Each analyst reads:
 - Alignment JSON (`$TMP/alignments.json`)
 - ULT/UST divergence patterns (`$TMP/ult_ust_diff.tsv`)
 - Automated detections (`$TMP/detected_issues.tsv`)
+- Editor notes (`data/editor-notes/<BOOK>.md`) if available
 
 **Hold for Wave 3**: After writing your TSV, do NOT mark your task as completed. Send a message to team-lead confirming your file is written, then wait for DMs from the challenger agent. Defend your classifications in one round, then wait for the challenger's "rulings complete" message before marking your task completed.
 

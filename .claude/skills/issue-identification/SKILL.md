@@ -77,6 +77,22 @@ node .claude/skills/utilities/scripts/usfm/parse_usfm.js /tmp/book_ust.usfm \
   --plain-only > /tmp/ust_plain.usfm 2>/dev/null || true
 ```
 
+#### Step 2b: Check Editor Notes
+
+```bash
+EDITOR_NOTES="data/editor-notes/<BOOK>.md"
+if [ -f "$EDITOR_NOTES" ]; then
+  cat "$EDITOR_NOTES"
+fi
+```
+
+If editor notes exist for this book, read them carefully. These are observations from human editors who have already been working through the text. They may flag:
+- Patterns to watch for (e.g., "heavy implicit information around covenant context")
+- Specific chapter concerns
+- Issue types they expect to be prevalent
+
+Incorporate these observations into your analysis — they should heighten your attention to the flagged patterns, not replace your systematic review.
+
 #### Step 3: Compare ULT/UST (if UST available)
 Where UST diverges from ULT (beyond synonym/clarity changes), there may be a translation issue:
 
