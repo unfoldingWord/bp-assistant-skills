@@ -14,7 +14,7 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | לוּן | H3885 | lodge | spend the night | concise |
 | עַז | H5794 | mighty | strong ones | |
 | נָבַע | H5042 | belch out | pour out | crude/uncontrolled speech image |
-| פָּקַד | H6485 | punish | visit | when in judgment context |
+| פָּקַד | H6485 | visit | punish | "visit" preserves Hebrew idiom; the term can mean things other than "punish" and it's good to show that range |
 | נוּעַ (hiphil) | H5128 | scatter | make them wander | |
 | נָצַר | H5341 | preserve | guard | watching over/protecting context |
 | שָׁלַם (Piel) | H7999 | pay | fulfill | with vows/debts |
@@ -28,7 +28,6 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | אַף | H0639 | nose | anger | preserve body-part idiom literally; editor PSA 69:24 |
 | מָחָה | H4229a | wiped | blotted out | editor PSA 69:28; no "out" |
 | שָׁטַף | H7857 | overflow | sweep away | editor PSA 69:2,15 |
-| נֶפֶשׁ | H5315 | life | soul | in hostile/danger context; editor PSA 71:10,13 |
 | רַע (noun) | H7451c | hurt | harm | as noun for enemy intent; editor PSA 71:13,24 |
 | זָמַר | H2167 | make music | sing praises | preserves distinction from singing when used in parallel with vocal praise |
 | סֶלַע | H5553 | rock | cliff | editor PSA 71:3 |
@@ -81,7 +80,7 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | הָדָר | H1926 | splendor | majesty | editor PSA 145:5,12; consistently "splendor" for hadar |
 | שָׂבַר | H7663b | wait for | look to | editor PSA 145:15; Piel = hope/wait, not merely "look" |
 | תְּהִלָּה | H8416 | psalm (in superscription) | praise | use "psalm" in superscription context; "praise" in body text; editor PSA 145:1 |
-| יָדָה | H3034 | thank | praise | Hiphil yadah = "thank"; editor preference PSA 145:10 |
+| יָדָה | H3034 | thank | praise | Hiphil yadah = usually "thank", but "praise" suits some contexts better (e.g. "praise your name" -- otherwise this is personification). General principle editors can adjust. |
 
 ## Phrases
 
@@ -93,7 +92,6 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | הַמִּתְקוֹמְמַי | the ones rising up against me | who rise up against me | participle as noun |
 | יוֹם יוֹם | day, day | day {by} day | preserve doubling without added words |
 | כֵּן (adverbial) | Thus | So | formal connector |
-| יָרוּם מִמֶּנִּי | higher than I | high away from me | comparative with מִן |
 | Jussive negative | may you not [verb] | do not [verb] | form-based: use jussive for 2nd person negative wishes, not imperative; editor PSA 69:6,17; 70:5 |
 | Concessive waw | Though...yet | And...and | discretionary: read waw as concessive in contrast contexts; editor PSA 69:10-11,20 |
 | Fronted predicate | subject-first | predicate-first | discretionary: editor normalizes Hebrew fronted predicates to English SVO; PSA 69:4,33; 70:2,4,5; 82:3,4,5; 89:1,15,20,23,34,44; 145:3,8,9,17,18 (HIGH FREQ in PSA 145) |
@@ -104,8 +102,6 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | Hebrew perfect (ongoing) | present tense | past/perfect tense | render Hebrew perfect as English present when context is ongoing/habitual/devotional or lament; editor PSA 88:1,7,9,13,16,17 (12 instances -- strongest evidence); also PSA 120:5; 122:2,4,5; 126:3; 130:1,5 |
 | hayah (stative) | {are} | have been | for stative uses of hayah perfect, use present "{are}" not "have been"; editor PSA 82:8; 83:8 |
 | Article in construct | bare noun | the [noun] | drop English "the" before nouns in construct chains and before abstract nouns; editor PSA 121:2; 125:3,5; 126:1,6; 127:2; 130:4,7 |
-| Superscription | include in v1 | omit | always include psalm superscription text in verse 1; editor corrected all 16 chapters reviewed |
-| Hiphil causative | single verb (distanced) | periphrastic (made far) | prefer single English verb for Hiphil causatives where available; editor PSA 88:8,18 (H7368 distanced) |
 | Suffixed pronoun retention | include object pronoun | omit | retain object pronouns visible in Hebrew morphology (e.g., remember them for זְכַרְתָּם); editor PSA 88:5 |
 | Emphatic pronoun | double pronoun (they, they) | single pronoun | when Hebrew has emphatic independent pronoun before verb (e.g., וְהֵמָּה), double the English pronoun; editor PSA 88:5; 89:26 |
 | עַד מָה (ad-mah) | Until when | How long | literal rendering of ad + mah; editor PSA 89:46 |

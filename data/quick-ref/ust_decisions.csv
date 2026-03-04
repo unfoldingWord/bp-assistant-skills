@@ -1,5 +1,5 @@
 Strong,Hebrew,Rendering,Book,Context,Notes,Date
-H727,אֲרוֹן,Sacred Chest,ALL,"Ark of the Covenant context","Capitalize 'Sacred Chest'. Never 'ark'. See hebrew_ot_glossary.",2025-02-09
+H727,אֲרוֹן,sacred chest,ALL,"Ark of the Covenant context","Lowercase 'sacred chest'. Never 'ark'. See hebrew_ot_glossary.",2025-02-09
 H7294,rahab,Egypt,PSA 87:4,poetic name for Egypt - not Rahab H7343,,2026-02-12
 H4599,mayan,blessings (metaphorical),PSA 87:7,springs metaphor = source of blessings/life,,2026-02-12
 H2617a,חֶסֶד,faithful and kind,PSA 130:7,"adj. phrase per glossary: UST uses adjective like 'faithful' or 'kind'","Per hebrew_ot_glossary.csv UST_GLOSS guidance",2026-02-12
@@ -9,7 +9,7 @@ H3374a,יִרְאָה,revere,PSA,"128:1,4 130:4 fear-of-God concept","Editor: 'r
 H5337,נָצַל,save,PSA,"130:7-8 save us / will save","Editor: 'save' not 'rescue'. 2 chapters confirmed.",2026-02-17
 H2617a,חֶסֶד,faithfully loves,PSA 130:7,"editor correction","UPDATED: editor changed 'faithful and kind' to 'faithfully loves us'. Adverb+verb form.",2026-02-17
 H6304,פְּדוּת,save from punishment,PSA 130:7-8,"editor correction","UPDATED: editor added 'from being punished for' -- salvation is from punishment not sins themselves.",2026-02-17
-,,"it is as though" framing,PSA,"88:7,8,17,18 figurative language","UST should frame metaphors/similes with 'it is as though' or 'it seems as though' rather than stating as direct fact. Editor PSA 88.",2026-02-17
+,,"as if" framing,PSA,"88:7,8,17,18 figurative language","UST should frame metaphors/similes with 'as if' rather than stating as direct fact. Prefer 'as if' over 'as though'. Editor PSA 88.",2026-02-17
 ,,perform miracles,PSA,"88:10,12 wonder/pele concepts","UST: 'perform miracles' not 'do amazing things' for פֶּלֶא contexts. Editor PSA 88.",2026-02-17
 ,,avoid,PSA,"88:8,18 friends distancing","UST: 'avoid' not 'stay away from'. More concise. Editor PSA 88.",2026-02-17
 ,,"us" in prayer,PSA,"88:11 covenant faithfulness","UST: use 'us' not 'your people' in prayer context where psalmist includes self. Editor PSA 88.",2026-02-17
