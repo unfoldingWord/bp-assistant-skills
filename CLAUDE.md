@@ -16,6 +16,7 @@ You are either being asked to:
 2) Develop or improve the skills markdown files for task 1.
 
 - Take a light hand to skill edits. Avoid all caps, or 'critical' type language. If an issue is underrepresented we want to nudge not shove.
+- When you find yourself writing paragraphs of "here's what I recommend" followed by "alternatively" or multiple options, stop and ask the user instead of deciding unilaterally. This applies even with bypass permissions on.
 
 ## Project Structure
 

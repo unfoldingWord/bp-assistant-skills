@@ -91,37 +91,41 @@ Passive voice is identified by analysts during analysis (prompt-over-code). See 
 
 Precedent evidence is positive-only. Finding published TN examples supports a classification. Finding none is only meaningful if the chapter has published TNs.
 
-## Team Setup
+## Spawning Sub-Agents
 
-```
-TeamCreate "deep-issue-<BOOK>-<CHAPTER>"
-```
+Use `Task` to spawn sub-agents. When spawning two analysts in parallel, call
+Task twice in a single message so they run concurrently. Each sub-agent writes
+its output to a file; the orchestrator reads the files after the Task completes.
 
-Team name pattern: `deep-issue-PSA-120`, `deep-issue-GEN-01`, etc. With verse range: `deep-issue-PSA-119-v1-40`.
+If `TeamCreate` and `Agent` are available (CLI mode), use them instead per
+`orchestration-conventions.md`. The wave structure is identical either way.
 
 ## Wave 2: Issue Identification
 
-Read `analyst-domains.md` for domain assignments and cross-reading protocol. Spawn both analysts with `team_name` set.
+Read `analyst-domains.md` for domain assignments. Spawn both analysts in
+parallel. Each analyst receives:
 
-Each analyst reads:
-- Human ULT (`$TMP/ult_plain.usfm`)
-- Human UST (`$TMP/ust_plain.usfm`) if available
-- Alignment JSON (`$TMP/alignments.json`)
-- ULT/UST divergence patterns (`$TMP/ult_ust_diff.tsv`)
-- Automated detections (`$TMP/detected_issues.tsv`)
-- Editor notes (`data/editor-notes/<BOOK>.md`) if available
+- The agent instructions from `.claude/agents/issue-identification.md`
+- Their domain assignment (structure or rhetoric)
+- Paths to all input files:
+  - Human ULT (`$TMP/ult_plain.usfm`)
+  - Human UST (`$TMP/ust_plain.usfm`) if available
+  - Alignment JSON (`$TMP/alignments.json`)
+  - ULT/UST divergence patterns (`$TMP/ult_ust_diff.tsv`)
+  - Automated detections (`$TMP/detected_issues.tsv`)
+  - Editor notes (`data/editor-notes/<BOOK>.md`) if available
 
-**Hold for Wave 3**: After writing your TSV, do NOT mark your task as completed. Send a message to team-lead confirming your file is written, then wait for DMs from the challenger agent. Defend your classifications in one round, then wait for the challenger's "rulings complete" message before marking your task completed.
+Wait for both analysts to complete before proceeding.
 
-Wait for both analysts to send their "file written" messages before proceeding to Wave 3.
+## Wave 3: Challenge
 
-## Wave 3: Challenge and Defend
+Read `challenger-protocol.md`. Spawn a challenger sub-agent (`model: "sonnet"`).
 
-Read `challenger-protocol.md`. Spawn the challenger (`model: "sonnet"`, name: "challenger").
+The challenger reads both analyst TSVs (`$TMP/wave2_structure.tsv`, `$TMP/wave2_rhetoric.tsv`) and writes rulings to `$TMP/wave3_challenges.tsv`.
 
 **ULT coherence check**: The human ULT is authoritative. If it already handles the construct naturally (e.g., already made a passive active, already unpacked a figure), drop the issue. Flag the issue, not the text.
 
-After the challenger writes rulings, it sends "Rulings complete" to each analyst, releasing them from hold.
+Wait for the challenger to complete before proceeding.
 
 Output: `$TMP/wave3_challenges.tsv`
 
@@ -139,13 +143,6 @@ Only run if `--gemini` is explicitly passed. Skip by default. If running: read `
 ```bash
 python3 .claude/skills/utilities/scripts/gemini_review.py --stage issues --book <BOOK> --chapter <CHAPTER>
 ```
-
-## Cleanup
-
-After the merge (and optional Gemini review) completes:
-1. Send `shutdown_request` to structure, rhetoric, challenger
-2. Wait for shutdown confirmations
-3. `TeamDelete` to clean up team resources
 
 ## Guiding Principle
 
@@ -172,19 +169,12 @@ Setup:    Fetch human ULT/UST from Door43 master
           Run automated detection (abstract nouns)
           Build published TN index
 
-Team:     TeamCreate "deep-issue-<BOOK>-<CHAPTER>"
+Wave 2:   Task: Structure ──────┐  (2 parallel sub-agents,
+          Task: Rhetoric ───────┘   each writes TSV to $TMP/)
 
-Wave 2:   Structure ───────────┐  (2 teammates, cross-read files,
-          Rhetoric ────────────┘   DM on disagreements,
-                                   stay alive for Wave 3)
+Wave 3:   Task: Challenger ─────── reads both TSVs, writes rulings
 
-Wave 3:   Challenger spawns ──── challenges each analyst via DM
-          Analysts defend ──────  one round of defend/respond
-          Challenger rules ─────  writes final rulings
+Wave 4a:  Orchestrator merges ──── applies rulings, deduplicates
 
-Wave 4a:  Merge ────────────────  (applies rulings, deduplicates)
-
-Gemini:   gemini_review.py --stage issues
-
-Cleanup:  shutdown_request all -> TeamDelete
+Gemini:   gemini_review.py --stage issues (optional)
 ```
