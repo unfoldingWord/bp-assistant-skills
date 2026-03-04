@@ -73,6 +73,8 @@ sin, evil, truth, wisdom, knowledge, obedience
 **Use figs-nominaladj for**: Adjectives functioning as nouns
 - "the righteous" (adjective as noun for "righteous people")
 
+**Hebrew infinitive constructs with a direct object**: When a Hebrew infinitive construct functions verbally (takes a direct object), it is not an abstract noun. For example, לָ⁠דַעַת אֶת־כְּבוֹד יְהוָה "knowing the glory of Yahweh" — "knowing" here is verbal, not abstract. Flag the direct object if it is abstract (e.g., "glory"), not the infinitive.
+
 **Concrete nouns**: Physical objects even when symbolic
 - "throne", "temple", "bread"
 
