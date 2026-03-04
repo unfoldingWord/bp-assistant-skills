@@ -19,14 +19,35 @@ Check AI-generated translation notes for quality issues before delivery. Two mod
 - `<BOOK>` = uppercase 3-letter book code (e.g., `PSA`)
 - `<CHAPTER>` = plain chapter number (e.g., `71`)
 - `<CH>` = zero-padded chapter for filenames: 3 digits for PSA (e.g., `071`), 2 digits for other books (e.g., `03`)
+- `--notes <path>` = (optional) explicit path to the notes TSV file. When provided, use this path instead of the default `output/notes/<BOOK>/<BOOK>-<CH>.tsv`.
+
+## Locating the Notes TSV
+
+If `--notes <path>` is provided, use that path directly.
+
+Otherwise, look for the notes TSV in order:
+1. `output/notes/<BOOK>/<BOOK>-<CH>.tsv` (standard full-chapter)
+2. `output/notes/<BOOK>/<BOOK>-<CH>-v*.tsv` (verse-range variant, e.g. `HAB-03-v1-2.tsv`)
+
+If neither exists, report an error and exit.
 
 ## Workflow
+
+### Step 0: Run Door43 CI Validation
+
+```bash
+python3 .claude/skills/tn-quality-check/scripts/validate_tn_tsv.py \
+    <NOTES_TSV> \
+    --json /tmp/claude/door43_validation.json
+```
+
+If this reports errors, fix them before proceeding. These are the same checks that run in Door43's CI pipeline on PR merge.
 
 ### Step 1: Run Mechanical Checks
 
 ```bash
 python3 .claude/skills/tn-quality-check/scripts/check_tn_quality.py \
-    output/notes/<BOOK>/<BOOK>-<CH>.tsv \
+    <NOTES_TSV> \
     --prepared-json /tmp/claude/prepared_notes.json \
     --ult-usfm /tmp/claude/ult_plain.usfm \
     --ust-usfm /tmp/claude/ust_plain.usfm \
