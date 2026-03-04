@@ -28,7 +28,7 @@ def ref_sort_key(ref):
         return (int(parts[0]), -1)
     elif len(parts) == 2:
         try:
-            return (int(parts[0]), int(parts[1]))
+            return (int(parts[0]), int(parts[1].split('-')[0]))
         except ValueError:
             return (int(parts[0]), 9999)
     return (9999, 9999)
