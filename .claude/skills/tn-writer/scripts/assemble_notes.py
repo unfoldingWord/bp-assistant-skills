@@ -159,6 +159,8 @@ def main():
             intro_count += 1
 
         for row in rows:
+            # Global text fixes
+            note = row['note'].replace('...', '\u2026')
             f.write('\t'.join([
                 row['reference'],
                 row['id'],
@@ -166,7 +168,7 @@ def main():
                 row['support_reference'],
                 row['quote'],
                 row['occurrence'],
-                row['note']
+                note
             ]) + '\n')
 
     total = len(rows) + intro_count
