@@ -908,18 +908,24 @@ def check_at_capitalization(row, prepared_items):
     if not found:
         return []
 
-    # Is the gl_quote at the start of the verse?
-    at_start = idx == 0 or clean_ult[:idx].rstrip().endswith('.')
+    # Distinguish sentence start (after period) from verse start (idx == 0)
+    after_period = idx > 0 and clean_ult[:idx].rstrip().endswith('.')
+    verse_start = idx == 0
 
     findings = []
     for at in ats:
         if not at:
             continue
         first_char = at[0]
-        if at_start and first_char.islower():
+        if after_period and first_char.islower():
             findings.append({
                 'severity': 'warning', 'category': 'at_capitalization',
-                'message': f'AT [{at}] starts lowercase but gl_quote is at verse/sentence start'
+                'message': f'AT [{at}] starts lowercase but gl_quote follows a period (sentence start)'
+            })
+        elif verse_start and first_char.islower():
+            findings.append({
+                'severity': 'warning', 'category': 'at_capitalization',
+                'message': f'AT [{at}] starts lowercase at verse start — verify whether this verse begins a new sentence (if so, capitalize the AT)'
             })
         elif not at_start and first_char.isupper():
             # Check if the uppercase might be a proper noun (allow it)
