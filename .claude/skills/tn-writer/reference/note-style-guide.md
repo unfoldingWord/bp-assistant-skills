@@ -87,6 +87,8 @@ When an AT covers non-adjacent text, use a single pair of brackets with a true e
 ### Restructuring Notes
 For issue types that suggest reordering text (figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result, grammar-connect-condition-fact, or any note suggesting putting one part of the verse before another), the gl_quote must cover the **entire area** being restructured, and the AT must show the full restructured result. For example, if the note says "put the second half of the verse before the first half," the gl_quote should be approximately the whole verse and the AT should be the whole verse reordered. Do not quote only one fragment of a reordering — the reader needs to see both the original order and the proposed new order.
 
+Do not write figs-infostructure notes about placing the object after the verb. Hebrew commonly puts the object before the verb, and many languages do too. Suggesting translators move the object after the verb is not a useful note. If an issue row only concerns object-before-verb order, skip it.
+
 ### Parallelism Quote Scope
 For figs-parallelism notes, the gl_quote must include the **entirety of both parallel phrases**, not just the key parallel nouns or words. For example, if the verse says "Your mercy is great … your truth reaches to the clouds," do not quote just "mercy … truth" — quote the full "Your mercy is great … your truth reaches to the clouds." The reader needs to see both complete phrases to understand the parallelism.
 
