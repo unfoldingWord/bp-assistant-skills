@@ -21,18 +21,45 @@ You are either being asked to:
 ## Project Structure
 
 ### Skills (in `.claude/skills/`)
-- `pipeline-overview/` - Orchestration and workflow guidance
+
+**Core Generation**
 - `ULT-gen/` - Hebrew USFM to literal English translation
-- `ULT-alignment/` - Word-level Hebrew-to-ULT alignment
 - `UST-gen/` - T4T to meaning-based simplified translation
-- `UST-alignment/` - Phrase-level Hebrew-to-UST alignment
+- `chapter-intro/` - Translator-oriented chapter introductions
+
+**Issue Identification**
 - `issue-identification/` - 94 translation issue type skills (complete)
-- `issue-to-tn/` - Convert identified issues to translation notes
-- `repo-insert/` - Insert content into Door43 repos, commit, create PRs
-- `create-issue-description/` - Create new issue identification skills
+- `deep-issue-id/` - Multi-agent adversarial issue identification for human-authored text
+- `post-edit-review/` - Diff-based issue adaptation after human edits to ULT/UST
+
+**Note & Question Writing**
 - `tn-writer/` - Translation note generation (prompt-over-code: scripts for mechanical work, prompts for semantic work)
-- `hebrew-reference/` - Hebrew language reference (placeholder)
+- `tn-quality-check/` - Mechanical + semantic quality checks on generated notes
+- `tn-quick/` - Quick scratchpad note writing outside the full pipeline
+- `parallel-batch/` - Split long chapters into chunks, run tn-writer in parallel, merge
+- `tq-writer/` - Update translation questions for current ULT/UST
+
+**Alignment**
+- `ULT-alignment/` - Word-level Hebrew-to-ULT alignment
+- `UST-alignment/` - Phrase-level Hebrew-to-UST alignment
+- `align-all-parallel/` - Run both alignments as parallel subagents
+
+**Orchestration**
+- `makeBP/` - End-to-end book package for a chapter (all stages)
+- `initial-pipeline/` - 6-wave coordinated pipeline (ULT, issues, UST) with adversarial feedback
+- `pipeline-overview/` - Guides to the appropriate skill for each stage
+
+**Review & Feedback**
+- `editor-compare/` - Compare editor-edited ULT/UST against AI output, update glossary/quick-ref
+- `gemini-review/` - Independent Gemini-based second-opinion reviewer
+- `test-poc/` - A/B comparison of prompt-over-code vs previous script approaches
+
+**Infrastructure**
+- `repo-insert/` - Insert content into Door43 repos, commit, create PRs
+- `repo-verify/` - Verify that a push landed on Door43 by comparing local and remote
+- `create-issue-description/` - Create new issue identification skills
 - `utilities/` - Shared scripts (alignment, USFM parsing, Proskomma, fetch tools)
+- `hebrew-reference/` - Hebrew language reference (placeholder)
 
 ### Data (in `data/`)
 Data Files (Not in Git)

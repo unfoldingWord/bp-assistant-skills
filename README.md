@@ -61,8 +61,12 @@ All skills live in `.claude/skills/`. Each has a `SKILL.md` defining the prompt 
 - **`gemini-review`** -- Independent Gemini-based second-opinion reviewer across all pipeline stages
 - **`test-poc`** -- A/B comparison of prompt-over-code vs previous script workflows
 
+### Quick Tools
+- **`tn-quick`** -- Quick scratchpad note writing outside the full pipeline
+
 ### Infrastructure
 - **`repo-insert`** -- Insert ULT, UST, or TN content into Door43 repo clones, commit, create PRs via Gitea API
+- **`repo-verify`** -- Verify that a push landed on Door43 by comparing local and remote content
 - **`create-issue-description`** -- Create or update issue identification skill files
 - **`utilities`** -- Shared scripts: USFM parsing (`usfm-js`), Proskomma queries, alignment validation, Hebrew Bible fetching, Strong's index building, curly quotes, and more
 
@@ -103,10 +107,13 @@ The Zulip bot runs via Docker Compose at `/srv/bot/`:
 
 - **`app/src/index.js`** -- Zulip event queue polling, message routing
 - **`app/src/router.js`** -- Pattern-matched routing to pipelines with verse-based timeout calculation
-- **`app/src/claude-runner.js`** -- Claude Code CLI execution
-- **`app/src/generate-pipeline.js`** -- ULT/UST/issue generation pipeline
-- **`app/src/notes-pipeline.js`** -- TN generation pipeline
-- **`app/src/interactive-dm-pipeline.js`** -- DM-based interactive sessions
+- **`app/src/claude-runner.js`** -- Claude SDK query() wrapper with timeout and metrics
+- **`app/src/generate-pipeline.js`** -- ULT/UST/issue generation + alignment + Door43 push
+- **`app/src/notes-pipeline.js`** -- TN skill chain (issue-id, tn-writer, quality-check) + Door43 push
+- **`app/src/interactive-dm-pipeline.js`** -- Multi-turn Claude sessions (DMs and stream sessions)
+- **`app/src/door43-push.js`** -- Deterministic Git+Gitea API push (no Claude involved)
+- **`app/src/repo-verify.js`** -- Gitea API verification that PR merged to master
+- **`app/src/usage-tracker.js`** -- Token usage tracking, preflight budget checks
 
 ## Authoritative Sources
 
