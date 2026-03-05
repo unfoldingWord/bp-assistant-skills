@@ -52,6 +52,8 @@ account for this:
   should start with the preposition: [in my suffering] not just [my suffering]
 - If the ULT reads "And he went" and gl_quote is "And he went", your AT must include
   "And": [And he traveled] not just [he traveled]
+- If the ULT reads "the one causing his neighbor to drink" for a Hebrew participle,
+  the AT must keep "the one": [the one overpowering his neighbor] not just [overpowering his neighbor]
 
 ### Capitalization in ATs
 Match the sentence position of the gl_quote:
