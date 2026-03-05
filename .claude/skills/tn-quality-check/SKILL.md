@@ -33,6 +33,14 @@ If neither exists, report an error and exit.
 
 ## Workflow
 
+### Step 0: Fix Trailing Newlines
+
+```bash
+python3 .claude/skills/tn-quality-check/scripts/fix_trailing_newlines.py <NOTES_TSV>
+```
+
+Strips any literal `\n` from the end of Note cells in-place. Run this before any other checks.
+
 ### Step 1: Run Mechanical Checks
 
 ```bash

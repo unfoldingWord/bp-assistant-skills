@@ -342,9 +342,7 @@ def validate_tsv_file(tsv_path: Path, errors: ErrorCollector) -> None:
             errors.add(rule=CHECK_OCCURRENCE, **ctx,
                        message=f"Occurrence '{occurrence}' must be a non-negative integer or -1.")
 
-        # Note ending check
-        if note.endswith("\\n"):
-            errors.add(rule=CHECK_NOTE_ENDING, **ctx, message="Note must not end with literal \\n.")
+        # Note ending: trailing \n is fixed by fix_trailing_newlines.py before validation
 
         # Note content checks
         if note:
