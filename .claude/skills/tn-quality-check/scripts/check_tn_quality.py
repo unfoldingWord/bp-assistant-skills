@@ -911,6 +911,7 @@ def check_at_capitalization(row, prepared_items):
     # Distinguish sentence start (after period) from verse start (idx == 0)
     after_period = idx > 0 and clean_ult[:idx].rstrip().endswith('.')
     verse_start = idx == 0
+    mid_sentence = not after_period and not verse_start
 
     findings = []
     for at in ats:
@@ -927,7 +928,7 @@ def check_at_capitalization(row, prepared_items):
                 'severity': 'warning', 'category': 'at_capitalization',
                 'message': f'AT [{at}] starts lowercase at verse start — verify whether this verse begins a new sentence (if so, capitalize the AT)'
             })
-        elif not at_start and first_char.isupper():
+        elif mid_sentence and first_char.isupper():
             # Check if the uppercase might be a proper noun (allow it)
             at_words = at.split()
             if len(at_words) > 0:
