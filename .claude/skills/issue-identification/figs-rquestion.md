@@ -83,6 +83,8 @@ From TA: "A rhetorical question is a question that strongly expresses the speake
 
 **Multiple questions in sequence**: Common in poetry and Paul's letters; each question gets its own note.
 
+**Multi-line questions in poetry**: Rhetorical questions in poetry often span \q1 + \q2 (or more) lines. The quote must cover the entire question through the question mark, not just the first poetic line. Look for the `?` in the ULT to find the true end of the question.
+
 **Implied answers**: Many rhetorical questions expect specific answers:
 | Question | Expected Answer |
 |----------|-----------------|
