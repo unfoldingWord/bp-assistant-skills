@@ -365,6 +365,17 @@ Rules:
 - Granularity: phrase-level, not word-level. Group by the meaning units you were thinking in.
 - This is a rough draft for the aligner, not a finished alignment. Don't overthink it.
 
+### Step 8.5: Check for Passive Voice
+
+Run the passive voice checker on the output file:
+
+```bash
+python3 .claude/skills/UST-gen/scripts/check_ust_passives.py \
+  output/AI-UST/[BOOK]/[BOOK]-[CHAPTER].usfm
+```
+
+If passives are found (exit code 1), fix them before proceeding. The script prints each passive phrase with its verse reference to stderr.
+
 ### Step 8: Convert to Curly Quotes
 
 Run the curly quotes script to convert straight quotes to curly quotes:
