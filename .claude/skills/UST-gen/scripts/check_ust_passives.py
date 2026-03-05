@@ -138,38 +138,52 @@ def strip_usfm(text):
 
 
 def parse_verses(content):
-    """Parse USFM content into {ref: plain_text} dict."""
+    """Parse USFM content into {ref: plain_text} dict.
+
+    Handles aligned USFM where a verse spans many lines: tracks the
+    current verse reference and accumulates all text until the next
+    \\v or \\c marker.
+    """
     verses = {}
-    # Find book ID
     book = 'UNK'
     id_match = re.search(r'\\id\s+(\S+)', content)
     if id_match:
         book = id_match.group(1)
 
     chapter = '0'
-    # Split by lines and track chapter/verse
+    current_ref = None
+
     for line in content.split('\n'):
         ch_match = re.match(r'\\c\s+(\d+)', line)
         if ch_match:
             chapter = ch_match.group(1)
+            current_ref = None
             continue
 
-        # Find all \v markers in the line (there can be multiple per line in poetry)
-        # Split by \v to handle multiple verses per line
+        # Check for \v markers -- a line can contain multiple (poetry)
         parts = re.split(r'\\v\s+(\d+)\s', line)
-        # parts[0] is before first \v (could be \q1 etc), then alternating num, text
-        for idx in range(1, len(parts), 2):
-            vnum = parts[idx]
-            vtext = parts[idx + 1] if idx + 1 < len(parts) else ''
-            ref = f"{book} {chapter}:{vnum}"
-            plain = strip_usfm(vtext)
+        if len(parts) > 1:
+            # parts[0] is text before first \v (continuation of previous verse)
+            if current_ref and parts[0].strip():
+                plain = strip_usfm(parts[0])
+                if plain:
+                    verses[current_ref] = verses.get(current_ref, '') + ' ' + plain
+            # Process each \v in the line
+            for idx in range(1, len(parts), 2):
+                vnum = parts[idx]
+                current_ref = f"{book} {chapter}:{vnum}"
+                vtext = parts[idx + 1] if idx + 1 < len(parts) else ''
+                plain = strip_usfm(vtext)
+                if plain:
+                    verses[current_ref] = verses.get(current_ref, '') + ' ' + plain
+        elif current_ref:
+            # Continuation line belonging to current verse
+            plain = strip_usfm(line)
             if plain:
-                if ref in verses:
-                    verses[ref] += ' ' + plain
-                else:
-                    verses[ref] = plain
+                verses[current_ref] = verses.get(current_ref, '') + ' ' + plain
 
-    return verses
+    # Clean up leading/trailing whitespace
+    return {ref: text.strip() for ref, text in verses.items()}
 
 
 def main():
