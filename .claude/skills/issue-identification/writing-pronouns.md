@@ -37,6 +37,8 @@ When pronouns shift in unexpected ways:
 - Chapter 5 of Genesis: consistent "he...he" pattern needs clarification
 - Alternating between singular/plural for collective subjects
 
+**Note:** If the shift is between grammatical persons (e.g., 3rd person to 2nd person for the same referent), use figs-123person, not writing-pronouns. writing-pronouns is for unclear referents, emphasis, and indefinite usage — not person shifts.
+
 ## NOT writing-pronouns
 
 | Situation | Use Instead |

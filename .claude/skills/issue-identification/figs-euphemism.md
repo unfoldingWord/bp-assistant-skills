@@ -135,7 +135,13 @@ Based on comprehensive analysis of 200+ examples across OT narrative (Genesis, E
 | "by the sword" (in battle) | Association - sword represents battle |
 | "blood on your head" | Association - blood represents death/guilt |
 
-**Test:** Is the speaker being polite/discreet about an embarrassing topic? If just using associated terms, use metonymy.
+### Use figs-metonymy for Concrete Imagery Representing Abstract Concepts:
+| Expression | Reason |
+|------------|--------|
+| "nakedness" (= humiliation/defeat) | Association - exposure represents vulnerability |
+| "darkness" (= evil/ignorance) | Association - darkness is associated with evil |
+
+**Test:** Is the speaker being polite/discreet about an embarrassing topic? If no — if a concrete image simply represents an associated abstract concept — use metonymy, not euphemism.
 
 Contrast with actual euphemisms for death:
 - "lies down with his fathers" = euphemism (polite way to say died)

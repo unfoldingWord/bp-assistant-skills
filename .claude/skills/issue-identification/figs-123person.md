@@ -88,12 +88,13 @@ Letter writers refer to themselves in third person when introducing themselves.
 - John: "John to the seven churches" (Rev 1:4)
 
 ### 6. Mixed Person in Same Speech
-Shifts between first and third person referring to the same entity within a single speech or passage.
+Shifts between grammatical persons referring to the same entity within a single speech or passage. This includes any mid-verse or mid-passage shift — not just self-reference.
 
 **Examples**:
 - Jacob's vow: "If God will be with me...then Yahweh will be God to me" (Gen 28:20-21)
 - Yahweh mixing "I" and "he/Yahweh" in prophecy
 - Jesus mixing "I" and "the Son" in discourse
+- Author shifting from 3rd person ("his neighbor") to 2nd person ("your wineskin") when addressing the same person (Hab 2:15)
 
 ---
 
