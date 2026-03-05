@@ -6,7 +6,7 @@ AI-assisted creation of unfoldingWord Book Packages (BP) -- ULT, UST, translatio
 
 The system runs as a **Zulip bot** inside a Docker container on an OCI ARM64 server. Users trigger pipelines via Zulip messages; Claude Code executes the appropriate skills. It can also run locally under Windows/WSL for development.
 
-**Design philosophy: prompt-over-code.** Deterministic scripts handle mechanical work (USFM parsing, Hebrew quote extraction, TSV splitting/merging, ID generation). LLM prompts handle all semantic decisions (translation, issue identification, note writing). No fuzzy matching or word lists -- the AI is trusted for linguistic judgment.
+**Design philosophy: code where verifiable, prompts where judgment is needed.** Deterministic scripts handle mechanical, verifiable tasks (USFM parsing, Hebrew quote extraction, TSV splitting/merging, ID generation, git operations, Door43 push). LLM prompts handle semantic decisions requiring linguistic judgment (translation, issue identification, note writing). This split evolved from experience -- AI was unreliable and slow at deterministic tasks (confabulating git results, botching file operations), while scripts couldn't handle the contextual judgment calls. The `test-poc` skill exists to A/B test where the boundary falls for new tasks.
 
 ## Pipeline Overview
 

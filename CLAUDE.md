@@ -33,7 +33,7 @@ You are either being asked to:
 - `post-edit-review/` - Diff-based issue adaptation after human edits to ULT/UST
 
 **Note & Question Writing**
-- `tn-writer/` - Translation note generation (prompt-over-code: scripts for mechanical work, prompts for semantic work)
+- `tn-writer/` - Translation note generation (scripts for mechanical extraction, prompts for semantic content)
 - `tn-quality-check/` - Mechanical + semantic quality checks on generated notes
 - `tn-quick/` - Quick scratchpad note writing outside the full pipeline
 - `parallel-batch/` - Split long chapters into chunks, run tn-writer in parallel, merge
