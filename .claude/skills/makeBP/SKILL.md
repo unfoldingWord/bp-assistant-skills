@@ -168,59 +168,95 @@ proceeding.
 ## Phase 4: Repo Insert (Push to User Branch)
 
 After all agents complete, insert each content type into Door43 repos.
-Launch four **Task subagents** in parallel (`model: "haiku"` -- pure CLI execution, no reasoning needed).
+Launch four **Task subagents** in parallel (`model: "haiku"` -- pure git operations, no reasoning needed).
 
-Each subagent runs `door43-push-cli.js` which handles clone, insert, validate,
-commit, push, PR create, and PR merge in one command.
+All repos are under the **unfoldingWord** organization on Door43. Never push
+to a personal fork. Content is merged to user branches, not master.
 
-### Content and branch mapping
+### User branch derivation
 
-| Content | Source | Type | Staging branch |
-|---------|--------|------|----------------|
-| ULT (aligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | ult | `AI-{BOOK}-{CH}` |
-| UST (aligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` | ust | `AI-{BOOK}-{CH}` |
-| TN | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` | tn | `AI-{BOOK}-{CH}` |
-| TQ | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` | tn | `AI-{BOOK}-{CH}` |
+| Content type | Branch pattern | Example |
+|---|---|---|
+| ULT | `auto-{USERNAME}-{BOOK}` | `auto-deferredreward-PSA` |
+| UST | `auto-{USERNAME}-{BOOK}` | `auto-deferredreward-PSA` |
+| TN | `{USERNAME}-tc-create-1` | `deferredreward-tc-create-1` |
+| TQ | `{USERNAME}-tc-create-1` | `deferredreward-tc-create-1` |
 
-User branches are derived automatically by the CLI (see repo-insert SKILL.md).
+| Content | Source | Repo | Staging branch | User branch (PR target) | Insert script |
+|---------|--------|------|--------|---------|---------------|
+| ULT (aligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ult | `AI-{BOOK}-{CH}` | `auto-{USERNAME}-{BOOK}` | `insert_usfm_verses.py` |
+| UST (aligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ust | `AI-{BOOK}-{CH}` | `auto-{USERNAME}-{BOOK}` | `insert_usfm_verses.py` |
+| TN | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` | unfoldingWord/en_tn | `AI-{BOOK}-{CH}` | `{USERNAME}-tc-create-1` | `insert_tn_rows.py` |
+| TQ | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` | unfoldingWord/en_tq | `AI-{BOOK}-{CH}` | `{USERNAME}-tc-create-1` | `insert_tn_rows.py` |
 
-### CLI command for each content type
+### Git procedure for each repo (strict order)
 
-Each subagent runs one command and reports the JSON result:
+Master is a protected branch on Door43 -- direct pushes are rejected. Use
+`gitea_pr.py --merge` to land changes on the user's working branch. See
+repo-insert SKILL.md for the canonical procedure.
+
+Derive the user branch for each content type (see table above), then:
+
+1. **Ensure remote points to unfoldingWord** -- verify the origin URL contains
+   `git.door43.org/unfoldingWord/{repo}`. If it points to a fork, fix it:
+   ```bash
+   git remote set-url origin "https://${DOOR43_USERNAME}:${DOOR43_TOKEN}@git.door43.org/unfoldingWord/{repo}.git"
+   ```
+2. **Fetch** -- `git fetch origin`
+3. **Create staging branch from origin/{USER_BRANCH}** -- always branch from
+   the user's working branch. Delete any stale local branch with the same name first.
+   ```bash
+   git checkout --detach 2>/dev/null
+   git branch -D "$BRANCH" 2>/dev/null || true
+   git checkout -b "$BRANCH" "origin/$USER_BRANCH"
+   ```
+4. **Insert** -- run the appropriate script with `--backup`
+   - USFM: `--chapter {CHAPTER} --verses {FIRST}-{LAST_VERSE}`
+   - TSV: no verse filter needed (script matches by reference)
+5. **Verify** -- log `git diff --stat` output
+6. **Commit** -- `git add {file} && git commit -m "AI {content_type} for {BOOK} {CHAPTER}"`
+7. **Push branch and merge via PR** (all in one block):
+   ```bash
+   git push origin "$BRANCH"
+   python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
+     --repo "$REPO" --head "$BRANCH" --base "$USER_BRANCH" \
+     --title "AI {content_type} for {BOOK} {CHAPTER} [${USERNAME}]" \
+     --merge --ensure-base
+   # Must see "PR #NNNN merged." in output. If not, the insert FAILED.
+   # --ensure-base creates the user branch from master if it doesn't exist yet.
+   ```
+8. **If merge fails or there is a conflict**: stop and report error to admin
+
+### Repo-insert commands reference
 
 ```bash
+REPOS="$DOOR43_REPOS_PATH"
+
 # ULT
-node /app/src/door43-push-cli.js \
-  --type ult --book {BOOK} --chapter {CHAPTER} \
-  --username {USERNAME} --branch AI-{BOOK}-{CH} \
-  --source output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm \
-  --verses 1-{LAST_VERSE}
+python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
+  --book-file "$REPOS/en_ult/{BOOK_NUM}-{BOOK}.usfm" \
+  --source-file output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm \
+  --chapter {CHAPTER} --verses {FIRST}-{LAST_VERSE} --backup
 
 # UST
-node /app/src/door43-push-cli.js \
-  --type ust --book {BOOK} --chapter {CHAPTER} \
-  --username {USERNAME} --branch AI-{BOOK}-{CH} \
-  --source output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm \
-  --verses 1-{LAST_VERSE}
+python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
+  --book-file "$REPOS/en_ust/{BOOK_NUM}-{BOOK}.usfm" \
+  --source-file output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm \
+  --chapter {CHAPTER} --verses {FIRST}-{LAST_VERSE} --backup
 
 # TN
-node /app/src/door43-push-cli.js \
-  --type tn --book {BOOK} --chapter {CHAPTER} \
-  --username {USERNAME} --branch AI-{BOOK}-{CH} \
-  --source output/notes/{BOOK}/{BOOK}-{CH}.tsv
+python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
+  --book-file "$REPOS/en_tn/tn_{BOOK}.tsv" \
+  --source-file output/notes/{BOOK}/{BOOK}-{CH}.tsv --backup
 
 # TQ
-node /app/src/door43-push-cli.js \
-  --type tn --book {BOOK} --chapter {CHAPTER} \
-  --username {USERNAME} --branch AI-{BOOK}-{CH} \
-  --source output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv
+python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
+  --book-file "$REPOS/en_tq/tq_{BOOK}.tsv" \
+  --source-file output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv --backup
 ```
 
-The CLI outputs JSON to stdout: `{"success": true, "details": "...", "prNumber": 123}`.
-Exit code 0 = success, 1 = failure (details in JSON).
-
-If a subagent gets a validation failure (TN), it should read the error details,
-fix the source file, and retry the CLI command.
+Book numbers for filenames (from `fetch_door43.py` BOOK_NUMBERS mapping):
+PSA = `19-PSA.usfm`, GEN = `01-GEN.usfm`, etc.
 
 ## Output Summary
 

@@ -8,12 +8,12 @@ allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 
 Insert AI-generated content (ULT, UST, or TN) into local clones of git.door43.org repos, commit on a temporary staging branch, and merge to the user's working branch via PR.
 
-All mechanical work (clone, insert, validate, commit, push, PR create, PR merge) is handled by `door43-push-cli.js`, a CLI wrapper around `door43Push()`. This skill adds intelligence on top: parameter gathering, dry-run preview, and error recovery.
-
 ## Organization Rule
 
 All repos belong to the **unfoldingWord** organization on Door43. Never push to a
-personal fork. The CLI enforces this by verifying the remote URL.
+personal fork. Always verify the remote URL contains `git.door43.org/unfoldingWord/`
+before any git operation. Use a temporary AI-named branch for staging, then merge
+to the user's working branch and push.
 
 ## User Branch Targeting
 
@@ -27,7 +27,8 @@ is derived from the content type, Door43 username, and book code:
 | TN | `{USERNAME}-tc-create-1` | `deferredreward-tc-create-1` |
 | TQ | `{USERNAME}-tc-create-1` | `deferredreward-tc-create-1` |
 
-If the user branch does not exist yet, the CLI creates it from master via the Gitea API.
+If the user branch does not exist yet, it is created from master via the Gitea API
+before branching the staging branch.
 
 ## Configuration
 
@@ -40,6 +41,8 @@ DOOR43_REPOS_PATH=/path/to/your/door43/repos
 ```
 
 The token variable may be named `GITEA_TOKEN` rather than `DOOR43_TOKEN` depending on the environment. The scripts accept either name.
+
+- **Git operations** (clone, push, pull): HTTPS with token (`https://${DOOR43_USERNAME}:${DOOR43_TOKEN}@git.door43.org/unfoldingWord/{repo}.git`)
 
 ## Parameters
 
@@ -70,103 +73,192 @@ Determine from the user or context:
 3. Source file path (check `output/` directories)
 4. Door43 username (for user branch derivation and commit attribution)
 
-Load `.env` for `DOOR43_USERNAME`:
+Load `.env` for `DOOR43_REPOS_PATH` and `DOOR43_USERNAME`:
 ```bash
+# Source .env values
 eval $(grep -v '^#' .env | xargs -d '\n' printf 'export %s\n')
-echo "User: $DOOR43_USERNAME"
+echo "Repos: $DOOR43_REPOS_PATH, User: $DOOR43_USERNAME"
 ```
 
-Derive staging branch name:
+Derive the user branch name:
 ```bash
-# PSA uses 3-digit padding, other books use 2-digit
-BRANCH="AI-PSA-030"  # or AI-ISA-33
+# For TN/TQ:
+USER_BRANCH="${DOOR43_USERNAME}-tc-create-1"
+# For ULT/UST:
+USER_BRANCH="auto-${DOOR43_USERNAME}-${BOOK}"
 ```
 
-### Step 2: Dry-Run Preview (interactive use only)
+### Step 2: Setup Repo
 
-For interactive (non-pipeline) use, show the user what will change before pushing.
+```bash
+REPOS_PATH="$DOOR43_REPOS_PATH"
+REPO="en_ult"  # en_ult, en_ust, or en_tn
+HTTPS_URL="https://${DOOR43_USERNAME}:${DOOR43_TOKEN}@git.door43.org/unfoldingWord/${REPO}.git"
+
+# Clone if needed (use HTTPS with token -- works in sandboxed environments)
+if [ ! -d "$REPOS_PATH/$REPO" ]; then
+  git clone "$HTTPS_URL" "$REPOS_PATH/$REPO"
+fi
+
+cd "$REPOS_PATH/$REPO"
+```
+
+**Verify remote points to unfoldingWord.** If the origin URL points to a personal
+fork instead of unfoldingWord, fix it before proceeding:
+
+```bash
+cd "$REPOS_PATH/$REPO"
+
+# Verify remote -- must be unfoldingWord org, not a personal fork
+ORIGIN_URL=$(git remote get-url origin)
+if [[ "$ORIGIN_URL" != *"git.door43.org/unfoldingWord/"* ]]; then
+  echo "WARNING: Remote points to $ORIGIN_URL -- fixing to unfoldingWord"
+  git remote set-url origin "$HTTPS_URL"
+fi
+```
+
+**Sync local with remote before anything else.** The local branch must exactly
+match the remote before inserting. Stale local state causes merge conflicts and
+misplaced rows.
+
+```bash
+# Check for uncommitted changes -- abort if dirty
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "ERROR: Repo has uncommitted changes. Resolve before proceeding."
+  git status
+  # Stop and ask the user how to handle this
+fi
+
+# Fetch latest from remote
+git fetch origin
+```
+
+**Create the staging branch from origin/{USER_BRANCH}.** Always start fresh from
+the user's working branch. Never resume a remote branch.
+
+```bash
+BRANCH="AI-PSA-030"  # Derived from book + chapter(s)
+
+# Detach HEAD first so we can safely delete the local branch if it exists
+git checkout --detach 2>/dev/null
+git branch -D "$BRANCH" 2>/dev/null || true
+
+# Create fresh from origin/{USER_BRANCH} every time
+git checkout -b "$BRANCH" "origin/$USER_BRANCH"
+```
+
+### Step 3: Show Existing Content
+
+Before replacing anything, show the user what currently exists at the target location so they can confirm.
 
 For USFM (ULT/UST):
 ```bash
+# Show current verses in the file
 python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
-  --book-file "$DOOR43_REPOS_PATH/$REPO/{BOOK_NUM}-{BOOK}.usfm" \
-  --source-file output/AI-ULT/PSA/PSA-030-aligned.usfm \
-  --chapter 30 --verses 1-22 --dry-run
+  --book-file "$REPOS_PATH/$REPO/19-PSA.usfm" \
+  --source-file output/AI-ULT/PSA/PSA-119-100-104-aligned.usfm \
+  --chapter 119 --verses 100-104 --dry-run
 ```
 
 For TN:
 ```bash
 python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
-  --book-file "$DOOR43_REPOS_PATH/$REPO/tn_PSA.tsv" \
-  --source-file output/notes/PSA/PSA-030.tsv \
-  --chapter 30 --dry-run
+  --book-file "$REPOS_PATH/$REPO/tn_PSA.tsv" \
+  --source-file output/notes/PSA/PSA-058.tsv \
+  --chapter 58 \
+  --dry-run
 ```
 
-Wait for user confirmation before proceeding. Skip this step in unattended/pipeline mode.
+Wait for user confirmation before proceeding.
 
-### Step 3: Run door43-push-cli.js
+### Step 4: Execute Insertion
 
-Execute the CLI wrapper which handles clone/fetch, insertion, validation (TN), commit, push, PR create, and PR merge:
+Run with `--backup` to create a safety copy:
+
+For USFM:
+```bash
+python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
+  --book-file "$REPOS_PATH/$REPO/19-PSA.usfm" \
+  --source-file output/AI-ULT/PSA/PSA-119-100-104-aligned.usfm \
+  --chapter 119 --verses 100-104 --backup
+```
+
+For TN:
+```bash
+python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
+  --book-file "$REPOS_PATH/$REPO/tn_PSA.tsv" \
+  --source-file output/notes/PSA/PSA-058.tsv \
+  --chapter 58 \
+  --backup
+```
+
+### Step 5: Door43 CI Validation (TN only)
+
+For TN inserts, run the Door43 CI validation on the modified book-level TSV
+before committing. These are the same checks that run in Door43's CI pipeline
+on PR merge -- catching failures here avoids pushing content that will be
+rejected.
 
 ```bash
-node /app/src/door43-push-cli.js \
-  --type tn \
-  --book PSA \
-  --chapter 30 \
-  --username "$DOOR43_USERNAME" \
-  --branch AI-PSA-030 \
-  --source output/notes/PSA/PSA-030.tsv
+python3 .claude/skills/tn-quality-check/scripts/validate_tn_tsv.py \
+    "$REPOS_PATH/$REPO/tn_PSA.tsv" \
+    --json /tmp/claude/door43_validation.json
 ```
 
-For ULT/UST, add `--verses` if not the full chapter:
+If this reports errors, fix them before proceeding. If errors cannot be fixed,
+roll back with `git checkout -- <file>` and report the failure.
+
+### Step 6: Verify
+
+Show the git diff so the user can review the actual changes:
 ```bash
-node /app/src/door43-push-cli.js \
-  --type ult \
-  --book PSA \
-  --chapter 30 \
-  --username "$DOOR43_USERNAME" \
-  --branch AI-PSA-030 \
-  --source output/AI-ULT/PSA/PSA-030-aligned.usfm \
-  --verses 1-22
+cd "$REPOS_PATH/$REPO"
+git diff
 ```
 
-**Path note**: Inside the Docker container, use `/app/src/door43-push-cli.js`. On the host (ad-hoc Claude sessions), use `/srv/bot/app/src/door43-push-cli.js`.
+Check:
+- Correct verses/rows changed
+- Adjacent content untouched
+- No stray formatting issues
 
-The CLI outputs JSON to stdout:
-```json
-{"success": true, "details": "PR #123 merged AI-PSA-030 into deferredreward-tc-create-1 on en_tn", "prNumber": 123, "duration": "4.2"}
+### Step 7: Commit, Push Branch, Create PR, and Merge
+
+Commit on the staging branch, push it, then create and merge a PR to the user branch.
+Master is a protected branch on Door43 -- direct pushes are rejected. The PR targets
+the user's working branch (`$USER_BRANCH`), not master.
+
+All four operations (commit, push, PR create, PR merge) must complete. The task
+is not done until `gitea_pr.py` prints "PR #NNNN merged."
+
+```bash
+cd "$REPOS_PATH/$REPO"
+
+# 1. Commit on the staging branch
+git add 19-PSA.usfm  # or tn_PSA.tsv
+git commit -m "AI ULT for PSA 30 (attribution: benjamin-test)"
+
+# 2. Verify the changes
+git diff HEAD~1 --stat
+
+# 3. Push the staging branch
+git push origin "$BRANCH"
+
+# 4. Create PR targeting user branch, merge it, and delete the staging branch
+python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
+  --repo "$REPO" --head "$BRANCH" --base "$USER_BRANCH" \
+  --title "AI TN for PSA 30 [benjamin-test]" \
+  --merge --ensure-base
+# Expected output: "PR #NNNN created" then "PR #NNNN merged." then "Branch ... deleted."
+# If you do not see "merged" in the output, the insert FAILED -- report the error.
+# --ensure-base creates the user branch from master if it doesn't exist yet.
 ```
 
-Exit codes: 0 = success, 1 = push failed (details in JSON), 2 = bad args.
+If the PR already exists (API 409), the script reuses it and still merges.
 
-### Step 4: Handle Result
-
-**Success**: Report the PR number and target branch to the user.
-
-**Validation failure** (details contain "Door43 CI validation failed"):
-1. Read the error details (line numbers, rule names, messages)
-2. Fix the source file (e.g., bracket pairing, AT label format)
-3. Re-run the CLI with the fixed source
-
-**No changes detected**: Not an error -- content already matches the target branch. Report and move on.
-
-**Git/push/API errors** (auth, conflict, timeout): Report to user -- these need human intervention.
+If the merge fails or there is a conflict: **stop immediately** and report the
+error to the admin. Include the repo name, book, chapter, and error output.
 
 ## Scripts Reference
-
-### door43-push-cli.js
-CLI wrapper around `door43Push()`. Handles clone, insert, validate, commit, push, PR create/merge in one command.
-
-```
-node /app/src/door43-push-cli.js \
-  --type <tn|ult|ust> --book <BOOK> --chapter <N> \
-  --username <name> --branch <branch> --source <path> \
-  [--verses <range>]
-```
-
-- Outputs JSON to stdout, logs to stderr
-- Exit 0 = success, 1 = failure, 2 = bad args
-- Internally calls `door43Push()` from `door43-push.js`
 
 ### insert_usfm_verses.py
 Surgically replaces a verse range in a book-level USFM file.
@@ -207,13 +299,21 @@ python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
 - Sort order within each chapter: `:intro` < `:front` < `:1` < `:2` < ... (see Note Ordering below)
 
 ### gitea_pr.py
-Creates a PR via the Gitea API and optionally merges it. Used by the manual fallback procedure.
+Creates a PR via the Gitea API and optionally merges it. This is the primary
+mechanism for landing changes on master (protected branch, no direct push).
 
 ```
 python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
   --repo <repo-name> --head <source-branch> --base <target-branch> \
   --title "PR title" --merge
 ```
+
+- `--merge`: creates PR, merges it, and deletes the staging branch
+- `--ensure-base`: if the `--base` branch does not exist on the remote, creates it from master first
+- Reads token from `.env` files first (project root, then config/.env),
+  falls back to env vars. Logs which token source is used.
+- Prints the PR URL, merge status, and branch deletion on success
+- Exits non-zero on failure
 
 ## Note Ordering (TN)
 
@@ -233,24 +333,18 @@ script and `assemble_notes.py` both enforce this ordering.
 
 ## Safety
 
-- Always dry-run first in interactive mode (show the user what will change)
-- Backup files created automatically by the CLI (`--backup` passed to insertion scripts)
-- Rollback: `git checkout -- <file>` in the repo directory if something goes wrong
+- Always dry-run first, show the user what will change
+- Always show `git diff` after insertion
+- Backup files created automatically with `--backup`
+- Rollback: `git checkout -- <file>` if something goes wrong
 - Never force-push
 
 ## Troubleshooting
 
-- **Push rejected (non-fast-forward)**: The remote branch has new commits. The CLI handles fetch/reset but if this persists, check for concurrent pushes.
+- **Push rejected (non-fast-forward)**: The remote branch has new commits. Pull with `git pull --rebase` before retrying. If conflicts arise, resolve them manually and re-push.
+- **Merge conflict**: The target branch diverged from your working branch. Fetch latest, rebase onto the target, resolve conflicts, and force-push your feature branch (never force-push master/main).
 - **Authentication error (403)**: The Door43 token may be expired or missing. Check `.env` for `DOOR43_TOKEN` and verify it has push access to the target organization.
-- **Validation failure**: Read the error details from the CLI JSON output, fix the source file, and retry.
-- **CLI not found**: Inside Docker use `/app/src/door43-push-cli.js`, on the host use `/srv/bot/app/src/door43-push-cli.js`.
-
-## Manual Fallback
-
-If the CLI is unavailable, the full manual git procedure is documented in the git
-history of this file. The key steps are: clone/fetch, create staging branch from
-user branch, run insertion script, validate (TN), commit, push, create PR via
-`gitea_pr.py --merge`, verify merge.
+- **Wrong remote (personal fork)**: Verify `git remote -v` shows the unfoldingWord org URL, not a personal fork. Use `git remote set-url origin <correct-url>` to fix.
 
 ## Book Number Reference
 
