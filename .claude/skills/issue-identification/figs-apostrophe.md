@@ -49,8 +49,11 @@ Apostrophe is when a speaker turns away from their actual listeners and addresse
 |-----------|-------------|
 | Speaker addresses God (who CAN hear) | Not a figure of speech - genuine prayer |
 | Speaker addresses present audience directly | Normal address |
-| Personification where object IS the audience | figs-personification |
+| Personification where object IS the audience | figs-personification (choose one -- see below) |
 | Speaking to oneself (aside) | figs-aside |
+
+### Overlap with figs-personification
+When a speaker addresses an inanimate object (e.g., "Awake, wood! Arise, stone!"), both apostrophe and personification could apply -- the object is being treated as alive (personification) and the speaker is addressing something that can't hear (apostrophe). Choose one. Use apostrophe if the note focuses on the speaker addressing a non-hearing entity; use personification if it focuses on the object being treated as capable of action. Don't write both for the same phrase.
 
 ## Recognition Process
 

@@ -144,6 +144,7 @@ Collective entities treated as single persons:
    - Is it a set cultural phrase? -> Check figs-idiom
    - Is it association (X represents Y)? -> Check figs-metonymy
    - Is it identity (X spoken of AS Y)? -> Check figs-metaphor
+   - Is someone addressing an object that can't hear? -> Overlaps with figs-apostrophe. Choose one -- personification if the note focuses on the object being treated as alive, apostrophe if it focuses on the speaker addressing something that can't hear. Don't write both for the same phrase.
 
 4. **Agency test**: The distinguishing feature is that the non-human thing is the **agent** performing an action. If the thing is merely being compared to something or standing for something, it's likely metaphor or metonymy instead.
 
