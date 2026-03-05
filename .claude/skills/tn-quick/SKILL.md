@@ -44,7 +44,7 @@ Use a placeholder ID (abc1, abc2, etc., incrementing from what's already in the 
 - Match capitalization and grammatical forms exactly from the ULT
 
 ### Author References
-- Use traditional authorship by name (e.g., Habakkuk, Isaiah, Moses)
+- Always use the author's name, never "the author." Replace the SPEAKER placeholder in templates with the name (e.g., Habakkuk, Isaiah, Moses)
 - For Psalms, check the superscription: use David, Asaph, etc. if named; use "the psalmist" if anonymous
 
 ### "Here" Rule
