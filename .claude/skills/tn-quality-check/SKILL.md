@@ -5,7 +5,7 @@ description: Check AI-generated translation notes for quality issues including m
 
 # Translation Note Quality Checker
 
-Check AI-generated translation notes for quality issues before delivery. Two modes: fast (script only, mechanical checks) and deep (script + semantic review).
+Check AI-generated translation notes for quality issues before delivery. Runs mechanical checks plus a full semantic review.
 
 ## Prerequisites
 
@@ -33,16 +33,6 @@ If neither exists, report an error and exit.
 
 ## Workflow
 
-### Step 0: Run Door43 CI Validation
-
-```bash
-python3 .claude/skills/tn-quality-check/scripts/validate_tn_tsv.py \
-    <NOTES_TSV> \
-    --json /tmp/claude/door43_validation.json
-```
-
-If this reports errors, fix them before proceeding. These are the same checks that run in Door43's CI pipeline on PR merge.
-
 ### Step 1: Run Mechanical Checks
 
 ```bash
@@ -57,15 +47,11 @@ python3 .claude/skills/tn-quality-check/scripts/check_tn_quality.py \
 
 Read the stderr output for a summary. Read `/tmp/claude/tn_quality_findings.json` for full details.
 
-### Step 2: Review Findings (fast mode stops here)
+### Step 2: Review Findings
 
-Read the findings JSON. Report the summary counts (errors, warnings, clean notes).
+Read the findings JSON. Report the summary counts (errors, warnings, clean notes). List errors first, then warnings. For each, show the reference, ID, category, and message.
 
-For **fast mode** (`--fast` or when the user just wants a quick check): stop here and report the findings. List errors first, then warnings. For each, show the reference, ID, category, and message.
-
-If no errors and no warnings, report the notes as clean.
-
-### Step 3: Semantic Review (deep mode only)
+### Step 3: Semantic Review
 
 Read the full TSV and the findings JSON. For each note (especially those not flagged by the script), check the following. Write findings to the report as you go.
 
@@ -136,7 +122,7 @@ Scan for notes that reference or depend on interpretations from nearby verses. S
 
 Flag inconsistencies with the specific note IDs and the conflicting interpretations so the writer can reconcile them.
 
-### Step 4: Fix Issues (deep mode only)
+### Step 4: Fix Issues
 
 For each issue found in Steps 1-3, fix it directly in the source files. Do not just report — fix.
 
@@ -215,6 +201,8 @@ The script runs these 16 checks:
 
 ## When to Run
 
-- **Fast mode**: After every tn-writer iteration (Step 7 AT fit cycle, Step 8 assembly). Quick sanity check.
-- **Deep mode**: Before final delivery. Full quality gate.
-- **After parallel-batch merge**: Run on the merged TSV to catch cross-chunk issues.
+- After every tn-writer iteration (Step 7 AT fit cycle, Step 8 assembly)
+- Before final delivery (full quality gate)
+- After parallel-batch merge (catch cross-chunk issues)
+
+Door43 CI validation runs separately as part of repo-insert, not here.

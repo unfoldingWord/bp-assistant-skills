@@ -167,7 +167,23 @@ python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
   --backup
 ```
 
-### Step 5: Verify
+### Step 5: Door43 CI Validation (TN only)
+
+For TN inserts, run the Door43 CI validation on the modified book-level TSV
+before committing. These are the same checks that run in Door43's CI pipeline
+on PR merge -- catching failures here avoids pushing content that will be
+rejected.
+
+```bash
+python3 .claude/skills/tn-quality-check/scripts/validate_tn_tsv.py \
+    "$REPOS_PATH/$REPO/tn_PSA.tsv" \
+    --json /tmp/claude/door43_validation.json
+```
+
+If this reports errors, fix them before proceeding. If errors cannot be fixed,
+roll back with `git checkout -- <file>` and report the failure.
+
+### Step 6: Verify
 
 Show the git diff so the user can review the actual changes:
 ```bash
@@ -180,7 +196,7 @@ Check:
 - Adjacent content untouched
 - No stray formatting issues
 
-### Step 6: Commit, Push Branch, Create PR, and Merge
+### Step 7: Commit, Push Branch, Create PR, and Merge
 
 Commit on the staging branch, push it, then create and merge a PR via the API.
 Master is a protected branch on Door43 -- direct pushes to master are rejected.
