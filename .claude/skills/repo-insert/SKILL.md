@@ -6,14 +6,29 @@ allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 
 # Repo Insert
 
-Insert AI-generated content (ULT, UST, or TN) into local clones of git.door43.org repos, commit on a temporary staging branch, merge to master, and push.
+Insert AI-generated content (ULT, UST, or TN) into local clones of git.door43.org repos, commit on a temporary staging branch, and merge to the user's working branch via PR.
 
 ## Organization Rule
 
 All repos belong to the **unfoldingWord** organization on Door43. Never push to a
 personal fork. Always verify the remote URL contains `git.door43.org/unfoldingWord/`
 before any git operation. Use a temporary AI-named branch for staging, then merge
-to master and push.
+to the user's working branch and push.
+
+## User Branch Targeting
+
+Content is always merged to the user's working branch, not master. The user branch
+is derived from the content type, Door43 username, and book code:
+
+| Content type | Branch pattern | Example |
+|---|---|---|
+| ULT | `auto-{USERNAME}-{BOOK}` | `auto-deferredreward-PSA` |
+| UST | `auto-{USERNAME}-{BOOK}` | `auto-deferredreward-PSA` |
+| TN | `{USERNAME}-tc-create-1` | `deferredreward-tc-create-1` |
+| TQ | `{USERNAME}-tc-create-1` | `deferredreward-tc-create-1` |
+
+If the user branch does not exist yet, it is created from master via the Gitea API
+before branching the staging branch.
 
 ## Configuration
 
@@ -43,6 +58,7 @@ The token variable may be named `GITEA_TOKEN` rather than `DOOR43_TOKEN` dependi
 ### Derived Values
 
 - **Repo**: `en_ult` / `en_ust` / `en_tn` (from content type)
+- **User branch** (PR target): see User Branch Targeting above
 - **Staging branch**: `AI-{BOOK}-{CH}` for single chapter (e.g. `AI-PSA-030`, `AI-ISA-33`), `AI-{BOOK}-{CH1}-{CH2}` for range (e.g. `AI-PSA-030-031`). PSA uses 3-digit padding, all other books use 2-digit.
 - **Filename in repo**: `{BOOK_NUMBER}-{BOOK}.usfm` for ULT/UST, `tn_{BOOK}.tsv` for TN
   - Book numbers from `fetch_door43.py` BOOK_NUMBERS mapping (e.g., PSA -> `19-PSA.usfm`)
@@ -52,15 +68,24 @@ The token variable may be named `GITEA_TOKEN` rather than `DOOR43_TOKEN` dependi
 ### Step 1: Gather Parameters
 
 Determine from the user or context:
-1. Content type (ult/ust/tn)
+1. Content type (ult/ust/tn/tq)
 2. Book and chapter (or range)
 3. Source file path (check `output/` directories)
+4. Door43 username (for user branch derivation and commit attribution)
 
 Load `.env` for `DOOR43_REPOS_PATH` and `DOOR43_USERNAME`:
 ```bash
 # Source .env values
 eval $(grep -v '^#' .env | xargs -d '\n' printf 'export %s\n')
 echo "Repos: $DOOR43_REPOS_PATH, User: $DOOR43_USERNAME"
+```
+
+Derive the user branch name:
+```bash
+# For TN/TQ:
+USER_BRANCH="${DOOR43_USERNAME}-tc-create-1"
+# For ULT/UST:
+USER_BRANCH="auto-${DOOR43_USERNAME}-${BOOK}"
 ```
 
 ### Step 2: Setup Repo
@@ -108,8 +133,8 @@ fi
 git fetch origin
 ```
 
-**Create the staging branch from origin/master.** Always start fresh from
-origin/master. Never resume a remote branch.
+**Create the staging branch from origin/{USER_BRANCH}.** Always start fresh from
+the user's working branch. Never resume a remote branch.
 
 ```bash
 BRANCH="AI-PSA-030"  # Derived from book + chapter(s)
@@ -118,8 +143,8 @@ BRANCH="AI-PSA-030"  # Derived from book + chapter(s)
 git checkout --detach 2>/dev/null
 git branch -D "$BRANCH" 2>/dev/null || true
 
-# Create fresh from origin/master every time
-git checkout -b "$BRANCH" origin/master
+# Create fresh from origin/{USER_BRANCH} every time
+git checkout -b "$BRANCH" "origin/$USER_BRANCH"
 ```
 
 ### Step 3: Show Existing Content
@@ -198,9 +223,9 @@ Check:
 
 ### Step 7: Commit, Push Branch, Create PR, and Merge
 
-Commit on the staging branch, push it, then create and merge a PR via the API.
-Master is a protected branch on Door43 -- direct pushes to master are rejected.
-You must use `gitea_pr.py --merge` to land changes on master.
+Commit on the staging branch, push it, then create and merge a PR to the user branch.
+Master is a protected branch on Door43 -- direct pushes are rejected. The PR targets
+the user's working branch (`$USER_BRANCH`), not master.
 
 All four operations (commit, push, PR create, PR merge) must complete. The task
 is not done until `gitea_pr.py` prints "PR #NNNN merged."
@@ -218,13 +243,14 @@ git diff HEAD~1 --stat
 # 3. Push the staging branch
 git push origin "$BRANCH"
 
-# 4. Create PR, merge it, and delete the staging branch (all in one call)
+# 4. Create PR targeting user branch, merge it, and delete the staging branch
 python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
-  --repo "$REPO" --head "$BRANCH" --base master \
+  --repo "$REPO" --head "$BRANCH" --base "$USER_BRANCH" \
   --title "AI TN for PSA 30 [benjamin-test]" \
-  --merge
+  --merge --ensure-base
 # Expected output: "PR #NNNN created" then "PR #NNNN merged." then "Branch ... deleted."
 # If you do not see "merged" in the output, the insert FAILED -- report the error.
+# --ensure-base creates the user branch from master if it doesn't exist yet.
 ```
 
 If the PR already exists (API 409), the script reuses it and still merges.
@@ -283,6 +309,7 @@ python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
 ```
 
 - `--merge`: creates PR, merges it, and deletes the staging branch
+- `--ensure-base`: if the `--base` branch does not exist on the remote, creates it from master first
 - Reads token from `.env` files first (project root, then config/.env),
   falls back to env vars. Logs which token source is used.
 - Prints the PR URL, merge status, and branch deletion on success

@@ -165,26 +165,37 @@ between our AI-generated ULT and the published Door43 master.
 Wait for this agent plus any remaining Phase 2 agents to complete before
 proceeding.
 
-## Phase 4: Repo Insert (Push to Master)
+## Phase 4: Repo Insert (Push to User Branch)
 
 After all agents complete, insert each content type into Door43 repos.
 Launch four **Task subagents** in parallel (`model: "haiku"` -- pure git operations, no reasoning needed).
 
 All repos are under the **unfoldingWord** organization on Door43. Never push
-to a personal fork.
+to a personal fork. Content is merged to user branches, not master.
 
-| Content | Source | Repo | Branch | Insert script |
-|---------|--------|------|--------|---------------|
-| ULT (aligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ult | `AI-{BOOK}-{CH}` (staging) -> master | `insert_usfm_verses.py` |
-| UST (aligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ust | `AI-{BOOK}-{CH}` (staging) -> master | `insert_usfm_verses.py` |
-| TN | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` | unfoldingWord/en_tn | `AI-{BOOK}-{CH}` (staging) -> master | `insert_tn_rows.py` |
-| TQ | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` | unfoldingWord/en_tq | `AI-{BOOK}-{CH}` (staging) -> master | `insert_tn_rows.py` |
+### User branch derivation
+
+| Content type | Branch pattern | Example |
+|---|---|---|
+| ULT | `auto-{USERNAME}-{BOOK}` | `auto-deferredreward-PSA` |
+| UST | `auto-{USERNAME}-{BOOK}` | `auto-deferredreward-PSA` |
+| TN | `{USERNAME}-tc-create-1` | `deferredreward-tc-create-1` |
+| TQ | `{USERNAME}-tc-create-1` | `deferredreward-tc-create-1` |
+
+| Content | Source | Repo | Staging branch | User branch (PR target) | Insert script |
+|---------|--------|------|--------|---------|---------------|
+| ULT (aligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ult | `AI-{BOOK}-{CH}` | `auto-{USERNAME}-{BOOK}` | `insert_usfm_verses.py` |
+| UST (aligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` | unfoldingWord/en_ust | `AI-{BOOK}-{CH}` | `auto-{USERNAME}-{BOOK}` | `insert_usfm_verses.py` |
+| TN | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` | unfoldingWord/en_tn | `AI-{BOOK}-{CH}` | `{USERNAME}-tc-create-1` | `insert_tn_rows.py` |
+| TQ | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` | unfoldingWord/en_tq | `AI-{BOOK}-{CH}` | `{USERNAME}-tc-create-1` | `insert_tn_rows.py` |
 
 ### Git procedure for each repo (strict order)
 
 Master is a protected branch on Door43 -- direct pushes are rejected. Use
-`gitea_pr.py --merge` to land changes. See repo-insert SKILL.md Step 6 for
-the canonical procedure.
+`gitea_pr.py --merge` to land changes on the user's working branch. See
+repo-insert SKILL.md for the canonical procedure.
+
+Derive the user branch for each content type (see table above), then:
 
 1. **Ensure remote points to unfoldingWord** -- verify the origin URL contains
    `git.door43.org/unfoldingWord/{repo}`. If it points to a fork, fix it:
@@ -192,12 +203,12 @@ the canonical procedure.
    git remote set-url origin "https://${DOOR43_USERNAME}:${DOOR43_TOKEN}@git.door43.org/unfoldingWord/{repo}.git"
    ```
 2. **Fetch** -- `git fetch origin`
-3. **Create staging branch from origin/master** -- always branch from
-   `origin/master`. Delete any stale local branch with the same name first.
+3. **Create staging branch from origin/{USER_BRANCH}** -- always branch from
+   the user's working branch. Delete any stale local branch with the same name first.
    ```bash
    git checkout --detach 2>/dev/null
    git branch -D "$BRANCH" 2>/dev/null || true
-   git checkout -b "$BRANCH" origin/master
+   git checkout -b "$BRANCH" "origin/$USER_BRANCH"
    ```
 4. **Insert** -- run the appropriate script with `--backup`
    - USFM: `--chapter {CHAPTER} --verses {FIRST}-{LAST_VERSE}`
@@ -208,10 +219,11 @@ the canonical procedure.
    ```bash
    git push origin "$BRANCH"
    python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
-     --repo "$REPO" --head "$BRANCH" --base master \
+     --repo "$REPO" --head "$BRANCH" --base "$USER_BRANCH" \
      --title "AI {content_type} for {BOOK} {CHAPTER} [${USERNAME}]" \
-     --merge
+     --merge --ensure-base
    # Must see "PR #NNNN merged." in output. If not, the insert FAILED.
+   # --ensure-base creates the user branch from master if it doesn't exist yet.
    ```
 8. **If merge fails or there is a conflict**: stop and report error to admin
 
@@ -250,10 +262,10 @@ PSA = `19-PSA.usfm`, GEN = `01-GEN.usfm`, etc.
 
 | Content | Local path | Repo | Pushed to |
 |---------|-----------|------|-----------|
-| ULT (aligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | en_ult | master |
-| UST (aligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` | en_ust | master |
-| TN | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` | en_tn | master |
-| TQ | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` | en_tq | master |
+| ULT (aligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm` | en_ult | `auto-{USERNAME}-{BOOK}` |
+| UST (aligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}-aligned.usfm` | en_ust | `auto-{USERNAME}-{BOOK}` |
+| TN | `output/notes/{BOOK}/{BOOK}-{CH}.tsv` | en_tn | `{USERNAME}-tc-create-1` |
+| TQ | `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` | en_tq | `{USERNAME}-tc-create-1` |
 | Issues | `output/issues/{BOOK}/{BOOK}-{CH}.tsv` | -- | working file only |
 | ULT (unaligned) | `output/AI-ULT/{BOOK}/{BOOK}-{CH}.usfm` | -- | not inserted |
 | UST (unaligned) | `output/AI-UST/{BOOK}/{BOOK}-{CH}.usfm` | -- | not inserted |

@@ -152,6 +152,30 @@ def merge_pr(token, repo, pr_number, message=""):
     sys.exit(1)
 
 
+def branch_exists(token, repo, branch):
+    """Check if a branch exists on the remote."""
+    status, _ = api_request('GET', f"/repos/{ORG}/{repo}/branches/{branch}", token)
+    return status == 200
+
+
+def create_branch(token, repo, new_branch, from_branch='master'):
+    """Create a new branch from an existing one. Returns True on success or if already exists."""
+    status, result = api_request(
+        'POST',
+        f"/repos/{ORG}/{repo}/branches",
+        token,
+        {"new_branch_name": new_branch, "old_branch_name": from_branch},
+    )
+    if status in (200, 201):
+        print(f"Created branch '{new_branch}' from '{from_branch}' on {repo}")
+        return True
+    if status == 409:
+        print(f"Branch '{new_branch}' already exists on {repo} (409)")
+        return True
+    print(f"ERROR: Failed to create branch '{new_branch}': {status} {result}", file=sys.stderr)
+    return False
+
+
 def delete_branch(token, repo, branch):
     """Delete a remote branch via the Gitea API."""
     status, result = api_request(
@@ -186,6 +210,8 @@ def main():
                         help='Merge the PR immediately after creating it')
     parser.add_argument('--no-delete', action='store_true',
                         help='Skip deleting the head branch after merge')
+    parser.add_argument('--ensure-base', action='store_true',
+                        help='If --base branch does not exist on remote, create it from master')
 
     args = parser.parse_args()
 
@@ -203,6 +229,13 @@ def main():
         print(f"ERROR: API token is invalid or expired (HTTP {status}).", file=sys.stderr)
         print("Regenerate at: https://git.door43.org/user/settings/applications", file=sys.stderr)
         sys.exit(1)
+
+    # Ensure base branch exists if requested
+    if args.ensure_base and args.base != 'master':
+        if not branch_exists(token, args.repo, args.base):
+            if not create_branch(token, args.repo, args.base, 'master'):
+                print(f"ERROR: Could not create base branch '{args.base}'", file=sys.stderr)
+                sys.exit(1)
 
     # Verify the head branch exists on the remote (push succeeded)
     status, result = api_request('GET', f"/repos/{ORG}/{args.repo}/branches/{args.head}", token)
