@@ -14,13 +14,16 @@ Write individual translation notes to `output/scratch.txt` without running the f
 3. Read the UST verse from `data/door43_repos/en_ust/` for AT comparison
 4. Look up the template: `grep '<issue_type>' data/templates.csv`
 5. Write the note following the template and style rules below
-6. Append to `output/scratch.txt` in this format:
+6. Append to `output/scratch.txt` in this format — each field on its own line for easy copying in a web GUI:
 
 ```
-REF<tab>ID<tab><tab>rc://*/ta/man/translate/ISSUE_TYPE<tab>HEBREW_QUOTE<tab>1<tab>NOTE_TEXT
+--- BOOK C:V ISSUE_TYPE ---
+rc://*/ta/man/translate/ISSUE_TYPE
+HEBREW_QUOTE
+NOTE_TEXT
 ```
 
-Use a placeholder ID (abc1, abc2, etc., incrementing from what's already in the file). Leave Hebrew quote for user to fill if not readily available.
+Use a placeholder ID (abc1, abc2, etc., incrementing from what's already in the file). Leave Hebrew quote blank if not readily available.
 
 ## Style Rules
 

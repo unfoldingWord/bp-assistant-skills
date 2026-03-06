@@ -67,11 +67,13 @@ Do not use quotation marks in the alternate translation(s) unless that text cont
 ### AT Should Differ from UST
 Check the UST for the same verse. Make sure your alternate translation is not the same as the UST phrasing. If it is, come up with another alternate translation idea.
 
+**Exception — obscure or textually uncertain passages**: When the passage is so difficult that any plain-meaning AT would inevitably echo the UST, omit the AT bracket and instead direct translators to the UST with the phrase "as the UST does." End the sentence with that phrase rather than providing an AT. Example: "If it would be helpful in your language, you could state the meaning plainly, as the UST does."
+
 ### Minimal Adjustment
 The AT should be the smallest change to the ULT text that resolves the translation issue. Keep ULT wording where possible, change only what is needed. For figures of speech (metaphors, idioms, etc.), more substantial rewording may be needed to express the plain meaning -- this is expected.
 
 ### Resolve the Figure
-When a note offers a plain-meaning AT, the AT must not reuse the same figure it is explaining. If the note identifies a metaphor, the AT should not use that metaphor; if it identifies personification, the AT should not give the non-living thing an action verb; and so on.
+When a note offers a plain-meaning AT, the AT must not reuse the same figure it is explaining. If the note identifies a metaphor, the AT should not use that metaphor; if it identifies personification, the AT should not give the non-living thing an action verb — use a stative description instead (e.g., "the deep waters were loud" not "the deep waters roared"); and so on.
 
 ### Supply Words in ATs
 Do not include the curly brace characters `{` or `}` in AT text. The words inside them are implied English words and may appear in the AT as plain text when needed. For example, if the ULT has `{am} poor and needy`, the AT may use "am" but must write it without braces: [am very poor].
