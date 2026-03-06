@@ -146,7 +146,7 @@ Collective entities treated as single persons:
    - Is it identity (X spoken of AS Y)? -> Check figs-metaphor
    - Is someone addressing an object that can't hear? -> Overlaps with figs-apostrophe. Choose one -- personification if the note focuses on the object being treated as alive, apostrophe if it focuses on the speaker addressing something that can't hear. Don't write both for the same phrase.
 
-4. **Agency test**: The distinguishing feature is that the non-human thing is the **agent** performing an action. If the thing is merely being compared to something or standing for something, it's likely metaphor or metonymy instead.
+4. **Agency test**: The distinguishing feature is that the non-human thing is the **agent** performing an action. If the thing is merely being compared to something or standing for something, it's likely metaphor or metonymy instead. If the action is something a physical object could do just as naturally (cover, fill, flow, burn), ask whether the underlying image is a non-person thing — in that case, prefer figs-metaphor (e.g., splendor covering like a blanket, praise filling like liquid).
 
 ---
 
