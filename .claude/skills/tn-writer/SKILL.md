@@ -276,10 +276,12 @@ python3 .claude/skills/utilities/scripts/curly_quotes.py output/notes/<BOOK>/<BO
 Read the assembled TSV alongside the aligned ULT. For each row, verify:
 
 1. **Quote column** is non-empty and contains Hebrew text
-2. **Note text** addresses the issue type indicated by SupportReference
-3. **AT fit** -- if an Alternate Translation is present, mentally substitute it for the GLQuote in the ULT verse and confirm it reads naturally
-4. **Quote scope** -- the Hebrew quote covers the right range (not too narrow or too wide for the issue)
-5. **No duplicate UST phrasing** -- ATs should differ from the UST for the same verse
+2. **Single-verse quotes** -- the Quote must contain material from one verse only (exception: `translate-versebridge`). If the issue relates to surrounding verses, discuss them in the Note text, not the Quote.
+3. **Continuous text** -- avoid discontinuous quotes with ampersands (`&`). Expand the quote to include intervening text rather than breaking it.
+4. **Note text** addresses the issue type indicated by SupportReference
+5. **AT fit** -- if an Alternate Translation is present, mentally substitute it for the GLQuote in the ULT verse and confirm it reads naturally
+6. **Quote scope** -- the Hebrew quote covers the right range (not too narrow or too wide for the issue)
+7. **No duplicate UST phrasing** -- ATs should differ from the UST for the same verse
 
 Fix any issues found and rewrite the TSV row(s) if needed. This is a lightweight review pass, not a regeneration -- just catch structural problems the scripts can't judge.
 
