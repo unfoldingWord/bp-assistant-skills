@@ -9,7 +9,7 @@ prevents row/note misalignment regardless of generation order.
 Usage:
     python3 assemble_notes.py /tmp/claude/prepared_notes.json \
         /tmp/claude/generated_notes.json \
-        --output output/notes/PSA-061.tsv
+        --output output/notes/HAB/HAB-03.tsv
 """
 
 import argparse

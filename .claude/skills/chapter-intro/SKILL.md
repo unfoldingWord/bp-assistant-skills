@@ -113,7 +113,7 @@ Use `[[rc://*/tw/dict/bible/kt/<term>]]` or `[[rc://*/tw/dict/bible/other/<term>
 
 Example:
 ```
-psa	61:intro					# Psalm 61 Introduction\n\n## Structure and Formatting\n\n...
+hab	3:intro					# Habakkuk 3 Introduction\n\n## Structure and Formatting\n\n...
 ```
 
 Columns:

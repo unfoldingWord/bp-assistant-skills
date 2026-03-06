@@ -131,6 +131,8 @@ When creating the quote field for parallelism, include both (or all three) compl
 Good: "Praise Yahweh, all you nations; exalt him, all you peoples"
 Bad: "Praise ... exalt" or just "all nations ... all peoples"
 
+Include the opening word of the first line even if it feels peripheral. For example, if the verse reads "I heard, and my belly trembled; at the sound my lips shook," start the quote at "I heard" — not at "and my belly trembled." The opening words are often part of the parallel structure ("I heard" / "at the sound").
+
 ---
 
 ## AT Strategies from TA

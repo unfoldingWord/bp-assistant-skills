@@ -87,7 +87,7 @@ All paths relative to project root. These directories exist locally but should n
 - `output/` - Generated files and reports 
 - `tmp/` - Temporary processing files - you are often in sandbox mode and should use this
 
-**Output Folder Organization**: Always use book subfolders (e.g., `output/AI-ULT/PSA/PSA-061.usfm`, `output/issues/PSA/PSA-061.tsv`, `output/notes/PSA/PSA-061.tsv`). Never put files flat in the type directory. This applies to all output subdirectories: `AI-ULT`, `AI-UST`, `AI-UST/hints`, `issues`, `notes`, `tq`, `quality`, `review`, `editor-compare`.
+**Output Folder Organization**: Always use book subfolders (e.g., `output/AI-ULT/HAB/HAB-03.usfm`, `output/issues/PSA/PSA-119.tsv`, `output/notes/PSA/PSA-065.tsv`). Never put files flat in the type directory. This applies to all output subdirectories: `AI-ULT`, `AI-UST`, `AI-UST/hints`, `issues`, `notes`, `tq`, `quality`, `review`, `editor-compare`.
 
 #### Other files
 - `translation-issues.csv` - All 94 translation issues (complete)

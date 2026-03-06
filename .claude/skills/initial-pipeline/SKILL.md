@@ -38,7 +38,7 @@ Read `orchestration-conventions.md` for chapter padding, model assignments, and 
 TeamCreate "pipeline-<BOOK>-<CHAPTER>"
 ```
 
-Team name pattern: `pipeline-PSA-061`, `pipeline-GEN-01`, etc.
+Team name pattern: `pipeline-HAB-03`, `pipeline-PSA-119`, etc.
 
 ### Working Directory
 
