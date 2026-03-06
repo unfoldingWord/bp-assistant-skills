@@ -136,6 +136,8 @@ Full clauses (subject + verb), not just words/phrases:
 - "Praise Yahweh, all nations; / exalt him, all peoples"
 - "He struck two men more righteous and better than himself" (if full parallel clauses)
 
+Also: if a figs-parallelism note already covers the two clauses that contain synonymous terms, do not add a separate figs-doublet note for those terms. The parallelism note already communicates that the clauses (and their key words) mean the same thing.
+
 ### Use figs-merism when:
 Two extremes representing totality:
 - "young and old" = everyone (age spectrum)
