@@ -6,7 +6,7 @@ allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 
 # Repo Insert
 
-Insert AI-generated content (ULT, UST, or TN) into local clones of git.door43.org repos, commit on a temporary staging branch, and merge to the user's working branch via PR.
+Insert AI-generated content (ULT, UST, or TN) into local clones of git.door43.org repos, commit on a temporary staging branch, and merge to master via PR.
 
 All mechanical work (clone, insert, validate, commit, push, PR create, PR merge) is handled by `door43-push-cli.js`, a CLI wrapper around `door43Push()`. This skill adds intelligence on top: parameter gathering, dry-run preview, and error recovery.
 
@@ -14,20 +14,6 @@ All mechanical work (clone, insert, validate, commit, push, PR create, PR merge)
 
 All repos belong to the **unfoldingWord** organization on Door43. Never push to a
 personal fork. The CLI enforces this by verifying the remote URL.
-
-## User Branch Targeting
-
-Content is always merged to the user's working branch, not master. The user branch
-is derived from the content type, Door43 username, and book code:
-
-| Content type | Branch pattern | Example |
-|---|---|---|
-| ULT | `auto-{USERNAME}-{BOOK}` | `auto-deferredreward-PSA` |
-| UST | `auto-{USERNAME}-{BOOK}` | `auto-deferredreward-PSA` |
-| TN | `{USERNAME}-tc-create-1` | `deferredreward-tc-create-1` |
-| TQ | `{USERNAME}-tc-create-1` | `deferredreward-tc-create-1` |
-
-If the user branch does not exist yet, the CLI creates it from master via the Gitea API.
 
 ## Configuration
 
@@ -55,7 +41,6 @@ The token variable may be named `GITEA_TOKEN` rather than `DOOR43_TOKEN` dependi
 ### Derived Values
 
 - **Repo**: `en_ult` / `en_ust` / `en_tn` (from content type)
-- **User branch** (PR target): see User Branch Targeting above
 - **Staging branch**: `AI-{BOOK}-{CH}` for single chapter (e.g. `AI-PSA-030`, `AI-ISA-33`), `AI-{BOOK}-{CH1}-{CH2}` for range (e.g. `AI-PSA-030-031`). PSA uses 3-digit padding, all other books use 2-digit.
 - **Filename in repo**: `{BOOK_NUMBER}-{BOOK}.usfm` for ULT/UST, `tn_{BOOK}.tsv` for TN
   - Book numbers from `fetch_door43.py` BOOK_NUMBERS mapping (e.g., PSA -> `19-PSA.usfm`)
@@ -134,7 +119,7 @@ node /app/src/door43-push-cli.js \
 
 The CLI outputs JSON to stdout:
 ```json
-{"success": true, "details": "PR #123 merged AI-PSA-030 into deferredreward-tc-create-1 on en_tn", "prNumber": 123, "duration": "4.2"}
+{"success": true, "details": "PR #123 merged AI-PSA-030 into master on en_tn", "prNumber": 123, "duration": "4.2"}
 ```
 
 Exit codes: 0 = success, 1 = push failed (details in JSON), 2 = bad args.
@@ -249,7 +234,7 @@ script and `assemble_notes.py` both enforce this ordering.
 
 If the CLI is unavailable, the full manual git procedure is documented in the git
 history of this file. The key steps are: clone/fetch, create staging branch from
-user branch, run insertion script, validate (TN), commit, push, create PR via
+master, run insertion script, validate (TN), commit, push, create PR via
 `gitea_pr.py --merge`, verify merge.
 
 ## Book Number Reference
