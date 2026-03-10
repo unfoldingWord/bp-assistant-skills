@@ -184,6 +184,7 @@ T4T may use "the LORD" or other renderings. Update to:
 - אֲדֹנָי = "Lord"
 - אֵל / אֱלֹהִים = "God"
 - "angel of Yahweh" = "an angel representing Yahweh"
+- יהוה צְבָאוֹת (Yahweh tsvaot) = "Yahweh, the commander of the heavenly armies" (not "Yahweh of Armies" -- that is the ULT rendering)
 
 #### C. Check Vocabulary Against Issues Resolved
 

@@ -223,3 +223,44 @@ H0809,אֲשִׁישָׁה,raisin cakes,HOS,3:1 raisin cakes of grapes,3 occ in 
 H8655,תְּרָפִים,teraphim,HOS,3:4 without ephod and teraphim,transliterated per glossary; 'teraphim' dominant in published (4/12),2026-03-03
 H2563c,חֹמֶר,homer,HOS,3:2 a homer of barley,only 1 occ (LEV 27:16 'a homer of'); measurement term per biblical_measurements.csv,2026-03-03
 H3963,לֶתֶךְ,lethek,HOS,3:2 a lethek of barley,no published ULT occurrences; transliterated per biblical_measurements.csv,2026-03-03
+H0422,אָלָה,swearing,HOS,4:2 infinitive absolute - oath/curse violation,Decalogue-like sin catalog context,2026-03-06
+H3584,כָּחַשׁ,deceiving,HOS,4:2 Piel infinitive absolute,Lying/dealing falsely in sin catalog,2026-03-06
+H7379,רִיב,dispute,HOS,4:1 Yahweh's dispute with people,Legal dispute/controversy sense - 17% dominant,2026-03-06
+H0535,אָמַל,languishes,HOS,4:3 Pulal - passive languishing,Published: languishes (1SA 2:5),2026-03-06
+H2184,זְנוּת,prostitution,HOS,4:11 prostitution takes heart,Not in published index; standard noun from zanah,2026-03-06
+H6510,פָּרָה,cow,HOS,4:16 like a stubborn cow,Feminine noun; heifer/cow. Context: stubborn animal metaphor,2026-03-06
+H3839,לִבְנֶה,poplar,HOS,4:13 under oak and poplar,Standard botanical identification,2026-03-06
+H0424,אֵלָה,terebinth,HOS,4:13 under oak and poplar and terebinth,Standard botanical identification,2026-03-06
+H0437,אַלּוֹן,oak,HOS,4:13 under oak,Standard botanical identification,2026-03-06
+H4731,מַקֵּל,staff,HOS,4:12 and their staff declares,Published: staff (GEN 32:10),2026-03-06
+H2415,חֹטֵר,shoot,ISA,only 1 occ in published ULT (PRO 14:3 'rod'); 'shoot' fits ISA 11:1 context,,2026-03-06
+H1503,גֶּזַע,stump,ISA,100% 'stump' in published ULT (JOB 14:8),,2026-03-06
+H5342,נֵצֶר,branch,ISA,no published data; branch/shoot from roots,,2026-03-06
+H5251,נֵס,banner,ISA,published ULT uses 'banner' (EXO 17:15 PSA 20:5 SNG 2:4),,2026-03-06
+H4334,מִישׁוֹר,uprightness,ISA,ISA 11:4 context = fairness/equity; PSA 45:6 'justice' MAL 2:6 'uprightness',,2026-03-06
+H6035,עָנָו,humble,ISA,PSA 25:9 'the humble' dominant rendering,,2026-03-06
+H4926,מִשְׁמָע,hearing,ISA,no published data; literal 'hearing of his ears',,2026-03-06
+H6620,פֶּתֶן,cobra,ISA,published split: 'asps' 'vipers' 'adder'; 'cobra' for clarity,,2026-03-06
+H6848b,צֶפַע,viper,ISA,PRO 23:32 'viper',,2026-03-06
+H2352,חוּר,hole,ISA,no published data; hole/opening of snake,,2026-03-06
+H3975,מְאוּרָה,den,ISA,no published data; den/lair of serpent,,2026-03-06
+H1911,הָדָה,stretch out,ISA,hapax; reach/stretch toward,,2026-03-06
+H4916b,מִשְׁלוֹחַ,stretching out,ISA,EST 9:19/22 'sending'; literal 'stretching out of hand',,2026-03-06
+H4928,מִשְׁמַעַת,obedience,ISA,1SA 22:14 2SA 23:23 'bodyguard'; ISA 11:14 = obedience/submission,,2026-03-06
+H5868b,עֲיָם,fierceness,ISA,hapax; scorching/fierceness of wind,,2026-03-06
+H0599,אָנַף,were angry,ISA,12:1 you were angry with me,dominant rendering 'was angry' 20% of 15 occ,2026-03-06
+H6670a,צָהַל,cry aloud,ISA,12:6 cry aloud and shout for joy,only 1 published occ (cheered EST 8:15); cry aloud fits imperative context,2026-03-06
+H1348,גֵּאוּת,majesty,ISA,12:5 he has done majesty,PSA 93:1 majesty; PSA 17:10 pride; majesty fits ISA context,2026-03-06
+H7579,שָׁאַב,draw water,ISA,12:3 draw water with joy,dominant rendering across published ULT,2026-03-06
+H8342,שָׂשׂוֹן,joy,ISA,12:3 draw water with joy,dominant rendering 43% of 7 occ,2026-03-06
+H1966,הֵילֵל,shining one,ISA,hapax; shining one / day star; literal rendering of root,ISA 14:12,2026-03-09
+H4062,מַדְהֵבָה,raging,ISA,hapax; meaning debated (golden city or raging oppression); raging from context,ISA 14:4,2026-03-09
+H4783,מֻרְדָּף,persecution,ISA,hapax; passive of rdp (pursue); persecution/pursuit without restraint,ISA 14:6,2026-03-09
+H8314a,שָׂרָף,fiery serpent,ISA,DEU 8:15 'fiery'; fiery serpent in ISA 14:29 context,ISA 14:29,2026-03-09
+H4293,מַטְבֵּחַ,slaughter,ISA,no published data; slaughtering-place/slaughter,ISA 14:21,2026-03-09
+H7090,קִפּוֹד,hedgehog,ISA,ZEP 2:14 'screech owl'; likely hedgehog/porcupine per modern scholarship,ISA 14:23,2026-03-09
+H4292,מַטְאֲטֵא,broom,ISA,hapax; broom for sweeping,ISA 14:23,2026-03-09
+H2894,טוּא,sweep,ISA,hapax; to sweep away,ISA 14:23,2026-03-09
+H1998,הֶמְיָה,sound,ISA,hapax; murmuring/sound of music,ISA 14:11,2026-03-09
+H4374,מְכַסֶּה,covering,ISA,LEV 9:19 'that which covers'; covering,ISA 14:11,2026-03-09
+H4151,מוֹעָד,ranks,ISA,no published data; appointed places/ranks,ISA 14:31,2026-03-09

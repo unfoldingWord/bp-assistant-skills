@@ -272,6 +272,19 @@ Brackets mark words added for English grammar not present in Hebrew.
 - Words within semantic range of Hebrew: "hill country" (not "hill {country}")
 - **Articles are NEVER bracketed**: "the head" (not "{the} head"), "the land" (not "{the} land"). The definite article never needs brackets regardless of whether Hebrew has an explicit article.
 
+### Prophetic Speech Formulas
+
+The phrase נְאֻם יְהוָה (neum Yahweh, "the declaration of Yahweh") and its expanded form נְאֻם יְהוָה צְבָאוֹת ("the declaration of Yahweh of Armies") appear as parenthetical attributions within prophetic speech. Format them with em-dashes and no supplied {is}:
+
+- Correct: `"And I will rise up against them"—the declaration of Yahweh of Armies—"and I will cut off..."`
+- Wrong: `"And I will rise up against them," {is} the declaration of Yahweh of Armies, "and I will cut off..."`
+
+Rules:
+- Use em-dashes (—) on both sides when the attribution interrupts quoted speech
+- Use a single em-dash when it ends a quoted section: `"...the broom of destruction"—the declaration of Yahweh of Armies.`
+- Do not add {is} -- the Hebrew has no copula here and the phrase is a parenthetical attribution, not a predicate
+- Do not add commas around the phrase; the em-dashes serve as the delimiter
+
 ### Step 5: Apply Style Rules
 
 Apply all shared style rules from `../reference/gl_guidelines.md` (formality, numbers, punctuation, capitalization, spelling). ULT-specific rules below:
