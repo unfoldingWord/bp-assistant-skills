@@ -448,9 +448,6 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
     }
   }
 
-  // Track which occurrence of each word we're processing
-  const wordOccurrenceIndex = {};
-
   // Count total occurrences of each word for x-occurrences attribute (case-sensitive)
   const englishTextOccKeys = englishTextWordsRaw.map(occurrenceKey);
   const wordTotalOccurrences = {};
@@ -514,93 +511,172 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
 
   const verseObjects = [];
 
-  // Process each word in english_text order
-  // englishTextWords[i] = normalized key, englishTextWordsRaw[i] = original with punctuation
+  // Build a list of items in English text order, where each item is either:
+  //   { type: 'aligned', alignIdx, wordIndices: [i, ...] }  — one alignment group
+  //   { type: 'unaligned', wordIndex: i }                   — unaligned word
+  // This ensures multiple English words sharing one alignment entry are grouped
+  // into a single zaln milestone block.
+
+  // Map each english_text word position to its alignment
+  const wordAlignmentGroup = new Array(englishTextWords.length).fill(null);
+  const tempOccIdx = {};
   for (let i = 0; i < englishTextWords.length; i++) {
     const normalized = englishTextWords[i];
-    const rawWord = englishTextWordsRaw[i];
-
-    // Get the alignment for this word occurrence
-    const occIdx = wordOccurrenceIndex[normalized] || 0;
-    wordOccurrenceIndex[normalized] = occIdx + 1;
-
+    const occIdx = tempOccIdx[normalized] || 0;
+    tempOccIdx[normalized] = occIdx + 1;
     const alignInfo = wordToAlignments[normalized]?.[occIdx];
-
-    // Track occurrence for this word (case-sensitive for viewer compatibility)
-    const occKey = englishTextOccKeys[i];
-    currentOccurrence[occKey] = (currentOccurrence[occKey] || 0) + 1;
-    const occurrence = currentOccurrence[occKey];
-    const occurrences = wordTotalOccurrences[occKey];
-
-    const isBracketed = bracketStatus[i];
-
-    // Detect group boundaries for bracket rendering
-    const isGroupStart = isBracketed && (i === 0 || !bracketStatus[i - 1]);
-    const isGroupEnd = isBracketed && (i === englishTextWords.length - 1 || !bracketStatus[i + 1]);
-
-    // Separate trailing punctuation from the word so it goes OUTSIDE the \w block
-    const strippedBrackets = rawWord.replace(/[{}]/g, '');
-    const punctMatch = strippedBrackets.match(/^(.*?)([.,;:!?]+)$/);
-    const cleanWord = punctMatch ? punctMatch[1] : strippedBrackets;
-    const trailingPunct = punctMatch ? punctMatch[2] : '';
-
-    const wordObj = buildWordObject(cleanWord, occurrence, occurrences);
-
-    // Get Hebrew metadata if aligned
-    let hebrewMeta = [];
     if (alignInfo) {
-      for (const idx of alignInfo.hebrewIndices) {
+      wordAlignmentGroup[i] = alignInfo.align; // reference to the alignment object
+    }
+  }
+
+  // Walk english_text positions and group consecutive words that share the same
+  // alignment object (by identity) into one group item.
+  const groupedItems = [];
+  let pos = 0;
+  while (pos < englishTextWords.length) {
+    const alignObj = wordAlignmentGroup[pos];
+    if (!alignObj) {
+      groupedItems.push({ type: 'unaligned', wordIndex: pos });
+      pos++;
+    } else {
+      // Collect all consecutive positions that belong to this same alignment object
+      const wordIndices = [pos];
+      let next = pos + 1;
+      while (next < englishTextWords.length && wordAlignmentGroup[next] === alignObj) {
+        wordIndices.push(next);
+        next++;
+      }
+      groupedItems.push({ type: 'aligned', align: alignObj, wordIndices });
+      pos = next;
+    }
+  }
+
+  // Now emit each group item
+  let isFirstEmitted = true;
+
+  for (const item of groupedItems) {
+    if (item.type === 'unaligned') {
+      const i = item.wordIndex;
+      const rawWord = englishTextWordsRaw[i];
+      const isBracketed = bracketStatus[i];
+      const isGroupStart = isBracketed && (i === 0 || !bracketStatus[i - 1]);
+      const isGroupEnd = isBracketed && (i === englishTextWords.length - 1 || !bracketStatus[i + 1]);
+
+      const occKey = englishTextOccKeys[i];
+      currentOccurrence[occKey] = (currentOccurrence[occKey] || 0) + 1;
+      const occurrence = currentOccurrence[occKey];
+      const occurrences = wordTotalOccurrences[occKey];
+
+      const strippedBrackets = rawWord.replace(/[{}]/g, '');
+      const punctMatch = strippedBrackets.match(/^(.*?)([.,;:!?]+)$/);
+      const cleanWord = punctMatch ? punctMatch[1] : strippedBrackets;
+      const trailingPunct = punctMatch ? punctMatch[2] : '';
+
+      const wordObj = buildWordObject(cleanWord, occurrence, occurrences);
+
+      if (!isFirstEmitted) {
+        verseObjects.push({ type: 'text', text: isBracketed ? ' ' : '\n' });
+      }
+      isFirstEmitted = false;
+
+      if (ustMode && isGroupStart) verseObjects.push({ type: 'text', text: '{' });
+      if (!ustMode && isBracketed) verseObjects.push({ type: 'text', text: '{' });
+
+      verseObjects.push(wordObj);
+
+      if (!ustMode && isBracketed) verseObjects.push({ type: 'text', text: '}' });
+      if (ustMode && isGroupEnd) verseObjects.push({ type: 'text', text: '}' });
+
+      if (trailingPunct) verseObjects.push({ type: 'text', text: trailingPunct });
+
+    } else {
+      // Aligned group: one or more English words sharing one alignment entry
+      const { align, wordIndices } = item;
+
+      // Build word objects for all words in the group
+      const childWordObjs = [];
+      for (let k = 0; k < wordIndices.length; k++) {
+        const i = wordIndices[k];
+        const rawWord = englishTextWordsRaw[i];
+
+        const occKey = englishTextOccKeys[i];
+        currentOccurrence[occKey] = (currentOccurrence[occKey] || 0) + 1;
+        const occurrence = currentOccurrence[occKey];
+        const occurrences = wordTotalOccurrences[occKey];
+
+        const strippedBrackets = rawWord.replace(/[{}]/g, '');
+        const punctMatch = strippedBrackets.match(/^(.*?)([.,;:!?]+)$/);
+        const cleanWord = punctMatch ? punctMatch[1] : strippedBrackets;
+        const trailingPunct = punctMatch ? punctMatch[2] : '';
+
+        childWordObjs.push({ wordObj: buildWordObject(cleanWord, occurrence, occurrences), trailingPunct, i });
+      }
+
+      // Bracket logic: determined by the first word of the group
+      const firstI = wordIndices[0];
+      const lastI = wordIndices[wordIndices.length - 1];
+      const isBracketed = bracketStatus[firstI];
+      const isGroupStart = isBracketed && (firstI === 0 || !bracketStatus[firstI - 1]);
+      const isGroupEnd = isBracketed && (lastI === englishTextWords.length - 1 || !bracketStatus[lastI + 1]);
+
+      // Separator before the group
+      if (!isFirstEmitted) {
+        verseObjects.push({ type: 'text', text: isBracketed ? ' ' : '\n' });
+      }
+      isFirstEmitted = false;
+
+      if (ustMode && isGroupStart) verseObjects.push({ type: 'text', text: '{' });
+      if (!ustMode && isBracketed) verseObjects.push({ type: 'text', text: '{' });
+
+      // Build children array: word objects with newline separators between them
+      // (within a milestone, words separated by newlines)
+      const children = [];
+      for (let k = 0; k < childWordObjs.length; k++) {
+        if (k > 0) children.push({ type: 'text', text: '\n' });
+        children.push(childWordObjs[k].wordObj);
+        // Trailing punctuation goes as a text node after the \w node, inside the milestone
+        if (childWordObjs[k].trailingPunct) {
+          children.push({ type: 'text', text: childWordObjs[k].trailingPunct });
+        }
+      }
+
+      // Get Hebrew metadata
+      const hebrewMeta = [];
+      for (const idx of align.hebrew_indices) {
         const hw = hebrewWords[idx] || mapping.hebrew_words[idx];
         if (hw) {
           hebrewMeta.push({ hw, idx });
         }
       }
-    }
 
-    // Add separator before (except first word)
-    // Bracketed words stay inline (space), others get newline
-    if (i > 0) {
-      verseObjects.push({ type: 'text', text: isBracketed ? ' ' : '\n' });
-    }
-
-    // UST mode: brackets go outside milestones, wrapping contiguous groups
-    // ULT mode: brackets go inside \w tags (per-word)
-    if (ustMode && isGroupStart) {
-      verseObjects.push({ type: 'text', text: '{' });
-    }
-    if (!ustMode && isBracketed) {
-      verseObjects.push({ type: 'text', text: '{' });
-    }
-
-    if (hebrewMeta.length === 0) {
-      // No alignment - just add the word
-      verseObjects.push(wordObj);
-    } else if (hebrewMeta.length === 1) {
-      // Single Hebrew word
-      const { hw, idx } = hebrewMeta[0];
-      const sourceWord = mapping.hebrew_words[idx]?.word || hw.word;
-      verseObjects.push(buildZalnMilestone(hw, sourceWord, [wordObj]));
-    } else {
-      // Multiple Hebrew words - nest the zaln milestones
-      let innermost = [wordObj];
-      for (let j = hebrewMeta.length - 1; j >= 0; j--) {
-        const { hw, idx } = hebrewMeta[j];
+      if (hebrewMeta.length === 0) {
+        // No Hebrew metadata (shouldn't happen for aligned group, but handle gracefully)
+        for (const { wordObj, trailingPunct } of childWordObjs) {
+          verseObjects.push(wordObj);
+          if (trailingPunct) verseObjects.push({ type: 'text', text: trailingPunct });
+        }
+      } else if (hebrewMeta.length === 1) {
+        // Single Hebrew word — all English children go inside one milestone
+        const { hw, idx } = hebrewMeta[0];
         const sourceWord = mapping.hebrew_words[idx]?.word || hw.word;
-        innermost = [buildZalnMilestone(hw, sourceWord, innermost)];
+        verseObjects.push(buildZalnMilestone(hw, sourceWord, children));
+      } else {
+        // Multiple Hebrew words — nest milestones, innermost holds the children
+        let innermost = children;
+        for (let j = hebrewMeta.length - 1; j >= 0; j--) {
+          const { hw, idx } = hebrewMeta[j];
+          const sourceWord = mapping.hebrew_words[idx]?.word || hw.word;
+          innermost = [buildZalnMilestone(hw, sourceWord, innermost)];
+        }
+        verseObjects.push(...innermost);
       }
-      verseObjects.push(...innermost);
-    }
 
-    if (!ustMode && isBracketed) {
-      verseObjects.push({ type: 'text', text: '}' });
-    }
-    if (ustMode && isGroupEnd) {
-      verseObjects.push({ type: 'text', text: '}' });
-    }
+      if (!ustMode && isBracketed) verseObjects.push({ type: 'text', text: '}' });
+      if (ustMode && isGroupEnd) verseObjects.push({ type: 'text', text: '}' });
 
-    // Add trailing punctuation OUTSIDE the \w block
-    if (trailingPunct) {
-      verseObjects.push({ type: 'text', text: trailingPunct });
+      // Trailing punctuation for the LAST word in the group is already inside children.
+      // Nothing extra needed here.
     }
   }
 
