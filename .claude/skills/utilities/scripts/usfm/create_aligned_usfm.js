@@ -260,7 +260,7 @@ function extractUsfmMarkers(ultContent, chapter, verse, hasDText = false) {
         .replace(/[{}\[\]]/g, '')          // Remove brackets
         .trim();
       const startWords = textAfterMarker.split(/\s+/).slice(0, 3).map(w =>
-        w.replace(/[.,;:!?'"]/g, '').toLowerCase()
+        w.replace(/[.,;:!?'"\u201C\u201D\u2018\u2019]/g, '').toLowerCase()
       );
       markers.push({ marker: lineMarkerMatch[1], position: -1, startWords });
     }
@@ -864,12 +864,12 @@ for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
       const alignedWords = [];
       for (let i = 1; i < lines.length; i++) {  // Start at 1 to skip verse line
         const line = lines[i];
-        if (!line.includes('\\zaln-s')) continue;
+        if (!line.includes('\\w ')) continue;
 
         const wordMatches = line.matchAll(/\\w\s+([^|]+)\|/g);
         for (const match of wordMatches) {
           alignedWords.push({
-            word: match[1].toLowerCase().replace(/[.,;:!?'"]/g, ''),
+            word: match[1].toLowerCase().replace(/[.,;:!?'"\u201C\u201D\u2018\u2019]/g, ''),
             lineIndex: i,
             matchOffset: match.index
           });
