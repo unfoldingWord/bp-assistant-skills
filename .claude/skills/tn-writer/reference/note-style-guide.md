@@ -101,7 +101,7 @@ When referring to the author or writer of a biblical text, use "the author" inst
 
 In the book of Psalms, refer to the chapter superscription for an author reference. If David, Asaph, etc. is mentioned as the author, use that name in notes in that psalm. If the psalm is anonymous, use "the psalmist."
 
-Assume traditional authorship of Biblical books.
+Assume traditional authorship of Biblical books. For example, Jeremiah is the author of Lamentations, and notes should refer to him accordingly.
 
 ## "Here" Rule
 Only start a note with "Here, " if it is immediately followed by a **bolded quote from the verse** that starts with a lowercase letter. For example: `Here, **admonish** means...` Do not use "Here" before author names, descriptions, or other non-quoted text. Do not do: `Here David is saying...` or `Here the author is speaking...`
