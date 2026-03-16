@@ -5,10 +5,11 @@ Identify exclamations - words or sentences that show strong feeling such as surp
 
 ## Definition
 An exclamation is an utterance that expresses strong emotion:
-- **Exclamation words** - "Oh," "Alas," "Behold," "Hush," "How"
+- **Exclamation words** - "Oh," "Alas," "Hush," "How"
 - **Exclamation sentences** - "What manner of stones!" "How unsearchable are his judgments!"
 - **Verbless exclamations** - "You worthless person!"
-- **Attention-getters** - "Behold," "See," "Listen"
+
+Note: "Behold" is almost always **figs-metaphor** (speaker says "look" but means "listen/pay attention"). See the "Behold" section below and figs-metaphor.md for the correct classification.
 
 ---
 
@@ -19,7 +20,7 @@ An exclamation is an utterance that expresses strong emotion:
 | Amazement/Wonder | "How unsearchable are his judgments!" | Rom 11:33 |
 | Fear/Distress | "Alas, O Lord Yahweh!" | Judges 6:22 |
 | Happiness formula | "The happiness of..." (ashrei) | Per Issues Resolved |
-| Attention-getter | "Behold!" | Various |
+| Attention-getter | "See!" (rare — most "behold" is figs-metaphor) | Various |
 | Urgency | "Hush!" | Zeph 1:7 |
 | Mock surprise | "Aha!" | Mark 15:29 |
 | Address | "O man" | Romans 2:1 |
@@ -76,14 +77,18 @@ Per Issues Resolved: "The happiness of..." is flagged as figs-exclamations when:
 | "Ah, Lord Yahweh!" | Neh 1:5, 1:11 |
 | "Oh, the depth of the riches!" | Rom 11:33 |
 
-### 3. "Behold" as Attention-Getter
-**Markers:** "Behold" or "See" at start, focuses audience, may express surprise
+### 3. "Behold" — Almost Always figs-metaphor, NOT figs-exclamations
+"Behold" introducing information (the vast majority of cases) is **figs-metaphor** — the speaker says "look" but means "listen/pay attention." Use the figs-metaphor behold template.
 
-| Example | Reference |
-|---------|-----------|
-| "Behold, I am sending my messenger" | Mark 1:2 |
-| "behold, Barak was pursuing Sisera" | Judges 4:22 |
-| "And behold" | Ruth 3:8 |
+Only classify "behold" as figs-exclamations when it expresses genuine surprise at something visually seen (very rare in biblical narrative).
+
+| Context | Correct Classification |
+|---------|----------------------|
+| "Behold, I am sending my messenger" | **figs-metaphor** |
+| "behold, Barak was pursuing Sisera" | **figs-metaphor** |
+| "And behold" (introducing info) | **figs-metaphor** |
+| "Behold me" (servant to master) | **writing-politeness** |
+| "Behold!" (genuine visual surprise) | figs-exclamations (rare) |
 
 ### 4. Verbless Exclamations
 **Markers:** No main verb, strong emotional content, often insults/praise
@@ -127,9 +132,9 @@ Per Issues Resolved: "The happiness of..." is flagged as figs-exclamations when:
 
 ## Recognition Process
 
-1. **Look for exclamation markers**: Oh, Alas, Ah, Behold, Hush, What, How; exclamation marks; verbless sentences with strong emotion
+1. **Look for exclamation markers**: Oh, Alas, Ah, Hush, What, How; exclamation marks; verbless sentences with strong emotion
 2. **Identify the emotion**: Fear/distress (Alas), Amazement (How, What), Joy (ashrei), Urgency (Hush), Mockery (Aha)
-3. **Check for special classifications**: "Behold" may be figs-metaphor, writing-politeness, or figs-idiom
+3. **"Behold" is figs-metaphor by default**: Only use figs-exclamations for "behold" if it expresses genuine visual surprise (very rare). All other "behold" cases go to figs-metaphor
 
 ---
 
