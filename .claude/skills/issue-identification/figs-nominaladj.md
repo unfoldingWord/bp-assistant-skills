@@ -41,6 +41,9 @@ A nominal adjective is an adjective used as a noun to refer to a class of people
 ### Apr 16, 2025 - Participles as adjectives vs. nouns
 > When the translation issue is a nominal adjective (figs-nominaladj), when a participle is being used as an adjective, we would not add the word "one(s)," e.g. Deuteronomy 16:19, "a bribe blinds the eyes of the wise," not "the wise ones." But when a participle is being used as a noun, we will add the word "one(s)," e.g. 1 Samuel 2:30, "For the ones honoring me, I will honor."
 
+### Mar 11, 2026 - Participles used as nouns do not get figs-nominaladj notes
+> We do not write figs-nominaladj notes to participles that are used as nouns. These appear in the ULT either in the English -er form (e.g. Psalm 94:4, "doers") or in the noun phrase "the one(s) —ing" (e.g. Psalm 103:18, "the ones keeping"). We do write figs-nominaladj notes to participles used as adjectives, to which the ULT does not add "ones." These are often passive participles (e.g. 2 Samuel 6:1, "the chosen").
+
 ### Dec 10, 2025 - "days of old" is NOT figs-nominaladj
 > Since "old" is an adjective, having the phrase "in days of old" or "from days of old" in the ULT involves using a nominalized adjective when the Hebrew actually has a noun. We agreed to use a noun to represent kedem in the ULT and say "in/from days of antiquity."
 
