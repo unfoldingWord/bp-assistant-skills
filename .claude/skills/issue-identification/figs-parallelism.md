@@ -78,6 +78,12 @@ Numerical intensification common in Hebrew poetry:
 
 8. **First instance in a psalm**: For the first parallelism identified in a psalm (or chapter), add `t: first instance` to the explanation. This routes the note writer to a template that introduces parallelism as a pattern and asks translators to establish a team-wide approach for the rest of the psalm. Only mark one occurrence per psalm as `t: first instance`.
 
+9. **One note per chapter**: Only the first parallelism in a chapter will receive a translation note. All other parallelism items are dropped before note writing to save cost — translators only need one example to establish their approach. The exception is parallelisms that are genuinely hard to understand or translate. Mark these with `t: exceptional` in the explanation to preserve them through filtering. Reserve this for cases like:
+   - Tricola where the three lines have different relationships to each other
+   - Parallelism where the synonymous meaning is not obvious without Hebrew knowledge
+   - Mixed structures where part is synonymous and part is synthetic
+   - Cases where the parallel phrasing could be misread as saying two different things
+
 ---
 
 ## NOT figs-parallelism

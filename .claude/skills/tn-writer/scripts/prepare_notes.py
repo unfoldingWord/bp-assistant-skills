@@ -696,24 +696,56 @@ def main():
         print(f"  Filtered {len(items) - len(tw_filtered)} items with tW articles", file=sys.stderr)
         items = tw_filtered
 
-    # Enforce single "first instance" parallelism note per chapter.
-    # Only the first figs-parallelism item keeps "t: first instance"; all later
-    # ones have that tag stripped so they use the shorter follow-up templates.
+    # Enforce single parallelism note per chapter.
+    # Keep only the first figs-parallelism item (the "first instance" note) and
+    # any marked "t: exceptional" (genuinely hard to translate). Drop all others
+    # to save note-writing cost -- translators only need one example to establish
+    # their team approach. Also drop companion notes (e.g. figs-ellipsis) from
+    # verses where parallelism was dropped, since they tend to come in pairs.
     first_parallelism_seen = False
-    demoted = 0
+    dropped_parallelism_verses = set()
+    kept_items = []
+    dropped_parallelism = 0
     for item in items:
         if item['sref'] == 'figs-parallelism':
+            is_exceptional = bool(re.search(r't:\s*exceptional\b', item['explanation'],
+                                            flags=re.IGNORECASE))
             if not first_parallelism_seen:
                 first_parallelism_seen = True
+                kept_items.append(item)
+            elif is_exceptional:
+                # Strip the exceptional tag before note writing (it was just a filter signal)
+                item['explanation'] = re.sub(r't:\s*exceptional\b', '', item['explanation'],
+                                             flags=re.IGNORECASE).strip()
+                kept_items.append(item)
             else:
-                new_expl = re.sub(r't:\s*first\s+instance\b', '', item['explanation'],
-                                  flags=re.IGNORECASE).strip()
-                if new_expl != item['explanation']:
-                    item['explanation'] = new_expl
-                    demoted += 1
-    if demoted:
-        print(f"  Demoted {demoted} parallelism item(s) from 'first instance' to follow-up",
+                dropped_parallelism += 1
+                dropped_parallelism_verses.add(item['ref'])
+        else:
+            kept_items.append(item)
+
+    # Second pass: drop companion notes from verses where parallelism was dropped.
+    # These are typically figs-ellipsis notes that only make sense alongside the
+    # parallelism note they were paired with.
+    companion_types = {'figs-ellipsis'}
+    dropped_companions = 0
+    if dropped_parallelism_verses:
+        final_items = []
+        for item in kept_items:
+            if (item['sref'] in companion_types
+                    and item['ref'] in dropped_parallelism_verses):
+                dropped_companions += 1
+            else:
+                final_items.append(item)
+        kept_items = final_items
+
+    if dropped_parallelism or dropped_companions:
+        print(f"  Parallelism filter: kept first instance"
+              f" + {sum(1 for i in kept_items if i['sref'] == 'figs-parallelism') - (1 if first_parallelism_seen else 0)} exceptional,"
+              f" dropped {dropped_parallelism} parallelism"
+              f" + {dropped_companions} companion note(s)",
               file=sys.stderr)
+    items = kept_items
 
     # Extract chapter from filename for output metadata
     basename = os.path.basename(args.input_tsv)
