@@ -613,31 +613,74 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
         childWordObjs.push({ wordObj: buildWordObject(cleanWord, occurrence, occurrences), trailingPunct, i });
       }
 
-      // Bracket logic: determined by the first word of the group
+      // Bracket logic: per-word awareness for ULT, group-level for UST
       const firstI = wordIndices[0];
       const lastI = wordIndices[wordIndices.length - 1];
-      const isBracketed = bracketStatus[firstI];
-      const isGroupStart = isBracketed && (firstI === 0 || !bracketStatus[firstI - 1]);
-      const isGroupEnd = isBracketed && (lastI === englishTextWords.length - 1 || !bracketStatus[lastI + 1]);
+      const firstWordBracketed = bracketStatus[firstI];
+      const anyBracketed = wordIndices.some(idx => bracketStatus[idx]);
+      // UST group-level bracket tracking (contiguous cross-group runs)
+      const isGroupStart = anyBracketed && (firstI === 0 || !bracketStatus[firstI - 1]);
+      const isGroupEnd = anyBracketed && (lastI === englishTextWords.length - 1 || !bracketStatus[lastI + 1]);
 
       // Separator before the group
       if (!isFirstEmitted) {
-        verseObjects.push({ type: 'text', text: isBracketed ? ' ' : '\n' });
+        verseObjects.push({ type: 'text', text: firstWordBracketed ? ' ' : '\n' });
       }
       isFirstEmitted = false;
 
       if (ustMode && isGroupStart) verseObjects.push({ type: 'text', text: '{' });
-      if (!ustMode && isBracketed) verseObjects.push({ type: 'text', text: '{' });
 
-      // Build children array: word objects with newline separators between them
-      // (within a milestone, words separated by newlines)
+      // Build children array with bracket handling
       const children = [];
-      for (let k = 0; k < childWordObjs.length; k++) {
-        if (k > 0) children.push({ type: 'text', text: '\n' });
-        children.push(childWordObjs[k].wordObj);
-        // Trailing punctuation goes as a text node after the \w node, inside the milestone
-        if (childWordObjs[k].trailingPunct) {
-          children.push({ type: 'text', text: childWordObjs[k].trailingPunct });
+
+      if (!ustMode) {
+        // ULT mode: per-word brackets inside the milestone children.
+        // If the first child is bracketed, emit { before the milestone (in verseObjects)
+        // so brackets appear as {zaln-s ... word} matching published ULT format.
+        const firstChildBracketed = bracketStatus[childWordObjs[0].i];
+        if (firstChildBracketed) {
+          verseObjects.push({ type: 'text', text: '{' });
+        }
+
+        let inBracketRun = firstChildBracketed;
+
+        for (let k = 0; k < childWordObjs.length; k++) {
+          const childBracketed = bracketStatus[childWordObjs[k].i];
+
+          if (k > 0) {
+            if (inBracketRun && !childBracketed) {
+              // Transition bracketed → non-bracketed: close bracket, then separator
+              children.push({ type: 'text', text: '}' });
+              inBracketRun = false;
+              children.push({ type: 'text', text: '\n' });
+            } else if (!inBracketRun && childBracketed) {
+              // Transition non-bracketed → bracketed: separator, then open bracket
+              children.push({ type: 'text', text: '\n' });
+              children.push({ type: 'text', text: '{' });
+              inBracketRun = true;
+            } else {
+              children.push({ type: 'text', text: '\n' });
+            }
+          }
+
+          children.push(childWordObjs[k].wordObj);
+          if (childWordObjs[k].trailingPunct) {
+            children.push({ type: 'text', text: childWordObjs[k].trailingPunct });
+          }
+        }
+
+        // Close bracket run if it extends to end of children
+        if (inBracketRun) {
+          children.push({ type: 'text', text: '}' });
+        }
+      } else {
+        // UST mode: standard children building (group-level brackets handled outside)
+        for (let k = 0; k < childWordObjs.length; k++) {
+          if (k > 0) children.push({ type: 'text', text: '\n' });
+          children.push(childWordObjs[k].wordObj);
+          if (childWordObjs[k].trailingPunct) {
+            children.push({ type: 'text', text: childWordObjs[k].trailingPunct });
+          }
         }
       }
 
@@ -651,10 +694,9 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
       }
 
       if (hebrewMeta.length === 0) {
-        // No Hebrew metadata (shouldn't happen for aligned group, but handle gracefully)
-        for (const { wordObj, trailingPunct } of childWordObjs) {
-          verseObjects.push(wordObj);
-          if (trailingPunct) verseObjects.push({ type: 'text', text: trailingPunct });
+        // No Hebrew metadata — use children array (has bracket nodes in ULT mode)
+        for (const child of children) {
+          verseObjects.push(child);
         }
       } else if (hebrewMeta.length === 1) {
         // Single Hebrew word — all English children go inside one milestone
@@ -672,7 +714,6 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
         verseObjects.push(...innermost);
       }
 
-      if (!ustMode && isBracketed) verseObjects.push({ type: 'text', text: '}' });
       if (ustMode && isGroupEnd) verseObjects.push({ type: 'text', text: '}' });
 
       // Trailing punctuation for the LAST word in the group is already inside children.
