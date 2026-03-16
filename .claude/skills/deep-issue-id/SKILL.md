@@ -95,7 +95,13 @@ Precedent evidence is positive-only. Finding published TN examples supports a cl
 
 Use `Task` to spawn sub-agents. When spawning two analysts in parallel, call
 Task twice in a single message so they run concurrently. Each sub-agent writes
-its output to a file; the orchestrator reads the files after the Task completes.
+its output to a file; the orchestrator reads the files after both tasks complete.
+
+**You must actively poll for completion.** After spawning tasks, immediately call
+`TaskGet` in a loop to check their status. Do NOT just say "I'll wait" — you must
+make a tool call on every turn or the session will end. Poll both task IDs with
+`TaskGet` until both show `completed` status, then read their output files and
+proceed to the next wave. Apply the same pattern for the Wave 3 challenger task.
 
 If `TeamCreate` and `Agent` are available (CLI mode), use them instead per
 `orchestration-conventions.md`. The wave structure is identical either way.
