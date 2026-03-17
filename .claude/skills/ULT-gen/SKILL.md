@@ -3,8 +3,16 @@ name: ULT-gen
 
 description: Transform Hebrew USFM into unfoldingWord Literal Text (ULT), preserving the form and structure of the original Hebrew. Use when asked to translate Hebrew to ULT, generate literal text, or create ULT for a chapter.
 
-allowed-tools: Read, Grep, Glob, Bash
+allowed-tools: Read, Grep, Glob, mcp__workspace-tools__*
 ---
+
+## MCP-First Execution
+
+Run this skill with workspace MCP tools in restricted environments. Prefer:
+- `mcp__workspace-tools__fetch_hebrew_bible`, `mcp__workspace-tools__fetch_ult`
+- `mcp__workspace-tools__build_strongs_index`
+- `mcp__workspace-tools__curly_quotes`
+Use `Read`/`Grep` for file inspection and avoid shell/python command snippets.
 
 ## 7-Step Workflow
 
@@ -12,13 +20,7 @@ allowed-tools: Read, Grep, Glob, Bash
 
 Read Hebrew USFM from `data/hebrew_bible/*.usfm`. Extract verse text from `\w` tags with morphology (lemma, strong, x-morph).
 
-For complex passages, use the alignment parser to see how Hebrew was previously translated:
-
-```bash
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
-  data/published_ult/34-NAM.usfm \
-  --chapter 1 --output-json /tmp/alignments.json
-```
+For complex passages, use MCP workspace tools to fetch and inspect prior published renderings, then read the relevant USFM/alignment artifacts with `Read`.
 
 Output shows Hebrew->English mappings:
 ```json
@@ -70,27 +72,15 @@ Apply rules in this order:
 
 **Do NOT guess vocabulary translations. You MUST run the lookup scripts below for every non-trivial word. Tokens are cheap, mistakes are expensive. If you skip lookups, the output will diverge from human ULT.**
 
-1. **First**: Check `data/issues_resolved.txt` for authoritative decisions
-   ```bash
-   grep -i "chesed\|חֶסֶד" data/issues_resolved.txt
-   ```
+1. **First**: Check `data/issues_resolved.txt` for authoritative decisions using `Grep`.
 
-2. **Second**: Check quick-ref decisions from prior ULT-gen runs
-   ```bash
-   grep "H4869" data/quick-ref/ult_decisions.csv
-   ```
+2. **Second**: Check quick-ref decisions from prior ULT-gen runs using `Grep` on `data/quick-ref/ult_decisions.csv`.
    If found, use the recorded rendering unless issues_resolved overrides it.
 
-3. **Third**: Look up the Strong's index for aggregated rendering data
-   ```bash
-   python3 .claude/skills/utilities/scripts/build_strongs_index.py --lookup H4869
-   ```
+3. **Third**: Look up the Strong's index for aggregated rendering data with `mcp__workspace-tools__build_strongs_index` (`lookup: "H4869"`).
    This returns all renderings with occurrence counts and sample refs from published ULT, without scanning 43MB of USFM. Use the dominant rendering unless context requires otherwise.
 
-4. **Fourth**: Check project glossary for editorial overrides
-   ```bash
-   grep -i "[term]" data/glossary/project_glossary.md
-   ```
+4. **Fourth**: Check project glossary for editorial overrides with `Grep` on `data/glossary/project_glossary.md`.
    Only add to project glossary when human review revealed a needed change from existing published patterns.
 
 5. **Fifth**: Check other glossaries in `data/glossary/`
@@ -110,11 +100,7 @@ Apply rules in this order:
    mkdir -p data/quick-ref && echo "Strong,Hebrew,Rendering,Book,Context,Notes,Date" > data/quick-ref/ult_decisions.csv
    ```
 
-**Fallback**: If the index doesn't have an entry (e.g., unpublished books), fall back to Proskomma or grep:
-   ```bash
-   node .claude/skills/utilities/scripts/proskomma/query_word.js H4869 --format table
-   grep -r "strong=\"H4869\"" data/published_ult/*.usfm | head -20
-   ```
+**Fallback**: If the index doesn't have an entry (e.g., unpublished books), search published files with `Grep` and inspect specific verses with `Read`.
 
 **Search multiple times if needed.** For any word that appears more than once in a chapter, verify consistency by checking 3-5 published occurrences before settling on a rendering.
 
@@ -377,12 +363,7 @@ Use three-letter book codes and two-digit chapter numbers (zero-padded).
 
 ### Step 8: Convert to Curly Quotes
 
-Run the curly quotes script to convert straight quotes to curly quotes:
-
-```bash
-python3 .claude/skills/utilities/scripts/curly_quotes.py \
-  output/AI-ULT/[BOOK]/[BOOK]-[CHAPTER].usfm --in-place
-```
+Run `mcp__workspace-tools__curly_quotes` with `inPlace: true` for `output/AI-ULT/[BOOK]/[BOOK]-[CHAPTER].usfm`.
 
 This converts:
 - Straight double quotes `"..."` to curly `"..."`

@@ -1,7 +1,7 @@
 ---
 name: editor-compare
 description: Compare editor-edited ULT/UST against AI output to identify systematic preferences. Feeds findings back into glossary and quick-ref. Use when asked to compare editor changes or learn from editing patterns.
-allowed-tools: Read, Grep, Glob, Bash, Write, Edit
+allowed-tools: Read, Grep, Glob, Write, Edit, mcp__workspace-tools__prepare_compare
 ---
 
 # Editor Compare
@@ -74,11 +74,10 @@ Before adding any finding, run a two-phase check:
 
 **Phase A -- Duplicate check** (existing memory):
 
-```bash
-grep -i "<Strong's number or Hebrew word>" data/glossary/project_glossary.md
-grep "<Strong's number>" data/quick-ref/ult_decisions.csv 2>/dev/null
-grep "<Strong's number>" data/quick-ref/ust_decisions.csv 2>/dev/null
-```
+Use `Read`/`Grep` tools to check:
+- `data/glossary/project_glossary.md`
+- `data/quick-ref/ult_decisions.csv`
+- `data/quick-ref/ust_decisions.csv`
 
 If the editor's preference already matches what's in memory, skip it -- the system is already calibrated. Only write genuinely new findings.
 
@@ -171,12 +170,7 @@ Wait for the editor to approve before proceeding.
 
 **For accepted items** -- write to memory using the logic below:
 
-Ensure the quick-ref directory exists and CSV files have headers:
-
-```python
-import os
-os.makedirs("data/quick-ref", exist_ok=True)
-```
+Ensure the quick-ref directory exists and CSV files have headers using workspace write/edit tools (not shell commands).
 
 If `data/quick-ref/ult_decisions.csv` doesn't exist, create it with header:
 ```
@@ -238,9 +232,7 @@ Use when comparing multiple chapters at once (e.g., "editor-compare PSA 81-84, 8
 
 Fetch the full-book USFM from Door43 master once per type. The Door43 file is per-book (e.g., `19-PSA.usfm` contains all 150 chapters), so one fetch covers all chapters.
 
-```bash
-python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> --type <ult|ust> --output /tmp/claude/editor_<type>.usfm
-```
+Use `mcp__workspace-tools__prepare_compare` directly per chapter/type. It can read editor USFM from default sources and optional `editorUsfm` input.
 
 Do this for each type being compared (ULT, UST, or both).
 
@@ -248,14 +240,7 @@ Do this for each type being compared (ULT, UST, or both).
 
 Parse the chapter spec (e.g., "81-84, 87, 120-130") into a flat list of chapter numbers.
 
-Run `prepare_compare.py` for each chapter in parallel, passing the pre-fetched file via `--editor-usfm`:
-
-```bash
-# Run all chapters in parallel (each as a separate subagent or background shell)
-python3 .claude/skills/editor-compare/scripts/prepare_compare.py <BOOK> <CH> --type <type> \
-    --editor-usfm /tmp/claude/editor_<type>.usfm \
-    --output /tmp/claude/compare_<type>_<CH>.json
-```
+Run `mcp__workspace-tools__prepare_compare` for each chapter in parallel (one tool call per chapter/type), writing output to `/tmp/claude/compare_<type>_<CH>.json`.
 
 For each chapter, after reading its comparison JSON:
 - Write a per-chapter report to `output/editor-compare/{BOOK}/{BOOK}-{CH:03d}-{type}.md`

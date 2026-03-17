@@ -7,6 +7,14 @@ description: Check AI-generated translation notes for quality issues including m
 
 Check AI-generated translation notes for quality issues before delivery. Runs mechanical checks plus a full semantic review.
 
+## MCP-First Execution
+
+In restricted runs, use workspace MCP tools instead of direct shell/python commands:
+- `mcp__workspace-tools__fix_trailing_newlines`
+- `mcp__workspace-tools__check_tn_quality`
+- `mcp__workspace-tools__assemble_notes`
+- `mcp__workspace-tools__curly_quotes`
+
 ## Prerequisites
 
 - Assembled TN TSV (from tn-writer Step 8-9)
@@ -35,23 +43,19 @@ If neither exists, report an error and exit.
 
 ### Step 0: Fix Trailing Newlines
 
-```bash
-python3 .claude/skills/tn-quality-check/scripts/fix_trailing_newlines.py <NOTES_TSV>
-```
+Use `mcp__workspace-tools__fix_trailing_newlines` with `file: <NOTES_TSV>`.
 
 Strips any literal `\n` from the end of Note cells in-place. Run this before any other checks.
 
 ### Step 1: Run Mechanical Checks
 
-```bash
-python3 .claude/skills/tn-quality-check/scripts/check_tn_quality.py \
-    <NOTES_TSV> \
-    --prepared-json /tmp/claude/prepared_notes.json \
-    --ult-usfm /tmp/claude/ult_plain.usfm \
-    --ust-usfm /tmp/claude/ust_plain.usfm \
-    --book <BOOK> \
-    --output /tmp/claude/tn_quality_findings.json
-```
+Use `mcp__workspace-tools__check_tn_quality` with:
+- `tsvPath`
+- `preparedJson`
+- `ultUsfm`
+- `ustUsfm`
+- `book`
+- `output: "/tmp/claude/tn_quality_findings.json"`
 
 Read the stderr output for a summary. Read `/tmp/claude/tn_quality_findings.json` for full details.
 
@@ -145,13 +149,7 @@ For each issue found in Steps 1-3, fix it directly in the source files. Do not j
 
 After any changes to `generated_notes.json` or `prepared_notes.json`, re-run assembly and post-processing:
 
-```bash
-python3 .claude/skills/tn-writer/scripts/assemble_notes.py \
-    /tmp/claude/prepared_notes.json \
-    /tmp/claude/generated_notes.json \
-    --output output/notes/<BOOK>/<BOOK>-<CH>.tsv
-python3 .claude/skills/utilities/scripts/curly_quotes.py output/notes/<BOOK>/<BOOK>-<CH>.tsv --in-place
-```
+Re-assemble with `mcp__workspace-tools__assemble_notes`, then run `mcp__workspace-tools__curly_quotes` (`inPlace: true`).
 
 Then re-run the mechanical check script to confirm no new errors were introduced. Repeat until clean.
 

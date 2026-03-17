@@ -3,8 +3,16 @@ name: UST-gen
 
 description: Transform T4T into unfoldingWord Simplified Text (UST), communicating the original meaning in natural English. Use when asked to create UST, generate simplified text, or transform T4T.
 
-allowed-tools: Read, Grep, Glob, Bash
+allowed-tools: Read, Grep, Glob, mcp__workspace-tools__*
 ---
+
+## MCP-First Execution
+
+In restricted runs, use workspace MCP tools instead of shell/python snippets:
+- `mcp__workspace-tools__fetch_t4t`, `mcp__workspace-tools__fetch_door43`
+- `mcp__workspace-tools__build_ust_index`
+- `mcp__workspace-tools__check_ust_passives`
+- `mcp__workspace-tools__curly_quotes`
 
 ## Important: T4T-Based Workflow
 
@@ -75,10 +83,7 @@ Hebrew poetry often says the same thing twice with different words (synonymous p
 
 Read the T4T from `data/t4t/*.usfm`. This is your starting point.
 
-```bash
-# Fetch T4T if not present
-python3 .claude/skills/utilities/scripts/fetch_t4t.py --books PSA 1KI
-```
+Use `mcp__workspace-tools__fetch_t4t` when T4T files are missing or stale.
 
 T4T uses special markers that serve two purposes:
 1. **Guide your UST rendering** - they identify translation issues in the text
@@ -132,10 +137,7 @@ Before generating UST, check for any pre-identified translation issues:
 
 Compare T4T to unfoldingWord standards. Flag areas that need adjustment:
 
-1. **Check Issues Resolved** for authoritative decisions
-   ```bash
-   grep -i "UST" data/issues_resolved.txt | grep -i "[term or topic]"
-   ```
+1. **Check Issues Resolved** for authoritative decisions using `Grep` on `data/issues_resolved.txt`.
 
 2. **Remove T4T notation markers** - [IDI], [DOU], [SYN], [RHQ], [EUP], [MTY]
 
@@ -188,16 +190,7 @@ T4T may use "the LORD" or other renderings. Update to:
 
 #### C. Check Vocabulary Against Issues Resolved
 
-```bash
-# Check for specific term decisions
-grep -i "UST" data/issues_resolved.txt | grep -i "[term]"
-
-# Check UST Strong's index for published precedent
-python3 .claude/skills/utilities/scripts/build_ust_index.py --lookup H2617
-
-# Check glossaries
-grep "[term]" data/glossary/hebrew_ot_glossary.csv
-```
+Use `Grep` for issues/glossary checks and `mcp__workspace-tools__build_ust_index` (`lookup`) for published precedent.
 
 When a vocabulary decision requires checking published precedent (UST index, glossaries, or issues_resolved), record it in `data/quick-ref/ust_decisions.csv` for future reference. Only record non-trivial decisions -- common words that map obviously don't need tracking.
 
@@ -368,23 +361,13 @@ Rules:
 
 ### Step 8.5: Check for Passive Voice
 
-Run the passive voice checker on the output file:
-
-```bash
-python3 .claude/skills/UST-gen/scripts/check_ust_passives.py \
-  output/AI-UST/[BOOK]/[BOOK]-[CHAPTER].usfm
-```
+Run `mcp__workspace-tools__check_ust_passives` on `output/AI-UST/[BOOK]/[BOOK]-[CHAPTER].usfm`.
 
 If passives are found (exit code 1), fix them before proceeding. The script prints each passive phrase with its verse reference to stderr.
 
 ### Step 8: Convert to Curly Quotes
 
-Run the curly quotes script to convert straight quotes to curly quotes:
-
-```bash
-python3 .claude/skills/utilities/scripts/curly_quotes.py \
-  output/AI-UST/[BOOK]/[BOOK]-[CHAPTER].usfm --in-place
-```
+Run `mcp__workspace-tools__curly_quotes` with `inPlace: true` to normalize quotes.
 
 This converts:
 - Straight double quotes `"..."` to curly `"..."`

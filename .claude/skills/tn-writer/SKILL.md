@@ -7,6 +7,18 @@ description: Generate translation notes from issue identification TSV. Uses prom
 
 Generate translation notes from issue identification output. A preparation script handles all deterministic work (template matching, language conversion, ID generation, prompt assembly), then Claude generates the note text.
 
+## MCP-First Execution
+
+When running in restricted mode, use workspace MCP tools instead of direct shell/python calls. Primary tools:
+- `mcp__workspace-tools__fetch_door43`
+- `mcp__workspace-tools__prepare_notes`
+- `mcp__workspace-tools__extract_alignment_data`
+- `mcp__workspace-tools__resolve_gl_quotes`
+- `mcp__workspace-tools__flag_narrow_quotes`
+- `mcp__workspace-tools__verify_at_fit`
+- `mcp__workspace-tools__assemble_notes`
+- `mcp__workspace-tools__curly_quotes`
+
 ## Prerequisites
 
 - Input TSV in `output/issues/` (from issue-identification)
@@ -17,25 +29,16 @@ Generate translation notes from issue identification output. A preparation scrip
 
 ### Step 1: Ensure ULT/UST USFM Files Exist
 
-The issue-identification agent usually leaves these at `/tmp/ult_plain.usfm` and `/tmp/ust_plain.usfm`. If they do not exist, fetch them:
-
-```bash
-python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> --output /tmp/claude/book_ult.usfm
-python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> --type ust --output /tmp/claude/book_ust.usfm
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js /tmp/claude/book_ult.usfm --plain-only > /tmp/claude/ult_plain.usfm
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js /tmp/claude/book_ust.usfm --plain-only > /tmp/claude/ust_plain.usfm
-```
+The issue-identification agent usually leaves these at `/tmp/ult_plain.usfm` and `/tmp/ust_plain.usfm`. If missing, fetch with `mcp__workspace-tools__fetch_door43` and prepare plain files with workspace tooling before continuing.
 
 ### Step 2a: Run the Preparation Script
 
-```bash
-python3 .claude/skills/tn-writer/scripts/prepare_notes.py \
-    output/issues/<BOOK>/<BOOK>-<CHAPTER>.tsv \
-    --ult-usfm /tmp/claude/ult_plain.usfm \
-    --ust-usfm /tmp/claude/ust_plain.usfm \
-    --aligned-usfm output/AI-ULT/<BOOK>/<BOOK>-<CHAPTER>-aligned.usfm \
-    --output /tmp/claude/prepared_notes.json
-```
+Use `mcp__workspace-tools__prepare_notes` with:
+- `inputTsv`
+- `ultUsfm`
+- `ustUsfm`
+- `alignedUsfm`
+- `output: "/tmp/claude/prepared_notes.json"`
 
 This produces a JSON file with fully-assembled prompts for each item, plus alignment data at `/tmp/claude/alignment_data.json`.
 
@@ -89,11 +92,7 @@ After filling all items, write the updated prepared JSON back to `/tmp/claude/pr
 
 After orig_quote is filled, run the reverse-lookup script to update gl_quote to the correct ULT English span:
 
-```bash
-python3 .claude/skills/tn-writer/scripts/resolve_gl_quotes.py \
-    /tmp/claude/prepared_notes.json \
-    /tmp/claude/alignment_data.json
-```
+Use `mcp__workspace-tools__resolve_gl_quotes` with `preparedJson` and `alignmentJson`.
 
 This uses the alignment data to find English words mapped to the Hebrew in orig_quote, then locates the contiguous span in the ULT verse (including `{supply}` words). Review the output for any warnings about unmatched items.
 
@@ -124,10 +123,7 @@ Investigate any items still missing `orig_quote`. Common causes:
 
 Run the narrow-quote flagger against the prepared JSON:
 
-```bash
-python3 .claude/skills/tn-writer/scripts/flag_narrow_quotes.py \
-    /tmp/claude/prepared_notes.json
-```
+Use `mcp__workspace-tools__flag_narrow_quotes` with `preparedJson: "/tmp/claude/prepared_notes.json"`.
 
 Review flagged items. These quotes are correct for focusing the note body on the issue, but may need wider phrase boundaries for AT fit later. Keep this list in mind during note generation -- write initial ATs that anticipate the surrounding phrase context.
 
@@ -199,11 +195,7 @@ Write this to `/tmp/claude/generated_notes.json`. Do NOT assemble the TSV yourse
 
 Run the verification script to see all substitutions:
 
-```bash
-python3 .claude/skills/tn-writer/scripts/verify_at_fit.py \
-    /tmp/claude/prepared_notes.json \
-    /tmp/claude/generated_notes.json
-```
+Use `mcp__workspace-tools__verify_at_fit` with `preparedJson` and `generatedJson`.
 
 Read the full stdout -- every substitution line is the review, not just the error summary at the end.
 
@@ -256,20 +248,13 @@ Also check:
 
 Run the assembly script to produce the final TSV. The script reads metadata from the prepared JSON and note text from the generated JSON, matching by ID. This prevents note/row misalignment.
 
-```bash
-python3 .claude/skills/tn-writer/scripts/assemble_notes.py \
-    /tmp/claude/prepared_notes.json \
-    /tmp/claude/generated_notes.json \
-    --output output/notes/<BOOK>/<BOOK>-<CHAPTER>.tsv
-```
+Use `mcp__workspace-tools__assemble_notes` with `preparedJson`, `generatedJson`, and output path.
 
 ### Step 9: Post-Process
 
 Run curly quote conversion on the output:
 
-```bash
-python3 .claude/skills/utilities/scripts/curly_quotes.py output/notes/<BOOK>/<BOOK>-<CHAPTER>.tsv --in-place
-```
+Use `mcp__workspace-tools__curly_quotes` with `input` set to the notes TSV and `inPlace: true`.
 
 ### Step 10: Final Review
 

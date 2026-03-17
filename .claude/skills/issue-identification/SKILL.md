@@ -1,8 +1,17 @@
 ---
 name: issue-identification
 description: Find translation issues in ULT/Hebrew/Greek texts. Covers 94 issue types across 7 categories. Use when asked to identify issues, find what needs notes, or analyze a passage for translation concerns.
-allowed-tools: Read, Grep, Glob, Bash
+allowed-tools: Read, Grep, Glob, mcp__workspace-tools__*
 ---
+
+## MCP-First Execution
+
+Prefer workspace MCP tools in restricted runs:
+- `mcp__workspace-tools__fetch_door43`
+- `mcp__workspace-tools__compare_ult_ust`
+- `mcp__workspace-tools__detect_abstract_nouns`
+- `mcp__workspace-tools__check_tw_headwords`
+- `mcp__workspace-tools__build_tn_index`
 
 # Issue Identification
 
@@ -44,13 +53,7 @@ There are two ways to use this skill:
 
 #### Step 1: Fetch/Locate USFM Text
 
-**Fetch mode (default)** - Get from unfoldingWord master:
-```bash
-# Fetch ULT
-python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> > /tmp/book_ult.usfm
-# Fetch UST (may not exist for all books - continue if fails)
-python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> --type ust > /tmp/book_ust.usfm 2>/dev/null || true
-```
+**Fetch mode (default)** - Use `mcp__workspace-tools__fetch_door43` for ULT and UST.
 
 **Local mode** - Use local files:
 ```bash
@@ -96,11 +99,7 @@ Incorporate these observations into your analysis — they should heighten your 
 #### Step 3: Compare ULT/UST (if UST available)
 Where UST diverges from ULT (beyond synonym/clarity changes), there may be a translation issue:
 
-```bash
-python3 .claude/skills/issue-identification/scripts/compare_ult_ust.py \
-  /tmp/ult_plain.usfm /tmp/ust_plain.usfm \
-  --chapter <N> --output /tmp/ult_ust_diff.tsv
-```
+Use `mcp__workspace-tools__compare_ult_ust` with `ultFile`, `ustFile`, and `chapter`.
 
 Output shows verses where UST made significant changes, with suggested issue types:
 | Pattern | Suggested Issue |
@@ -119,11 +118,7 @@ Skip this step if UST file doesn't exist.
 
 **Abstract nouns** -- run the detection script:
 
-```bash
-# Abstract nouns - evaluate each for note necessity
-python3 .claude/skills/issue-identification/scripts/detection/detect_abstract_nouns.py \
-  /tmp/alignments.json --format tsv >> /tmp/detected_issues.tsv
-```
+Use `mcp__workspace-tools__detect_abstract_nouns` (`alignmentJson`, `format: "tsv"`).
 
 **Passive voice** -- identify ALL passive constructions during your verse-by-verse analysis (no script needed). Read the detection instructions in `figs-activepassive.md` for the passive voice pattern (auxiliary "be" + past participle), stative adjective exclusions, and worked examples. Every passive construction needs a note.
 
@@ -133,11 +128,7 @@ Merge detected issues into final output.
 
 When you just have English text (no USFM, no alignments), use `--text` to run detection directly. This skips source language morphology checks but still finds abstract nouns. Passive voice is identified by Claude during analysis (see `figs-activepassive.md`).
 
-```bash
-# Abstract noun detection on plain English
-python3 .claude/skills/issue-identification/scripts/detection/detect_abstract_nouns.py \
-  --text "The righteousness of God brings salvation" --format tsv
-```
+Use `mcp__workspace-tools__detect_abstract_nouns` with `text` and `format: "tsv"` for quick plain-text checks.
 
 Output uses "text" as the reference since there's no verse structure. Source language fields (morph, lemma) will be empty.
 
@@ -145,16 +136,7 @@ Output uses "text" as the reference since there's no verse structure. Source lan
 
 **IMPORTANT**: Before flagging any name or unknown concept for translate-names or translate-unknown, check if it has a tW article. If a tW article exists, generally NO note is needed.
 
-```bash
-# Check a single term
-python3 .claude/skills/issue-identification/scripts/check_tw_headwords.py "Abimelech"
-
-# Check multiple terms at once
-python3 .claude/skills/issue-identification/scripts/check_tw_headwords.py "Yahweh" "bread" "Persia"
-
-# Check terms from stdin (for batch processing)
-echo -e "Jordan\nCyrus\nmyrrh" | python3 .claude/skills/issue-identification/scripts/check_tw_headwords.py --stdin
-```
+Use `mcp__workspace-tools__check_tw_headwords` with a `terms` array (single or multiple terms).
 
 The script returns JSON with `matches` (have tW articles) and `no_match` (may need notes):
 - **matches in "names" category**: NO translate-names note needed (tW covers it)
