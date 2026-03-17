@@ -32,19 +32,19 @@ and present it for escalation -- do not change the canonical file.
 ### Step 1: Run the comparison script
 
 Run once per type. If the user doesn't specify a type, run for both ult and ust (skip if AI output doesn't exist for that type).
+If the user requested verse scope (for example `1:1-6`), pass only the in-chapter verse segment (`1-6`) to the comparison step.
 
-```bash
-python3 .claude/skills/editor-compare/scripts/prepare_compare.py <BOOK> <CHAPTER> --type <ult|ust> \
-    --output /tmp/claude/compare_<type>.json
-```
+Use `mcp__workspace-tools__prepare_compare` (preferred in restricted environments):
+- Required: `book`, `chapter`, `type`
+- Optional verse filter: `verses` (for example `"1-6"` or `"1,3,5-7"`)
+- Output path: `output`
 
-If the user provides an editor-feedback file:
-```bash
-python3 .claude/skills/editor-compare/scripts/prepare_compare.py <BOOK> <CHAPTER> --type <ult|ust> \
-    --editor-file "<path>" --output /tmp/claude/compare_<type>.json
-```
+Example arguments:
+`{"book":"LAM","chapter":1,"type":"ult","verses":"1-6","output":"/tmp/claude/compare_ult.json"}`
 
-The script uses `parse_usfm.js` (AST-based parser) for plain text extraction. It handles both aligned USFM (with `\zaln` markers from Door43 master) and unaligned USFM (AI output) through the same code path.
+If the user provides an editor-feedback file, pass `editorUsfm` to `prepare_compare`.
+
+Comparison output includes normalized fields. Curly-brace and quote-mark-only differences are formatting noise and should not be treated as substantive editor preferences.
 
 ### Step 2: Read the comparison JSON
 
