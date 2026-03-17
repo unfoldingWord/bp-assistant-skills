@@ -8,12 +8,12 @@ description: Orchestrate ULT-gen, issue-id, and UST-gen as a multi-agent pipelin
 Coordinates ULT-gen, issue-id, and UST-gen as a persistent team for a chapter. All agents are teammates that can interact across waves -- the ULT agent stays alive to revise its own work and answer queries, and the UST agent can consult anyone when it starts in Wave 6.
 
 This skill orchestrates issue-identification agents. Shared orchestration
-patterns are in sibling reference files (read each at the relevant stage):
-- `orchestration-conventions.md` (start)
-- `analyst-domains.md` (Wave 2)
-- `challenger-protocol.md` (Wave 3)
-- `merge-procedure.md` (Wave 4a)
-- `gemini-review-wave.md` (Wave 7)
+patterns are in the issue-identification skill directory (read each at the relevant stage):
+- `.claude/skills/issue-identification/orchestration-conventions.md` (start)
+- `.claude/skills/issue-identification/analyst-domains.md` (Wave 2)
+- `.claude/skills/issue-identification/challenger-protocol.md` (Wave 3)
+- `.claude/skills/issue-identification/merge-procedure.md` (Wave 4a)
+- `.claude/skills/issue-identification/gemini-review-wave.md` (Wave 7)
 
 Analysts receive `.claude/agents/issue-identification.md` when spawned.
 
@@ -32,7 +32,7 @@ These three stages benefit from cross-checking:
 
 ## Team Setup
 
-Read `orchestration-conventions.md` for chapter padding, model assignments, and patience rules. Pipeline-specific: only send `shutdown_request` after Wave 6 output is written.
+Read `.claude/skills/issue-identification/orchestration-conventions.md` for chapter padding, model assignments, and patience rules. Pipeline-specific: only send `shutdown_request` after Wave 6 output is written.
 
 ```
 TeamCreate "pipeline-<BOOK>-<CHAPTER>"
@@ -42,30 +42,26 @@ Team name pattern: `pipeline-HAB-03`, `pipeline-PSA-119`, etc.
 
 ### Working Directory
 
-```bash
-TMP=tmp/pipeline-<BOOK>-<CHAPTER>
-mkdir -p $TMP
-```
+Use this path convention for intermediate files:
+
+`tmp/pipeline-<BOOK>-<CHAPTER>`
+
+Do not rely on shell commands in restricted environments. When a tool needs to write a file under `tmp/`, pass that target path and let the tool create parent directories.
 
 ### Fetch T4T for the Book
 
-```bash
-python3 .claude/skills/utilities/scripts/fetch_t4t.py --books <BOOK>
-```
+Use `mcp__workspace-tools__fetch_t4t` with `{"books":["<BOOK>"]}`.
 
-T4T is the base source for UST creation (Wave 6). All OT books are pre-fetched in `data/t4t/`, but run this to ensure the book is cached. The script skips if already cached.
+T4T is the base source for UST creation (Wave 6). All OT books are pre-fetched in `data/t4t/`, but run this to ensure the book is cached. The fetch tool skips if already cached.
 
 ### Build Published TN Index
 
-```bash
-python3 .claude/skills/utilities/scripts/build_tn_index.py
-```
+Use `mcp__workspace-tools__build_tn_index` with `{}`.
 
-This builds/refreshes the index (daily cache). Use `--lookup` and `--issue` for precedent lookups during analysis:
-```bash
-python3 .claude/skills/utilities/scripts/build_tn_index.py --issue figs-metaphor
-python3 .claude/skills/utilities/scripts/build_tn_index.py --lookup "tongue"
-```
+This builds/refreshes the index (daily cache). Use `lookup` and `issue` arguments for precedent lookups during analysis:
+
+- `mcp__workspace-tools__build_tn_index` with `{"issue":"figs-metaphor"}`
+- `mcp__workspace-tools__build_tn_index` with `{"lookup":"tongue"}`
 
 ## Teammate Lifetimes
 
@@ -105,11 +101,11 @@ UST is NOT generated here. UST needs the issue-id output to know what translatio
 
 ## Wave 2: Issue Identification
 
-Read `analyst-domains.md` for domain assignments and cross-reading protocol. Spawn both analysts with `subagent_type: "issue-identification"`, `model: "opus"`, and `team_name` set.
+Read `.claude/skills/issue-identification/analyst-domains.md` for domain assignments and cross-reading protocol. Spawn both analysts with `subagent_type: "issue-identification"`, `model: "opus"`, and `team_name` set.
 
 Each analyst reads:
 - ULT draft from Wave 1 (`output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`)
-- Published TN index (via `build_tn_index.py --lookup`/`--issue`)
+- Published TN index (via `mcp__workspace-tools__build_tn_index` with `lookup`/`issue`)
 
 Each writes their TSV to `$TMP/wave2_*.tsv`.
 
@@ -123,7 +119,7 @@ Wait for both analysts to send their "file written" messages. Do NOT proceed to 
 
 ## Wave 3: Challenge and Defend
 
-Read `challenger-protocol.md`. Spawn the challenger (`model: "sonnet"`, name: "challenger"). The Wave 2 analysts and ULT agent are all still alive.
+Read `.claude/skills/issue-identification/challenger-protocol.md`. Spawn the challenger (`model: "sonnet"`, name: "challenger"). The Wave 2 analysts and ULT agent are all still alive.
 
 Pipeline-specific additions:
 - The challenger also DMs `ult-gen` to ask about specific rendering decisions when relevant (e.g., "In v3 you rendered the construct chain as X -- was that a deliberate structural preservation?")
@@ -138,7 +134,7 @@ Output: `$TMP/wave3_challenges.tsv`
 
 ## Wave 4a: Merge
 
-Read `merge-procedure.md`. Orchestrator merges all findings. Writes `$TMP/merged_issues.tsv`.
+Read `.claude/skills/issue-identification/merge-procedure.md`. Orchestrator merges all findings. Writes `$TMP/merged_issues.tsv`.
 
 ## Wave 4b: ULT Revision
 
@@ -208,15 +204,10 @@ The UST agent:
 
 ## Wave 7: Gemini Review (optional, activation only)
 
-Read `gemini-review-wave.md`. Only run if `--gemini` is explicitly passed. Skip by default.
+Read `.claude/skills/issue-identification/gemini-review-wave.md`. Only run if `--gemini` is explicitly passed. Skip by default.
 
 Pipeline runs three stages: `ult`, `issues`, and `ust`.
-
-```bash
-python3 .claude/skills/utilities/scripts/gemini_review.py --stage ult --book <BOOK> --chapter <CHAPTER>
-python3 .claude/skills/utilities/scripts/gemini_review.py --stage issues --book <BOOK> --chapter <CHAPTER>
-python3 .claude/skills/utilities/scripts/gemini_review.py --stage ust --book <BOOK> --chapter <CHAPTER>
-```
+In restricted shell-less environments, keep Wave 7 disabled unless a dedicated workspace MCP tool is added for Gemini review.
 
 ## Cleanup
 
