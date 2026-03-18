@@ -313,7 +313,6 @@ Hebrew vocatives at clause end should stay there:
 \p
 \v [verse] [text]
 
-\ts\*
 \q1 [poetry line 1]
 \q2 [poetry line 2 - indented]
 
@@ -342,9 +341,6 @@ For tricola (three-part verses), use `\q1` + `\q2` + `\q2`:
 \q2 everyone who swears by him will exult,
 \q2 for the mouth of the speakers of lies will be shut.
 ```
-
-**Section breaks:**
-- `\ts\*` - chunk/section divider
 
 ### Step 7: Export to File
 

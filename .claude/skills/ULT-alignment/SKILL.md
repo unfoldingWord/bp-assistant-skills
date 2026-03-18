@@ -166,7 +166,6 @@ The script will:
 
 The script automatically detects and preserves inter-verse markers from the source ULT file, including:
 - `\qa <text>` (acrostic headings, e.g., `\qa Nun`)
-- `\ts\*` (text section breaks)
 - `\s1 <text>`, `\s2 <text>` (section headings)
 - `\b` (blank line markers)
 - `\d <text>` (superscriptions, when not using `d_text` for aligned output)
@@ -402,15 +401,15 @@ for v in $(seq 44 72); do
     --hebrew data/hebrew_bible/19-PSA.usfm \
     --mapping alignments/PSA-078-${vpad}.json \
     --ult output/AI-ULT/PSA/PSA-078-44-72.usfm \
-    --chapter 78 --verse $v 2>/dev/null | sed -n '/^\\[vqdsb]\|^\\ts/,/^$/p' >> output/AI-ULT/PSA/PSA-078-44-72-aligned.usfm
+    --chapter 78 --verse $v 2>/dev/null | sed -n '/^\\[vqdsb]/,/^$/p' >> output/AI-ULT/PSA/PSA-078-44-72-aligned.usfm
 done
 ```
 
 **Notes:**
-- Use `sed -n '/^\\[vqdsb]\|^\\ts/,/^$/p'` to capture verse line, inter-verse markers (`\qa`, `\ts\*`, `\d`, `\s1`, `\b`), and all alignment lines until blank (do NOT use `[vqdstb]` — the `t` matches `\toc` headers)
+- Use `sed -n '/^\\[vqdsb]/,/^$/p'` to capture verse line, inter-verse markers (`\qa`, `\d`, `\s1`, `\b`), and all alignment lines until blank (do NOT use `[vqdstb]` — the `t` matches `\toc` headers)
 - Do NOT use `grep "^\v"` - this only gets the first line and truncates alignments
 - Use zero-padded verse numbers in mapping filenames (e.g., `PSA-078-044.json`)
-- Inter-verse markers (`\qa`, `\ts\*`, `\s1`, `\b`, etc.) and aligned `\d` lines are inserted automatically by the script -- no manual insertion needed
+- Inter-verse markers (`\qa`, `\s1`, `\b`, etc.) and aligned `\d` lines are inserted automatically by the script -- no manual insertion needed
 
 ### Naming Convention
 

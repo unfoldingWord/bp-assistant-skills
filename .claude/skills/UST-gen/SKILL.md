@@ -310,7 +310,6 @@ Ensure proper USFM formatting:
 \p
 \v [verse] [text]
 
-\ts\*
 \q1 [poetry line 1]
 \q2 [poetry line 2 - indented]
 ```

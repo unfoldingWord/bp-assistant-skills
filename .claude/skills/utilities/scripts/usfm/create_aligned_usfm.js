@@ -128,9 +128,15 @@ if (ultFile) {
 }
 
 // Read inputs
-const hebrewContent = readFileSync(hebrewFile, 'utf8');
+let hebrewContent = readFileSync(hebrewFile, 'utf8');
+if (hebrewContent.startsWith('# Fetched:')) {
+  hebrewContent = hebrewContent.slice(hebrewContent.indexOf('\n') + 1);
+}
 const mappingData = JSON.parse(readFileSync(mappingFile, 'utf8'));
-const ultContent = ultFile ? readFileSync(ultFile, 'utf8') : null;
+let ultContent = ultFile ? readFileSync(ultFile, 'utf8') : null;
+if (ultContent && ultContent.startsWith('# Fetched:')) {
+  ultContent = ultContent.slice(ultContent.indexOf('\n') + 1);
+}
 
 // Parse Hebrew USFM
 const hebrewParsed = usfm.toJSON(hebrewContent);
@@ -141,7 +147,7 @@ const hebrewParsed = usfm.toJSON(hebrewContent);
  * [{marker: 'q1', position: 0, startWords: []},           // before \v on same line
  *  {marker: 'q2', position: -1, startWords: ['and', 'their']},  // mid-verse poetry
  *  {markerLine: '\\qa Nun', position: -2},                // inter-verse marker (own line)
- *  {markerLine: '\\ts\\*', position: -2}]                 // inter-verse marker (own line)
+ *  {markerLine: '\\s1 Section', position: -2}]             // inter-verse marker (own line)
  * position  0 = before verse marker on same line
  * position -1 = mid-verse (use startWords to match)
  * position -2 = own line before verse
@@ -196,12 +202,12 @@ function extractUsfmMarkers(ultContent, chapter, verse, hasDText = false) {
       const betweenLines = betweenRegion.split('\n');
       // Find where the previous verse's text content ends
       // Text content lines: \v lines, \q lines with text after, or plain text continuation
-      // Inter-verse markers: \qa, \ts\*, \s1, \s2, \b, \cl, \d, or blank lines
+      // Inter-verse markers: \qa, \s1, \s2, \b, \cl, \d, or blank lines
       let lastTextLine = 0;
       for (let i = 0; i < betweenLines.length; i++) {
         const trimmed = betweenLines[i].trim();
         if (!trimmed) continue;  // skip blank lines
-        const isInterVerseMarker = trimmed.match(/^\\(qa\s|ts\\\*|s[12]\s|d\s|d$|b\s*$|cl\s|p\s*$)/);
+        const isInterVerseMarker = trimmed.match(/^\\(qa\s|s[12]\s|d\s|d$|b\s*$|cl\s|p\s*$)/);
         if (!isInterVerseMarker) {
           lastTextLine = i;
         }
@@ -217,7 +223,7 @@ function extractUsfmMarkers(ultContent, chapter, verse, hasDText = false) {
   const interVerseLines = interVerseText.split('\n');
 
   // Match inter-verse markers
-  const interVerseMarkerPattern = /^(\\qa\s+.+|\\ts\\\*|\\s[12]\s+.+|\\b\s*$|\\cl\s+.+|\\d\s+.+|\\d\s*$|\\p\s*$)/;
+  const interVerseMarkerPattern = /^(\\qa\s+.+|\\s[12]\s+.+|\\b\s*$|\\cl\s+.+|\\d\s+.+|\\d\s*$|\\p\s*$)/;
   for (const line of interVerseLines) {
     const trimmed = line.trim();
     if (!trimmed) continue;
