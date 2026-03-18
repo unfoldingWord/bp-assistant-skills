@@ -149,6 +149,10 @@ The ULT agent:
 3. Writes revised ULT (draft 2) to `output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`
 4. Sends message to team-lead: "ULT revision complete"
 
+Two coherence patterns guide what to include in the revision instructions:
+1. ULT unnecessarily preserves Hebrew form (no named grammatical structure) → adjust ULT, drop the corresponding issue
+2. ULT incorrectly flattens a named Hebrew structure (construct chain, passive, etc.) → correct ULT to preserve it, keep the issue
+
 This is more natural than a separate agent applying changes -- the original translator revises their own work with specific feedback.
 
 Wait for the ULT agent's confirmation before proceeding.
@@ -275,45 +279,3 @@ Wave 7:   Gemini review (ult, issues, ust stages)
           v
 Cleanup:  shutdown_request all -> TeamDelete
 ```
-
-## Lessons Learned (PSA 61)
-
-- **Coverage vs accuracy**: Parallel independent analysis (wave 2) optimizes for coverage.
-  Adversarial review (wave 3) optimizes for accuracy. Differentiating the wave 2 agents
-  by domain and having them check each other gives both.
-- **Heart classification**: Without a challenger, a wrong skill file entry (heart = metaphor)
-  went unchallenged. The challenger agent cross-references authoritative lists.
-- **ULT/issue-id coherence**: Two failure modes:
-  1. ULT unnecessarily preserves Hebrew form -> adjust ULT, drop note (PSA 61:2 word order)
-  2. ULT incorrectly flattens Hebrew structure -> correct ULT, keep note (PSA 61:3 construct)
-  Wave 4b handles both by having the ULT agent revise its own work, and wave 5 verifies
-  the issues still hold.
-- **UST after issue-id**: UST generated in isolation can't model issue handling. Generating
-  it after issue-id means it can show translators what each figure/construction means in
-  plain language. With the team feature, UST can also ask the analysts directly when the
-  TSV leaves scope or classification ambiguous.
-- **Note ordering**: Within each verse, first-to-last by ULT position, longest-to-shortest
-  when phrases nest. Issue-id should output in this order; assemble_notes.py enforces it.
-- **Persistent agents**: The ULT agent revising its own work in Wave 4b produces better
-  results than a separate agent applying changes -- the original translator understands
-  its own rendering decisions and can make targeted fixes.
-
-## Lessons Learned (PSA 88)
-
-- **Skip Wave 5 when ULT unchanged**: If the challenger finds no ULT rendering issues
-  and Wave 4b produces no changes, Wave 5 verification is redundant -- analysts would
-  re-check against the same text they already analyzed. Skip directly to writing final
-  issues and launching Wave 6. This saves a full round of agent turns.
-- **4 analysts produce clean but overlapping work**: With 4 domain-specialist analysts
-  on an 18-verse psalm, the 94 raw issues contained 18 duplicates (same phrase, same
-  type across analysts) and only 1 misclassification. The challenger's main value was
-  deduplication rather than error correction. This supports making 2-analyst mode the
-  default -- the coverage/accuracy tradeoff favors fewer agents for typical chapters.
-- **ULT agent as verifier**: Even when Wave 5 was run redundantly, the ULT agent caught
-  2 valid drops (duplicate pronoun note, abstract noun subsumed by metaphor) and 1 valid
-  addition (figs-irony on "free among the dead"). The ULT translator's perspective on
-  its own rendering decisions adds unique verification value.
-- **Dark psalms with no resolution**: PSA 88 is unique in the Psalter -- pure lament with
-  no hope turn. The UST needs to preserve this tone rather than softening it. The issue
-  identification correctly captured the death/darkness imagery cluster without imposing
-  resolution that isn't in the text.
