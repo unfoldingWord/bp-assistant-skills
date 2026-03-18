@@ -861,6 +861,8 @@ let outputUsfm = usfm.toUSFM(outputJson);
 
 // Post-process to add USFM markers (poetry, inter-verse, aligned \d)
 // This is more reliable than trying to inject them into the JSON structure
+const verseLastMatchIdx = {};  // verseRef → last matched word index (for ordered matching)
+
 for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
   const [, verse] = verseRef.split(':');
 
@@ -917,10 +919,11 @@ for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
         }
       }
 
-      // Find where startWords sequence begins
+      // Find where startWords sequence begins (starting after last match for this verse)
+      const minIdx = verseLastMatchIdx[verseRef] || 0;
       let targetLineIndex = -1;
       let targetWordIdx = -1;
-      for (let i = 0; i <= alignedWords.length - markerObj.startWords.length; i++) {
+      for (let i = minIdx; i <= alignedWords.length - markerObj.startWords.length; i++) {
         let matches = true;
         for (let j = 0; j < markerObj.startWords.length; j++) {
           if (alignedWords[i + j].word !== markerObj.startWords[j]) {
@@ -936,6 +939,12 @@ for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
       }
 
       if (targetLineIndex > 0) {
+        // Update last match position for ordered matching within this verse
+        verseLastMatchIdx[verseRef] = targetWordIdx + markerObj.startWords.length;
+
+        // Skip if line already has a \q marker (e.g., from position-0 insertion)
+        if (lines[targetLineIndex].match(/^\\q[12]\s/)) continue;
+
         // Check if the target word shares its line with earlier words
         const targetOffset = alignedWords[targetWordIdx].matchOffset;
         let hasEarlierWords = false;
