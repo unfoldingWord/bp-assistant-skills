@@ -343,8 +343,19 @@ Both comparisons should show no differences. If there are differences, the align
 
 ## Conversion to Aligned USFM
 
-After creating the mapping JSON, run the conversion script:
+After creating the mapping JSON, convert it to aligned USFM using the conversion tool. This step is mandatory -- never write aligned USFM directly, as manual occurrence counting is error-prone.
 
+**Option A — MCP tool (preferred, works without Bash):**
+```
+mcp__workspace-tools__create_aligned_usfm({
+  hebrew: "data/hebrew_bible/01-GEN.usfm",
+  mapping: "tmp/alignments/GEN-01-001.json",
+  source: "output/AI-ULT/GEN/GEN-01.usfm",
+  chapter: 1, verse: 1
+})
+```
+
+**Option B — Bash (when available):**
 ```bash
 node .claude/skills/utilities/scripts/usfm/create_aligned_usfm.js \
   --hebrew data/hebrew_bible/01-GEN.usfm \

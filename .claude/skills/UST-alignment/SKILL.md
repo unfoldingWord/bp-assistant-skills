@@ -285,10 +285,22 @@ Write to scratchpad or output directory:
 
 ## Conversion to Aligned USFM
 
-After creating the mapping JSON, run the conversion script:
+After creating the mapping JSON, convert it to aligned USFM using the conversion tool. This step is mandatory -- never write aligned USFM directly, as manual occurrence counting is error-prone.
 
-> **Critical:** `--source` MUST point to the **UST file** (`output/AI-UST/BOOK/...`). Never pass the ULT file here. If you pass the ULT file, the output will silently contain ULT English text and look structurally valid — the error will not be obvious.
+> **Critical:** `source` MUST point to the **UST file** (`output/AI-UST/BOOK/...`). Never pass the ULT file here. If you pass the ULT file, the output will silently contain ULT English text and look structurally valid -- the error will not be obvious.
 
+**Option A -- MCP tool (preferred, works without Bash):**
+```
+mcp__workspace-tools__create_aligned_usfm({
+  hebrew: "data/hebrew_bible/19-PSA.usfm",
+  mapping: "tmp/alignments/PSA-001-001.json",
+  source: "output/AI-UST/PSA/PSA-001.usfm",
+  ust: true,
+  chapter: 1, verse: 1
+})
+```
+
+**Option B -- Bash (when available):**
 ```bash
 node .claude/skills/utilities/scripts/usfm/create_aligned_usfm.js \
   --hebrew data/hebrew_bible/19-PSA.usfm \
