@@ -365,11 +365,13 @@ output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-{START}-{END}-aligned.usfm  # partial chap
 
 ### Convert to Curly Quotes
 
-After creating the final aligned USFM:
+After creating the final aligned USFM, normalize quotes:
 
-```bash
-python3 .claude/skills/utilities/scripts/curly_quotes.py \
-  output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm --in-place
+```
+mcp__workspace-tools__curly_quotes({
+  input: "output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm",
+  inPlace: true
+})
 ```
 
 ## Verification

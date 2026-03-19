@@ -438,11 +438,13 @@ Use zero-padded chapter numbers: 3 digits for Psalms (150 chapters), 2 digits fo
 
 ### Convert to Curly Quotes
 
-After creating the final aligned USFM, run the curly quotes script:
+After creating the final aligned USFM, normalize quotes:
 
-```bash
-python3 .claude/skills/utilities/scripts/curly_quotes.py \
-  output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm --in-place
+```
+mcp__workspace-tools__curly_quotes({
+  input: "output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm",
+  inPlace: true
+})
 ```
 
 This converts:
