@@ -10,14 +10,16 @@ Generate translation notes from issue identification output. A preparation scrip
 ## MCP-First Execution
 
 When running in restricted mode, use workspace MCP tools instead of direct shell/python calls. Primary tools:
-- `mcp__workspace-tools__fetch_door43`
-- `mcp__workspace-tools__prepare_notes`
+- `mcp__workspace-tools__prepare_and_validate` — **preferred**: runs prepare + alignment + gl_quote resolution + flagging + AT verification in one call (saves turns)
+- `mcp__workspace-tools__prepare_notes` — prepare only (use when you need to modify the prepared JSON between steps)
 - `mcp__workspace-tools__extract_alignment_data`
 - `mcp__workspace-tools__resolve_gl_quotes`
 - `mcp__workspace-tools__flag_narrow_quotes`
 - `mcp__workspace-tools__verify_at_fit`
 - `mcp__workspace-tools__assemble_notes`
 - `mcp__workspace-tools__curly_quotes`
+- `mcp__workspace-tools__fix_hebrew_quotes` — pass `output` param to write to file instead of returning inline
+- `mcp__workspace-tools__generate_ids`
 
 ## Prerequisites
 
