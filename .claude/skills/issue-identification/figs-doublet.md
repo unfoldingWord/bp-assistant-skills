@@ -46,6 +46,12 @@ From Issues Resolved: "In general, a doublet is two or more words or phrases wit
 | "false and deceptive" = lying | "young and old" = everyone |
 | Words mean the SAME thing | Words name DIFFERENT ends of spectrum |
 
+Also use figs-merism when two **different roles or components** together represent a whole category:
+- "priest and prophet" = all religious leaders
+- "king and priest" = all of society's leadership
+- "rampart and wall" = all defenses
+- "appointed festival and Sabbath" = all worship occasions
+
 ---
 
 ## Doublet Categories

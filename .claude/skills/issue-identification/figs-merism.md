@@ -80,6 +80,8 @@ These have been explicitly decided by the content team (Issues Resolved):
 - **"man and woman" / "any man or woman"** = all people, everyone
 - **"male servants and female servants"** = all servants
 - **"sons and daughters"** = all children, all family members
+- **"priest and prophet"** = all religious leaders (paired roles representing a whole category)
+- **"king and priest"** = all of a nation's leadership (paired roles representing a whole category)
 - **"living and dead"** = all people (whether alive or deceased)
 - **"Greeks and barbarians"** = all Gentiles
 - **"wise and foolish"** = all types of people
