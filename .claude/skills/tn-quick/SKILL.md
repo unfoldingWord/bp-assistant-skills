@@ -25,6 +25,11 @@ NOTE_TEXT
 
 Use a placeholder ID (abc1, abc2, etc., incrementing from what's already in the file). Leave Hebrew quote blank if not readily available.
 
+7. After appending, run the fix_quotes script to convert any straight quotes to curly quotes:
+   ```
+   python3 .claude/skills/tn-quick/fix_quotes.py output/scratch.txt
+   ```
+
 ## Style Rules
 
 ### Templates
