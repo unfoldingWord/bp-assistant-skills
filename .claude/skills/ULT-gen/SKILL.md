@@ -74,8 +74,8 @@ Apply rules in this order:
 
 1. **First**: Check `data/issues_resolved.txt` for authoritative decisions using `Grep`.
 
-2. **Second**: Check quick-ref decisions from prior ULT-gen runs using `Grep` on `data/quick-ref/ult_decisions.csv`.
-   If found, use the recorded rendering unless issues_resolved overrides it.
+2. **Second**: Check quick-ref decisions using `Grep` on `data/quick-ref/ult_decisions.csv`.
+   The file has a `Source` column: `human` entries (editor corrections, issues_resolved) are near-authoritative — treat them like issues_resolved. `AI` entries are precedent — use them unless context clearly warrants deviation.
 
 3. **Third**: Look up the Strong's index for aggregated rendering data with `mcp__workspace-tools__build_strongs_index` (`lookup: "H4869"`).
    This returns all renderings with occurrence counts and sample refs from published ULT, without scanning 43MB of USFM. Use the dominant rendering unless context requires otherwise.
@@ -90,15 +90,15 @@ Apply rules in this order:
    - `biblical_measurements.csv` - measurements and units
    - `biblical_phrases.csv` - common constructions
 
-6. **After resolving**: For words that required 2+ sources or had multiple possible renderings, append the decision to the quick-ref CSV so future runs resolve faster:
-   ```bash
-   # Only if data/quick-ref/ult_decisions.csv doesn't already have this decision
-   echo "H4869,misgav,stronghold,PSA,dominant rendering 85% of 20 occ,,$(date +%Y-%m-%d)" >> data/quick-ref/ult_decisions.csv
-   ```
-   Create the file with a header row on first use:
-   ```bash
-   mkdir -p data/quick-ref && echo "Strong,Hebrew,Rendering,Book,Context,Notes,Date" > data/quick-ref/ult_decisions.csv
-   ```
+6. **After resolving**: For words that required 2+ sources or had multiple possible renderings, record the decision with `mcp__workspace-tools__append_quickref` so future runs resolve faster:
+   - `file`: `ult_decisions`
+   - `strong`: the Strong's number (e.g. `H4869`)
+   - `hebrew`: the Hebrew word
+   - `rendering`: the English rendering chosen
+   - `context`: brief context (e.g. `dominant rendering 85% of 20 occ`)
+   - `notes`: rationale if non-obvious
+   - `source`: `AI` (default) or `human` if recording an editor decision
+   The tool deduplicates by Strong number and returns the existing entry if one is already recorded.
 
 **Fallback**: If the index doesn't have an entry (e.g., unpublished books), search published files with `Grep` and inspect specific verses with `Read`.
 
@@ -367,73 +367,28 @@ This converts:
 
 ---
 
-## Scripts Reference
+## Tools Reference
 
-### Parse aligned USFM to JSON
-```bash
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
-  data/published_ult/[BOOK].usfm \
-  --chapter [N] \
-  --output-json /tmp/alignments.json
-```
+All lookups use MCP tools or built-in `Read`/`Grep` (no Bash needed).
 
-### Strong's index lookup (fast, preferred for vocabulary)
-```bash
-# Build index if stale (daily check, ~10 seconds)
-python3 .claude/skills/utilities/scripts/build_strongs_index.py
-
-# Look up renderings for a Strong's number (instant from JSON)
-python3 .claude/skills/utilities/scripts/build_strongs_index.py --lookup H3068
-
-# Index statistics
-python3 .claude/skills/utilities/scripts/build_strongs_index.py --stats
-```
-
-### Vocabulary lookup (search aggressively)
-```bash
-# 1. Check authoritative decisions
-grep -i "[hebrew term]\|[english term]" data/issues_resolved.txt
-
-# 2. Check prior decisions from ULT-gen runs
-grep "H4869" data/quick-ref/ult_decisions.csv
-
-# 3. Strong's index (preferred over raw grep)
-python3 .claude/skills/utilities/scripts/build_strongs_index.py --lookup H4869
-
-# 4. Fallback: Proskomma for verse-level context
-node .claude/skills/utilities/scripts/proskomma/query_word.js H4869 --format table
-
-# 5. Fallback: grep aligned USFM for Strong's number
-grep -r "strong=\"H4869\"" data/published_ult/*.usfm | head -20
-
-# 6. Parse specific verse to see full alignment
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
-  data/published_ult/19-PSA.usfm --verse "PSA 18:2" --output-json /tmp/sample.json
-
-# 7. Search plain English text for phrases
-grep -r "stronghold" data/published_ult_english/*.usfm | head -10
-
-# 8. Check project glossary for editorial overrides
-grep -i "[term]" data/glossary/project_glossary.md
-
-# 9. Check standard glossaries
-grep "[term]" data/glossary/hebrew_ot_glossary.csv
-```
+| Task | Tool | Example |
+|------|------|---------|
+| Strong's lookup | `mcp__workspace-tools__build_strongs_index` | `lookup: "H4869"` |
+| Hebrew source | `mcp__workspace-tools__fetch_hebrew_bible` | `books: ["LAM"]` |
+| Published ULT | `mcp__workspace-tools__fetch_ult` | `books: ["LAM"]` |
+| Glossary files | `mcp__workspace-tools__fetch_glossary` | (fetches all 5 CSVs) |
+| Authoritative decisions | `Grep` on `data/issues_resolved.txt` | pattern: `"H4869"` |
+| Prior ULT decisions | `Grep` on `data/quick-ref/ult_decisions.csv` | pattern: `"H4869"` |
+| Project glossary | `Grep` on `data/glossary/project_glossary.md` | pattern: `"term"` |
+| Standard glossaries | `Grep` on `data/glossary/*.csv` | pattern: `"term"` |
+| Published ULT text | `Grep` on `data/published_ult_english/*.usfm` | pattern: `"stronghold"` |
+| Aligned USFM parse | `mcp__workspace-tools__create_aligned_usfm` | (for alignment data) |
+| Plain USFM extract | `mcp__workspace-tools__extract_ult_english` | (strips alignment markup) |
+| Curly quotes | `mcp__workspace-tools__curly_quotes` | (post-processing) |
+| Record decision | `mcp__workspace-tools__append_quickref` | `file: "ult_decisions", strong: "H4869"` |
 
 ### Verify consistency before output
-For key terms appearing multiple times, check 3-5 published occurrences:
-```bash
-# Find all verses with a term
-grep -r "strong=\"H2617\"" data/published_ult/*.usfm | wc -l  # count occurrences
-grep -r "strong=\"H2617\"" data/published_ult/*.usfm | shuf | head -5  # random sample
-```
-
-### Extract plain USFM from aligned
-```bash
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
-  data/published_ult/[BOOK].usfm \
-  --plain-only > /tmp/plain.usfm
-```
+For key terms appearing multiple times, use `Grep` on `data/published_ult/*.usfm` with the Strong's number pattern (e.g. `strong="H2617"`) to check 3-5 published occurrences.
 
 ---
 

@@ -1,31 +1,31 @@
-Strong,Hebrew,Rendering,Book,Context,Notes,Date
-H727,אֲרוֹן,sacred chest,ALL,"Ark of the Covenant context","Lowercase 'sacred chest'. Never 'ark'. See hebrew_ot_glossary.",2025-02-09
-H7294,rahab,Egypt,PSA 87:4,poetic name for Egypt - not Rahab H7343,,2026-02-12
-H4599,mayan,blessings (metaphorical),PSA 87:7,springs metaphor = source of blessings/life,,2026-02-12
-H2617a,חֶסֶד,faithful and kind,PSA 130:7,"adj. phrase per glossary: UST uses adjective like 'faithful' or 'kind'","Per hebrew_ot_glossary.csv UST_GLOSS guidance",2026-02-12
-H6304,פְּדוּת,rescue,PSA 130:7,"verbal form of abstract noun 'redemption'","Abstract noun -> verb per UST pattern",2026-02-12
-H5547,סְלִיחָה,forgive,PSA 130:4,"verbal form of abstract noun 'forgiveness'","Abstract noun -> verb per UST pattern",2026-02-12
-H3374a,יִרְאָה,revere,PSA,"128:1,4 130:4 fear-of-God concept","Editor: 'revere' not 'respect' or 'honor'. 3 chapters confirmed.",2026-02-17
-H5337,נָצַל,save,PSA,"130:7-8 save us / will save","Editor: 'save' not 'rescue'. 2 chapters confirmed.",2026-02-17
-H2617a,חֶסֶד,faithfully loves,PSA 130:7,"editor correction","UPDATED: editor changed 'faithful and kind' to 'faithfully loves us'. Adverb+verb form.",2026-02-17
-H6304,פְּדוּת,save from punishment,PSA 130:7-8,"editor correction","UPDATED: editor added 'from being punished for' -- salvation is from punishment not sins themselves.",2026-02-17
-,,"as if" framing,PSA,"88:7,8,17,18 figurative language","UST should frame metaphors/similes with 'as if' rather than stating as direct fact. Prefer 'as if' over 'as though'. Editor PSA 88.",2026-02-17
-,,perform miracles,PSA,"88:10,12 wonder/pele concepts","UST: 'perform miracles' not 'do amazing things' for פֶּלֶא contexts. Editor PSA 88.",2026-02-17
-,,avoid,PSA,"88:8,18 friends distancing","UST: 'avoid' not 'stay away from'. More concise. Editor PSA 88.",2026-02-17
-,,"us" in prayer,PSA,"88:11 covenant faithfulness","UST: use 'us' not 'your people' in prayer context where psalmist includes self. Editor PSA 88.",2026-02-17
-,,turn away from,PSA,"88:14 hide face idiom","UST: 'turn away from' not 'refuse to pay attention to' for hiding face. Editor PSA 88.",2026-02-17
-H5459,סְגֻלָּה,his own special people,PSA 135:4,treasured possession - varied UST precedent; 'special people' fits Psalms context,,2026-02-17
-H1777,דִּין,defends,PSA 135:14,vindicate/judge context - 'defends' for positive sense toward his people,,2026-02-17
-H5162,נָחַם,shows mercy,PSA 135:14,hitpael: have compassion/relent - 'shows mercy' for divine compassion on servants,,2026-02-17
-H2617a,chesed,faithfully loves us forever,PSA 136,refrain x26; verbal per editor + PSA 118 precedent,,2026-02-17
-H7782,שׁוֹפָר,horn,PSA 150:3,"issues_resolved: shofar=horn in UST; reserve 'trumpet' for metal instrument",per issues_resolved,2026-02-18
-H8643,תְּרוּעָה,loud (adj. for cymbals),PSA 150:5,"abstract noun 'shouting' rendered as adj. 'loud'","construct chain: cymbals of shouting",2026-02-18
-H8451,תּוֹרָה,instruction,HAB 1:4,law/torah - issues_resolved: UST uses 'instruction' not 'law',,2026-02-19
-H3374,yir'ah,revere/revering,ISA,11:2-3 fear of Yahweh = deeply revere / revering Yahweh,,2026-03-06
-H3519,kavod,glorious,ISA,11:10 his resting place will be glory = the place where he lives will be glorious,,2026-03-06
-H2763,charam,destroy completely,ISA,11:15 devote to destruction = destroy completely (per special terms),,2026-03-06
-H7585,sheol,the place where dead people go,ISA,dominant UST rendering ~12%,,2026-03-09
-H7496,rephaim,spirits of dead leaders,ISA,matches published UST pattern,,2026-03-09
-H1966,helel,shining morning star,ISA,no published UST precedent; morning star widely understood,,2026-03-09
-H7090,qippod,hedgehogs,ISA,ZEP 2:14 uses 'owls' but hedgehog matches ULT,,2026-03-09
-H4062,madhebah,raging fury,ISA,hapax legomenon; meaning debated,,2026-03-09
+Strong,Hebrew,Rendering,Book,Context,Notes,Date,Source
+H727,אֲרוֹן,sacred chest,ALL,Ark of the Covenant context,Lowercase 'sacred chest'. Never 'ark'. See hebrew_ot_glossary.,2025-02-09,AI
+H7294,rahab,Egypt,ALL,poetic name for Egypt - not Rahab H7343,,2026-02-12,AI
+H4599,mayan,blessings (metaphorical),ALL,springs metaphor = source of blessings/life,,2026-02-12,AI
+H2617a,חֶסֶד,faithful and kind,ALL,adj. phrase per glossary: UST uses adjective like 'faithful' or 'kind',Per hebrew_ot_glossary.csv UST_GLOSS guidance,2026-02-12,AI
+H6304,פְּדוּת,rescue,ALL,verbal form of abstract noun 'redemption',Abstract noun -> verb per UST pattern,2026-02-12,AI
+H5547,סְלִיחָה,forgive,ALL,verbal form of abstract noun 'forgiveness',Abstract noun -> verb per UST pattern,2026-02-12,AI
+H3374a,יִרְאָה,revere,ALL,"128:1,4 130:4 fear-of-God concept",Editor: 'revere' not 'respect' or 'honor'. 3 chapters confirmed.,2026-02-17,human
+H5337,נָצַל,save,ALL,130:7-8 save us / will save,Editor: 'save' not 'rescue'. 2 chapters confirmed.,2026-02-17,human
+H2617a,חֶסֶד,faithfully loves,ALL,editor correction,UPDATED: editor changed 'faithful and kind' to 'faithfully loves us'. Adverb+verb form.,2026-02-17,human
+H6304,פְּדוּת,save from punishment,ALL,editor correction,UPDATED: editor added 'from being punished for' -- salvation is from punishment not sins themselves.,2026-02-17,human
+,,as if framing,ALL,"88:7,8,17,18 figurative language",UST should frame metaphors/similes with 'as if' rather than stating as direct fact. Prefer 'as if' over 'as though'. Editor PSA 88.,2026-02-17,human
+,,perform miracles,ALL,"88:10,12 wonder/pele concepts",UST: 'perform miracles' not 'do amazing things' for פֶּלֶא contexts. Editor PSA 88.,2026-02-17,human
+,,avoid,ALL,"88:8,18 friends distancing",UST: 'avoid' not 'stay away from'. More concise. Editor PSA 88.,2026-02-17,human
+,,us in prayer,ALL,88:11 covenant faithfulness,UST: use 'us' not 'your people' in prayer context where psalmist includes self. Editor PSA 88.,2026-02-17,human
+,,turn away from,ALL,88:14 hide face idiom,UST: 'turn away from' not 'refuse to pay attention to' for hiding face. Editor PSA 88.,2026-02-17,human
+H5459,סְגֻלָּה,his own special people,ALL,treasured possession - varied UST precedent; 'special people' fits Psalms context,,2026-02-17,AI
+H1777,דִּין,defends,ALL,vindicate/judge context - 'defends' for positive sense toward his people,,2026-02-17,AI
+H5162,נָחַם,shows mercy,ALL,hitpael: have compassion/relent - 'shows mercy' for divine compassion on servants,,2026-02-17,AI
+H2617a,chesed,faithfully loves us forever,ALL,refrain x26; verbal per editor + PSA 118 precedent,,2026-02-17,AI
+H7782,שׁוֹפָר,horn,ALL,issues_resolved: shofar=horn in UST; reserve 'trumpet' for metal instrument,per issues_resolved,2026-02-18,human
+H8643,תְּרוּעָה,loud (adj. for cymbals),ALL,abstract noun 'shouting' rendered as adj. 'loud',construct chain: cymbals of shouting,2026-02-18,AI
+H8451,תּוֹרָה,instruction,ALL,law/torah - issues_resolved: UST uses 'instruction' not 'law',,2026-02-19,AI
+H3374,yir'ah,revere/revering,ALL,11:2-3 fear of Yahweh = deeply revere / revering Yahweh,,2026-03-06,AI
+H3519,kavod,glorious,ALL,11:10 his resting place will be glory = the place where he lives will be glorious,,2026-03-06,AI
+H2763,charam,destroy completely,ALL,11:15 devote to destruction = destroy completely (per special terms),,2026-03-06,AI
+H7585,sheol,the place where dead people go,ALL,dominant UST rendering ~12%,,2026-03-09,AI
+H7496,rephaim,spirits of dead leaders,ALL,matches published UST pattern,,2026-03-09,AI
+H1966,helel,shining morning star,ALL,no published UST precedent; morning star widely understood,,2026-03-09,AI
+H7090,qippod,hedgehogs,ALL,ZEP 2:14 uses 'owls' but hedgehog matches ULT,,2026-03-09,AI
+H4062,madhebah,raging fury,ALL,hapax legomenon; meaning debated,,2026-03-09,AI

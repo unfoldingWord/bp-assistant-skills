@@ -1,266 +1,320 @@
-Strong,Hebrew,Rendering,Book,Context,Notes,Date
-H727,אֲרוֹן,Box,ALL,"Ark of the Covenant context","Capitalize 'Box'. Use 'Box of the Testimony' (Exodus) or 'Box of the Covenant' (Joshua+). Never 'ark'. See hebrew_ot_glossary.",2025-02-09
-H6041,עָנִי,poor,PSA,"69:29 poor and in pain","Form-based: adjective, not passive participle. Not 'afflicted'.",2025-02-10
-H6035,עָנָו,poor,PSA,"69:32 The poor will see","Form-based: adjective, not passive participle. Same as H6041.",2025-02-10
-H0954,בּוּשׁ,have shame,PSA,"69:6 may...not have shame; 70:2 have shame","Per issues_resolved Feb 18: focus on standing not feeling. Not 'be ashamed' or 'feel shame'.",2025-02-10
-H7941,שֵׁכָר,beer,PSA,"69:12 drinkers of beer","Not 'strong drink'. More specific.",2025-02-10
-H0639,אַף,nose,PSA,"69:24 burning of your nose","Preserve body-part idiom. Not 'anger'. Consistent with literal ULT philosophy.",2025-02-10
-H4229a,מָחָה,wiped,PSA,"69:28 wiped from the book","Not 'blotted out'. No additional preposition.",2025-02-10
-H7857,שָׁטַף,overflow,PSA,"69:2,15 a flood overflows me","Not 'sweep away'. Present tense preferred.",2025-02-10
-H7574,רֶתֶם,broom trees,PSA,120:4 coals of broom trees,2/3 published: juniper tree (1KI) vs broom trees (JOB). 'broom trees' is botanically accurate.,2026-02-10
-H7423a,רְמִיָּה,deceit,PSA,120:2-3 tongue of deceit,Dominant rendering 50% (2/4 occ). Also used in PSA 101:7 JOB 27:4.,2026-02-10
-H0190,אוֹיָה,Woe,PSA,120:5 Woe to me,Not in published ULT. Interjection of lament. Consistent with 'Woe' used elsewhere (ZEP 2:5 3:1).,2026-02-10
-H7600,שַׁאֲנָן,the ones at ease,PSA,123:4 the scorn of the ones at ease,Only 2 occ in index: arrogance (2KI) and secure (JOB); at ease fits contemptuous context,2026-02-10
-H1349,גַּאֲיוֹן,the proud,PSA,123:4 the contempt of the proud,Hapax legomenon; from root ga'ah (to be exalted/proud),2026-02-10
-H0937,בּוּז,contempt,PSA,123:3-4 satisfied with contempt,Dominant rendering 43% of 7 occ,2026-02-10
-H3933,לַעַג,scorn,PSA,123:4 the scorn of the ones at ease,50% scorn in index (2 occ total),2026-02-10
-H2121,זֵידוֹן,raging,PSA,124:5 the raging waters,Not in published ULT; adjective from root zid (to boil/be insolent). For waters context 'raging' is literal.,2026-02-10
-H3884,לוּלֵא,Unless,PSA,124:1-2 Unless Yahweh who was for us,PSA dominant: Unless (27:13 94:17). Counterfactual conditional particle.,2026-02-10
-H6341a,פַּח,snare,PSA,124:7 from the snare of the trappers,Dominant rendering 43% (snare/snares). Matches PSA 91:3.,2026-02-10
-H3369,יָקֹשׁ,trappers,PSA,124:7 the snare of the trappers,Qal participle plural. PSA 91:3 uses 'trapper' (singular).,2026-02-10
-H2964,טֶרֶף,prey,PSA,124:6 prey to their teeth,22% prey in index. Animal metaphor context with teeth.,2026-02-10
-H7451c,רַע,hurt,PSA,"71:13,24 those who seek my hurt","Not 'harm'. Noun form for enemy intent.",2026-02-10
-H2167,זָמַר,make music,PSA,"71:22,23 with harp/lyre context","Preserves distinction from singing when parallel with vocal praise.",2026-02-10
-H5553,סֶלַע,rock,PSA,"71:3 you are my rock","Not 'cliff'. Editor PSA 71.",2026-02-10
-H8597,תִּפְאָרָה,honor,PSA,"71:8 all the day with your honor","Not 'splendor'. Editor PSA 71.",2026-02-10
-H2363,חִישׁ,hurry,PSA,"71:12 hurry to help me","Not 'hasten'. Editor PSA 71.",2026-02-10
-H0571,אֶמֶת,trustworthiness,PSA,"71:22 for your trustworthiness","Not 'faithfulness'. Editor PSA 71.",2026-02-10
-H1420,גְּדוּלָה,honor,PSA,"71:21 increase my honor","Not 'greatness'. Editor PSA 71.",2026-02-10
-H3766,כָּרַע,kneel,PSA,"72:9 May desert-dwellers kneel","Not 'bow down'. Distinct from H7812 shachah. Editor PSA 72.",2026-02-10
-H1369,גְּבוּרָה,mighty acts,PSA,"71:16 the mighty acts of Lord Yahweh","Not 'mighty deeds'. Also 'power' in 71:18. Editor PSA 71.",2026-02-10
-H2220,זְרוֹעַ,strength,PSA,"71:18 declaring your strength","Not 'arm' in this context. Editor PSA 71. (arm is more literal; editor chose semantic)",2026-02-10
-H6381,פָּלָא,wonderful,PSA,"71:17 your wonderful deeds","Not 'wondrous'. Niphal participle. Editor PSA 71.",2026-02-10
-H1897,הָגָה,talk about,PSA,"71:24 tongue will also talk about","Not 'meditate on'. Editor PSA 71.",2026-02-10
-H3039a,יְדִיד,beloved,PSA,84:1 beloved dwelling places,adjective form; "beloved" matches published PSA 60:5 "beloved ones",2026-02-10
-H4908,מִשְׁכָּן,dwelling places,PSA,84:1 your dwelling places,plural form; "dwelling place" 67% in published ULT; plural here,2026-02-10
-H3700,כָּסַף,longs,PSA,84:2 my soul longs,Niphal; "long for" per GEN 31:30 published ULT,2026-02-10
-H1866,דְּרוֹר,swallow,PSA,84:3 a swallow,bird species; "swallow" per PRO 26:2,2026-02-10
-H5605,סָפַף,stand at the threshold,PSA,84:10 to stand at the threshold,Hithpolel infinitive; threshold/doorway context,2026-02-10
-H1056,בָּכָא,Baca,PSA,84:6 Valley of Baca,proper noun; transliterate,2026-02-10
-H4175,מוֹרֶה,the early rain,PSA,84:6 the early rain covers,per JOL 2:23 published ULT,2026-02-10
-H7622,שְׁבוּת,prosperity,PSA,85:1 you restored the prosperity of Jacob,PSA 14:7 and 53:6 both use 'prosperity of' (28.6%),2026-02-11
-H5678,עֶבְרָה,wrath,PSA,85:3 you gathered all your wrath,'wrath' 15.4% dominant general rendering,2026-02-11
-H3708a,כַּעַס,vexation,PSA,85:4 break your vexation with us,PSA 10:14 uses 'vexation' (15.4%),2026-02-11
-H3690,כִּסְלָה,folly,PSA,85:8 let them not return to folly,Only 1 occ (JOB 4:6 'confidence'). Context here is moral failing.,2026-02-11
-H2623,חָסִיד,faithful ones,PSA,85:8 his faithful ones,Dominant Psalms usage: 'faithful ones' / 'faithful',2026-02-11
-H3248,yesudah,foundation,PSA,87:1 His foundation on the mountains,hapax-like; fem singular construct + 3ms suffix,2026-02-11
-H7294,rahav,Rahab,PSA,87:4 I will mention Rahab,proper noun; poetic name for Egypt,2026-02-11
-H2490b,chalal,pipe,PSA,87:7 those who pipe,only 1 published occ: 'were piping' 1KI 1:40,2026-02-11
-H0835,אֶשֶׁר,The happiness of,PSA,128:1-2 The happiness of everyone fearing Yahweh,Dominant Psalms pattern: PSA 1:1 2:12 94:12 112:1,2026-02-11
-H3411,יְרֵכָה,innermost parts,PSA,128:3 in the innermost parts of your house,Published: recesses (PSA 48:2 1SA 24:3) innermost parts (JON 1:5); both acceptable,2026-02-11
-H8363,שְׁתִל,shoots,PSA,128:3 like shoots of olive trees,Not in published index; hapax-like. Root sh-t-l = transplant/plant,2026-02-11
-H6887d,tsarar,afflicted,PSA,verb form Qal perfect - they have afflicted me,,2026-02-11
-H1354,gab,back,PSA,upon my back - body part in plowing metaphor,,2026-02-11
-H4618,maanah,furrows,PSA,agricultural furrows - Qere form,,2026-02-11
-H2683,chetsen,bosom,PSA,hapax - fold of garment for gathering sheaves,,2026-02-11
-H1396,gabar,is strong,PSA,over us context,confirmed from published PSA 117:2,2026-02-11
-H0523,ummim,peoples,PSA,all peoples,confirmed from published PSA 117:1,2026-02-11
-H7623b,shabach,extol,PSA,extol him,confirmed from published PSA 117:1,2026-02-11
-H0046,abir,Mighty One,PSA,construct: the Mighty One of Jacob,GEN 49:24 pattern,2026-02-12
-H1916,hadom,footstool,PSA,construct: the footstool of his feet,PSA 99:5 and PSA 110:1 patterns,2026-02-12
-H6718b,tsayid,provisions,PSA,her provisions,dominant rendering 54.5% of 11 occ,2026-02-12
-H3468,yesha,salvation,PSA,her priests I will clothe with salvation,dominant rendering across Psalms,2026-02-12
-H5145,nezer,crown,PSA,his crown will flourish,dominant rendering 57% of 7 occ,2026-02-12
-H2534,חֵמָה,wrath,PSA,"88:7 God's anger on psalmist","heat (21% general), rage (PSA 6:1), wrath (PSA 90:7). Psalmic lament context = wrath.",2026-02-16
-H5564,סָמַךְ,rests heavily,PSA,"88:7 wrath rests heavily on me","UPDATED: editor corrected 'leaned' to 'rests heavily'. Qal perfect.",2026-02-17
-H7496,רָפָא,Raphaites,PSA,"88:10 Or will the Raphaites arise?","Per issues_resolved: 'Raphaites' from Rapha, English pluralization convention.",2026-02-17
-H0353,אֱיָל,strength,PSA,"88:4 man without strength","Hapax in published ULT. Lexical: strength/help.",2026-02-16
-H6323,פּוּן,must despair,PSA,"88:15 I must despair","UPDATED: editor corrected 'numb' to 'must despair'. Hapax. Cohortative form.",2026-02-17
-H1669,דָּאַב,mourns,PSA,"88:9 My eye mourns from affliction","UPDATED: editor corrected 'wastes away' to 'mourns'.",2026-02-17
-H0530,emunah,faithfulness,PSA,your faithfulness / in my faithfulness,dominant rendering 25% - psalms use faithfulness consistently,2026-02-16
-H4905,maskil,maskil,PSA,A maskil of,dominant rendering 71% of 7 occ,2026-02-16
-H6918,qadosh,holy ones,PSA,assembly of the holy ones / council of the holy ones,psalms context for divine council,2026-02-16
-H6635b,tsaba,Armies,PSA,God of Armies,dominant rendering 57% of 60 occ,2026-02-16
-H7834,shachaq,skies,PSA,in the skies,16.7% but fits context of divine council setting,2026-02-16
-H4349,makon,foundation,PSA,foundation of your throne,12.5% - PSA 97:2 precedent,2026-02-16
-H8597,tipharah,splendor,PSA,the splendor of their strength,dominant rendering 21% of 14 occ,2026-02-16
-H2623,chasid,faithful ones,PSA,your faithful ones,13.3% - matches published pattern,2026-02-16
-H6119,aqeb,footsteps,PSA,the footsteps of your anointed one,contextual - not literal heels,2026-02-16
-H2465,cheled,life,PSA,how short my life is,25% - fits rhetorical question context,2026-02-16
-H2042,harar,mountains,PSA,87:1 mountains of holiness,split between mountains/hills in 5 occ; used mountains for parallel with Zion,,2026-02-12
-H4908,mishkan,dwellings,PSA,87:2 dwellings of Jacob,dominant 'Dwelling' (67%) but lowercase plural for non-Tabernacle contexts,,2026-02-12
-H4599,mayan,springs,PSA,87:7 All of my springs,springs dominant in PSA 104:10; fountain also valid,,2026-02-12
-H3513,nikbadot,Glorious things,PSA,87:3 Niphal participle fpa - substantive use,glorious (DEU 28:58) dominant for Niphal; honored also valid,2026-02-12
-H5608a,saphar,count,PSA,87:6 Yahweh will count in the registering,count/recount dominant; count for census context,2026-02-12
-H3559a,kun (Polel),establish,PSA,87:5 the Most High will establish her,Polel intensive of kun; establish for Zion context,2026-02-12
-H2142,zakar (Hiphil),mention,PSA,87:4 I will mention Rahab,Hiphil = cause to remember / mention; mention (GEN 40:14),2026-02-12
-H3789,katav (inf const),writing,PSA,87:6 in the writing of peoples,infinitive construct; literal 'writing' preferred over 'registering',2026-02-12
-H0157,ahav (Qal ptc),is loving,PSA,87:2 Yahweh is loving the gates,participle form preserved per skill rule; dominant 'loved/loves' for finite forms,,2026-02-12
-H1696,davar (Pual ptc),are being spoken,PSA,87:3 Glorious things are being spoken,Pual passive participle; passive form preserved,,2026-02-12
-H0559,amar (Niphal),it will be said,PSA,87:5 of Zion it will be said,Niphal passive impf; standard passive rendering,,2026-02-12
-H7891,shir (Qal ptc),the ones singing,PSA,87:7 the ones singing,participle form; 'singers' also valid but ptc rule applied,,2026-02-12
-H4720,מִקְדָּשׁ,sanctuary,PSA,"74:3,7 your sanctuary","Not 'holy place'. Editor PSA 74.",2026-02-12
-H8577,תַּנִּין,sea monsters,PSA,"74:13 heads of the sea monsters","Not 'sea creatures'. Editor PSA 74.",2026-02-12
-H1367,גְּבוּלָה,borders,PSA,"74:17 all the borders of the earth","Not 'boundaries'. Editor PSA 74.",2026-02-12
-H6924,קֶדֶם,days of antiquity,PSA,"74:2,12 in days of antiquity / from days of antiquity","Per issues_resolved Dec 10: Hebrew has noun, not adjective. Not 'of old' or 'ancient times'.",2026-02-12
-H5006,נָאַץ,blaspheme,PSA,"74:18 has blasphemed your name","Not 'despise'. Also 'treat with contempt' (74:10). Editor PSA 74.",2026-02-12
-H8449,תּוֹר,dove,PSA,"74:19 the life of your dove","Not 'turtledove'. Editor PSA 74.",2026-02-12
-H4615,מַעֲמָק,depths,PSA,130:1 from the depths,Not in published ULT; standard meaning. Plural form.,2026-02-12
-H5547,סְלִיחָה,forgiveness,PSA,130:4 with you is the forgiveness,100% rendering in published ULT (NEH 9:17).,2026-02-12
-H7183,קַשָּׁב,attentive,PSA,130:2 let your ears be attentive,100% rendering in published ULT (NEH 1:6 1:11).,2026-02-12
-H8469,תַּחֲנוּן,pleas,PSA,130:2 voice of my pleas,Dominant rendering 60% (PSA 28:2 28:6 116:1).,2026-02-12
-H6304,פְּדוּת,redemption,PSA,130:7 abundant with him is redemption,100% rendering in published ULT (EXO 8:23 PSA 111:9).,2026-02-12
-H1361,גָּבַהּ,high,PSA,"131:1 heart has not been high","Qal 'to be high'; PRO 16:5 'high of heart' same concept. Not 'haughty' (too interpretive).",2026-02-12
-H7737a,שָׁוָה,leveled,PSA,"131:2 Piel 'leveled my soul'","Piel = make level/calm; cf. PSA 16:8 'I have set'. Context: composing/calming.",2026-02-12
-H1826a,דָּמַם,stilled,PSA,"131:2 Polel 'stilled my soul'","Polel causative: made still/quiet. Cf. PSA 4:4 'be silent'. Published: various forms.",2026-02-12
-H3490,יָתוֹם,orphan,PSA,"82:3 judge the orphan","Use 'orphan' in Psalms; AI defaulted to 'fatherless' (dominant ULT rendering corpus-wide).",2026-02-16
-H0403,אָכֵן,But,PSA,"82:7 adversative use in contrast with v6","Editor changed 'Surely' to 'But'. Use 'But' when אָכֵן introduces contrast after a concession.",2026-02-16
-H5027,נָבַט,regard,PSA,"82:9 84:9 regard the face of your anointed","Editor changed 'look at' to 'regard' in both occurrences. Imperative habbet.",2026-02-17
-H3039a,יְדִיד,amiable,PSA,"84:1 amiable dwelling places","UPDATED: editor corrected AI 'beloved' to 'amiable'. Overrides 2026-02-10 entry.",2026-02-17
-H3411,יְרֵכָה,recesses,PSA,"128:3 in the recesses of your house","UPDATED: editor corrected AI 'innermost parts' to 'recesses'. Overrides 2026-02-11 entry.",2026-02-17
-H8469,תַּחֲנוּן,supplications,PSA,"130:2 voice of my supplications","UPDATED: editor corrected AI 'pleas' to 'supplications'. Overrides 2026-02-12 entry.",2026-02-17
-H5608a,סָפַר,recount,PSA,"87:6 Yahweh will recount in the writing","UPDATED: editor corrected AI 'count' to 'recount'. Overrides 2026-02-12 entry.",2026-02-17
-H4060a,מִדָּה,garments,PSA,133:2 mouth of his garments,pi middotav - collar/opening of garments - literal rendering preserves peh idiom,2026-02-17
-H5273a,נָעִים,pleasant,PSA,133:1 how pleasant,dominant rendering 20% of 10 occ; fits adjective in parallel with tov,,2026-02-17
-H2803,חָשַׁב,reckoned,PSA,"88:4 I am reckoned with the ones going down","Niphal. Editor corrected 'counted' to 'reckoned'.",2026-02-17
-H5060,נָגַע,come near,PSA,"88:3 my life has come near to Sheol","Hiphil. Editor corrected 'reached' to 'come near'.",2026-02-17
-H7368,רָחַק,distanced,PSA,"88:8,18 You have distanced my acquaintances","Hiphil causative as single English verb. Not 'made far'. 2 occurrences.",2026-02-17
-H4867,מִשְׁבָּר,waves,PSA,"88:7 all of your waves","Editor corrected 'breakers' to 'waves'.",2026-02-17
-H2740,חָרוֹן,indignations,PSA,"88:16 Your indignations pass over me","Plural matching Hebrew plural. Not 'burning anger'.",2026-02-17
-H5362b,נָקַף,close in upon,PSA,"88:17 they close in upon me together","Hiphil. Editor corrected 'encircled' to 'close in upon'.",2026-02-17
-H6923,קָדַם,precedes,PSA,"88:13 my prayer precedes you","Piel imperfect. Single verb preferred over 'comes before'.",2026-02-17
-H5387b,נָשִׂיא,clouds,PSA,135:7 meteorological context,PRO 25:14 100% "Clouds"; mist/vapors rising,,2026-02-17
-H1300b,בָּרָק,lightning bolts,PSA,135:7 plural,JOB 38:35 "lightning bolts"; PSA 97:4 "His lightning",,2026-02-17
-H6091,עָצָב,idols,PSA,135:15 nations' idols,PSA 115:4 "Their idols"; 60% dominant rendering,,2026-02-17
-H5459,סְגֻלָּה,possession,PSA,135:4 Israel as possession,60% dominant "possession" across 5 occ,,2026-02-17
-H1777,דִּין,vindicates,PSA,135:14 parallel DEU 32:36,DEU 32:36 pub ULT "vindicates his people",,2026-02-17
-H5162,נָחַם (Hitpael),has compassion on,PSA,135:14 parallel DEU 32:36,DEU 32:36 pub ULT "has compassion on his servants",,2026-02-17
-H0214,אוֹצָר,storehouses,PSA,135:7 wind from storehouses,JOB 38:22 "storehouses" 2 occ; DEU 28:12 "treasure",,2026-02-17
-H7554,רָקַע,spreading out,PSA,"136:6 spreading out the earth","Participle form. Only 3 occ in published; no dominant rendering for participle context.",2026-02-17
-H1504,גָּזַר,dividing,PSA,"136:13 dividing the Sea of Reeds","Participle form. Published has 'Divide' (1KI 3:25-26).",2026-02-17
-H5287,נָעַר,shook off,PSA,"136:15 shook off Pharaoh","Piel perfect. Matches EXO 14:27 published 'shook off'.",2026-02-17
-H8216,שֶׁפֶל,humiliation,PSA,"136:23 in our humiliation","Not in Strong's index. Only published match: EZR 9:5 'humiliation'.",2026-02-17
-H6561,פָּרַק,tore away,PSA,"136:24 tore us away from our adversaries","Wayyiqtol. Published has 'tearing apart' (PSA 7:2). Context = rescue.",2026-02-17
-H8629,תֵּקַע,blast,PSA,150:1 blast of a shofar,Only occ in OT; noun from root tq' (to thrust/blow),2026-02-18
-H4234,מָחוֹל,dance,PSA,150:4 tambourine and dance,No published ULT occ; standard lexical meaning,2026-02-18
-H6767d,צְלָצַל,cymbals,PSA,150:5 cymbals of sound,1 published occ (2SA 6:5 'with cymbals'),2026-02-18
-H8088a,שֵׁמַע,sound,PSA,150:5 cymbals of sound,Published as 'hearing' in JOB 42:5 and 'report' elsewhere; 'sound' fits instrument context,2026-02-18
-H1792,דָּכָא,shattered,PSA,89:10 You shattered Rahab,editor prefers "shattered" over "crushed" in cosmic battle context,2026-02-18
-H2491a,חָלָל,slain,PSA,89:10 like a slain one,primary sense = killed; not "pierced",2026-02-18
-H3988a,מָאַס,spurned,PSA,89:38 rejected and spurned,more precise than "despised" for divine rejection,2026-02-18
-H5010,נָאַר,voided,PSA,89:39 voided the covenant,legal sense covenant annulment; not "repudiated",2026-02-18
-H5674b,עָבַר (Hitpael),passed yourself over from,PSA,89:38 passed yourself over from your anointed,literal Hitpael reflexive; not "been angry with",2026-02-18
-H0539,אָמַן (Niphal ptc),attested / confirmed,PSA,"89:28 covenant confirmed; 89:37 attested witness",forensic/evidentiary sense; distinguish from adjective "faithful",2026-02-18
-H7723,שָׁוְא,emptiness,PSA,89:47 for what emptiness,more literal than "vanity",2026-02-18
-H1368,גִּבּוֹר,warrior,PSA,89:19 help on a warrior,specific military term; not generic "mighty one",2026-02-18
-H4048,מָגַר,cast,PSA,89:44 cast his throne to the ground,without redundant "down" when directional phrase follows,2026-02-18
-H5844a,עָטָה (Hiphil),covered over,PSA,89:45 covered him over with shame,Hiphil + al preposition warrants "over",2026-02-18
-H7692,shigyonot,shigyonoth,HAB,superscription musical term; transliterated,unique term only in HAB 3:1 and PSA 7:1,2026-02-18
-H2253,chebyon,the hiding of,HAB,4:4 rare word; no index entry; hiding/concealment,2026-02-18
-H4128,mud,measured (Hiphil),HAB,6 Hiphil wayyiqtol; no index entry; measure/survey earth,2026-02-18
-H5425a,nathar,spring apart (Hiphil),HAB,6 made nations spring/leap apart; no index entry,2026-02-18
-H6518,paraz,warriors (of open country),HAB,14 fighters/warriors; rare word; Qere variant,2026-02-18
-H2073,zebul,habitation,HAB,11 sun/moon stand in their habitation; only 2 occ in index,2026-02-18
-H1979,halikah,goings,HAB,6 His goings are everlasting; his ways/marches,2026-02-18
-H1760a,נִדְחֵי,scattered,PSA,147:2 scattered ones of Israel,those driven away/dispersed,2026-02-19
-H6094,עַצְּבוֹת,wounds,PSA,147:3 healing their wounds,physical injury not emotional sorrow,2026-02-19
-H5749a,עוֹדֵד,lifting up,PSA,147:6 Yahweh lifting up the poor,Polel participle,2026-02-19
-H0929,בְּהֵמָה,beast,PSA,147:9 to the beast its food,more register-appropriate in poetry than animal,2026-02-19
-H0565a,אִמְרָה,command,PSA,147:15 sends his command,use command for directive action; word for speech reference,2026-02-19
-H7140,קֶרַח,hail,PSA,147:17 casts his hail like crumbs,contextual: scattered/cast precipitation,2026-02-19
-H6595a,פַּת,crumbs,PSA,147:17 like crumbs,small pieces; parallels scattered imagery,2026-02-19
-H3176,יָחַל,hoping,PSA,147:11 those hoping in his covenant faithfulness,active expectation not passive waiting,2026-02-19
-H6250,עֶשְׁתֹּנָה,thoughts,PSA,146:4 his thoughts perish,hapax legomenon; only PSA 146:4,2026-02-20
-H2210,זָקַף,raising up,PSA,146:8 raising up the bowed down,hapax; Qal participle,2026-02-20
-H7664,שֵׂבֶר,hope,PSA,146:5 whose hope is on Yahweh,not in Strong's index; context: confident expectation,2026-02-20
-H7779,שׁוּף,crush,PSA,"139:11 darkness will crush me","Only 3 occ in published; Gen 3:15 'strike' Job 9:17 'break'. 'Crush' preserves the violence of the verb.",2026-02-20
-H1564,גֹּלֶם,unformed substance,PSA,"139:16 my unformed substance","Hapax legomenon; only PSA 139:16.",2026-02-20
-H8312,שַׂרְעַף,cares,PSA,"139:23 know my cares","Only 2 occ; PSA 94:19 'my cares'. Consistent.",2026-02-20
-H6383,פִּלְאִי,wonderful,PSA,"139:6 too wonderful for me","Only 2 occ; JDG 13:18 'is wonderful'. Consistent.",2026-02-20
-H7252,רֶבַע,lying down,PSA,"139:3 my lying down","Hapax-like; context = resting. Inf construct + suffix.",2026-02-20
-H1926,הָדָר,splendor,PSA,"145:5,12 the splendor of the glory","Not 'majesty'. Editor PSA 145. Consistent across both occurrences.",2026-02-23
-H7663b,שָׂבַר,wait for,PSA,"145:15 The eyes of all wait for you","Piel = hope/wait. Not 'look to'. Editor PSA 145.",2026-02-23
-H8416,תְּהִלָּה,psalm,PSA,"145:1 superscription A psalm of David","In superscriptions = 'psalm'. In body text = 'praise'. Editor PSA 145.",2026-02-23
-H3034,יָדָה,thank,PSA,"145:10 All your works will thank you","Hiphil yadah = usually 'thank'. 'Praise' suits some contexts (e.g. 'praise your name' avoids personification). Editors adjust by context.",2026-02-23
-H0571,אֶמֶת,truth,PSA,"145:18 call on him in truth","Situational: 'truth' in 145:18 vs 'trustworthiness' in 71:22. Context-dependent.",2026-02-23
-H7623b,שָׁבַח,proclaim,PSA,"145:4 Generation to generation will proclaim","Situational: 'proclaim' when declaring works (145:4) vs 'extol' when praising God directly (117:1).",2026-02-23
-H1369,גְּבוּרָה,power,PSA,"145:11 they will speak of your power","Singular = 'power'. Plural = 'mighty acts' (71:16). Context-dependent.",2026-02-23
-H5769,עוֹלָם,eternities,PSA,"145:13 kingdom of all of eternities","Plural עוֹלָמִים = 'eternities'. Singular = 'forever/ages'. Editor PSA 145.",2026-02-23
-H7356b,רַחַם,compassions,PSA,"145:9 his compassions are over all of his works","Plural = 'compassions'. Not singular 'compassion'. Editor PSA 145.",2026-02-23
-H2502a,חָלַץ,rescue,PSA,140:1 Rescue me Yahweh,Piel imperative. Dominant Psalms rendering: Rescue (PSA 6:4),2026-02-24
-H5919,עַכְשׁוּב,viper,PSA,140:3 venom of a viper,Hapax legomenon. Traditionally spider/asp. Serpent context = viper.,2026-02-24
-H2534,חֵמָה,venom,PSA,140:3 venom of a viper,Serpent context = venom (as DEU 32:33). Not wrath.,2026-02-24
-H4113,מַהֲמֹרָה,pits,PSA,140:10 into pits,No index entry. Deep pits/watery pits. Rendered as pits.,2026-02-24
-H3970,מַאֲוַי,desires,PSA,140:8 desires of the wicked,No index entry. From avah = desire.,2026-02-24
-H2162,זָמָם,plot,PSA,140:8 his plot,No index entry. Noun from zamam = scheme/plot.,2026-02-24
-H8108,shomrah,guard,PSA,141:3 a guard on my mouth,hapax legomenon - contextual guard/watch,2026-02-25
-H4516,manam,delicacies,PSA,141:4 their delicacies,hapax - dainty foods,2026-02-25
-H1986,halam,strike,PSA,141:5 righteous strike me,beat/strike - 4 occ total,2026-02-25
-H5106,nua,refuse,PSA,141:5 may my head not refuse,Hiphil = refuse/hinder - no published ULT data,2026-02-25
-H6398,palach,splitting,PSA,141:7 one splitting in earth,split/cleave/plow - 5 occ total,2026-02-25
-H4364b,makmar,nets,PSA,141:10 fall into his nets,rare word - nets/snares,2026-02-25
-H4498,מָנוֹס,refuge,PSA,142:4 Refuge has perished from me,2SA 22:3 'my refuge' 50% of 2 occ; JOB 11:20 'escape' 50%,2026-02-26
-H4525,מַסְגֵּר,prison,PSA,142:7 Bring out my soul from prison,2KI 24 'smith' is different sense; PSA context = confinement,2026-02-26
-H3803,כָּתַר,surround,PSA,142:7 The righteous will surround me,JDG 20:43 'surrounded'; PSA 22:12 'encircle me'; Hiphil = crown/surround,2026-02-26
-H5959,עַלְמָה,young woman,ISA,the young woman (with article) Gen 24:43 precedent,,2026-03-02
-H6005,עִמָּנוּאֵל,Immanuel,ISA,proper name God with us,,2026-03-02
-H2529a,חֶמְאָה,curds,ISA,dominant rendering across published ULT,,2026-03-02
-H0181,אוּד,firebrands,ISA,no published data; firebrand/torch,,2026-03-02
-H2750,חֳרִי,burning,ISA,burning of nose = fierce anger idiom,,2026-03-02
-H6226,עָשֵׁן,smoking,ISA,100% in published ULT (Exo 20:18),,2026-03-02
-H2070,זְבוּב,fly,ISA,no published data; standard meaning,,2026-03-02
-H1682,דְּבוֹרָה,bee,ISA,dominant rendering bees/bee,,2026-03-02
-H2183,זָנוּן,prostitutions,HOS,prostitutions of/her prostitutions,Matching HOS 1:2 pattern,2026-03-02
-H5005,נַאֲפוּף,adulteries,HOS,her adulteries,Hapax-like; adultery noun plural,2026-03-02
-H7753,שׂוּךְ,hedging,HOS,behold me hedging your way,JOB 1:10 hedge; participle form,2026-03-02
-H1443,גָּדַר,wall up,HOS,I will wall up her wall,JOB 19:8 walled up,2026-03-02
-H5040,נַבְלוּת,lewdness,HOS,I will uncover her lewdness,No published data; shameful exposure,2026-03-02
-H0866,אֶתְנָה,hire,HOS,a hire they are to me,No published data; prostitute wages,2026-03-02
-H2484,חֶלְיָה,jewelry,HOS,her ring and her jewelry,No published data; ornament,2026-03-02
-H8250,שִׁקּוּי,drink,HOS,my oil and my drink,PRO 3:8 refreshment; drink in provision context,2026-03-02
-H6601b,פָּתָה,alluring,HOS,I am alluring her,Piel participle; entice/allure in romantic restoration context,2026-03-02
-H0781,אָרַשׂ,betroth,HOS,I will betroth you to me,2SA 3:14 betrothed; dominant in marriage context,2026-03-02
-H4155,מוּעָף,gloom,ISA,9:1 no gloom for her in distress,hapax; darkness/gloom sense from context,2026-03-03
-H4164,מוּצַק,distress,ISA,9:1 who was in distress,constriction/distress; JOB 36:16 'constriction',2026-03-03
-H4951,מִשְׂרָה,dominion,ISA,9:6-7 the dominion is on his shoulder,no published ULT data; royal authority/rule,2026-03-03
-H5430,סְאוֹן,boot,ISA,9:5 every boot of the one marching,hapax; military boot,2026-03-03
-H5431,סָאַן,marching,ISA,9:5 the one marching with shaking,hapax; paired with se'on (boot),2026-03-03
-H3980,מַאֲכֹלֶת,fuel,ISA,9:5 and 9:19 fuel of fire,no published ULT data; food/fuel for fire,2026-03-03
-H6272,עָתַם,scorched,ISA,9:19 the land is scorched,hapax; burned/darkened,2026-03-03
-H0055,אָבַךְ,rolled upward,ISA,9:18 they rolled upward in a column,hapax; billowed/rolled upward,2026-03-03
-H3739a,כָּרָה,bought,HOS,3:2 bought her for myself,only 1 occ in published ULT (DEU 2:6 'purchase'); 'bought' fits narrative context,2026-03-03
-H0809,אֲשִׁישָׁה,raisin cakes,HOS,3:1 raisin cakes of grapes,3 occ in published: 'raisin cake' dominant rendering,2026-03-03
-H8655,תְּרָפִים,teraphim,HOS,3:4 without ephod and teraphim,transliterated per glossary; 'teraphim' dominant in published (4/12),2026-03-03
-H2563c,חֹמֶר,homer,HOS,3:2 a homer of barley,only 1 occ (LEV 27:16 'a homer of'); measurement term per biblical_measurements.csv,2026-03-03
-H3963,לֶתֶךְ,lethek,HOS,3:2 a lethek of barley,no published ULT occurrences; transliterated per biblical_measurements.csv,2026-03-03
-H0422,אָלָה,swearing,HOS,4:2 infinitive absolute - oath/curse violation,Decalogue-like sin catalog context,2026-03-06
-H3584,כָּחַשׁ,deceiving,HOS,4:2 Piel infinitive absolute,Lying/dealing falsely in sin catalog,2026-03-06
-H7379,רִיב,dispute,HOS,4:1 Yahweh's dispute with people,Legal dispute/controversy sense - 17% dominant,2026-03-06
-H0535,אָמַל,languishes,HOS,4:3 Pulal - passive languishing,Published: languishes (1SA 2:5),2026-03-06
-H2184,זְנוּת,prostitution,HOS,4:11 prostitution takes heart,Not in published index; standard noun from zanah,2026-03-06
-H6510,פָּרָה,cow,HOS,4:16 like a stubborn cow,Feminine noun; heifer/cow. Context: stubborn animal metaphor,2026-03-06
-H3839,לִבְנֶה,poplar,HOS,4:13 under oak and poplar,Standard botanical identification,2026-03-06
-H0424,אֵלָה,terebinth,HOS,4:13 under oak and poplar and terebinth,Standard botanical identification,2026-03-06
-H0437,אַלּוֹן,oak,HOS,4:13 under oak,Standard botanical identification,2026-03-06
-H4731,מַקֵּל,staff,HOS,4:12 and their staff declares,Published: staff (GEN 32:10),2026-03-06
-H2415,חֹטֵר,shoot,ISA,only 1 occ in published ULT (PRO 14:3 'rod'); 'shoot' fits ISA 11:1 context,,2026-03-06
-H1503,גֶּזַע,stump,ISA,100% 'stump' in published ULT (JOB 14:8),,2026-03-06
-H5342,נֵצֶר,branch,ISA,no published data; branch/shoot from roots,,2026-03-06
-H5251,נֵס,banner,ISA,published ULT uses 'banner' (EXO 17:15 PSA 20:5 SNG 2:4),,2026-03-06
-H4334,מִישׁוֹר,uprightness,ISA,ISA 11:4 context = fairness/equity; PSA 45:6 'justice' MAL 2:6 'uprightness',,2026-03-06
-H6035,עָנָו,humble,ISA,PSA 25:9 'the humble' dominant rendering,,2026-03-06
-H4926,מִשְׁמָע,hearing,ISA,no published data; literal 'hearing of his ears',,2026-03-06
-H6620,פֶּתֶן,cobra,ISA,published split: 'asps' 'vipers' 'adder'; 'cobra' for clarity,,2026-03-06
-H6848b,צֶפַע,viper,ISA,PRO 23:32 'viper',,2026-03-06
-H2352,חוּר,hole,ISA,no published data; hole/opening of snake,,2026-03-06
-H3975,מְאוּרָה,den,ISA,no published data; den/lair of serpent,,2026-03-06
-H1911,הָדָה,stretch out,ISA,hapax; reach/stretch toward,,2026-03-06
-H4916b,מִשְׁלוֹחַ,stretching out,ISA,EST 9:19/22 'sending'; literal 'stretching out of hand',,2026-03-06
-H4928,מִשְׁמַעַת,obedience,ISA,1SA 22:14 2SA 23:23 'bodyguard'; ISA 11:14 = obedience/submission,,2026-03-06
-H5868b,עֲיָם,fierceness,ISA,hapax; scorching/fierceness of wind,,2026-03-06
-H0599,אָנַף,were angry,ISA,12:1 you were angry with me,dominant rendering 'was angry' 20% of 15 occ,2026-03-06
-H6670a,צָהַל,cry aloud,ISA,12:6 cry aloud and shout for joy,only 1 published occ (cheered EST 8:15); cry aloud fits imperative context,2026-03-06
-H1348,גֵּאוּת,majesty,ISA,12:5 he has done majesty,PSA 93:1 majesty; PSA 17:10 pride; majesty fits ISA context,2026-03-06
-H7579,שָׁאַב,draw water,ISA,12:3 draw water with joy,dominant rendering across published ULT,2026-03-06
-H8342,שָׂשׂוֹן,joy,ISA,12:3 draw water with joy,dominant rendering 43% of 7 occ,2026-03-06
-H1966,הֵילֵל,shining one,ISA,hapax; shining one / day star; literal rendering of root,ISA 14:12,2026-03-09
-H4062,מַדְהֵבָה,raging,ISA,hapax; meaning debated (golden city or raging oppression); raging from context,ISA 14:4,2026-03-09
-H4783,מֻרְדָּף,persecution,ISA,hapax; passive of rdp (pursue); persecution/pursuit without restraint,ISA 14:6,2026-03-09
-H8314a,שָׂרָף,fiery serpent,ISA,DEU 8:15 'fiery'; fiery serpent in ISA 14:29 context,ISA 14:29,2026-03-09
-H4293,מַטְבֵּחַ,slaughter,ISA,no published data; slaughtering-place/slaughter,ISA 14:21,2026-03-09
-H7090,קִפּוֹד,hedgehog,ISA,ZEP 2:14 'screech owl'; likely hedgehog/porcupine per modern scholarship,ISA 14:23,2026-03-09
-H4292,מַטְאֲטֵא,broom,ISA,hapax; broom for sweeping,ISA 14:23,2026-03-09
-H2894,טוּא,sweep,ISA,hapax; to sweep away,ISA 14:23,2026-03-09
-H1998,הֶמְיָה,sound,ISA,hapax; murmuring/sound of music,ISA 14:11,2026-03-09
-H4374,מְכַסֶּה,covering,ISA,LEV 9:19 'that which covers'; covering,ISA 14:11,2026-03-09
-H4151,מוֹעָד,ranks,ISA,no published data; appointed places/ranks,ISA 14:31,2026-03-09
+Strong,Hebrew,Rendering,Book,Context,Notes,Date,Source
+H727,אֲרוֹן,Box,ALL,Ark of the Covenant context,Capitalize 'Box'. Use 'Box of the Testimony' (Exodus) or 'Box of the Covenant' (Joshua+). Never 'ark'. See hebrew_ot_glossary.,2025-02-09,AI
+H6041,עָנִי,poor,ALL,69:29 poor and in pain,"Form-based: adjective, not passive participle. Not 'afflicted'.",2025-02-10,AI
+H6035,עָנָו,poor,ALL,69:32 The poor will see,"Form-based: adjective, not passive participle. Same as H6041.",2025-02-10,AI
+H0954,בּוּשׁ,have shame,ALL,69:6 may...not have shame; 70:2 have shame,Per issues_resolved Feb 18: focus on standing not feeling. Not 'be ashamed' or 'feel shame'.,2025-02-10,human
+H7941,שֵׁכָר,beer,ALL,69:12 drinkers of beer,Not 'strong drink'. More specific.,2025-02-10,AI
+H0639,אַף,nose,ALL,body-part idiom for anger (nose/nostrils flare; orig. context PSA 69:24),Preserve body-part idiom. Not 'anger'. Consistent with literal ULT philosophy.,2025-02-10,AI
+H4229a,מָחָה,wiped,ALL,69:28 wiped from the book,Not 'blotted out'. No additional preposition.,2025-02-10,AI
+H7857,שָׁטַף,overflow,ALL,"69:2,15 a flood overflows me",Not 'sweep away'. Present tense preferred.,2025-02-10,AI
+H7574,רֶתֶם,broom trees,ALL,120:4 coals of broom trees,2/3 published: juniper tree (1KI) vs broom trees (JOB). 'broom trees' is botanically accurate.,2026-02-10,AI
+H7423a,רְמִיָּה,deceit,ALL,120:2-3 tongue of deceit,Dominant rendering 50% (2/4 occ). Also used in PSA 101:7 JOB 27:4.,2026-02-10,AI
+H0190,אוֹיָה,Woe,ALL,120:5 Woe to me,Not in published ULT. Interjection of lament. Consistent with 'Woe' used elsewhere (ZEP 2:5 3:1).,2026-02-10,AI
+H7600,שַׁאֲנָן,the ones at ease,ALL,123:4 the scorn of the ones at ease,Only 2 occ in index: arrogance (2KI) and secure (JOB); at ease fits contemptuous context,2026-02-10,AI
+H1349,גַּאֲיוֹן,the proud,ALL,123:4 the contempt of the proud,Hapax legomenon; from root ga'ah (to be exalted/proud),2026-02-10,AI
+H0937,בּוּז,contempt,ALL,123:3-4 satisfied with contempt,Dominant rendering 43% of 7 occ,2026-02-10,AI
+H3933,לַעַג,scorn,ALL,123:4 the scorn of the ones at ease,50% scorn in index (2 occ total),2026-02-10,AI
+H2121,זֵידוֹן,raging,ALL,124:5 the raging waters,Not in published ULT; adjective from root zid (to boil/be insolent). For waters context 'raging' is literal.,2026-02-10,AI
+H3884,לוּלֵא,Unless,ALL,124:1-2 Unless Yahweh who was for us,PSA dominant: Unless (27:13 94:17). Counterfactual conditional particle.,2026-02-10,AI
+H6341a,פַּח,snare,ALL,124:7 from the snare of the trappers,Dominant rendering 43% (snare/snares). Matches PSA 91:3.,2026-02-10,AI
+H3369,יָקֹשׁ,trappers,ALL,124:7 the snare of the trappers,Qal participle plural. PSA 91:3 uses 'trapper' (singular).,2026-02-10,AI
+H2964,טֶרֶף,prey,ALL,124:6 prey to their teeth,22% prey in index. Animal metaphor context with teeth.,2026-02-10,AI
+H7451c,רַע,hurt,ALL,"71:13,24 those who seek my hurt",Not 'harm'. Noun form for enemy intent.,2026-02-10,AI
+H2167,זָמַר,make music,ALL,"71:22,23 with harp/lyre context",Preserves distinction from singing when parallel with vocal praise.,2026-02-10,AI
+H5553,סֶלַע,rock,ALL,71:3 you are my rock,Not 'cliff'. Editor PSA 71.,2026-02-10,human
+H8597,תִּפְאָרָה,honor,ALL,71:8 all the day with your honor,Not 'splendor'. Editor PSA 71.,2026-02-10,human
+H2363,חִישׁ,hurry,ALL,71:12 hurry to help me,Not 'hasten'. Editor PSA 71.,2026-02-10,human
+H0571,אֶמֶת,trustworthiness,ALL,71:22 for your trustworthiness,Not 'faithfulness'. Editor PSA 71.,2026-02-10,human
+H1420,גְּדוּלָה,honor,ALL,71:21 increase my honor,Not 'greatness'. Editor PSA 71.,2026-02-10,human
+H3766,כָּרַע,kneel,ALL,72:9 May desert-dwellers kneel,Not 'bow down'. Distinct from H7812 shachah. Editor PSA 72.,2026-02-10,human
+H1369,גְּבוּרָה,mighty acts,ALL,71:16 the mighty acts of Lord Yahweh,Not 'mighty deeds'. Also 'power' in 71:18. Editor PSA 71.,2026-02-10,human
+H2220,זְרוֹעַ,strength,ALL,71:18 declaring your strength,Not 'arm' in this context. Editor PSA 71. (arm is more literal; editor chose semantic),2026-02-10,human
+H6381,פָּלָא,wonderful,ALL,71:17 your wonderful deeds,Not 'wondrous'. Niphal participle. Editor PSA 71.,2026-02-10,human
+H1897,הָגָה,talk about,ALL,71:24 tongue will also talk about,Not 'meditate on'. Editor PSA 71.,2026-02-10,human
+H3039a,יְדִיד,beloved,ALL,84:1 beloved dwelling places,"adjective form; ""beloved"" matches published PSA 60:5 ""beloved ones""",2026-02-10,AI
+H4908,מִשְׁכָּן,dwelling places,ALL,84:1 your dwelling places,"plural form; ""dwelling place"" 67% in published ULT; plural here",2026-02-10,AI
+H3700,כָּסַף,longs,ALL,84:2 my soul longs,"Niphal; ""long for"" per GEN 31:30 published ULT",2026-02-10,AI
+H1866,דְּרוֹר,swallow,ALL,84:3 a swallow,"bird species; ""swallow"" per PRO 26:2",2026-02-10,AI
+H5605,סָפַף,stand at the threshold,ALL,84:10 to stand at the threshold,Hithpolel infinitive; threshold/doorway context,2026-02-10,AI
+H1056,בָּכָא,Baca,ALL,84:6 Valley of Baca,proper noun; transliterate,2026-02-10,AI
+H4175,מוֹרֶה,the early rain,ALL,84:6 the early rain covers,per JOL 2:23 published ULT,2026-02-10,AI
+H7622,שְׁבוּת,prosperity,ALL,85:1 you restored the prosperity of Jacob,PSA 14:7 and 53:6 both use 'prosperity of' (28.6%),2026-02-11,AI
+H5678,עֶבְרָה,wrath,ALL,85:3 you gathered all your wrath,'wrath' 15.4% dominant general rendering,2026-02-11,AI
+H3708a,כַּעַס,vexation,ALL,85:4 break your vexation with us,PSA 10:14 uses 'vexation' (15.4%),2026-02-11,AI
+H3690,כִּסְלָה,folly,ALL,85:8 let them not return to folly,Only 1 occ (JOB 4:6 'confidence'). Context here is moral failing.,2026-02-11,AI
+H2623,חָסִיד,faithful ones,ALL,85:8 his faithful ones,Dominant Psalms usage: 'faithful ones' / 'faithful',2026-02-11,AI
+H3248,yesudah,foundation,ALL,87:1 His foundation on the mountains,hapax-like; fem singular construct + 3ms suffix,2026-02-11,AI
+H7294,rahav,Rahab,ALL,87:4 I will mention Rahab,proper noun; poetic name for Egypt,2026-02-11,AI
+H2490b,chalal,pipe,ALL,87:7 those who pipe,only 1 published occ: 'were piping' 1KI 1:40,2026-02-11,AI
+H0835,אֶשֶׁר,The happiness of,ALL,128:1-2 The happiness of everyone fearing Yahweh,Dominant Psalms pattern: PSA 1:1 2:12 94:12 112:1,2026-02-11,AI
+H3411,יְרֵכָה,innermost parts,ALL,128:3 in the innermost parts of your house,Published: recesses (PSA 48:2 1SA 24:3) innermost parts (JON 1:5); both acceptable,2026-02-11,AI
+H8363,שְׁתִל,shoots,ALL,128:3 like shoots of olive trees,Not in published index; hapax-like. Root sh-t-l = transplant/plant,2026-02-11,AI
+H6887d,tsarar,afflicted,ALL,verb form Qal perfect - they have afflicted me,,2026-02-11,AI
+H1354,gab,back,ALL,upon my back - body part in plowing metaphor,,2026-02-11,AI
+H4618,maanah,furrows,ALL,agricultural furrows - Qere form,,2026-02-11,AI
+H2683,chetsen,bosom,ALL,hapax - fold of garment for gathering sheaves,,2026-02-11,AI
+H1396,gabar,is strong,ALL,over us context,confirmed from published PSA 117:2,2026-02-11,AI
+H0523,ummim,peoples,ALL,all peoples,confirmed from published PSA 117:1,2026-02-11,AI
+H7623b,shabach,extol,ALL,extol him,confirmed from published PSA 117:1,2026-02-11,AI
+H0046,abir,Mighty One,ALL,construct: the Mighty One of Jacob,GEN 49:24 pattern,2026-02-12,AI
+H1916,hadom,footstool,ALL,construct: the footstool of his feet,PSA 99:5 and PSA 110:1 patterns,2026-02-12,AI
+H6718b,tsayid,provisions,ALL,her provisions,dominant rendering 54.5% of 11 occ,2026-02-12,AI
+H3468,yesha,salvation,ALL,her priests I will clothe with salvation,dominant rendering across Psalms,2026-02-12,AI
+H5145,nezer,crown,ALL,his crown will flourish,dominant rendering 57% of 7 occ,2026-02-12,AI
+H2534,חֵמָה,wrath,ALL,88:7 God's anger on psalmist,"heat (21% general), rage (PSA 6:1), wrath (PSA 90:7). Psalmic lament context = wrath.",2026-02-16,AI
+H5564,סָמַךְ,rests heavily,ALL,88:7 wrath rests heavily on me,UPDATED: editor corrected 'leaned' to 'rests heavily'. Qal perfect.,2026-02-17,human
+H7496,רָפָא,Raphaites,ALL,88:10 Or will the Raphaites arise?,"Per issues_resolved: 'Raphaites' from Rapha, English pluralization convention.",2026-02-17,human
+H0353,אֱיָל,strength,ALL,88:4 man without strength,Hapax in published ULT. Lexical: strength/help.,2026-02-16,AI
+H6323,פּוּן,must despair,ALL,88:15 I must despair,UPDATED: editor corrected 'numb' to 'must despair'. Hapax. Cohortative form.,2026-02-17,human
+H1669,דָּאַב,mourns,ALL,88:9 My eye mourns from affliction,UPDATED: editor corrected 'wastes away' to 'mourns'.,2026-02-17,human
+H0530,emunah,faithfulness,ALL,your faithfulness / in my faithfulness,dominant rendering 25% - psalms use faithfulness consistently,2026-02-16,AI
+H4905,maskil,maskil,ALL,A maskil of,dominant rendering 71% of 7 occ,2026-02-16,AI
+H6918,qadosh,holy ones,ALL,assembly of the holy ones / council of the holy ones,psalms context for divine council,2026-02-16,AI
+H6635b,tsaba,Armies,ALL,God of Armies,dominant rendering 57% of 60 occ,2026-02-16,AI
+H7834,shachaq,skies,ALL,in the skies,16.7% but fits context of divine council setting,2026-02-16,AI
+H4349,makon,foundation,ALL,foundation of your throne,12.5% - PSA 97:2 precedent,2026-02-16,AI
+H8597,tipharah,splendor,ALL,the splendor of their strength,dominant rendering 21% of 14 occ,2026-02-16,AI
+H2623,chasid,faithful ones,ALL,your faithful ones,13.3% - matches published pattern,2026-02-16,AI
+H6119,aqeb,footsteps,ALL,the footsteps of your anointed one,contextual - not literal heels,2026-02-16,AI
+H2465,cheled,life,ALL,how short my life is,25% - fits rhetorical question context,2026-02-16,AI
+H2042,harar,mountains,ALL,87:1 mountains of holiness,split between mountains/hills in 5 occ; used mountains for parallel with Zion,,2026-02-12,AI
+H4908,mishkan,dwellings,ALL,87:2 dwellings of Jacob,dominant 'Dwelling' (67%) but lowercase plural for non-Tabernacle contexts,,2026-02-12,AI
+H4599,mayan,springs,ALL,87:7 All of my springs,springs dominant in PSA 104:10; fountain also valid,,2026-02-12,AI
+H3513,nikbadot,Glorious things,ALL,87:3 Niphal participle fpa - substantive use,glorious (DEU 28:58) dominant for Niphal; honored also valid,2026-02-12,AI
+H5608a,saphar,count,ALL,87:6 Yahweh will count in the registering,count/recount dominant; count for census context,2026-02-12,AI
+H3559a,kun (Polel),establish,ALL,87:5 the Most High will establish her,Polel intensive of kun; establish for Zion context,2026-02-12,AI
+H2142,zakar (Hiphil),mention,ALL,87:4 I will mention Rahab,Hiphil = cause to remember / mention; mention (GEN 40:14),2026-02-12,AI
+H3789,katav (inf const),writing,ALL,87:6 in the writing of peoples,infinitive construct; literal 'writing' preferred over 'registering',2026-02-12,AI
+H0157,ahav (Qal ptc),is loving,ALL,87:2 Yahweh is loving the gates,participle form preserved per skill rule; dominant 'loved/loves' for finite forms,,2026-02-12,AI
+H1696,davar (Pual ptc),are being spoken,ALL,87:3 Glorious things are being spoken,Pual passive participle; passive form preserved,,2026-02-12,AI
+H0559,amar (Niphal),it will be said,ALL,87:5 of Zion it will be said,Niphal passive impf; standard passive rendering,,2026-02-12,AI
+H7891,shir (Qal ptc),the ones singing,ALL,87:7 the ones singing,participle form; 'singers' also valid but ptc rule applied,,2026-02-12,AI
+H4720,מִקְדָּשׁ,sanctuary,ALL,"74:3,7 your sanctuary",Not 'holy place'. Editor PSA 74.,2026-02-12,human
+H8577,תַּנִּין,sea monsters,ALL,74:13 heads of the sea monsters,Not 'sea creatures'. Editor PSA 74.,2026-02-12,human
+H1367,גְּבוּלָה,borders,ALL,74:17 all the borders of the earth,Not 'boundaries'. Editor PSA 74.,2026-02-12,human
+H6924,קֶדֶם,days of antiquity,ALL,"74:2,12 in days of antiquity / from days of antiquity","Per issues_resolved Dec 10: Hebrew has noun, not adjective. Not 'of old' or 'ancient times'.",2026-02-12,human
+H5006,נָאַץ,blaspheme,ALL,74:18 has blasphemed your name,Not 'despise'. Also 'treat with contempt' (74:10). Editor PSA 74.,2026-02-12,human
+H8449,תּוֹר,dove,ALL,74:19 the life of your dove,Not 'turtledove'. Editor PSA 74.,2026-02-12,human
+H4615,מַעֲמָק,depths,ALL,130:1 from the depths,Not in published ULT; standard meaning. Plural form.,2026-02-12,AI
+H5547,סְלִיחָה,forgiveness,ALL,130:4 with you is the forgiveness,100% rendering in published ULT (NEH 9:17).,2026-02-12,AI
+H7183,קַשָּׁב,attentive,ALL,130:2 let your ears be attentive,100% rendering in published ULT (NEH 1:6 1:11).,2026-02-12,AI
+H8469,תַּחֲנוּן,pleas,ALL,130:2 voice of my pleas,Dominant rendering 60% (PSA 28:2 28:6 116:1).,2026-02-12,AI
+H6304,פְּדוּת,redemption,ALL,130:7 abundant with him is redemption,100% rendering in published ULT (EXO 8:23 PSA 111:9).,2026-02-12,AI
+H1361,גָּבַהּ,high,ALL,131:1 heart has not been high,Qal 'to be high'; PRO 16:5 'high of heart' same concept. Not 'haughty' (too interpretive).,2026-02-12,AI
+H7737a,שָׁוָה,leveled,ALL,131:2 Piel 'leveled my soul',Piel = make level/calm; cf. PSA 16:8 'I have set'. Context: composing/calming.,2026-02-12,AI
+H1826a,דָּמַם,stilled,ALL,131:2 Polel 'stilled my soul',Polel causative: made still/quiet. Cf. PSA 4:4 'be silent'. Published: various forms.,2026-02-12,AI
+H3490,יָתוֹם,orphan,PSA,82:3 judge the orphan,Use 'orphan' in Psalms; AI defaulted to 'fatherless' (dominant ULT rendering corpus-wide).,2026-02-16,AI
+H0403,אָכֵן,But,ALL,82:7 adversative use in contrast with v6,Editor changed 'Surely' to 'But'. Use 'But' when אָכֵן introduces contrast after a concession.,2026-02-16,human
+H5027,נָבַט,regard,ALL,82:9 84:9 regard the face of your anointed,Editor changed 'look at' to 'regard' in both occurrences. Imperative habbet.,2026-02-17,human
+H3039a,יְדִיד,amiable,ALL,84:1 amiable dwelling places,UPDATED: editor corrected AI 'beloved' to 'amiable'. Overrides 2026-02-10 entry.,2026-02-17,human
+H3411,יְרֵכָה,recesses,ALL,128:3 in the recesses of your house,UPDATED: editor corrected AI 'innermost parts' to 'recesses'. Overrides 2026-02-11 entry.,2026-02-17,human
+H8469,תַּחֲנוּן,supplications,ALL,130:2 voice of my supplications,UPDATED: editor corrected AI 'pleas' to 'supplications'. Overrides 2026-02-12 entry.,2026-02-17,human
+H5608a,סָפַר,recount,ALL,87:6 Yahweh will recount in the writing,UPDATED: editor corrected AI 'count' to 'recount'. Overrides 2026-02-12 entry.,2026-02-17,human
+H4060a,מִדָּה,garments,ALL,133:2 mouth of his garments,pi middotav - collar/opening of garments - literal rendering preserves peh idiom,2026-02-17,AI
+H5273a,נָעִים,pleasant,ALL,133:1 how pleasant,dominant rendering 20% of 10 occ; fits adjective in parallel with tov,,2026-02-17,AI
+H2803,חָשַׁב,reckoned,ALL,88:4 I am reckoned with the ones going down,Niphal. Editor corrected 'counted' to 'reckoned'.,2026-02-17,human
+H5060,נָגַע,come near,ALL,88:3 my life has come near to Sheol,Hiphil. Editor corrected 'reached' to 'come near'.,2026-02-17,human
+H7368,רָחַק,distanced,ALL,"88:8,18 You have distanced my acquaintances",Hiphil causative as single English verb. Not 'made far'. 2 occurrences.,2026-02-17,AI
+H4867,מִשְׁבָּר,waves,ALL,88:7 all of your waves,Editor corrected 'breakers' to 'waves'.,2026-02-17,human
+H2740,חָרוֹן,indignations,ALL,88:16 Your indignations pass over me,Plural matching Hebrew plural. Not 'burning anger'.,2026-02-17,AI
+H5362b,נָקַף,close in upon,ALL,88:17 they close in upon me together,Hiphil. Editor corrected 'encircled' to 'close in upon'.,2026-02-17,human
+H6923,קָדַם,precedes,ALL,88:13 my prayer precedes you,Piel imperfect. Single verb preferred over 'comes before'.,2026-02-17,AI
+H5387b,נָשִׂיא,clouds,ALL,135:7 meteorological context,"PRO 25:14 100% ""Clouds""; mist/vapors rising",,2026-02-17,AI
+H1300b,בָּרָק,lightning bolts,ALL,135:7 plural,"JOB 38:35 ""lightning bolts""; PSA 97:4 ""His lightning""",,2026-02-17,AI
+H6091,עָצָב,idols,ALL,135:15 nations' idols,"PSA 115:4 ""Their idols""; 60% dominant rendering",,2026-02-17,AI
+H5459,סְגֻלָּה,possession,ALL,135:4 Israel as possession,"60% dominant ""possession"" across 5 occ",,2026-02-17,AI
+H1777,דִּין,vindicates,ALL,135:14 parallel DEU 32:36,"DEU 32:36 pub ULT ""vindicates his people""",,2026-02-17,AI
+H5162,נָחַם (Hitpael),has compassion on,ALL,135:14 parallel DEU 32:36,"DEU 32:36 pub ULT ""has compassion on his servants""",,2026-02-17,AI
+H0214,אוֹצָר,storehouses,ALL,135:7 wind from storehouses,"JOB 38:22 ""storehouses"" 2 occ; DEU 28:12 ""treasure""",,2026-02-17,AI
+H7554,רָקַע,spreading out,ALL,136:6 spreading out the earth,Participle form. Only 3 occ in published; no dominant rendering for participle context.,2026-02-17,AI
+H1504,גָּזַר,dividing,ALL,136:13 dividing the Sea of Reeds,Participle form. Published has 'Divide' (1KI 3:25-26).,2026-02-17,AI
+H5287,נָעַר,shook off,ALL,136:15 shook off Pharaoh,Piel perfect. Matches EXO 14:27 published 'shook off'.,2026-02-17,AI
+H8216,שֶׁפֶל,humiliation,ALL,136:23 in our humiliation,Not in Strong's index. Only published match: EZR 9:5 'humiliation'.,2026-02-17,AI
+H6561,פָּרַק,tore away,ALL,136:24 tore us away from our adversaries,Wayyiqtol. Published has 'tearing apart' (PSA 7:2). Context = rescue.,2026-02-17,AI
+H8629,תֵּקַע,blast,ALL,150:1 blast of a shofar,Only occ in OT; noun from root tq' (to thrust/blow),2026-02-18,AI
+H4234,מָחוֹל,dance,ALL,150:4 tambourine and dance,No published ULT occ; standard lexical meaning,2026-02-18,AI
+H6767d,צְלָצַל,cymbals,ALL,150:5 cymbals of sound,1 published occ (2SA 6:5 'with cymbals'),2026-02-18,AI
+H8088a,שֵׁמַע,sound,ALL,150:5 cymbals of sound,Published as 'hearing' in JOB 42:5 and 'report' elsewhere; 'sound' fits instrument context,2026-02-18,AI
+H1792,דָּכָא,shattered,ALL,89:10 You shattered Rahab,"editor prefers ""shattered"" over ""crushed"" in cosmic battle context",2026-02-18,human
+H2491a,חָלָל,slain,ALL,89:10 like a slain one,"primary sense = killed; not ""pierced""",2026-02-18,AI
+H3988a,מָאַס,spurned,ALL,89:38 rejected and spurned,"more precise than ""despised"" for divine rejection",2026-02-18,AI
+H5010,נָאַר,voided,ALL,89:39 voided the covenant,"legal sense covenant annulment; not ""repudiated""",2026-02-18,AI
+H5674b,עָבַר (Hitpael),passed yourself over from,ALL,89:38 passed yourself over from your anointed,"literal Hitpael reflexive; not ""been angry with""",2026-02-18,AI
+H0539,אָמַן (Niphal ptc),attested / confirmed,ALL,89:28 covenant confirmed; 89:37 attested witness,"forensic/evidentiary sense; distinguish from adjective ""faithful""",2026-02-18,AI
+H7723,שָׁוְא,emptiness,ALL,89:47 for what emptiness,"more literal than ""vanity""",2026-02-18,AI
+H1368,גִּבּוֹר,warrior,ALL,89:19 help on a warrior,"specific military term; not generic ""mighty one""",2026-02-18,AI
+H4048,מָגַר,cast,ALL,89:44 cast his throne to the ground,"without redundant ""down"" when directional phrase follows",2026-02-18,AI
+H5844a,עָטָה (Hiphil),covered over,ALL,89:45 covered him over with shame,"Hiphil + al preposition warrants ""over""",2026-02-18,AI
+H7692,shigyonot,shigyonoth,ALL,superscription musical term; transliterated,unique term only in HAB 3:1 and PSA 7:1,2026-02-18,AI
+H2253,chebyon,the hiding of,ALL,4:4 rare word; no index entry; hiding/concealment,2026-02-18,AI
+H4128,mud,measured (Hiphil),ALL,6 Hiphil wayyiqtol; no index entry; measure/survey earth,2026-02-18,AI
+H5425a,nathar,spring apart (Hiphil),ALL,6 made nations spring/leap apart; no index entry,2026-02-18,AI
+H6518,paraz,warriors (of open country),ALL,14 fighters/warriors; rare word; Qere variant,2026-02-18,AI
+H2073,zebul,habitation,ALL,11 sun/moon stand in their habitation; only 2 occ in index,2026-02-18,AI
+H1979,halikah,goings,ALL,6 His goings are everlasting; his ways/marches,2026-02-18,AI
+H1760a,נִדְחֵי,scattered,ALL,147:2 scattered ones of Israel,those driven away/dispersed,2026-02-19,AI
+H6094,עַצְּבוֹת,wounds,ALL,147:3 healing their wounds,physical injury not emotional sorrow,2026-02-19,AI
+H5749a,עוֹדֵד,lifting up,ALL,147:6 Yahweh lifting up the poor,Polel participle,2026-02-19,AI
+H0929,בְּהֵמָה,beast,ALL,147:9 to the beast its food,more register-appropriate in poetry than animal,2026-02-19,AI
+H0565a,אִמְרָה,command,ALL,147:15 sends his command,use command for directive action; word for speech reference,2026-02-19,AI
+H7140,קֶרַח,hail,ALL,147:17 casts his hail like crumbs,contextual: scattered/cast precipitation,2026-02-19,AI
+H6595a,פַּת,crumbs,ALL,147:17 like crumbs,small pieces; parallels scattered imagery,2026-02-19,AI
+H3176,יָחַל,hoping,ALL,147:11 those hoping in his covenant faithfulness,active expectation not passive waiting,2026-02-19,AI
+H6250,עֶשְׁתֹּנָה,thoughts,ALL,146:4 his thoughts perish,hapax legomenon; only PSA 146:4,2026-02-20,AI
+H2210,זָקַף,raising up,ALL,146:8 raising up the bowed down,hapax; Qal participle,2026-02-20,AI
+H7664,שֵׂבֶר,hope,ALL,146:5 whose hope is on Yahweh,not in Strong's index; context: confident expectation,2026-02-20,AI
+H7779,שׁוּף,crush,ALL,139:11 darkness will crush me,Only 3 occ in published; Gen 3:15 'strike' Job 9:17 'break'. 'Crush' preserves the violence of the verb.,2026-02-20,AI
+H1564,גֹּלֶם,unformed substance,ALL,139:16 my unformed substance,Hapax legomenon; only PSA 139:16.,2026-02-20,AI
+H8312,שַׂרְעַף,cares,ALL,139:23 know my cares,Only 2 occ; PSA 94:19 'my cares'. Consistent.,2026-02-20,AI
+H6383,פִּלְאִי,wonderful,ALL,139:6 too wonderful for me,Only 2 occ; JDG 13:18 'is wonderful'. Consistent.,2026-02-20,AI
+H7252,רֶבַע,lying down,ALL,139:3 my lying down,Hapax-like; context = resting. Inf construct + suffix.,2026-02-20,AI
+H1926,הָדָר,splendor,ALL,"145:5,12 the splendor of the glory",Not 'majesty'. Editor PSA 145. Consistent across both occurrences.,2026-02-23,human
+H7663b,שָׂבַר,wait for,ALL,145:15 The eyes of all wait for you,Piel = hope/wait. Not 'look to'. Editor PSA 145.,2026-02-23,human
+H8416,תְּהִלָּה,psalm,ALL,145:1 superscription A psalm of David,In superscriptions = 'psalm'. In body text = 'praise'. Editor PSA 145.,2026-02-23,human
+H3034,יָדָה,thank,ALL,145:10 All your works will thank you,Hiphil yadah = usually 'thank'. 'Praise' suits some contexts (e.g. 'praise your name' avoids personification). Editors adjust by context.,2026-02-23,human
+H0571,אֶמֶת,truth,ALL,145:18 call on him in truth,Situational: 'truth' in 145:18 vs 'trustworthiness' in 71:22. Context-dependent.,2026-02-23,AI
+H7623b,שָׁבַח,proclaim,ALL,145:4 Generation to generation will proclaim,Situational: 'proclaim' when declaring works (145:4) vs 'extol' when praising God directly (117:1).,2026-02-23,AI
+H1369,גְּבוּרָה,power,ALL,145:11 they will speak of your power,Singular = 'power'. Plural = 'mighty acts' (71:16). Context-dependent.,2026-02-23,AI
+H5769,עוֹלָם,eternities,ALL,145:13 kingdom of all of eternities,Plural עוֹלָמִים = 'eternities'. Singular = 'forever/ages'. Editor PSA 145.,2026-02-23,human
+H7356b,רַחַם,compassions,ALL,145:9 his compassions are over all of his works,Plural = 'compassions'. Not singular 'compassion'. Editor PSA 145.,2026-02-23,human
+H2502a,חָלַץ,rescue,ALL,140:1 Rescue me Yahweh,Piel imperative. Dominant Psalms rendering: Rescue (PSA 6:4),2026-02-24,AI
+H5919,עַכְשׁוּב,viper,ALL,140:3 venom of a viper,Hapax legomenon. Traditionally spider/asp. Serpent context = viper.,2026-02-24,AI
+H2534,חֵמָה,venom,ALL,140:3 venom of a viper,Serpent context = venom (as DEU 32:33). Not wrath.,2026-02-24,AI
+H4113,מַהֲמֹרָה,pits,ALL,140:10 into pits,No index entry. Deep pits/watery pits. Rendered as pits.,2026-02-24,AI
+H3970,מַאֲוַי,desires,ALL,140:8 desires of the wicked,No index entry. From avah = desire.,2026-02-24,AI
+H2162,זָמָם,plot,ALL,140:8 his plot,No index entry. Noun from zamam = scheme/plot.,2026-02-24,AI
+H8108,shomrah,guard,ALL,141:3 a guard on my mouth,hapax legomenon - contextual guard/watch,2026-02-25,AI
+H4516,manam,delicacies,ALL,141:4 their delicacies,hapax - dainty foods,2026-02-25,AI
+H1986,halam,strike,ALL,141:5 righteous strike me,beat/strike - 4 occ total,2026-02-25,AI
+H5106,nua,refuse,ALL,141:5 may my head not refuse,Hiphil = refuse/hinder - no published ULT data,2026-02-25,AI
+H6398,palach,splitting,ALL,141:7 one splitting in earth,split/cleave/plow - 5 occ total,2026-02-25,AI
+H4364b,makmar,nets,ALL,141:10 fall into his nets,rare word - nets/snares,2026-02-25,AI
+H4498,מָנוֹס,refuge,ALL,142:4 Refuge has perished from me,2SA 22:3 'my refuge' 50% of 2 occ; JOB 11:20 'escape' 50%,2026-02-26,AI
+H4525,מַסְגֵּר,prison,PSA,142:7 Bring out my soul from prison,2KI 24 'smith' is different sense; PSA context = confinement,2026-02-26,AI
+H3803,כָּתַר,surround,ALL,142:7 The righteous will surround me,JDG 20:43 'surrounded'; PSA 22:12 'encircle me'; Hiphil = crown/surround,2026-02-26,AI
+H5959,עַלְמָה,young woman,ALL,the young woman (with article) Gen 24:43 precedent,,2026-03-02,AI
+H6005,עִמָּנוּאֵל,Immanuel,ALL,proper name God with us,,2026-03-02,AI
+H2529a,חֶמְאָה,curds,ALL,dominant rendering across published ULT,,2026-03-02,AI
+H0181,אוּד,firebrands,ALL,no published data; firebrand/torch,,2026-03-02,AI
+H2750,חֳרִי,burning,ALL,burning of nose = fierce anger idiom,,2026-03-02,AI
+H6226,עָשֵׁן,smoking,ALL,100% in published ULT (Exo 20:18),,2026-03-02,AI
+H2070,זְבוּב,fly,ALL,no published data; standard meaning,,2026-03-02,AI
+H1682,דְּבוֹרָה,bee,ALL,dominant rendering bees/bee,,2026-03-02,AI
+H2183,זָנוּן,prostitutions,ALL,prostitutions of/her prostitutions,Matching HOS 1:2 pattern,2026-03-02,AI
+H5005,נַאֲפוּף,adulteries,ALL,her adulteries,Hapax-like; adultery noun plural,2026-03-02,AI
+H7753,שׂוּךְ,hedging,ALL,behold me hedging your way,JOB 1:10 hedge; participle form,2026-03-02,AI
+H1443,גָּדַר,wall up,ALL,I will wall up her wall,JOB 19:8 walled up,2026-03-02,AI
+H5040,נַבְלוּת,lewdness,ALL,I will uncover her lewdness,No published data; shameful exposure,2026-03-02,AI
+H0866,אֶתְנָה,hire,ALL,a hire they are to me,No published data; prostitute wages,2026-03-02,AI
+H2484,חֶלְיָה,jewelry,ALL,her ring and her jewelry,No published data; ornament,2026-03-02,AI
+H8250,שִׁקּוּי,drink,ALL,my oil and my drink,PRO 3:8 refreshment; drink in provision context,2026-03-02,AI
+H6601b,פָּתָה,alluring,ALL,I am alluring her,Piel participle; entice/allure in romantic restoration context,2026-03-02,AI
+H0781,אָרַשׂ,betroth,ALL,I will betroth you to me,2SA 3:14 betrothed; dominant in marriage context,2026-03-02,AI
+H4155,מוּעָף,gloom,ALL,9:1 no gloom for her in distress,hapax; darkness/gloom sense from context,2026-03-03,AI
+H4164,מוּצַק,distress,ALL,9:1 who was in distress,constriction/distress; JOB 36:16 'constriction',2026-03-03,AI
+H4951,מִשְׂרָה,dominion,ALL,9:6-7 the dominion is on his shoulder,no published ULT data; royal authority/rule,2026-03-03,AI
+H5430,סְאוֹן,boot,ALL,9:5 every boot of the one marching,hapax; military boot,2026-03-03,AI
+H5431,סָאַן,marching,ALL,9:5 the one marching with shaking,hapax; paired with se'on (boot),2026-03-03,AI
+H3980,מַאֲכֹלֶת,fuel,ALL,9:5 and 9:19 fuel of fire,no published ULT data; food/fuel for fire,2026-03-03,AI
+H6272,עָתַם,scorched,ALL,9:19 the land is scorched,hapax; burned/darkened,2026-03-03,AI
+H0055,אָבַךְ,rolled upward,ALL,9:18 they rolled upward in a column,hapax; billowed/rolled upward,2026-03-03,AI
+H3739a,כָּרָה,bought,ALL,3:2 bought her for myself,only 1 occ in published ULT (DEU 2:6 'purchase'); 'bought' fits narrative context,2026-03-03,AI
+H0809,אֲשִׁישָׁה,raisin cakes,ALL,3:1 raisin cakes of grapes,3 occ in published: 'raisin cake' dominant rendering,2026-03-03,AI
+H8655,תְּרָפִים,teraphim,ALL,3:4 without ephod and teraphim,transliterated per glossary; 'teraphim' dominant in published (4/12),2026-03-03,AI
+H2563c,חֹמֶר,homer,ALL,3:2 a homer of barley,only 1 occ (LEV 27:16 'a homer of'); measurement term per biblical_measurements.csv,2026-03-03,AI
+H3963,לֶתֶךְ,lethek,ALL,3:2 a lethek of barley,no published ULT occurrences; transliterated per biblical_measurements.csv,2026-03-03,AI
+H0422,אָלָה,swearing,ALL,4:2 infinitive absolute - oath/curse violation,Decalogue-like sin catalog context,2026-03-06,AI
+H3584,כָּחַשׁ,deceiving,ALL,4:2 Piel infinitive absolute,Lying/dealing falsely in sin catalog,2026-03-06,AI
+H7379,רִיב,dispute,ALL,4:1 Yahweh's dispute with people,Legal dispute/controversy sense - 17% dominant,2026-03-06,AI
+H0535,אָמַל,languishes,ALL,4:3 Pulal - passive languishing,Published: languishes (1SA 2:5),2026-03-06,AI
+H2184,זְנוּת,prostitution,ALL,4:11 prostitution takes heart,Not in published index; standard noun from zanah,2026-03-06,AI
+H6510,פָּרָה,cow,ALL,4:16 like a stubborn cow,Feminine noun; heifer/cow. Context: stubborn animal metaphor,2026-03-06,AI
+H3839,לִבְנֶה,poplar,ALL,4:13 under oak and poplar,Standard botanical identification,2026-03-06,AI
+H0424,אֵלָה,terebinth,ALL,4:13 under oak and poplar and terebinth,Standard botanical identification,2026-03-06,AI
+H0437,אַלּוֹן,oak,ALL,4:13 under oak,Standard botanical identification,2026-03-06,AI
+H4731,מַקֵּל,staff,ALL,4:12 and their staff declares,Published: staff (GEN 32:10),2026-03-06,AI
+H2415,חֹטֵר,shoot,ALL,only 1 occ in published ULT (PRO 14:3 'rod'); 'shoot' fits ISA 11:1 context,,2026-03-06,AI
+H1503,גֶּזַע,stump,ALL,100% 'stump' in published ULT (JOB 14:8),,2026-03-06,AI
+H5342,נֵצֶר,branch,ALL,no published data; branch/shoot from roots,,2026-03-06,AI
+H5251,נֵס,banner,ALL,published ULT uses 'banner' (EXO 17:15 PSA 20:5 SNG 2:4),,2026-03-06,AI
+H4334,מִישׁוֹר,uprightness,ALL,ISA 11:4 context = fairness/equity; PSA 45:6 'justice' MAL 2:6 'uprightness',,2026-03-06,AI
+H6035,עָנָו,humble,ALL,PSA 25:9 'the humble' dominant rendering,,2026-03-06,AI
+H4926,מִשְׁמָע,hearing,ALL,no published data; literal 'hearing of his ears',,2026-03-06,AI
+H6620,פֶּתֶן,cobra,ALL,published split: 'asps' 'vipers' 'adder'; 'cobra' for clarity,,2026-03-06,AI
+H6848b,צֶפַע,viper,ALL,PRO 23:32 'viper',,2026-03-06,AI
+H2352,חוּר,hole,ALL,no published data; hole/opening of snake,,2026-03-06,AI
+H3975,מְאוּרָה,den,ALL,no published data; den/lair of serpent,,2026-03-06,AI
+H1911,הָדָה,stretch out,ALL,hapax; reach/stretch toward,,2026-03-06,AI
+H4916b,מִשְׁלוֹחַ,stretching out,ALL,EST 9:19/22 'sending'; literal 'stretching out of hand',,2026-03-06,AI
+H4928,מִשְׁמַעַת,obedience,ALL,1SA 22:14 2SA 23:23 'bodyguard'; ISA 11:14 = obedience/submission,,2026-03-06,AI
+H5868b,עֲיָם,fierceness,ALL,hapax; scorching/fierceness of wind,,2026-03-06,AI
+H0599,אָנַף,were angry,ALL,12:1 you were angry with me,dominant rendering 'was angry' 20% of 15 occ,2026-03-06,AI
+H6670a,צָהַל,cry aloud,ALL,12:6 cry aloud and shout for joy,only 1 published occ (cheered EST 8:15); cry aloud fits imperative context,2026-03-06,AI
+H1348,גֵּאוּת,majesty,ISA,12:5 he has done majesty,PSA 93:1 majesty; PSA 17:10 pride; majesty fits ISA context,2026-03-06,AI
+H7579,שָׁאַב,draw water,ALL,12:3 draw water with joy,dominant rendering across published ULT,2026-03-06,AI
+H8342,שָׂשׂוֹן,joy,ALL,12:3 draw water with joy,dominant rendering 43% of 7 occ,2026-03-06,AI
+H1966,הֵילֵל,shining one,ALL,hapax; shining one / day star; literal rendering of root,ISA 14:12,2026-03-09,AI
+H4062,מַדְהֵבָה,raging,ALL,hapax; meaning debated (golden city or raging oppression); raging from context,ISA 14:4,2026-03-09,AI
+H4783,מֻרְדָּף,persecution,ALL,hapax; passive of rdp (pursue); persecution/pursuit without restraint,ISA 14:6,2026-03-09,AI
+H8314a,שָׂרָף,fiery serpent,ALL,DEU 8:15 'fiery'; fiery serpent in ISA 14:29 context,ISA 14:29,2026-03-09,AI
+H4293,מַטְבֵּחַ,slaughter,ALL,no published data; slaughtering-place/slaughter,ISA 14:21,2026-03-09,AI
+H7090,קִפּוֹד,hedgehog,ALL,ZEP 2:14 'screech owl'; likely hedgehog/porcupine per modern scholarship,ISA 14:23,2026-03-09,AI
+H4292,מַטְאֲטֵא,broom,ALL,hapax; broom for sweeping,ISA 14:23,2026-03-09,AI
+H2894,טוּא,sweep,ALL,hapax; to sweep away,ISA 14:23,2026-03-09,AI
+H1998,הֶמְיָה,sound,ALL,hapax; murmuring/sound of music,ISA 14:11,2026-03-09,AI
+H4374,מְכַסֶּה,covering,ALL,LEV 9:19 'that which covers'; covering,ISA 14:11,2026-03-09,AI
+H4151,מוֹעָד,ranks,ALL,no published data; appointed places/ranks,ISA 14:31,2026-03-09,AI
+H6767a,צְלָצַל,whirring,ALL,ISA 18:1 whirring of wings (hapax in this sense for buzzing/whirring insects),,2026-03-12,AI
+H6735a,צִיר,envoys,ALL,ISA 18:2 dominant rendering 'envoy' in PRO 13:17 PRO 25:13,,2026-03-12,AI
+H4900,מָשַׁךְ,tall (Pual),ALL,ISA 18:2 Pual 'drawn out' = tall; existing ULT alignment uses 'tall',,2026-03-12,AI
+H6978,קַו־קַו,line line,ALL,ISA 18:2 hapax; preserved Hebrew doubling literally per ULT policy,,2026-03-12,AI
+H7862,שַׁי,tribute,ALL,ISA 18:7 existing ULT alignment uses 'tribute',,2026-03-12,AI
+H6972,קוּץ,spend the summer,ALL,ISA 18:6 denominative from qayits (summer),,2026-03-12,AI
+H2778b,חָרַף,spend the winter,ALL,ISA 18:6 denominative from choreph (autumn/winter),,2026-03-12,AI
+H4853b,מַשָּׂא,burden,ALL,prophetic oracle heading; 'burden' in MAL 1:1 and 2KI 9:25,,2026-03-16,AI
+H2380,חָזוּת,vision,ALL,no published data; standard meaning from root chazah (to see),,2026-03-16,AI
+H2479,חַלְחָלָה,anguish,ALL,no published data; hapax - writhing/anguish/trembling,,2026-03-16,AI
+H6427,פַּלָּצוּת,horror,ALL,PSA 55:5 'horror' JOB 21:6 'trembling'; horror fits ISA 21:4 context,,2026-03-16,AI
+H2837,חֵשֶׁק,desire,ALL,1KI 9:1/19 'desire'; twilight of my desire,,2026-03-16,AI
+H6844,צָפִית,carpet,ALL,hapax; covering/carpet spread for banquet,,2026-03-16,AI
+H4098,מְדֻשָּׁה,threshed one,ALL,hapax; from dush (thresh); my threshed one = Israel as threshed grain,,2026-03-16,AI
+H0736,אֹרְחָה,caravans,ALL,GEN 37:25 'a caravan of'; plural caravans,,2026-03-16,AI
+H3514,כֹּבֶד,heaviness,ALL,PRO 27:3 'the heaviness of'; heaviness of war,,2026-03-16,AI
+H7101,קָצִין,commander,ALL,dominant rendering 60% of 5 occ,,2026-03-16,AI
+H5532,סָכַן,steward,ALL,contextual; participle used as title in ISA 22:15,,2026-03-16,AI
+H4539,מָסָךְ,covering,ALL,16.7% rendering; used metaphorically for defense,,2026-03-16,AI
+H5402,נֶשֶׁק,weaponry,ALL,20% rendering; collective sense of weapons,,2026-03-16,AI
+H2904,טוּל,hurl,ALL,dominant rendering 18% of 11 occ,,2026-03-16,AI
+H6801,צָנַף,wind up,ALL,only 1 prior occurrence; wrap/wind,,2026-03-16,AI
+H4668,מַפְתֵּחַ,key,ALL,only 1 prior occ rendered 'opener'; 'key' fits context,,2026-03-16,AI
+H6849,צְפִעָה,offshoot,ALL,hapax; related to growth/branching,,2026-03-16,AI
+H1754b,דּוּר,ball,ALL,hapax; context of rolling/throwing,,2026-03-16,AI
+H3213,יָלַל,wail,ALL,dominant rendering 75% of 4 occ,,2026-03-17,AI
+H0339,אִי,coastland,ALL,dominant rendering; singular for singular,,2026-03-17,AI
+H5947,עַלִּיז,exultant,ALL,dominant rendering in ZEP,,2026-03-17,AI
+H1347,גָּאוֹן,pride,ALL,dominant rendering 30% of 10 occ,,2026-03-17,AI
+H6643a,צְבִי,splendor,ALL,only occurrence 2SA 1:19,,2026-03-17,AI
+H5504,סַחַר,profit,ALL,dominant rendering PRO 3:14 and 31:18,,2026-03-17,AI
+H0868,אֶתְנַן,wages,ALL,only occurrence DEU 23:18,,2026-03-17,AI
+H3658,כִּנּוֹר,harp,ALL,dominant rendering across 17 occ,,2026-03-17,AI
+H0759,אַרְמוֹן,citadels,ALL,dominant rendering PSA 48:13,,2026-03-17,AI
+H7654,שׇׂבְעָה,satiety,ALL,only occurrence HAG 1:6,,2026-03-17,AI
+H6331,פּוּר,frustrated,ALL,Hiphil - frustrated the counsel of nations,no published ULT data - Hiphil = break/frustrate,2026-03-17,AI
+H7688,שָׁגַח,gazed,ALL,from the place of his dwelling he gazed,only 1 occ in SNG 2:9 = gazing,2026-03-17,AI
+H5000,נָאוֶה,fitting,ALL,praise is fitting for the upright,suitable/lovely in published ULT - fitting best for praise context,2026-03-17,AI
+H1238b,בָּקַק,emptying/emptied,ALL,24:1 24:3 emptying the earth,No published ULT data; literal rendering of root bqq,2026-03-17,AI
+H1110,בָּלַק,laying waste,ALL,24:1 laying it waste,No published ULT data; devastate/lay waste,2026-03-17,AI
+H5753a,עָוָה,twisted,ALL,24:1 twisted its face,No published ULT data; twist/distort,2026-03-17,AI
+H8492,תִּירוֹשׁ,new wine,ALL,24:7 the new wine mourns,Dominant rendering across published ULT,2026-03-17,AI
+H7151,קִרְיָה,city,ALL,24:10 the city of chaos,Dominant rendering 'city' 27% of 11 occ,2026-03-17,AI
+H6354,פַּחַת,pit,ALL,24:17-18 terror pit and snare wordplay,Only 3 occ all rendered 'pit',2026-03-17,AI
+H0699,אֲרֻבָּה,windows,ALL,24:18 windows from on high,Dominant rendering 40% of 5 occ; echoes Gen 7:11,2026-03-17,AI
+H7591,שְׁאִיָּה,ruin,ALL,24:12 with ruin the gate is battered,No published data; desolation/ruin,2026-03-17,AI
+H4213,מִזְעָר,few,ALL,24:6 man of few is left,No published data; fewness/smallness,2026-03-17,AI
+H2787,חָרַר,scorched,ALL,24:6 dwellers of earth are scorched,Published split; 'scorched' fits judgment context,2026-03-17,AI
+H0217b,אוּר,east,ALL,24:15 in the east glorify Yahweh,Context: fires/lights = eastern regions,2026-03-17,AI
+H3585,כַּחַשׁ,lies,ALL,7:3 by their lies the princes,JOB 16:8 'leanness' but HOS context = deception/lies,2026-03-17,AI
+H3945,לָצַץ,mockers,ALL,7:5 with the mockers,No published data; Qal participle = scorners/mockers,2026-03-17,AI
+H5920,עַל,upward,ALL,7:16 not upward,Adverb 'upward/on high' - not the preposition,2026-03-17,AI
+H3852,לֶהָבָה,flame,ALL,7:6 fire of flame,Standard meaning; fire imagery,2026-03-17,AI
+H1101a,בָּלַל,mixes himself,ALL,7:8 Hitpolel reflexive - mixes among peoples,No published data for reflexive form,2026-03-17,AI
