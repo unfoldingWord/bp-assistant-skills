@@ -248,7 +248,9 @@ Also check:
 
 Run the assembly script to produce the final TSV. The script reads metadata from the prepared JSON and note text from the generated JSON, matching by ID. This prevents note/row misalignment.
 
-Use `mcp__workspace-tools__assemble_notes` with `preparedJson`, `generatedJson`, and output path.
+If `--output <path>` was provided in the invocation, use that exact path for `assemble_notes`. Otherwise default to `output/notes/<BOOK>/<BOOK>-<CH>.tsv`.
+
+Use `mcp__workspace-tools__assemble_notes` with `preparedJson`, `generatedJson`, and the determined output path.
 
 ### Step 9: Post-Process
 
