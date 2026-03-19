@@ -46,6 +46,11 @@ Use a placeholder ID (abc1, abc2, etc., incrementing from what's already in the 
 - Only bold the first occurrence
 - Match capitalization and grammatical forms exactly from the ULT
 
+### Quotation Marks
+- Use Unicode curly quotes in note body text: " " (U+201C/U+201D) and ' ' (U+2018/U+2019)
+- Never use straight quotes (" or ') in prose — curly quotes only
+- Alternate translation brackets `[]` are unaffected
+
 ### Author References
 - Always use the author's name, never "the author." Replace the SPEAKER placeholder in templates with the name (e.g., Habakkuk, Isaiah, Moses)
 - For Psalms, check the superscription: use David, Asaph, etc. if named; use "the psalmist" if anonymous
