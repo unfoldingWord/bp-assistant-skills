@@ -37,7 +37,7 @@ All skills live in `.claude/skills/`. Each has a `SKILL.md` defining the prompt 
 
 ### Issue Identification
 - **`issue-identification`** -- 94 translation issue types (figures of speech, abstract nouns, grammatical patterns, cultural concepts), each with its own skill file
-- **`deep-issue-id`** -- Multi-agent adversarial mode: 4 parallel domain analysts + challenger debate. Supports `--lite` (2 agents) and `--verses` for chunked analysis
+- **`deep-issue-id`** -- Multi-agent adversarial issue identification: 2 domain analysts (structure + rhetoric) + challenger. Supports `--verses` for chunked analysis
 - **`post-edit-review`** -- Diff-based adaptation of issues after human edits to ULT/UST
 
 ### Note & Question Writing
@@ -53,7 +53,7 @@ All skills live in `.claude/skills/`. Each has a `SKILL.md` defining the prompt 
 
 ### Orchestration
 - **`makeBP`** -- End-to-end book package for a chapter with maximum parallelization
-- **`initial-pipeline`** -- 6-wave coordinated pipeline (ULT, issues, UST) with adversarial feedback loop. `--heavy` for 4-agent issue identification
+- **`initial-pipeline`** -- 6-wave coordinated pipeline (ULT, issues, UST) with adversarial feedback loop
 - **`pipeline-overview`** -- Guides to the appropriate skill for each stage
 
 ### Review & Feedback

@@ -56,7 +56,7 @@ End-to-end book package for a chapter. Runs all 9 stages with maximum paralleliz
 **Skill**: `.claude/skills/makeBP/SKILL.md`
 
 ### Initial Pipeline (`/initial-pipeline`)
-Coordinates ULT-gen, issue-id, and UST-gen as a team for a chapter. 6-wave pipeline with adversarial issue identification, ULT feedback loop, and UST generated last (so it can model handling identified issues). Supports `--heavy` for 4-agent issue-id and `--lite` for 2-agent mode.
+Coordinates ULT-gen, issue-id, and UST-gen as a team for a chapter. 6-wave pipeline with adversarial issue identification, ULT feedback loop, and UST generated last (so it can model handling identified issues). Always uses 2-analyst adversarial issue identification with challenger.
 
 **Skill**: `.claude/skills/initial-pipeline/SKILL.md`
 
