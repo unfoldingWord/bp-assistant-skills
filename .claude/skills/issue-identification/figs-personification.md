@@ -32,6 +32,7 @@ This category includes:
 | X spoken of AS IF it were Y | Identity comparison, not agency |
 | "house" = descendants | Topic-image relationship |
 | "path/way" = behavior | Topic-image relationship |
+| "daughter of Judah" / "daughter of my people" | The referent is already human — calling a people group a "daughter" is a metaphor, not personification. Reserve personification for "daughter of Zion/Jerusalem" where a city (non-human) is treated as a woman. |
 
 ### Use figs-idiom for:
 | Expression | Reason |
