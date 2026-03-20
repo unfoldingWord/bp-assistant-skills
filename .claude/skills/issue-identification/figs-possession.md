@@ -139,6 +139,14 @@ START: Is there a possessive form (X of Y, Y's X, his/her/their X)?
 3. **Can the relationship be clarified with "from," "about," "for," "characterized by," or a relative clause?**
 4. **Is this an abstract noun as possessor (fear, wrath, judgment)?** - Check first if it needs a note
 
+## Always Flag: "my/our/your God"
+
+Flag every instance of "my God," "our God," and "your God" as `figs-possession` with `t:our God`. Use this template regardless of whether the UST seems to make the meaning clear.
+
+The reason: in many languages, the possessive pronoun + "God" implies ownership or control, which is theologically misleading. The worship-relationship reading is non-obvious enough that a note is always warranted. Do not suppress based on UST clarity for this specific pattern.
+
+Always use `t:our God` as the template hint regardless of pronoun (my/our/your). The tn-writer will adapt the speaker reference from context.
+
 ## When to Suppress figs-possession
 
 Do NOT flag figs-possession when:
