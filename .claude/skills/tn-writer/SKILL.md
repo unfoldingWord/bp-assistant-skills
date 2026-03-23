@@ -260,6 +260,10 @@ Run curly quote conversion on the output:
 
 Use `mcp__workspace-tools__curly_quotes` with `input` set to the notes TSV and `inPlace: true`.
 
+Fix Hebrew quote Unicode to match UHB source byte order (prevents UI highlighting failures):
+
+Use `mcp__workspace-tools__fix_unicode_quotes` with `tsvFile` set to the notes TSV path.
+
 ### Step 10: Final Review
 
 Read the assembled TSV alongside the aligned ULT. For each row, verify:
