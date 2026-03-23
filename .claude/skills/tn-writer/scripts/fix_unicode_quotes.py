@@ -88,41 +88,59 @@ def _extract_verse_text(raw_lines):
         last_end = m.end()
     return ''.join(parts)
 
-def build_reduced(raw):
-    """Strip cantillation/word-joiners/meteg from source, keeping offset map."""
-    reduced = []
-    offset_map = []
+def build_stripped(raw):
+    """Strip cantillation/word-joiners/meteg from source, keeping offset map back to raw."""
+    stripped = []
+    offset_map = []  # offset_map[i] = index in raw for stripped[i]
     for i, c in enumerate(raw):
         if not STRIP_RE.match(c):
-            reduced.append(c)
+            stripped.append(c)
             offset_map.append(i)
-    return ''.join(reduced), offset_map
+    return ''.join(stripped), offset_map
 
-def fix_segment(seg, reduced_text, offset_map):
-    """Try to match a quote segment against reduced source and return exact bytes."""
-    norm_quote = unicodedata.normalize('NFKD', seg)
-    norm_reduced = unicodedata.normalize('NFKD', reduced_text)
+def raw_span(raw, offset_map, s_start, s_end, stripped_len):
+    """Given a match in stripped text, return the corresponding full span from raw."""
+    raw_start = offset_map[s_start]
+    # End: start of NEXT stripped char, or end of raw string
+    raw_end_excl = offset_map[s_end + 1] if (s_end + 1 < stripped_len) else len(raw)
+    # Trim trailing spaces and sof pasuq
+    end = raw_end_excl
+    while end > raw_start and raw[end - 1] in (' ', '\u05C3'):
+        end -= 1
+    return raw[raw_start:end]
 
-    # Build map from normalized index back to reduced index
+def fix_segment(seg, raw_verse):
+    """Match a quote segment against UHB verse and return exact full-mark bytes."""
+    stripped_verse, offset_map = build_stripped(raw_verse)
+    # Strip the quote too (it may or may not already have marks stripped)
+    stripped_quote = STRIP_RE.sub('', seg)
+
+    norm_quote = unicodedata.normalize('NFKD', stripped_quote)
+    norm_stripped = unicodedata.normalize('NFKD', stripped_verse)
+
+    # Build map from normalized stripped index back to stripped index
     nr_map = []
-    ri = 0
+    si = 0
     ni = 0
-    while ni < len(norm_reduced) and ri < len(reduced_text):
-        char_norm = unicodedata.normalize('NFKD', reduced_text[ri])
+    while ni < len(norm_stripped) and si < len(stripped_verse):
+        char_norm = unicodedata.normalize('NFKD', stripped_verse[si])
         for k in range(len(char_norm)):
-            if ni + k < len(norm_reduced):
-                nr_map.append(ri)
+            if ni + k < len(norm_stripped):
+                nr_map.append(si)
         ni += len(char_norm)
-        ri += 1
+        si += 1
 
-    pos = norm_reduced.find(norm_quote)
+    pos = norm_stripped.find(norm_quote)
     if pos == -1:
         return None
 
-    r_start = nr_map[pos] if pos < len(nr_map) else 0
+    # Map: norm pos -> stripped pos -> raw pos
+    s_start = nr_map[pos] if pos < len(nr_map) else 0
     end_norm = pos + len(norm_quote) - 1
-    r_end = nr_map[end_norm] if end_norm < len(nr_map) else len(reduced_text) - 1
-    return reduced_text[r_start:r_end + 1]
+    s_end = nr_map[end_norm] if end_norm < len(nr_map) else len(stripped_verse) - 1
+
+    # Extract the FULL raw span (with all marks) from the original verse
+    return raw_span(raw_verse, offset_map, s_start, s_end, len(stripped_verse))
 
 def fix_tsv(tsv_content, verse_map):
     """Fix Hebrew quotes in TSV content. Returns (fixed_content, stats)."""
@@ -165,8 +183,7 @@ def fix_tsv(tsv_content, verse_map):
         all_matched = True
 
         for seg in segments:
-            reduced_text, offset_map = build_reduced(raw_verse)
-            result = fix_segment(seg, reduced_text, offset_map)
+            result = fix_segment(seg, raw_verse)
             if result is None:
                 all_matched = False
                 warnings.append(f'{ref}: segment not found: "{seg[:30]}..."')
