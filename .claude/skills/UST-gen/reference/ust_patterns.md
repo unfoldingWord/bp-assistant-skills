@@ -248,3 +248,48 @@ UST can:
 | {brackets} | Grammar words | Background/implicit info |
 | Metaphors | Preserve | Express meaning |
 | Names | Same as Hebrew | Same names + clarification |
+
+---
+
+## Common Literalness Failures
+
+Real examples where generated UST was too literal. Use these to calibrate your output.
+
+### Preserved Hebrew metaphor (keep the image → should explain it)
+
+| Verse | Hebrew figure | Generated (too literal) | Correct UST |
+|-------|---------------|------------------------|-------------|
+| LAM 3:43 | "covered yourself in anger" | "wrapped yourself in anger" | "because you were angry" |
+| LAM 3:44 | "covered yourself in a cloud" | "hid yourself behind a cloud" | "you made yourself unreachable" |
+| LAM 4:11 | "poured out burning of his nose" | "poured out his fierce anger" | "showed how extremely angry he was" |
+| LAM 4:20 | "breath of our nostrils" | "as essential as the breath in our nostrils" | "the one who kept us alive" |
+| LAM 4:21 | "the cup will pass to you" | "drink from the cup of his anger" | "Yahweh will punish you severely" |
+
+### Preserved Hebrew simile (keep the comparison → should collapse it)
+
+| Verse | Hebrew simile | Generated (too literal) | Correct UST |
+|-------|---------------|------------------------|-------------|
+| LAM 4:7 | "purer than snow, whiter than milk, more ruddy than corals, sapphire" | "brighter than snow, whiter than milk, more ruddy than coral, like sapphires" | "very pure and healthy-looking" |
+| LAM 3:48 | "streams of water go down my eye" | "tears flow from my eyes like streams of water" | "many tears flow from my eyes" |
+
+### New English metaphor introduced (not in source at all)
+
+| Verse | Source text | Generated (wrong) | Correct UST |
+|-------|-----------|-------------------|-------------|
+| LAM 3:15 | "he saturated me with wormwood" | "he drenched me in misery" | "he caused me to suffer greatly" |
+
+"Drenched" is a metaphor. UST should never create figurative language that wasn't in the Hebrew.
+
+### Hebrew idiom kept verbatim
+
+| Verse | Hebrew idiom | Generated (too literal) | Correct UST |
+|-------|-------------|------------------------|-------------|
+| LAM 3:65 | "covering of heart" | "make their hearts stubborn" | "make them stubborn" |
+| LAM 3:66 | "from under the heavens" | "from the face of the earth" | "so they no longer exist" |
+
+### ULT phrasing imported into UST
+
+| Verse | ULT | T4T (correct base) | Generated (imported ULT) |
+|-------|-----|---------------------|-------------------------|
+| LAM 3:22 | "covenant faithfulness of Yahweh" | "Yahweh never stops faithfully loving us" | "Yahweh is always faithful to his covenant" |
+| LAM 3:27 | "bears a yoke" | "patiently endure suffering" | "accept the burden of discipline" |

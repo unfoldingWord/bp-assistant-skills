@@ -98,23 +98,27 @@ T4T uses special markers that serve two purposes:
 | `[RHQ]` | Rhetorical question | Keep as question or convert to statement |
 | `[EUP]` | Euphemism | Use clear language |
 | `[MTY]` | Metonymy (association) | Express what is actually meant |
+| `[MET]` | Metaphor | State the plain meaning; do not preserve the image |
+| `[SIM]` | Simile | State the plain meaning; do not preserve the comparison |
 
-These markers are valuable pre-identified translation issues - use them to inform your rendering choices before removing them from the final text.
+These markers are valuable pre-identified translation issues - use them to inform your rendering choices before removing them from the final text. When you see `[MET]` or `[SIM]`, the T4T is flagging figurative language — strip the marker AND replace the figure with what it means in plain English.
 
-### Step 2: Verify Against Hebrew and ULT
+### Step 2: Verify T4T's Meaning Accuracy Against Hebrew
 
 Check that T4T accurately represents the Hebrew meaning:
 
 1. **Read Hebrew source** from `data/hebrew_bible/*.usfm` - this is the final authority
 2. **Read corresponding ULT** - shows the literal form for comparison
-3. **Note any discrepancies** between T4T and Hebrew/ULT
+3. **Note any discrepancies** where T4T misunderstands Hebrew meaning
 
 Key relationship:
 - Hebrew = **final authority** on meaning
 - ULT = **what the Hebrew says** (form)
 - T4T/UST = **what the Hebrew means** (meaning)
 
-If T4T diverges from Hebrew meaning, correct it. If T4T and ULT express the same meaning differently, that's expected - they serve different purposes.
+If T4T diverges from Hebrew meaning, correct the meaning. If T4T and ULT express the same meaning differently, that's expected — they serve different purposes.
+
+The purpose of this step is to catch T4T meaning errors — places where the T4T got the meaning wrong. It is NOT a license to import Hebrew phrasing, imagery, or structure into the UST. If the T4T's meaning is correct, keep the T4T's wording even if the Hebrew is more vivid or poetic.
 
 ### Step 2.5: Check Identified Translation Issues
 
@@ -125,7 +129,7 @@ Before generating UST, check for any pre-identified translation issues:
    - **figs-activepassive**: MUST convert to active voice in UST
    - **figs-abstractnouns**: Consider verbal/clausal forms
    - **figs-nominaladj**: Unpack nominalized adjectives
-   - **figs-metaphor/figs-simile**: Express the meaning
+   - **figs-metaphor/figs-simile**: State the plain meaning in non-figurative language. Do not preserve the metaphorical image — if the Hebrew says "poured out his anger," write "showed how extremely angry he was," not "poured out his anger." If a simile is flagged, collapse it into a direct statement rather than keeping the comparison.
    - **figs-personification**: State the plain meaning; do not give the non-living thing an action verb
    - **figs-idiom**: Explain rather than preserve
    - **figs-rquestion**: Consider if rhetorical function is clear
@@ -139,7 +143,7 @@ Compare T4T to unfoldingWord standards. Flag areas that need adjustment:
 
 1. **Check Issues Resolved** for authoritative decisions using `Grep` on `data/issues_resolved.txt`.
 
-2. **Remove T4T notation markers** - [IDI], [DOU], [SYN], [RHQ], [EUP], [MTY]
+2. **Remove T4T notation markers** - [IDI], [DOU], [SYN], [RHQ], [EUP], [MTY], [MET], [SIM]
 
 3. **Handle `\add...\add*` markers** - weave into prose; rarely bracket (see Step 4A)
 
@@ -247,7 +251,28 @@ When identified issues flag **figs-nominaladj**, unpack the nominalized adjectiv
 
 The UST should make clear who or what is being described.
 
-#### G. Psalm Superscriptions
+#### G. Figurative Language (Metaphors, Similes)
+
+When the issues file flags `figs-metaphor` or `figs-simile`, or T4T markers `[MET]`/`[SIM]` are present:
+
+1. Identify what the figure *means* (what is actually happening or being described)
+2. Write that meaning in plain, non-figurative English
+3. Do NOT preserve the image, even if it "sounds better"
+4. Do NOT introduce new English metaphors or similes that weren't in the source
+
+| Hebrew figure | BAD (preserved/new metaphor) | GOOD (plain meaning) |
+|---------------|------------------------------|---------------------|
+| "breath of our nostrils" (king) | "as essential as the breath in our nostrils" | "the one who kept us alive" |
+| "poured out his anger" | "poured out his fierce anger" | "showed how extremely angry he was" |
+| "drink from the cup of anger" | "drink from the cup of his anger" | "Yahweh will punish you severely" |
+| "purer than snow, whiter than milk" | "brighter than snow, whiter than milk" | "very pure and healthy-looking" |
+| "wrapped in anger" | "wrapped yourself in anger" | "because you were angry" |
+| "streams of water from my eye" | "tears like streams of water" | "many tears flow from my eyes" |
+| "saturated with wormwood" | "drenched me in misery" | "caused me to suffer greatly" |
+
+When T4T uses framing like "It is as though," that signals the underlying content is figurative. State the meaning directly rather than presenting the image as literal fact.
+
+#### H. Psalm Superscriptions
 
 (See Active Voice above for passive → active conversion)
 
@@ -274,7 +299,7 @@ Quick check at chapter start:
 - If `\v 1` has both superscription words AND body text: use format 1 (empty `\d`, superscription in `\v 1`).
 - If `\v 1` has only superscription words and body starts at `\v 2`: use format 2 (`\d` with text, body at English `\v 1`).
 
-#### H. Initial Conjunctions
+#### I. Initial Conjunctions
 
 If T4T starts sentences with "And" or "But", replace:
 - "And" → "So" / "Then" / remove
@@ -437,9 +462,10 @@ node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
 Before finalizing UST output, verify:
 
 **T4T Conversion:**
-- [ ] T4T notation markers removed ([IDI], [DOU], [SYN], [RHQ], [EUP], [MTY])
+- [ ] T4T notation markers removed ([IDI], [DOU], [SYN], [RHQ], [EUP], [MTY], [MET], [SIM])
 - [ ] `\add...\add*` content woven into natural prose (rarely bracketed)
 - [ ] Changes are minimal - T4T preserved where it meets standards
+- [ ] **Figurative language expressed as plain meaning** — no preserved metaphors, similes, or Hebrew idioms; no new English metaphors introduced
 
 **unfoldingWord Standards:**
 - [ ] Divine names correct (Yahweh, not LORD)
