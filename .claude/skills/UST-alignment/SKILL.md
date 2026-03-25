@@ -18,7 +18,7 @@ UST alignment is fundamentally different from ULT alignment. Where ULT aims for 
 
 You need:
 1. **Hebrew USFM** from `data/hebrew_bible/*.usfm` - contains Strong's numbers, lemmas, morphology
-2. **English UST text** - from `output/AI-UST/` or user-provided
+2. **English UST text** — if `--ust <path>` is provided, use that file. Otherwise look in `output/AI-UST/` or use user-provided text. When the orchestrator provides an explicit path, that is the authoritative source — do not fetch from Door43.
 
 ## Using Alignment Hints
 

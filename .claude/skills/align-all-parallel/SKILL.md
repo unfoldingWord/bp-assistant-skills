@@ -10,10 +10,20 @@ allowed-tools: Task, Bash
 
 Spawn both alignment agents in parallel and wait for both to complete.
 
+## Pipeline Context
+
+If `--context <path>` is provided, read the context.json file. It contains the authoritative source paths:
+- `sources.ult` — the ULT to align (may be a freshly generated file, not Door43 master)
+- `sources.ust` — the UST to align
+- `sources.hebrew` — Hebrew source file
+
+Pass the ULT and UST paths to the alignment subagents so they align the correct files. Include these in the subagent prompts, e.g.: `PSA 35 --ult output/AI-ULT/PSA/PSA-035.usfm`
+
 ## Input
 
 - **Book**: 3-letter abbreviation (PSA, GEN, 2SA, etc.)
 - **Chapter**: number
+- **--context** (optional): path to pipeline context.json
 
 ## Model
 

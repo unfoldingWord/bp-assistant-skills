@@ -7,12 +7,20 @@ description: After humans edit ULT/UST, adapt existing issues and notes to match
 
 After humans edit the ULT/UST, adapt existing issues to match their changes.
 
+## Pipeline Context
+
+If `--context <path>` is provided, read the context.json file. It contains:
+- `sources.ult` — the current human-edited ULT from Door43 master (fetched fresh by the pipeline runner)
+- `sources.ust` — the current human-edited UST from Door43 master
+
+Use these as the authoritative human-edited text. Compare against the AI-generated versions in `output/AI-ULT/{BOOK}/` and `output/AI-UST/{BOOK}/`.
+
 ## Inputs
 
 - **Book**: 3-letter abbreviation (PSA, GEN, 2SA, etc.)
 - **Chapter**: number
 - AI-generated ULT/UST (from `output/AI-ULT/{BOOK}/`, `output/AI-UST/{BOOK}/`)
-- Human-edited ULT/UST (from repo or provided files)
+- Human-edited ULT/UST — from `--context` sources (preferred) or fetch via `mcp__workspace-tools__fetch_door43`
 - Existing issues TSV (from `output/issues/{BOOK}/`)
 
 ## When This Runs

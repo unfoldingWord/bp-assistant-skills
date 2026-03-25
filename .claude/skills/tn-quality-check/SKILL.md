@@ -15,11 +15,15 @@ In restricted runs, use workspace MCP tools instead of direct shell/python comma
 - `mcp__workspace-tools__assemble_notes`
 - `mcp__workspace-tools__curly_quotes`
 
+## Pipeline Context
+
+If `--context <path>` is provided, read the context.json file for authoritative ULT/UST paths (`sources.ult`, `sources.ust`). Use these instead of searching for files.
+
 ## Prerequisites
 
 - Assembled TN TSV (from tn-writer Step 8-9)
 - `prepared_notes.json` (from tn-writer Step 2a)
-- Plain ULT and UST USFM files
+- Plain ULT and UST USFM files (from context.json `sources.ult`/`sources.ust` if available)
 - Book code (for master TN ID collision check)
 
 ## Parameters

@@ -34,6 +34,17 @@ If `--verses <start>-<end>` is specified:
 
 After running all chunks, concatenate the chunk TSVs (stripping any duplicate headers) into the final `output/issues/<BOOK>/<BOOK>-<CH>.tsv`.
 
+## Pipeline Context
+
+If `--context <path>` is provided, read the context.json file. The pipeline runner has already fetched the current ULT/UST from Door43 master:
+- `sources.ult` — chapter ULT USFM (use instead of running `fetch_door43.py`)
+- `sources.ust` — chapter UST USFM
+- `sources.ultFull` — full book ULT (for alignment parsing)
+- `sources.ustFull` — full book UST
+- `sources.hebrew` — Hebrew source file
+
+When context is available, skip the "Fetch and Parse" step's fetch commands and read directly from the context paths. Still run the parse/compare/detect scripts on the fetched content.
+
 ## Setup (orchestrator runs directly)
 
 Read `orchestration-conventions.md` for chapter padding and model assignments.

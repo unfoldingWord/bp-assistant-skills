@@ -27,11 +27,23 @@ When running in restricted mode, use workspace MCP tools instead of direct shell
 - Plain ULT and UST USFM files (from issue-identification or fetched fresh)
 - The tsv-quote-converters tool (path resolved automatically by the script)
 
+## Pipeline Context
+
+If `--context <path>` is provided, read the context.json file first. It contains the authoritative source paths:
+- `sources.ult` — current ULT for this chapter (fetched fresh from Door43 by the pipeline runner)
+- `sources.ust` — current UST for this chapter
+- `sources.ultAligned` — aligned ULT if available
+- `sources.issues` — issues TSV path
+
+When a context file is provided, use these paths as your inputs. Do not fetch from Door43 or look in `/tmp/` — the context file has the correct, current versions.
+
 ## Workflow
 
 ### Step 1: Ensure ULT/UST USFM Files Exist
 
-The issue-identification agent usually leaves these at `/tmp/ult_plain.usfm` and `/tmp/ust_plain.usfm`. If missing, fetch with `mcp__workspace-tools__fetch_door43` and prepare plain files with workspace tooling before continuing.
+If `--context` was provided, use the paths from `sources.ult` and `sources.ust` in context.json. These are the authoritative source files provided by the pipeline runner.
+
+If no context is available, fall back to checking `/tmp/ult_plain.usfm` and `/tmp/ust_plain.usfm`. If those are also missing, fetch with `mcp__workspace-tools__fetch_door43` and prepare plain files with workspace tooling before continuing.
 
 ### Step 2a: Run the Preparation Script
 

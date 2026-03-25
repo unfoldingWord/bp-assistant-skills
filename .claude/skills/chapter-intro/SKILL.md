@@ -19,6 +19,10 @@ Book abbreviations follow standard 3-letter codes or common variants:
 - 2sam, 2sa -> 2SA
 - gen -> GEN
 
+## Pipeline Context
+
+If `--context <path>` is provided, read the context.json file for authoritative source paths (`sources.ult`, `sources.ust`, `sources.issues`). Use these instead of searching for files.
+
 ## Workflow
 
 ### Step 1: Gather Inputs
