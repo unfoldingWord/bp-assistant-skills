@@ -10,8 +10,8 @@ Write individual translation notes to `output/scratch.txt` without running the f
 ## Workflow
 
 1. User says "note on X in BOOK C:V" (optionally specifying the issue type)
-2. Read the ULT verse from `data/door43_repos/en_ult/` (strip alignment markup mentally)
-3. Read the UST verse from `data/door43_repos/en_ust/` for AT comparison
+2. Read the ULT verse from `door43-repos/en_ult/` (strip alignment markup mentally)
+3. Read the UST verse from `door43-repos/en_ust/` for AT comparison
 4. Look up the template: `grep '<issue_type>' data/templates.csv`
 5. Write the note following the template and style rules below
 6. Append to `output/scratch.txt` in this format — each field on its own line for easy copying in a web GUI:
