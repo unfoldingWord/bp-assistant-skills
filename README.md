@@ -1,12 +1,50 @@
-# Pure Skills BP Assistant
+# BP Assistant Skills
+
+[![GitHub](https://img.shields.io/badge/github-unfoldingWord%2Fbp--assistant--skills-blue)](https://github.com/unfoldingWord/bp-assistant-skills)
 
 AI-assisted creation of unfoldingWord Book Packages (BP) -- ULT, UST, translation notes, translation questions, chapter intros, and word-level alignments -- driven entirely by Claude Code skills.
+
+**Companion repo:** [bp-assistant](https://github.com/unfoldingWord/bp-assistant) -- Zulip bot that orchestrates these skills via the Claude Agent SDK.
 
 ## Architecture
 
 The system runs as a **Zulip bot** inside a Docker container on an OCI ARM64 server. Users trigger pipelines via Zulip messages; Claude Code executes the appropriate skills. It can also run locally under Windows/WSL for development.
 
 **Design philosophy: code where verifiable, prompts where judgment is needed.** Deterministic scripts handle mechanical, verifiable tasks (USFM parsing, Hebrew quote extraction, TSV splitting/merging, ID generation, git operations, Door43 push). LLM prompts handle semantic decisions requiring linguistic judgment (translation, issue identification, note writing). This split evolved from experience -- AI was unreliable and slow at deterministic tasks (confabulating git results, botching file operations), while scripts couldn't handle the contextual judgment calls. The `test-poc` skill exists to A/B test where the boundary falls for new tasks.
+
+## Getting Started
+
+### Setup
+
+```bash
+# Clone the repo
+git clone https://github.com/unfoldingWord/bp-assistant-skills.git
+cd bp-assistant-skills
+
+# Install Node dependencies (used by utility scripts)
+npm install
+
+# Fetch reference data (Hebrew Bible, Translation Words, etc.)
+# These are gitignored and must be fetched separately:
+python3 .claude/skills/utilities/scripts/fetch_hebrew_bible.py
+python3 .claude/skills/utilities/scripts/build_strongs_index.py
+# Other data directories (en_tw, published-tns, ta-flat, etc.) should be
+# cloned from their respective Door43 repos into data/
+```
+
+### Running skills interactively
+
+Skills are designed to run under Claude Code. Start a session in the repo root:
+
+```bash
+claude
+```
+
+Then ask Claude to run any skill, e.g., "generate ULT for PSA 23" or "write notes for HAB 3".
+
+### Running via the bot
+
+When deployed alongside the [bp-assistant](https://github.com/unfoldingWord/bp-assistant) bot, skills are invoked automatically via Zulip commands. The bot mounts this repo at `/workspace` inside Docker and uses the Claude Agent SDK to execute skills.
 
 ## Pipeline Overview
 
@@ -103,17 +141,7 @@ output/             # Generated files, organized by book subfolder
 
 ## Deployment
 
-The Zulip bot runs via Docker Compose (see [bp-assistant](https://github.com/unfoldingWord/bp-assistant)):
-
-- **`app/src/index.js`** -- Zulip event queue polling, message routing
-- **`app/src/router.js`** -- Pattern-matched routing to pipelines with verse-based timeout calculation
-- **`app/src/claude-runner.js`** -- Claude SDK query() wrapper with timeout and metrics
-- **`app/src/generate-pipeline.js`** -- ULT/UST/issue generation + alignment + Door43 push
-- **`app/src/notes-pipeline.js`** -- TN skill chain (issue-id, tn-writer, quality-check) + Door43 push
-- **`app/src/interactive-dm-pipeline.js`** -- Multi-turn Claude sessions (DMs and stream sessions)
-- **`app/src/door43-push.js`** -- Deterministic Git+Gitea API push (no Claude involved)
-- **`app/src/repo-verify.js`** -- Gitea API verification that PR merged to master
-- **`app/src/usage-tracker.js`** -- Token usage tracking, preflight budget checks
+In production, this repo is mounted at `/workspace` inside the [bp-assistant](https://github.com/unfoldingWord/bp-assistant) Docker container. The bot uses the Claude Agent SDK to invoke skills and push results to [Door43](https://git.door43.org). See the companion repo for bot architecture, routing, and Docker setup.
 
 ## Authoritative Sources
 
@@ -135,6 +163,6 @@ The 5 glossary CSVs and `issues_resolved.txt` are protected from modification. `
 
 ## Dependencies
 
-- Node.js (usfm-js ^3.4.3 for USFM parsing)
-- Python 3 (scripts for data processing, Hebrew quote extraction, quality checks)
-- Claude Code CLI
+- Node.js 22+ (usfm-js ^3.4.3 for USFM parsing, Proskomma for word lookups)
+- Python 3.10+ (data processing, Hebrew quote extraction, quality checks)
+- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) (Agent SDK for skill execution)
