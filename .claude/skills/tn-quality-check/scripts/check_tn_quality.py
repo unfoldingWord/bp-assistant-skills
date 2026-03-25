@@ -493,6 +493,36 @@ def check_orphaned_words(row, prepared_items):
     return findings
 
 
+def check_dropped_leading_conjunction(row, prepared_items):
+    """Check 10b: AT drops a conjunction that the gl_quote starts with."""
+    note = row.get('Note', '')
+    ats = extract_ats(note)
+    if not ats:
+        return []
+
+    item = prepared_items.get(row.get('ID', ''))
+    if not item:
+        return []
+    gl_quote = item.get('gl_quote_roundtripped') or item.get('gl_quote', '')
+    if not gl_quote:
+        return []
+
+    gl_first = gl_quote.strip().split()[0].lower().strip('.,;:!?') if gl_quote.strip() else ''
+    if gl_first not in CONJUNCTIONS:
+        return []
+
+    findings = []
+    for at in ats:
+        at_first = at.strip().split()[0].lower().strip('.,;:!?') if at.strip() else ''
+        # Allow a different conjunction (e.g. "and" → "so") but flag if no conjunction at all
+        if at_first not in CONJUNCTIONS:
+            findings.append({
+                'severity': 'warning', 'category': 'dropped_conjunction',
+                'message': f'gl_quote starts with "{gl_first}" but AT [{at}] drops it'
+            })
+    return findings
+
+
 def check_writer_in_psalms(row, book_code):
     """Check 11: 'The writer' and 'the author' should not appear in Psalms notes.
 
@@ -1047,6 +1077,10 @@ def main():
 
         # Check 10: Orphaned words
         for f in check_orphaned_words(row, prepared_items):
+            row_findings.append(f)
+
+        # Check 10b: Dropped leading conjunction
+        for f in check_dropped_leading_conjunction(row, prepared_items):
             row_findings.append(f)
 
         # Check 11: "The writer" in Psalms

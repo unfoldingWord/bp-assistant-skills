@@ -192,6 +192,7 @@ The script runs these 16 checks:
  8  bold_not_in_ult                 error       Bolded text appears verbatim in ULT verse
  9  rc_link_in_note                 error       Note column has no rc:// links
 10  orphaned_conjunction/prep       warning     No orphaned words before AT in substitution
+10b dropped_conjunction             warning     gl_quote starts with conjunction but AT drops it
 11  writer_in_psalms                warning     PSA: use attributed name or "the psalmist", never "the writer" or "the author"
 12  straight_quotes                 warning     No straight quote characters
 13  at_capitalization               warning     AT capitalization matches sentence position

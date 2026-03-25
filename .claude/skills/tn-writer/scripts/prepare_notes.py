@@ -57,6 +57,9 @@ If there is any data here, it is a previous note written by AI that the human ed
 When you make the alternate translation, it should fit seamlessly back into the ULT such that if you remove the GLQuote `{gl_quote}` and replace it with the alternate translation it reads correctly. Here is the ULT for this verse: `{ult_verse}`
 
 CRITICAL AT RULES:
+- If the gl_quote starts with a conjunction (And, But, So, Then, Or), your AT must
+  also start with a conjunction. Usually keep the same one; you may change it only if
+  the note is specifically about that conjunction's meaning (e.g. "and" → "so").
 - Look at the word immediately BEFORE the gl_quote in the ULT verse. If it is a
   conjunction (And, But, So, Then, Or) or preposition (in, to, from, by, for, with,
   on, at, of), your AT must include that leading word so it is not orphaned.
