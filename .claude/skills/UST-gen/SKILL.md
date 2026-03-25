@@ -260,6 +260,8 @@ When the issues file flags `figs-metaphor` or `figs-simile`, or T4T markers `[ME
 2. Write that meaning in plain, non-figurative English
 3. Do NOT preserve the image, even if it "sounds better"
 4. Do NOT introduce new English metaphors or similes that weren't in the source
+5. Do NOT substitute an English idiom that encodes the same concept as the Hebrew metaphor — if the Hebrew uses a path/way metaphor for "life direction," don't write "blocked every way forward" because "way forward" is the same metaphor in English dress. Write what actually happened: "prevented me from making any progress" or "frustrated everything I tried to do."
+6. When T4T uses "It is as though" framing, the ENTIRE content after that phrase is figurative. Do not drop the framing words and then state the imagery as literal fact. Instead, identify what the figure describes and state that plainly. Example: T4T "It is as though he shot arrows into my body" → BAD: "He shot his arrows deep into my body" (stated as fact) → GOOD: "He deliberately caused me intense suffering."
 
 | Hebrew figure | BAD (preserved/new metaphor) | GOOD (plain meaning) |
 |---------------|------------------------------|---------------------|
@@ -270,8 +272,10 @@ When the issues file flags `figs-metaphor` or `figs-simile`, or T4T markers `[ME
 | "wrapped in anger" | "wrapped yourself in anger" | "because you were angry" |
 | "streams of water from my eye" | "tears like streams of water" | "many tears flow from my eyes" |
 | "saturated with wormwood" | "drenched me in misery" | "caused me to suffer greatly" |
-
-When T4T uses framing like "It is as though," that signals the underlying content is figurative. State the meaning directly rather than presenting the image as literal fact.
+| "walled up my ways with stone" | "blocked every way forward" (English path idiom) | "prevented me from making any progress" |
+| "a bear lying in ambush" | "waited in hiding" (still figurative) | "attacked me suddenly and without warning" |
+| "he bent his bow / shot arrows into my body" | "He shot his arrows deep into my body" (literal fact) | "He deliberately caused me intense suffering" |
+| "made my teeth grind on gravel / pressed me in ashes" | "made me chew on gravel / pushed my face in ashes" (literal fact) | "He completely humiliated and degraded me" |
 
 #### H. Psalm Superscriptions
 

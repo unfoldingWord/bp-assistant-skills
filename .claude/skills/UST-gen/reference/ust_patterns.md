@@ -287,6 +287,25 @@ Real examples where generated UST was too literal. Use these to calibrate your o
 | LAM 3:65 | "covering of heart" | "make their hearts stubborn" | "make them stubborn" |
 | LAM 3:66 | "from under the heavens" | "from the face of the earth" | "so they no longer exist" |
 
+### English idiom substitution (Hebrew metaphor replaced with equivalent English idiom)
+
+| Verse | Hebrew metaphor | Generated (English idiom) | Correct UST |
+|-------|----------------|--------------------------|-------------|
+| LAM 3:9 | "walled up my ways with hewn stone / made my paths crooked" | "blocked every way forward" | "stopped me from making any progress and frustrated everything I tried to do" |
+| LAM 3:10 | "a bear lying in ambush / a lion in hiding" | "waited in hiding and then attacked" | "attacked me suddenly and without warning" |
+| LAM 3:6 | "made me dwell in dark places, like the dead of long ago" | "put me in a hopeless condition where I feel dead" | "put me in a completely hopeless state, as if everyone has forgotten me" |
+
+The test: after removing the Hebrew image, does your English phrasing use a spatial, physical, or sensory metaphor for the same concept? If so, rephrase as what actually happened.
+
+### T4T "It is as though" imagery stated as literal fact
+
+| Verse | T4T (figurative framing) | Generated (dropped framing, kept image) | Correct UST |
+|-------|-------------------------|----------------------------------------|-------------|
+| LAM 3:12-13 | "It is as though he bent his bow... It is as though he shot his arrows" | "He aimed his bow... He shot his arrows deep into my body" | "He deliberately caused me intense suffering" |
+| LAM 3:16 | "It is as though he caused me to chew gravel... he has trampled me" | "He made me chew on gravel... pushed my face in ashes" | "He completely humiliated and degraded me" |
+
+When T4T says "It is as though," the content is figurative. Don't drop the framing and state the image as fact.
+
 ### ULT phrasing imported into UST
 
 | Verse | ULT | T4T (correct base) | Generated (imported ULT) |
