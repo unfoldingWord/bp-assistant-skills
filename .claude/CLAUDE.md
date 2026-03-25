@@ -59,4 +59,5 @@ This file is for interactive Claude Code sessions only. Skills at runtime get th
 - After making changes to skills or config, always suggest a commit to the user.
 
 ## Bot Safety
-- The bot runs as a Docker container. Before any rebuild/restart, always check `sudo docker logs zulip-bot --tail 30` for active pipelines. Look for `[notes] Running`, `[generate] Processing`, or `[claude-runner] Starting` without a corresponding completion. A restart kills in-progress work.
+- The bot runs as a Docker container. Before any rebuild/restart, always check `docker logs zulip-bot --tail 30` for active pipelines. Look for `[notes] Running`, `[generate] Processing`, or `[claude-runner] Starting` without a corresponding completion. A restart kills in-progress work.
+

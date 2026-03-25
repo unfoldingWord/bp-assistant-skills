@@ -103,7 +103,7 @@ output/             # Generated files, organized by book subfolder
 
 ## Deployment
 
-The Zulip bot runs via Docker Compose at `/srv/bot/`:
+The Zulip bot runs via Docker Compose (see [bp-assistant](https://github.com/unfoldingWord/bp-assistant)):
 
 - **`app/src/index.js`** -- Zulip event queue polling, message routing
 - **`app/src/router.js`** -- Pattern-matched routing to pipelines with verse-based timeout calculation
