@@ -47,7 +47,7 @@ Apostrophe is when a speaker turns away from their actual listeners and addresse
 
 | Situation | Use Instead |
 |-----------|-------------|
-| Speaker addresses God (who CAN hear) | Not a figure of speech - genuine prayer |
+| Speaker addresses God or Yahweh | Not apostrophe — God can hear, so this is genuine prayer. Never write an apostrophe note for prayer. |
 | Speaker addresses present audience directly | Normal address |
 | Personification where object IS the audience | figs-personification (choose one -- see below) |
 | Speaking to oneself (aside) | figs-aside |
@@ -60,7 +60,7 @@ When a speaker addresses an inanimate object (e.g., "Awake, wood! Arise, stone!"
 ```
 Is someone speaking TO something/someone?
   |
-  +-- Can the addressed entity hear? --> NOT apostrophe
+  +-- Can the addressed entity hear? (including God/Yahweh) --> NOT apostrophe
   |
   +-- Cannot hear:
       |
