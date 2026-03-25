@@ -10,6 +10,7 @@ allowed-tools: Read, Grep, Glob, mcp__workspace-tools__*
 
 In restricted runs, use workspace MCP tools instead of shell/python snippets:
 - `mcp__workspace-tools__fetch_t4t`, `mcp__workspace-tools__fetch_door43`
+- `mcp__workspace-tools__read_usfm_chapter` — read a single chapter from a book file (use this instead of reading full books)
 - `mcp__workspace-tools__build_ust_index`
 - `mcp__workspace-tools__check_ust_passives`
 - `mcp__workspace-tools__curly_quotes`
@@ -81,7 +82,7 @@ Hebrew poetry often says the same thing twice with different words (synonymous p
 
 ### Step 1: Read T4T Base
 
-Read the T4T from `data/t4t/*.usfm`. This is your starting point.
+Use `mcp__workspace-tools__read_usfm_chapter` to read only the target chapter from the T4T file (e.g., `file: data/t4t/25-LAM.usfm, chapter: 3`). Do NOT read the entire book file — only the chapter you are generating.
 
 Use `mcp__workspace-tools__fetch_t4t` when T4T files are missing or stale.
 
@@ -107,8 +108,8 @@ These markers are valuable pre-identified translation issues - use them to infor
 
 Check that T4T accurately represents the Hebrew meaning:
 
-1. **Read Hebrew source** from `data/hebrew_bible/*.usfm` - this is the final authority
-2. **Read corresponding ULT** - shows the literal form for comparison
+1. **Read Hebrew source** — use `mcp__workspace-tools__read_usfm_chapter` on `data/hebrew_bible/[BOOK].usfm` for the target chapter only
+2. **Read corresponding ULT** — use `mcp__workspace-tools__read_usfm_chapter` on `data/published_ult_english/[BOOK].usfm` for the target chapter only
 3. **Note any discrepancies** where T4T misunderstands Hebrew meaning
 
 Key relationship:
@@ -141,7 +142,7 @@ Before generating UST, check for any pre-identified translation issues:
 
 Compare T4T to unfoldingWord standards. Flag areas that need adjustment:
 
-1. **Check Issues Resolved** for authoritative decisions using `Grep` on `data/issues_resolved.txt`.
+1. **Check Issues Resolved** for authoritative decisions using `Grep` on `data/issues_resolved_optimized.txt` (topically organized). If that file is missing, fall back to `data/issues_resolved.txt`.
 
 2. **Remove T4T notation markers** - [IDI], [DOU], [SYN], [RHQ], [EUP], [MTY], [MET], [SIM]
 
@@ -413,7 +414,7 @@ python3 .claude/skills/utilities/scripts/fetch_t4t.py --list
 ### Vocabulary lookup
 ```bash
 # 1. Check authoritative UST decisions
-grep -i "UST" data/issues_resolved.txt | grep -i "[term]"
+grep -i "UST" data/issues_resolved_optimized.txt | grep -i "[term]"
 
 # 2. Check prior UST vocabulary decisions
 grep "H2617" data/quick-ref/ust_decisions.csv 2>/dev/null
@@ -496,7 +497,7 @@ Before finalizing UST output, verify:
 | Source | Path | Purpose |
 |--------|------|---------|
 | **T4T** | `data/t4t/*.usfm` | PRIMARY SOURCE for UST |
-| Issues Resolved | `data/issues_resolved.txt` | FINAL AUTHORITY - UST decisions |
+| Issues Resolved | `data/issues_resolved_optimized.txt` | FINAL AUTHORITY - UST decisions (topically organized; fallback: `data/issues_resolved.txt`) |
 | Hebrew Glossary | `data/glossary/hebrew_ot_glossary.csv` | UST_GLOSS column |
 | Psalms Reference | `data/glossary/psalms_reference.csv` | UST_GLOSS column |
 | Sacrifice Terms | `data/glossary/sacrifice_terminology.csv` | UST_GLOSS column where available |
