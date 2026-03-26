@@ -1,6 +1,7 @@
 # Output and temporary files
 output/
 tmp/
+plans/
 
 # External data (can be fetched)
 data/en_tw/
