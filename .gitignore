@@ -25,7 +25,6 @@ data/issues_resolved.txt
 data/templates.csv
 data/tw_headwords.json
 data/cache/
-data/quick-ref/
 .cache/
 
 # Local repo clones (used at runtime by door43-push)
