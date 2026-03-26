@@ -19,7 +19,8 @@
  *   --ust               UST mode: brackets placed outside milestones, contiguous groups wrapped
  */
 
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { dirname } from 'path';
 import usfm from 'usfm-js';
 
 // Parse command line arguments
@@ -1006,6 +1007,7 @@ for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
 
 // Write output
 if (outputFile) {
+  mkdirSync(dirname(outputFile), { recursive: true });
   writeFileSync(outputFile, outputUsfm);
   console.error(`Wrote aligned USFM to ${outputFile}`);
 } else {

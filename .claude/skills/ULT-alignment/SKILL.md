@@ -17,6 +17,10 @@ This skill maps English ULT words to Hebrew source words. The workflow is two-st
 You need:
 1. **Hebrew USFM** from `data/hebrew_bible/*.usfm` - contains Strong's numbers, lemmas, morphology
 2. **English ULT text** — if `--ult <path>` is provided, use that file. Otherwise look in `output/AI-ULT/{BOOK}/` or use user-provided text. When the orchestrator provides an explicit path, that is the authoritative source — do not fetch from Door43.
+3. **`--verses START-END`** (optional): process only this verse range (e.g. `--verses 1-11`). When provided:
+   - Only align the specified verses; skip all others
+   - Name the output file `BOOK-CH-vSTART-vEND-aligned.usfm` (e.g. `LAM-04-v01-v11-aligned.usfm`)
+   - Include the standard chapter header (`\id`, `\usfm`, `\ide`, `\h`, `\mt`, `\c`) followed by only the verses in range
 
 ## Output Format: Simple Mapping JSON
 

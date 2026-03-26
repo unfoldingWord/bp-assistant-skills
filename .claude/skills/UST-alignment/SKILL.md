@@ -19,6 +19,10 @@ UST alignment is fundamentally different from ULT alignment. Where ULT aims for 
 You need:
 1. **Hebrew USFM** from `data/hebrew_bible/*.usfm` - contains Strong's numbers, lemmas, morphology
 2. **English UST text** — if `--ust <path>` is provided, use that file. Otherwise look in `output/AI-UST/` or use user-provided text. When the orchestrator provides an explicit path, that is the authoritative source — do not fetch from Door43.
+3. **`--verses START-END`** (optional): process only this verse range (e.g. `--verses 12-22`). When provided:
+   - Only align the specified verses; skip all others
+   - Name the output file `BOOK-CH-vSTART-vEND-aligned.usfm` (e.g. `LAM-04-v12-v22-aligned.usfm`)
+   - Include the standard chapter header (`\id`, `\usfm`, `\ide`, `\h`, `\mt`, `\c`) followed by only the verses in range
 
 ## Using Alignment Hints
 
