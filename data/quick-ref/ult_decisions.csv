@@ -329,3 +329,7 @@ H6004,עָמַם,tarnished,ALL,LAM 4:1 Hiphil - gold becoming dim/tarnished,Only
 H8132,שָׁנָא,changed,ALL,LAM 4:1 gold has changed,Matches 2KI 25:29 pattern (100%),2026-03-24,AI
 H5139,נָזִיר,Nazirites,ALL,LAM 4:7 her Nazirites were purer than snow,Could be princes/nobles but Nazirite is dominant published rendering,2026-03-24,AI
 H6443,פָּנִין,corals,ALL,LAM 4:7 more ruddy than corals,Published uses coral/coral pearls/rubies; corals fits body description context,2026-03-24,AI
+H5036,נָבָל,fool,ALL,ISA 32:5-6 - adjectival noun used substantively,"Published PSA has ""The fool"" (PSA 14:1, 53:1); biblical_phrases has ""worthless one""; ""fool"" is dominant in context of moral/spiritual foolishness",2026-03-26,AI
+H3596,כִּילַי,scoundrel,ALL,"ISA 32:5,7 - only 2 OT occurrences, both in ISA 32","No published ULT data; ""scoundrel"" captures the sense of villainy/treachery in context",2026-03-26,AI
+H5081,נָדִיב,noble,ALL,"ISA 32:5,8 - adjective used substantively, contrasted with fool/scoundrel","Published ULT has ""nobles"" (1SA 2:8), ""a noble"" (PRO 19:6, 25:7); adjectival use fits context",2026-03-26,AI
+H3759,כַּרְמֶל,orchard,ALL,ISA 32:15-16 - not proper noun Carmel; common noun meaning fertile/cultivated land,"Published ISA ULT uses ""orchard""; published elsewhere has ""garden"" (2KI 19:23) and ""fresh grain"" (LEV); orchard fits cultivated-land sense",2026-03-26,AI
