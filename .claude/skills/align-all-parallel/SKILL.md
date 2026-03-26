@@ -3,7 +3,7 @@ name: align-all-parallel
 
 description: Run ULT-alignment and UST-alignment in parallel for a single chapter. Use when asked to align both ULT and UST or run all alignments for a chapter.
 
-allowed-tools: Task, Read, mcp__workspace-tools__read_usfm_chapter
+allowed-tools: Task, Read, mcp__workspace-tools__read_usfm_chapter, mcp__workspace-tools__merge_aligned_usfm
 ---
 
 ## Quick Alignment Pipeline
@@ -53,25 +53,24 @@ Wait for both to complete. Report results.
 
 ## Step 2b: Split Batch (> 18 verses)
 
-Run in two rounds:
+Divide the chapter into batches of up to 18 verses each:
+- Batch size = 18
+- Number of batches = ceil(N / 18)
+- Batch 1: verses 1–18, Batch 2: verses 19–36, etc.
+- Last batch may be shorter
 
-**Round 1** — spawn in parallel:
-- If running ULT: `ult-align-1` subagent for `BOOK CH --verses 1-HALF`
-- If running UST: `ust-align-1` subagent for `BOOK CH --verses 1-HALF`
+Run batches **sequentially** (one round at a time). Each round spawns ULT and/or UST sub-agents **in parallel**:
 
-Wait for round 1 to complete.
+**Round K** (for each batch K = 1..numBatches):
+- If running ULT: spawn `ult-align-K` subagent for `BOOK CH --verses START-END`
+- If running UST: spawn `ust-align-K` subagent for `BOOK CH --verses START-END`
+- Wait for round K to complete before starting round K+1
 
-**Round 2** — spawn in parallel:
-- If running ULT: `ult-align-2` subagent for `BOOK CH --verses HALF+1-N`
-- If running UST: `ust-align-2` subagent for `BOOK CH --verses HALF+1-N`
+**Merge** — after all rounds complete, use `mcp__workspace-tools__merge_aligned_usfm` to assemble the full chapter:
+- ULT (if applicable): call with `parts` = ordered array of all ULT partial files, `output` = `output/AI-ULT/BOOK/BOOK-CH-aligned.usfm`
+- UST (if applicable): call with `parts` = ordered array of all UST partial files, `output` = `output/AI-UST/BOOK/BOOK-CH-aligned.usfm`
 
-Wait for round 2 to complete.
-
-**Merge** — assemble the full chapter file for each translation type:
-- ULT: read `BOOK-CH-v1-vHALF-aligned.usfm` and `BOOK-CH-vHALF+1-vN-aligned.usfm`, write `BOOK-CH-aligned.usfm`
-  - Keep the full header (`\id`, `\usfm`, `\ide`, `\h`, `\mt`, `\c`) from part 1
-  - Append only the verse lines (lines starting with `\v`, `\q`, `\zaln`, `\w`, etc.) from part 2
-- UST: same
+Do NOT use Bash, sub-agents, or manual Read+Write for the merge — use the MCP tool.
 
 ## Output
 
