@@ -326,7 +326,7 @@ def parse_usfm_verses(usfm_path):
                 pending_front_matter = None
             continue
 
-        verse_match = re.match(r'\\v\s+(\d+[-\d]*|front)\s*(.*)', line)
+        verse_match = re.search(r'\\v\s+(\d+[-\d]*|front)\s*(.*)', line)
         if verse_match and current_chapter:
             save_current_verse()
             current_verse = verse_match.group(1)
