@@ -473,12 +473,17 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
     occurrences: occurrences.toString()
   });
 
-  // Count total occurrences of each Hebrew source word in this verse
-  // Key by the word string (the actual Hebrew text)
+  // Count total occurrences of each Hebrew source word as it will be emitted.
+  // Count from alignment entries (not hebrew_words array), because the same
+  // Hebrew word index can be referenced by multiple alignment groups in UST,
+  // and each reference produces a \zaln-s milestone.
   const hebrewWordTotalOccurrences = {};
-  for (const hw of (mapping.hebrew_words || [])) {
-    if (hw && hw.word) {
-      hebrewWordTotalOccurrences[hw.word] = (hebrewWordTotalOccurrences[hw.word] || 0) + 1;
+  for (const align of (mapping.alignments || [])) {
+    for (const idx of (align.hebrew_indices || [])) {
+      const hw = (mapping.hebrew_words || [])[idx];
+      if (hw && hw.word) {
+        hebrewWordTotalOccurrences[hw.word] = (hebrewWordTotalOccurrences[hw.word] || 0) + 1;
+      }
     }
   }
   // Track current occurrence per Hebrew word as we process alignments
