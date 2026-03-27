@@ -52,6 +52,11 @@ Culturally expected completions:
 - "wiser than men" - needs "than the wisdom of men"
 - "stronger than men" - needs "than the strength of men"
 
+**Transitive Verb Missing Object:**
+- "the Lord will not reject forever" - needs "reject his people"
+- "he will not afflict forever" - needs "afflict us"
+- When a verb that requires an object appears without one, the object is elided from context
+
 **Missing Conditional Words:**
 - "if you incline your heart" - continuing condition from earlier "if"
 - "But if not" - needs "if you are not doing X"

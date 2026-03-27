@@ -718,6 +718,27 @@ def main():
         print(f"  Demoted {demoted} parallelism item(s) from 'first instance' to follow-up",
               file=sys.stderr)
 
+    # Enforce single figs-imperative3p note per chapter.
+    # Keep only the first occurrence; drop all subsequent ones entirely
+    # (no follow-up template exists — the first-instance note directs
+    # translators to establish a team-wide approach).
+    first_imp3p_seen = False
+    imp3p_dropped = 0
+    imp3p_filtered = []
+    for item in items:
+        if item['sref'] == 'figs-imperative3p':
+            if not first_imp3p_seen:
+                first_imp3p_seen = True
+                imp3p_filtered.append(item)
+            else:
+                imp3p_dropped += 1
+        else:
+            imp3p_filtered.append(item)
+    if imp3p_dropped:
+        print(f"  Dropped {imp3p_dropped} subsequent figs-imperative3p item(s) (first-instance-only rule)",
+              file=sys.stderr)
+    items = imp3p_filtered
+
     # Extract chapter from filename for output metadata
     basename = os.path.basename(args.input_tsv)
     chapter_match = re.search(r'-(\d+)', basename)

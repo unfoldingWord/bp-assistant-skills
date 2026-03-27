@@ -146,7 +146,7 @@ When granting permission for third parties to do something.
    | Is it prohibiting something? | Prohibition | figs-imperative3p |
    | Is it giving permission? | Permission | figs-imperative3p |
 
-4. **Always write a note**: Third-person imperatives are a translation issue for many languages
+4. **First instance only**: Flag only the first third-person imperative in each chapter. Add `t: first instance` to its explanation. Do not flag subsequent jussives in the same chapter — the first-instance note directs translators to establish a team-wide approach that covers all later occurrences.
 
 ---
 
@@ -181,9 +181,9 @@ Based on 98 examples in processed notes:
 - "He will be silent" (indicative form as command) -> **figs-declarative**
 
 ### When to write a note:
-- ALWAYS write a note for third-person imperatives
-- Many languages lack this grammatical form entirely
-- Translators need guidance on how to express the idea naturally
+- Write a note only for the **first** third-person imperative in each chapter
+- Add `t: first instance` to its explanation so the note writer uses the team-decision template
+- Do not flag subsequent jussives — the first-instance note covers the pattern for the whole chapter
 
 ---
 
