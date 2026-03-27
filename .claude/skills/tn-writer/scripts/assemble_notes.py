@@ -34,6 +34,17 @@ def ref_sort_key(ref):
     return (9999, 9999)
 
 
+def _find_in_ult(quote, ult):
+    """Try to find quote in ULT text (case-insensitive). Returns position or -1."""
+    pos = ult.lower().find(quote.lower())
+    if pos < 0:
+        # Try without curly braces
+        clean_ult = re.sub(r'\{([^}]*)\}', r'\1', ult)
+        clean_quote = re.sub(r'\{([^}]*)\}', r'\1', quote)
+        pos = clean_ult.lower().find(clean_quote.lower())
+    return pos
+
+
 def intra_verse_sort_key(item):
     """Within a verse, sort by ULT position (first to last), then longest first.
 
@@ -46,18 +57,33 @@ def intra_verse_sort_key(item):
     if not gl_quote or not ult_verse:
         return (9998, 0)
 
-    # Find position of gl_quote in ULT verse (case-insensitive)
-    pos = ult_verse.lower().find(gl_quote.lower())
-    if pos < 0:
-        # Try without curly braces
-        clean_ult = re.sub(r'\{([^}]*)\}', r'\1', ult_verse)
-        clean_quote = re.sub(r'\{([^}]*)\}', r'\1', gl_quote)
-        pos = clean_ult.lower().find(clean_quote.lower())
+    full_len = len(gl_quote)
+
+    # 1. Try gl_quote as-is
+    pos = _find_in_ult(gl_quote, ult_verse)
+
+    # 2. If gl_quote contains '&', try replacing with common separators
+    if pos < 0 and ' & ' in gl_quote:
+        for sep in [' and ', '; ', ', ']:
+            expanded = gl_quote.replace(' & ', sep)
+            pos = _find_in_ult(expanded, ult_verse)
+            if pos >= 0:
+                full_len = len(expanded)
+                break
+
+    # 3. If still not found, split on '&' and match first segment
+    if pos < 0 and ' & ' in gl_quote:
+        first_seg = gl_quote.split(' & ', 1)[0].strip()
+        if first_seg:
+            pos = _find_in_ult(first_seg, ult_verse)
+            # Keep full_len as the original gl_quote length so whole-verse
+            # notes (parallelism) sort before sub-phrase notes
+
     if pos < 0:
         pos = 9999
 
     # Negative length so longer phrases sort first
-    return (pos, -len(gl_quote))
+    return (pos, -full_len)
 
 
 def generate_short_id():
