@@ -189,6 +189,7 @@ As you work through items, keep a mental map of interpretive commitments you hav
    - If the gl_quote boundary creates an orphaned preposition or conjunction, the preferred fix is to expand the gl_quote in Step 7, not to include the orphaned word only in the AT.
    - For restructuring issue types (figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result, grammar-connect-condition-fact): if the note suggests reordering parts of the verse, ensure the gl_quote spans the full area being restructured. The AT must show the complete restructured text, not just a fragment.
    - For figs-parallelism: ensure the gl_quote captures both full parallel phrases, not just the key parallel terms. Check whether the parallelism involves ellipsis (words omitted in one phrase that are understood from the other) — if so, a separate figs-ellipsis note may be needed.
+   - For figs-ellipsis: the AT must supply the actual missing words from context, even if they come from a prior verse. If v23 omits a subject stated in v22, the AT must include that subject so the result is a complete, standalone clause.
 
 4. For items with `tcm_mode: true`:
    - Present multiple interpretations using the "This could mean:" format
