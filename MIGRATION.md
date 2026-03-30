@@ -64,16 +64,7 @@ ls workspace/output/AI-ULT/
 ls app/data/sessions/
 ```
 
-## 4. Install usfm-js dependency
-
-The curation script uses `usfm-js` which is already installed in the USFM scripts package:
-
-```bash
-cd /srv/bot/workspace/.claude/skills/utilities/scripts/usfm
-npm install
-```
-
-## 5. Run initial data setup
+## 4. Run initial data setup
 
 The curation logic runs **inside the Docker container** via MCP tool or admin DM. After deploying the bot:
 
@@ -129,5 +120,5 @@ Updates should be run monthly or after a new Door43 release (releases are infreq
 
 - Curation runs **inside** the Docker container (CommonJS module in `app/src/curate-data.js`)
 - `/workspace` is bind-mounted, so fetched data persists across container rebuilds
-- The `usfm-js` package must be installed: `cd workspace/.claude/skills/utilities/scripts/usfm && npm install`
-- The standalone `.mjs` script in workspace is also available for host-side use if needed
+- `usfm-js` is an app dependency — installed during `docker compose build`, no host-side setup needed
+- The standalone `.mjs` script in workspace is also available for host-side use if needed (requires host npm install)
