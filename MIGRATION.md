@@ -73,69 +73,61 @@ cd /srv/bot/workspace/.claude/skills/utilities/scripts/usfm
 npm install
 ```
 
-## 5. Run curation script (first run populates all fetchable data)
+## 5. Run initial data setup
 
-```bash
-cd /srv/bot/workspace
+The curation logic runs **inside the Docker container** via MCP tool or admin DM. After deploying the bot:
 
-# Dry run first -- see what will be fetched
-node .claude/skills/utilities/scripts/curate-published-data.mjs --check
-
-# Full run -- fetches everything, builds indexes (~5-10 min)
-node .claude/skills/utilities/scripts/curate-published-data.mjs --force
+**Option A: Admin DM to the bot in Zulip**
+```
+setup data
 ```
 
-This will:
+**Option B: MCP tool call (from Claude during a pipeline)**
+```
+curate_published_data({ step: "setup" })
+```
+
+Both are equivalent to a full force-fetch. This will:
 1. Discover published OT books from Door43 releases API (currently 25 books, v88)
 2. Fetch aligned ULT, UST, TN, Hebrew Bible, T4T for each book
 3. Fetch glossary, templates, and issues_resolved from Google Sheets/Docs
-4. Extract unaligned English ULT & UST (via usfm-js parser)
+4. Extract unaligned English ULT & UST (via usfm-js proper USFM parser)
 5. Resolve any missing GL quotes on TNs
 6. Build Strong's index, UST index, and TN index in `data/cache/`
 
 ## 6. Verify
 
-```bash
-# Check file counts match expected
-ls workspace/data/published_ult/*.usfm | wc -l    # expect ~25-26
-ls workspace/data/published_ult_english/*.usfm | wc -l  # same
-ls workspace/data/published-tns/*.tsv | wc -l      # expect ~25+
-ls workspace/data/cache/                            # strongs_index.json, ust_index.json, tn_index.json, published_manifest.json
+After setup completes, the bot will DM you a summary. You can also check via DM:
 
-# Spot check English extraction
-head -15 workspace/data/published_ult_english/01-GEN.usfm
-
-# Check indexes
-node -e "const d=JSON.parse(require('fs').readFileSync('workspace/data/cache/strongs_index.json'));console.log(d._meta)"
+```
+update data check
 ```
 
-## 7. Set up monthly curation (optional)
+This reports the current release tag, book count, and whether any new books are available.
 
-Add a cron job on the host (not in Docker):
+## 7. Ongoing updates
 
-```bash
-# Run monthly on the 1st at 3am
-echo "0 3 1 * * cd /srv/bot/workspace && node .claude/skills/utilities/scripts/curate-published-data.mjs >> /tmp/curate.log 2>&1" | crontab -
+**Admin DM commands:**
+```
+update data              # Normal update (only fetches if release changed or cache stale)
+update data force        # Force refetch everything
+update data check        # Dry run — report what's changed
+update data fetch-door43 # Just Door43 fetch step
+update data build-indexes # Just rebuild indexes
 ```
 
-Or trigger via admin DM in Zulip (requires adding a route in `app/config.json`).
+**MCP tool** (available to Claude in pipelines):
+```
+curate_published_data({ step: "check" })
+curate_published_data({ force: true })
+curate_published_data({ step: "build-indexes" })
+```
+
+Updates should be run monthly or after a new Door43 release (releases are infrequent).
 
 ## 8. Docker considerations
 
-- The curation script runs on the **host**, not inside the Docker container
-- `/workspace` is bind-mounted into Docker, so data is immediately available
-- The Chainguard container has no bash/Python -- all workspace tooling is Node.js
-- The `usfm-js` package in `scripts/usfm/node_modules/` must be installed on the host
-
-## Script reference
-
-```
-node curate-published-data.mjs                        # Full run
-node curate-published-data.mjs --check                # Dry run
-node curate-published-data.mjs --step fetch-door43    # Just Door43 fetch
-node curate-published-data.mjs --step fetch-google    # Just Google fetch
-node curate-published-data.mjs --step extract-english # Just unaligned extraction
-node curate-published-data.mjs --step resolve-quotes  # Just GLQuote resolution
-node curate-published-data.mjs --step build-indexes   # Just rebuild indexes
-node curate-published-data.mjs --force                # Ignore cache, refetch all
-```
+- Curation runs **inside** the Docker container (CommonJS module in `app/src/curate-data.js`)
+- `/workspace` is bind-mounted, so fetched data persists across container rebuilds
+- The `usfm-js` package must be installed: `cd workspace/.claude/skills/utilities/scripts/usfm && npm install`
+- The standalone `.mjs` script in workspace is also available for host-side use if needed
