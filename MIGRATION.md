@@ -108,9 +108,8 @@ ls app/data/sessions/
 ## 4. Create Docker infrastructure
 
 ```bash
-# Create external networks
+# Create external network
 docker network create work-net
-docker network create home-net
 
 # Create the Claude config volume (will be populated in step 5)
 docker volume create bot_claude-config
