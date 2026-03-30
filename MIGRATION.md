@@ -204,3 +204,4 @@ Run monthly or after a new Door43 release (releases are infrequent).
 - `usfm-js` is an app dependency, baked into the Docker image at build time
 - `/workspace` is bind-mounted, so fetched data persists across container rebuilds
 - The standalone `workspace/.claude/skills/utilities/scripts/curate-published-data.mjs` is also available for host-side use if you have Node.js installed
+- MCP server (port 3001) is bound to localhost only (`127.0.0.1:3001`). On the old server, Caddy on `home-net` reverse-proxied it externally at `bt-mcp.abidinginhesed.com` for Claude Desktop access. This is **not set up on AWS** -- no external MCP exposure. If needed in the future, add a reverse proxy to port 3001 with auth.
