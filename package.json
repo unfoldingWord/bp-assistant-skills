@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.13.5",
+    "axios": "1.13.5",
     "usfm-js": "^3.4.3"
   }
 }
