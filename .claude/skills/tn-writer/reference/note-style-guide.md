@@ -174,6 +174,10 @@ Similarly, do not borrow wording from templates belonging to other issue types. 
 - **figs-personification**: Check that the AT does not still include personification. The non-living thing should not be given any verb that implies agency or living action.
 - **writing-poetry (cognate accusative)**: Use the cognate accusative template exactly. Do not describe the poetic effect, explain the figure, or substitute other wording
 
+## Quotation Marks
+
+Use double curly quotes for all quoted meanings, glosses, and cited text within notes. Single apostrophes may only appear in possessives (e.g., "David’s"). We do not use contractions, so there is no other legitimate use of single quotes or apostrophes in note text. Follow the templates exactly: idiom meanings use double quotes (e.g., `to mean “they misuse your name.”`), not single quotes.
+
 ## Terminology
 
 When writing notes, use the same terms that appear in the ULT and UST for the verse. Never substitute common English terms that differ from the project's chosen renderings. For example:

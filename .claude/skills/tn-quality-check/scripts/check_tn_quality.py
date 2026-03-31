@@ -944,6 +944,27 @@ def check_curly_quotes(row):
     return None
 
 
+def check_single_quotes(row):
+    """Check 23: Single quotes should not be used except for possessives."""
+    if row.get('Occurrence') == '0':
+        return None
+    note = row.get('Note', '')
+    # Strip markdown bold and [AT brackets] to avoid false positives
+    clean = re.sub(r'\*\*[^*]+\*\*', '', note)
+    clean = re.sub(r'\[[^\]]+\]', '', clean)
+    # Look for single curly quotes used as quotation marks (not possessives)
+    # Quotation: \u2018text\u2019 or 'text'
+    # Match opening single curly quote followed by content and closing single curly quote
+    if re.search('\u2018[^\u2019]+\u2019', clean):
+        return {'severity': 'error', 'category': 'single_quotes',
+                'message': 'Note uses single curly quotes for meaning/gloss (use double curly quotes)'}
+    # Also catch straight single quotes used as quote marks (paired around words)
+    if re.search(r"(?<!\w)'[^']{2,}'(?!\w)", clean):
+        return {'severity': 'error', 'category': 'single_quotes',
+                'message': 'Note uses single straight quotes for meaning/gloss (use double curly quotes)'}
+    return None
+
+
 def check_at_capitalization(row, prepared_items):
     """Check 13: AT capitalization should match sentence position."""
     note = row.get('Note', '')
@@ -1118,6 +1139,11 @@ def main():
 
         # Check 12: Curly quotes
         f = check_curly_quotes(row)
+        if f:
+            row_findings.append(f)
+
+        # Check 23: Single quotes used as quotation marks
+        f = check_single_quotes(row)
         if f:
             row_findings.append(f)
 
