@@ -253,6 +253,8 @@ Brackets mark words added for English grammar not present in Hebrew.
 **Pattern**: When "my [noun]" in Hebrew becomes "of [noun] to me" for literalness:
 - צַר־לִי -> "trouble to me" (not "my distress")
 
+**Prefer fewer implied words**: When Hebrew uses a preposition + infinitive construct (e.g., min + infinitive), render it with the Hebrew preposition rather than restructuring into an English purpose/result clause with added implied words. Preserve Hebrew word order when the meaning is clear in English.
+
 **DO NOT use brackets for:**
 - **Participles with be-verbs are NEVER bracketed**: "Yahweh is giving" (not "Yahweh {is} giving"), "he was walking" (not "he {was} walking"), "they are dwelling" (not "they {are} dwelling"). The auxiliary verb is required English grammar for participle constructions.
 - Words within semantic range of Hebrew: "hill country" (not "hill {country}")

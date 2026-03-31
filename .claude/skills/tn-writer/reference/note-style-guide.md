@@ -105,6 +105,10 @@ Always use the author's name rather than "the author." Assume traditional author
 
 Only use "the author" as a fallback when the author is genuinely unknown. Never use "the writer."
 
+## Quote Width
+
+Prefer continuous Hebrew quotes when practical. Per Issues Resolved: "It is best to avoid discontinuous text in the Quote field. It is helpful to expand the Quote in order to avoid having ampersands in it." However, an `&` separator is acceptable when expanding the quote would force an awkward `...` ellipsis in the AT. Use judgment — expand when it makes both quote and AT cleaner, keep the `&` when it does.
+
 ## "Here" Rule
 Only start a note with "Here, " if it is immediately followed by a **bolded quote from the verse** that starts with a lowercase letter. For example: `Here, **admonish** means...` Do not use "Here" before author names, descriptions, or other non-quoted text. Do not do: `Here David is saying...` or `Here the author is speaking...`
 

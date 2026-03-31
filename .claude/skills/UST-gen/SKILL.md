@@ -37,7 +37,7 @@ The UST must be **noticeably different** from the ULT. If the only difference is
 - **Explain meaning** rather than preserve form
 
 
-**Test:** Read the ULT and UST side by side. If they sound nearly identical, rewrite the UST.
+**Test:** Read the ULT and UST side by side. If they sound nearly identical, rewrite the UST. In particular, when the ULT preserves figurative imagery (metaphors, yoke/burden language, body-part idioms), the UST should unpack the meaning rather than echo the same image.
 
 | ULT | Bad UST (too similar) | Good UST (differentiated) |
 |-----|----------------------|---------------------------|
