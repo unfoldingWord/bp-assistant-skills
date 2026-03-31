@@ -182,7 +182,7 @@ Write the final quality report to `output/quality/<BOOK>/<BOOK>-<CH>-quality.md`
 
 ## Mechanical Checks Reference
 
-The script runs these 16 checks:
+The script runs these 17 checks:
 
 ```
  #  Category                        Severity    What it checks
@@ -207,6 +207,7 @@ The script runs these 16 checks:
 20  multiverse_backref              warning     Note back-references another verse (e.g., "as in verse 3")
 20  multiverse_duplicate            warning     Near-duplicate notes (same issue type, adjacent verses, 75%+ content overlap)
 21  rquestion_missing_punctuation   warning     figs-rquestion AT should end with . or ! (not ? or bare)
+22  missing_at                      error       Note must include Alternate translation when template requires one
 ```
 
 **Note on orphaned preposition/conjunction warnings after gl_quote expansion**: When a gl_quote has been expanded to include a leading preposition or conjunction (the correct fix for orphaned words at the AT boundary), the script may still report `orphaned_conjunction` or `orphaned_prep` warnings. These are false positives -- the word now appears both in the expanded gl_quote and at the start of the AT, which is the intended behavior. During the deep semantic review (Step 3c), verify the actual substitution reads naturally rather than trusting these warnings at face value.

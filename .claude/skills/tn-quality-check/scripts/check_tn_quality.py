@@ -698,6 +698,33 @@ def check_at_starting_punctuation(row, prepared_items):
     return findings
 
 
+def check_missing_at(row, prepared_items):
+    """Check 22: Notes must have an alternate translation when the template requires one."""
+    note = row.get('Note', '')
+    item = prepared_items.get(row.get('ID', ''))
+    if not item:
+        return None
+    needs_at = item.get('needs_at', False)
+    tcm_mode = item.get('tcm_mode', False)
+    note_type = item.get('note_type', '')
+
+    # If the template has an AT section, the note must include one
+    if not needs_at and not tcm_mode:
+        return None
+
+    # Check for "Alternate translation:" anywhere in the note
+    if 'Alternate translation:' in note or 'Alternate translation:' in note:
+        return None
+
+    # TCM notes use inline "Alternate translation:" per option
+    if tcm_mode:
+        return {'severity': 'error', 'category': 'missing_at',
+                'message': 'TCM note is missing Alternate translation(s)'}
+
+    return {'severity': 'error', 'category': 'missing_at',
+            'message': 'Note is missing Alternate translation (template requires one)'}
+
+
 def check_hebrew_quote_joiners(row, hebrew_verses):
     """Check 19: Hebrew quotes spanning non-adjacent words should use & separators."""
     if row.get('Occurrence') == '0':
@@ -1125,6 +1152,11 @@ def main():
 
         # Check 21: rquestion AT must end with . or !
         for f in check_rquestion_at_punctuation(row, prepared_items):
+            row_findings.append(f)
+
+        # Check 22: Missing alternate translation
+        f = check_missing_at(row, prepared_items)
+        if f:
             row_findings.append(f)
 
         # Annotate each finding with row context

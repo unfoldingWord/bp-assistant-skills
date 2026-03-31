@@ -179,7 +179,7 @@ As you work through items, keep a mental map of interpretive commitments you hav
 
 2. Read the `prompt` field -- it contains all context (templates, verse text, explanation). Generate the note following the style guide.
 
-3. For items with `needs_at: true`:
+3. For items with `needs_at: true`, the note must include an alternate translation — notes missing one will fail quality check:
    - Place the AT at the end of the note: `Alternate translation: [text here]`
    - Use square brackets, not quotes, around the AT text
    - The AT must fit seamlessly: removing `gl_quote` from `ult_verse` and inserting the AT should read as natural English
