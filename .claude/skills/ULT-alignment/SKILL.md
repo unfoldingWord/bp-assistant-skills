@@ -522,6 +522,25 @@ grep -oE '\\w [^|]+\|' aligned.usfm | sed 's/\\w //;s/|//' | tr '\n' ' '
 # Should match original ULT text word-for-word
 ```
 
+## Step 8: Check for Voice Mismatches
+
+After text verification passes, run the voice mismatch check to catch cases where an
+active Hebrew verb stem was rendered with an English passive construction:
+
+```bash
+python3 .claude/skills/utilities/scripts/check_ult_voice_mismatch.py \
+  output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm
+```
+
+Exit code 0 = clean. Exit code 1 = mismatches found; each line shows the verse,
+Hebrew word, lemma, and the English passive phrase. Review each flagged item:
+
+- If the Hebrew verb is genuinely active (Qal, Piel, Hiphil) and the English uses
+  a passive, the ULT needs correction — rewrite as active with implicit subject
+  ("They violated..." rather than "...are violated").
+- Some flags may be false positives (e.g. idiomatic passives where the source ULT
+  author made a deliberate choice). Use judgment.
+
 ## Gemini Review (optional, activation only)
 
 After validation, run Gemini as an independent reviewer. Only run if `--gemini` is explicitly passed. Skip by default.
