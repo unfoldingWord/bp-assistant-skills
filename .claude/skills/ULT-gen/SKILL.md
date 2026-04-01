@@ -249,7 +249,7 @@ Brackets mark words added for English grammar not present in Hebrew.
 - Implied prepositions in negation: "not {for} my transgression"
 - Purpose clause markers: "that they {may} not {be}"
 - Implied objects: "{to} any treacherous workers"
-- **Active verbs with no explicit subject where English passive would be the natural rendering**: supply the implied subject in brackets to preserve active voice. Use a contextually appropriate noun — `{people}`, `{enemies}`, `{he}`, etc. E.g., `{people} forgot` (Qal of שָׁכַח, LAM 2:6) rather than "is forgotten"; `let {people} fill him` (LAM 3:30) rather than "let him be filled." When the implied subject is genuinely unclear, passive with a note is acceptable, but bracket the subject wherever context makes it identifiable.
+- **Active verbs with no explicit subject where English passive would be the natural rendering**: supply the implied subject in brackets to preserve active voice. Use a contextually appropriate noun — `{people}`, `{enemies}`, `{he}`, etc. E.g., `{people} forgot` (Qal of שָׁכַח, LAM 2:6) rather than "is forgotten"; `let {people} fill him` (LAM 3:30) rather than "let him be filled." When the implied subject is genuinely unclear, try `{someone}` first before resorting to passive.
 
 **Pattern**: When "my [noun]" in Hebrew becomes "of [noun] to me" for literalness:
 - צַר־לִי -> "trouble to me" (not "my distress")
