@@ -162,6 +162,11 @@ Do not introduce linguistic or grammatical terminology that does not appear in t
 
 Similarly, do not borrow wording from templates belonging to other issue types. Each note should follow only the template(s) provided for its own support reference.
 
+## Classification Guidelines
+
+- **"daughter of X" (בַּת + people/place name)**: Use figs-idiom, not figs-personification. "Daughter of Zion," "daughter of my people," "daughter of Edom" are kinship-term idioms that refer to a people group. They are not personifying a nation as a woman. Use the figs-idiom template: "Jeremiah is using **daughter of X** as a common expression to refer to the people of X."
+- **Divine causation of literal events**: When the text says Yahweh did something that literally happened (e.g., "he kindled a fire in Zion" when the Babylonians actually burned Jerusalem), use figs-explicit, not figs-metaphor. The fire is real; the implicit information is that Yahweh caused it through human agents. Reserve figs-metaphor for cases where God's action is genuinely figurative (e.g., "he poured out his wrath" -- wrath is not literally a liquid).
+
 ## Issue-Specific Restrictions
 
 - **writing-background & writing-newevent**: No elaboration on narrative function or context
