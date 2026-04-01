@@ -25,17 +25,24 @@ import sys
 # ---------------------------------------------------------------------------
 
 def is_active_hebrew_verb(morph):
-    """Return True if x-morph is an active-stem Hebrew verb.
+    """Return True if x-morph is an active-stem Hebrew verb that should not
+    be rendered with an English passive.
 
     In unfoldingWord x-morph codes (e.g. "He,Vqp3fs"):
       V = verb, next char = stem.
-      Active stems (lowercase): q=Qal, p=Piel, h=Hiphil, t=Hitpael
-      Passive stems (uppercase): N=Niphal, P=Pual, H=Hophal
+      Active stems flagged (lowercase, excluding t): q=Qal, p=Piel, h=Hiphil
+      Excluded from check: t=Hitpael (reflexive/reciprocal — English passive is
+        often a legitimate rendering, e.g. "are intertwined" for Hitpael of שׂרג)
+      Passive stems (uppercase, not flagged): N=Niphal, P=Pual, H=Hophal
     """
     m = re.search(r'He,V([a-zA-Z])', morph)
     if not m:
         return False
-    return m.group(1).islower()
+    stem = m.group(1)
+    # Hitpael (t) is reflexive — exclude from check
+    if stem == 't':
+        return False
+    return stem.islower()
 
 
 # ---------------------------------------------------------------------------
