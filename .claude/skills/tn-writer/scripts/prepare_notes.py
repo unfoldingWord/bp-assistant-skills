@@ -699,23 +699,25 @@ def main():
         print(f"  Filtered {len(items) - len(tw_filtered)} items with tW articles", file=sys.stderr)
         items = tw_filtered
 
-    # Enforce single "first instance" parallelism note per chapter.
-    # Only the first figs-parallelism item keeps "t: first instance"; all later
-    # ones have that tag stripped so they use the shorter follow-up templates.
+    # Enforce single figs-parallelism note per chapter.
+    # Keep only the first occurrence; drop all subsequent ones.
+    # The first-instance note directs translators to handle parallelism
+    # throughout the chapter — additional notes are redundant.
     first_parallelism_seen = False
-    demoted = 0
+    parallelism_dropped = 0
+    parallelism_filtered = []
     for item in items:
         if item['sref'] == 'figs-parallelism':
             if not first_parallelism_seen:
                 first_parallelism_seen = True
+                parallelism_filtered.append(item)
             else:
-                new_expl = re.sub(r't:\s*first\s+instance\b', '', item['explanation'],
-                                  flags=re.IGNORECASE).strip()
-                if new_expl != item['explanation']:
-                    item['explanation'] = new_expl
-                    demoted += 1
-    if demoted:
-        print(f"  Demoted {demoted} parallelism item(s) from 'first instance' to follow-up",
+                parallelism_dropped += 1
+        else:
+            parallelism_filtered.append(item)
+    items = parallelism_filtered
+    if parallelism_dropped:
+        print(f"  Dropped {parallelism_dropped} subsequent figs-parallelism item(s) (first-instance-only rule)",
               file=sys.stderr)
 
     # Enforce single figs-imperative3p note per chapter.
