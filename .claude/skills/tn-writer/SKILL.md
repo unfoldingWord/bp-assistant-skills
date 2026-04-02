@@ -73,21 +73,23 @@ Note: `orig_quote` fields in the prepared JSON will be empty when using aligned 
 
 Read `/tmp/claude/alignment_data.json` directly using the Read tool. The file is a JSON object keyed by `"chapter:verse"` — review the first few entries to understand the English-to-Hebrew word mappings (fields: `eng`, `heb`, `heb_pos`, `strong`).
 
-### Step 2c: Fill Hebrew Quotes (Claude Semantic Matching)
+### Step 2c: Fill Hebrew Quotes (script + manual fallback)
 
-For each item in `/tmp/claude/prepared_notes.json` where `orig_quote` is empty:
+Run `mcp__workspace-tools__fill_orig_quotes` with:
+- `preparedJson: "/tmp/claude/prepared_notes.json"`
+- `alignmentJson: "/tmp/claude/alignment_data.json"`
+- (hebrewUsfm omitted — auto-detected from book code)
 
-1. Read the alignment data for the item's verse from `/tmp/claude/alignment_data.json`
-2. Semantically identify which English aligned words correspond to the item's `gl_quote`
-3. Collect the Hebrew `heb` values for those matched alignment entries
-4. Read the Hebrew source verse from `data/hebrew_bible/*-<BOOK>.usfm` (find the `\c` and `\v` markers for the chapter:verse)
-5. Order the collected Hebrew words by their character offset in the Hebrew source verse: find each Hebrew word's position in the verse string (index of its first character), then sort ascending by that offset. Do NOT use `heb_pos` from the alignment data for ordering -- that reflects English word order in the USFM, not Hebrew reading order
-6. Verify EXACT Unicode match: each Hebrew word you collected must appear character-for-character as a `\w` token in the Hebrew source verse for that reference
-7. Extract `orig_quote` as the exact substring from the Hebrew source verse that spans from the first collected word to the last -- copy Unicode for Unicode. Find the start of the first word and the end of the last word in the verse string, then copy everything between those positions, including the spaces and any Maqqeph (־) connectors that naturally appear in the source. Do not concatenate the individual `heb` values together; copy the contiguous span from the source. Update `orig_quote` in the prepared JSON.
+The script deterministically matches English gl_quote words to alignment data and extracts exact Hebrew spans from the UHB source USFM. It updates `prepared_notes.json` in place.
 
-**CRITICAL**: You MUST copy Hebrew text character-for-character from the source file. Do not generate Hebrew from memory. Read the source, find the words, copy them exactly.
+Review the output — it reports how many items were resolved and lists any that couldn't be matched automatically. For unresolved items only, manually fill `orig_quote` using the alignment data and Hebrew source:
 
-After filling all items, write the updated prepared JSON back to `/tmp/claude/prepared_notes.json`.
+1. Read the alignment data for the item's verse
+2. Semantically identify which English aligned words correspond to the `gl_quote`
+3. Collect the Hebrew `heb` values for matched entries
+4. Read the Hebrew source verse from `data/hebrew_bible/*-<BOOK>.usfm`
+5. Extract the exact Unicode span covering those Hebrew words from the source (copy character-for-character; do not concatenate `heb` values)
+6. Write the updated JSON back to `/tmp/claude/prepared_notes.json`
 
 ### Step 2d: Resolve gl_quote from alignment (script)
 

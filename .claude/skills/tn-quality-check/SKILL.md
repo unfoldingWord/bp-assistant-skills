@@ -118,7 +118,7 @@ Flag notes in the same verse that:
 
 #### 3g. "Here" rule compliance
 
-If a note starts with "Here, ", verify the next content is a **bolded quote from the verse** starting with a lowercase letter. Flag violations like "Here David is saying..." or "Here the author is speaking..."
+The mechanical check (check 24) catches the most common violations. In semantic review, verify that notes flagged by check 24 are genuinely wrong (not false positives), and look for subtler cases the script may miss (e.g., "Here, **The** king..." where the bolded word starts with uppercase).
 
 #### 3h. Restructuring quote scope
 
@@ -182,7 +182,7 @@ Write the final quality report to `output/quality/<BOOK>/<BOOK>-<CH>-quality.md`
 
 ## Mechanical Checks Reference
 
-The script runs these 18 checks:
+The script runs these checks:
 
 ```
  #  Category                        Severity    What it checks
@@ -209,6 +209,8 @@ The script runs these 18 checks:
 21  rquestion_missing_punctuation   warning     figs-rquestion AT should end with . or ! (not ? or bare)
 22  missing_at                      error       Note must include Alternate translation when template requires one
 23  single_quotes                   error       Single quotes must not be used as quotation marks (use double curly quotes; single apostrophe only for possessives)
+24  here_rule                       warning     Note starts with "Here" — next content must be a bolded lowercase quote (not "Here David is saying...")
+25  template_phrase_missing         warning     figs-abstractnouns/rquestion/metaphor notes include expected fixed template phrase
 ```
 
 **Note on orphaned preposition/conjunction warnings after gl_quote expansion**: When a gl_quote has been expanded to include a leading preposition or conjunction (the correct fix for orphaned words at the AT boundary), the script may still report `orphaned_conjunction` or `orphaned_prep` warnings. These are false positives -- the word now appears both in the expanded gl_quote and at the start of the AT, which is the intended behavior. During the deep semantic review (Step 3c), verify the actual substitution reads naturally rather than trusting these warnings at face value.
