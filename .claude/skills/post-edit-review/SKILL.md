@@ -48,6 +48,36 @@ Human edits affect existing issues in three ways:
 3. **New issue appears** -- human edit creates a translation issue that wasn't in the
    AI-generated text. Add an issue for it.
 
+## Step 0: Quick Diff Gate
+
+**Model: Haiku** — this is a diff check, not a reasoning task.
+
+Run this before spinning up any agents. If there are no human edits, skip the full pipeline immediately.
+
+### Procedure
+
+1. **Fetch master ULT and UST** from Door43 via `mcp__workspace-tools__fetch_door43`.
+   - This is mandatory — no fallback to cached copies.
+   - Retry up to 5 times on any failure. If all 5 attempts fail, abort the entire skill with a clear error message.
+
+2. **Load aligned AI-generated files**:
+   - ULT: `output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm`
+   - UST: `output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm`
+   - These are the post-alignment versions. Use them, not the raw generated files.
+
+3. **Extract the target chapter** from both the fetched master and the AI-generated files.
+   - Locate `\c <CHAPTER>` markers to find the start line.
+   - The chapter ends at the next `\c` marker or end of file.
+   - Slice out only that chapter's content from each file.
+
+4. **Diff the slices** — literal comparison, no stripping or normalization.
+   - Diff master ULT chapter vs AI-generated ULT chapter.
+   - Diff master UST chapter vs AI-generated UST chapter.
+
+5. **Gate decision**:
+   - If **both diffs are empty**: print `No human edits detected — skipping post-edit review.` and exit the skill cleanly (success). Do not write any output files. The pipeline runner will advance normally to the next step.
+   - If **any diff exists**: proceed to the Diff Analyzer and Issue Reconciler below.
+
 ## Team Composition
 
 Lighter-weight than the initial pipeline -- this is review, not full generation.
