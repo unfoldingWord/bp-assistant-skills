@@ -47,7 +47,7 @@ Read the following files. Not all may exist; work with what's available.
 
 **Reference materials (consult as needed):**
 - Published TN intros for style reference: `data/published-tns/tn_PSA.tsv` (grep for `^PSA\t<chapter>\tintro`)
-- Translation Words for key terms: use `python3 .claude/skills/issue-identification/scripts/check_tw_headwords.py "term1" "term2"` or browse `data/en_tw/`
+- Translation Words for key terms: use `mcp__workspace-tools__check_tw_headwords` with `terms=["term1", "term2"]` or browse `data/en_tw/`
 - Translation Academy for psalm type definitions: `data/ta-flat/`
 
 ### Step 2: Read the Style Guide

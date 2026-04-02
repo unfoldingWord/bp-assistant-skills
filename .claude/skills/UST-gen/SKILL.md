@@ -407,27 +407,17 @@ This converts:
 ## Scripts Reference
 
 ### Fetch T4T (primary source)
-```bash
-# Fetch T4T books
-python3 .claude/skills/utilities/scripts/fetch_t4t.py --books PSA 1KI
 
-# List available books
-python3 .claude/skills/utilities/scripts/fetch_t4t.py --list
-```
+Use `mcp__workspace-tools__fetch_t4t` with `books=["PSA", "1KI"]` (or omit `books` to list available).
 
 ### Vocabulary lookup
+
 ```bash
 # 1. Check authoritative UST decisions
 grep -i "UST" data/issues_resolved_optimized.txt | grep -i "[term]"
 
 # 2. Check prior UST vocabulary decisions
 grep "H2617" data/quick-ref/ust_decisions.csv 2>/dev/null
-
-# 3. Check UST Strong's index for published UST precedent
-python3 .claude/skills/utilities/scripts/build_ust_index.py --lookup H2617
-
-# 4. Compare ULT vs UST renderings for the same word
-python3 .claude/skills/utilities/scripts/build_ust_index.py --compare H2617
 
 # 5. Check glossaries (UST_GLOSS column)
 grep "[term]" data/glossary/hebrew_ot_glossary.csv
@@ -437,20 +427,15 @@ grep "1:1" data/t4t/11-1KI.usfm
 grep "1:1" data/published_ult_english/11-1KI.usfm
 ```
 
+For steps 3 and 4 (UST Strong's index), use `mcp__workspace-tools__build_ust_index` with `lookup="H2617"` or `compare="H2617"`.
+
 ### UST Strong's Index
-```bash
-# Build/refresh UST index (daily staleness check)
-python3 .claude/skills/utilities/scripts/build_ust_index.py
 
-# Look up published UST renderings for a Strong's number
-python3 .claude/skills/utilities/scripts/build_ust_index.py --lookup H2617
-
-# Compare ULT (literal) vs UST (meaning-based) renderings
-python3 .claude/skills/utilities/scripts/build_ust_index.py --compare H2617
-
-# Index statistics
-python3 .claude/skills/utilities/scripts/build_ust_index.py --stats
-```
+Use `mcp__workspace-tools__build_ust_index` with optional parameters:
+- `lookup="H2617"` — look up published UST renderings for a Strong's number
+- `compare="H2617"` — compare ULT (literal) vs UST (meaning-based) renderings
+- `stats=true` — index statistics
+- No parameters — build/refresh UST index (daily staleness check)
 
 ### Parse aligned USFM (for Hebrew verification)
 ```bash

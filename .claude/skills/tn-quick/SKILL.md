@@ -14,7 +14,7 @@ Write individual translation notes to `output/scratch.txt` without running the f
 3. Read the UST verse from `door43-repos/en_ust/` for AT comparison
 4. Look up the template: `grep '<issue_type>' data/templates.csv`
 5. Write the note following the template and style rules below
-6. Append to `output/scratch.txt` in this format — each field on its own line for easy copying in a web GUI:
+6. Always append to the **end** of `output/scratch.txt` — never insert in the middle. Format each field on its own line for easy copying in a web GUI:
 
 ```
 --- BOOK C:V ISSUE_TYPE ---
@@ -25,10 +25,8 @@ NOTE_TEXT
 
 Use a placeholder ID (abc1, abc2, etc., incrementing from what's already in the file). Leave Hebrew quote blank if not readily available.
 
-7. After appending, run the fix_quotes script to convert any straight quotes to curly quotes:
-   ```
-   python3 .claude/skills/tn-quick/fix_quotes.py output/scratch.txt
-   ```
+7. After appending, run curly quote conversion:
+   Use `mcp__workspace-tools__curly_quotes` with `input="output/scratch.txt"`, `inPlace=true`.
 
 ## Style Rules
 

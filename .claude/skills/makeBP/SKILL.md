@@ -136,10 +136,7 @@ knows when it completes. The other three can run in the background if desired.
 After ULT-alignment completes, run the bracket validator to catch words
 incorrectly marked as implied when they actually translate a Hebrew prefix:
 
-```bash
-python3 .claude/skills/utilities/scripts/validate_ult_brackets.py \
-  output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm
-```
+Use `mcp__workspace-tools__validate_ult_brackets` with `alignedUsfm="output/AI-ULT/{BOOK}/{BOOK}-{CH}-aligned.usfm"`.
 
 If issues are found, fix the aligned USFM before proceeding to tn-writer.
 Typical fix: remove curly braces from words like `{in}` that align to a

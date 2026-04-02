@@ -275,10 +275,7 @@ Remaining `{bracketed}` English words that don't map to any Hebrew get `hebrew_i
 
 Every English word must appear in exactly one alignment entry. Run validation:
 
-```bash
-python3 .claude/skills/utilities/scripts/validate_alignment_json.py \
-  --ust /path/to/alignments/*.json
-```
+Use `mcp__workspace-tools__validate_alignment_json` with `files` set to the array of alignment JSON paths and `ust=true`.
 
 ### Step 9: Save JSON
 
@@ -395,16 +392,9 @@ diff \
 
 ### Step 1: Verify English Text Preservation
 
-```bash
-# Extract English from aligned output
-python3 .claude/skills/utilities/scripts/extract_ult_english.py \
-  --input-dir output/AI-UST \
-  --output-dir /tmp/verify-alignment \
-  --force
+Use `mcp__workspace-tools__extract_ult_english` with `inputDir="output/AI-UST"`, `outputDir="/tmp/verify-alignment"`, `force=true`.
 
-# Compare extracted text with original unaligned UST
-diff <(cat /tmp/verify-alignment/BOOK.usfm) <(cat output/AI-UST/BOOK/BOOK-unaligned.usfm)
-```
+Then compare extracted text with original unaligned UST: diff `/tmp/verify-alignment/BOOK.usfm` against `output/AI-UST/BOOK/BOOK-unaligned.usfm`.
 
 ### Step 2: Verify Bracket Placement
 

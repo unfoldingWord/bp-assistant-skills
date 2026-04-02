@@ -69,23 +69,7 @@ BRANCH="AI-PSA-030"  # or AI-ISA-33
 
 ### Step 2: Dry-Run Preview (interactive use only)
 
-For interactive (non-pipeline) use, show the user what will change before pushing.
-
-For USFM (ULT/UST):
-```bash
-python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
-  --book-file "$DOOR43_REPOS_PATH/$REPO/{BOOK_NUM}-{BOOK}.usfm" \
-  --source-file output/AI-ULT/PSA/PSA-030-aligned.usfm \
-  --chapter 30 --verses 1-22 --dry-run
-```
-
-For TN:
-```bash
-python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
-  --book-file "$DOOR43_REPOS_PATH/$REPO/tn_PSA.tsv" \
-  --source-file output/notes/PSA/PSA-030.tsv \
-  --chapter 30 --dry-run
-```
+For interactive (non-pipeline) use, show the user what will change before pushing. Pass `--dry-run` to the `door43-push-cli.js` command (Step 3) to preview without committing. The CLI will print the diff but not push.
 
 Wait for user confirmation before proceeding. Skip this step in unattended/pipeline mode.
 
@@ -153,16 +137,8 @@ node /app/src/door43-push-cli.js \
 - Exit 0 = success, 1 = failure, 2 = bad args
 - Internally calls `door43Push()` from `door43-push.js`
 
-### insert_usfm_verses.py
-Surgically replaces a verse range in a book-level USFM file.
-
-```
-python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
-  --book-file <path-to-book.usfm> \
-  --source-file <path-to-source.usfm> \
-  --chapter <N> --verses <start-end> \
-  [--dry-run] [--backup]
-```
+### insert_usfm_verses (internal)
+Used internally by `door43-push-cli.js`. Surgically replaces a verse range in a book-level USFM file.
 
 - Strips source headers (`\id`, `\usfm`, `\ide`, `\h`, `\toc*`, `\mt`, `\c`), uses only verse content
 - Finds verse boundaries by `\v N` markers within the target chapter
@@ -172,18 +148,8 @@ python3 .claude/skills/repo-insert/scripts/insert_usfm_verses.py \
 - Verifies verse marker count is unchanged after insertion
 - Preserves original file line endings
 
-### insert_tn_rows.py
-Verse-aware chapter replacement for TN rows in a book-level TSV file.
-
-```
-python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
-  --book-file <path-to-tn.tsv> \
-  --source-file <path-to-source.tsv> \
-  --chapter <chapter-number> \
-  [--skip-intro] [--per-reference] \
-  [--references 58:2,58:3] \
-  [--dry-run] [--backup]
-```
+### insert_tn_rows (internal)
+Used internally by `door43-push-cli.js`. Verse-aware chapter replacement for TN rows in a book-level TSV file.
 
 - Default mode: detects which verses are in the source file, removes only those verses from the book file, preserves rows for verses not covered by the source
 - `--per-reference`: legacy mode that matches rows by exact reference string
@@ -191,14 +157,8 @@ python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
 - `--references`: filters to specific references (only with `--per-reference`)
 - Sort order within each chapter: `:intro` < `:front` < `:1` < `:2` < ... (see Note Ordering below)
 
-### gitea_pr.py
-Creates a PR via the Gitea API and optionally merges it. Used by the manual fallback procedure.
-
-```
-python3 .claude/skills/repo-insert/scripts/gitea_pr.py \
-  --repo <repo-name> --head <source-branch> --base <target-branch> \
-  --title "PR title" --merge
-```
+### gitea_pr (manual fallback)
+Use `mcp__workspace-tools__gitea_pr` with `repo`, `head`, `base`, `title`, and `merge=true`. Used only when the CLI is unavailable.
 
 ## Note Ordering (TN)
 

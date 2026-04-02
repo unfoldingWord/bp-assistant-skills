@@ -71,20 +71,7 @@ Note: `orig_quote` fields in the prepared JSON will be empty when using aligned 
 
 ### Step 2b: Review Alignment Data
 
-Read the alignment data JSON to understand the English-to-Hebrew word mappings:
-
-```bash
-python3 -c "
-import json
-with open('/tmp/claude/alignment_data.json') as f:
-    data = json.load(f)
-print(f'{len(data)} verses with alignment data')
-for ref in sorted(data.keys(), key=lambda r: (int(r.split(\":\")[0]), int(r.split(\":\")[1]) if r.split(\":\")[1] != \"front\" else 0))[:3]:
-    print(f'  {ref}: {len(data[ref])} aligned words')
-    for w in data[ref][:5]:
-        print(f'    {w[\"eng\"]} -> {w[\"heb\"]} (pos {w[\"heb_pos\"]})')
-"
-```
+Read `/tmp/claude/alignment_data.json` directly using the Read tool. The file is a JSON object keyed by `"chapter:verse"` — review the first few entries to understand the English-to-Hebrew word mappings (fields: `eng`, `heb`, `heb_pos`, `strong`).
 
 ### Step 2c: Fill Hebrew Quotes (Claude Semantic Matching)
 
@@ -112,22 +99,7 @@ This uses the alignment data to find English words mapped to the Hebrew in orig_
 
 ### Step 3: Verify Hebrew Quotes
 
-After filling orig_quote values, verify each Hebrew quote is a valid substring of Hebrew source:
-
-```bash
-python3 -c "
-import json
-with open('/tmp/claude/prepared_notes.json') as f:
-    data = json.load(f)
-empty = [i for i in data['items'] if not i.get('orig_quote') and not i['reference'].endswith(':front')]
-if empty:
-    print(f'WARNING: {len(empty)} items still missing orig_quote:')
-    for e in empty[:10]:
-        print(f'  {e[\"id\"]} {e[\"reference\"]}: \"{e[\"gl_quote\"]}\"')
-else:
-    print(f'All {len(data[\"items\"])} items have orig_quote filled.')
-"
-```
+After filling orig_quote values, read `/tmp/claude/prepared_notes.json` and scan for items where `orig_quote` is empty and the reference does not end with `:front`. Report any missing items.
 
 Investigate any items still missing `orig_quote`. Common causes:
 - The gl_quote doesn't match any words in the alignment data (check for typos)

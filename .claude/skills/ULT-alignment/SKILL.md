@@ -290,12 +290,9 @@ For each Hebrew word (in English rendering order):
 
 ### Step 5: Verify Completeness
 
-After saving JSON files, validate them with the validation script:
+After saving JSON files, validate them with the validation tool:
 
-```bash
-python3 .claude/skills/utilities/scripts/validate_alignment_json.py \
-  /path/to/alignments/*.json
-```
+Use `mcp__workspace-tools__validate_alignment_json` with `files` set to the array of alignment JSON paths (e.g., `["/path/to/alignments/GEN-01-001.json"]`).
 
 This checks that every Hebrew index is aligned, every English word appears exactly once, and required fields are present.
 
@@ -315,16 +312,9 @@ After generating aligned USFM, verify the English text is preserved exactly. Thi
 
 Extract English from the aligned output and compare with the original unaligned ULT:
 
-```bash
-# Extract English from aligned output
-python3 .claude/skills/utilities/scripts/extract_ult_english.py \
-  --input-dir output/AI-ULT/{BOOK} \
-  --output-dir /tmp/verify-alignment \
-  --force
+Use `mcp__workspace-tools__extract_ult_english` with `inputDir="output/AI-ULT/{BOOK}"`, `outputDir="/tmp/verify-alignment"`, `force=true`.
 
-# Compare extracted text with original unaligned ULT
-diff <(cat /tmp/verify-alignment/{BOOK}.usfm) <(cat output/AI-ULT/{BOOK}/{BOOK}-unaligned.usfm)
-```
+Then compare extracted text with original unaligned ULT using a diff of `/tmp/verify-alignment/{BOOK}.usfm` against `output/AI-ULT/{BOOK}/{BOOK}-unaligned.usfm`.
 
 The extracted text should match exactly - same words, same order, same punctuation.
 
@@ -509,7 +499,7 @@ Before finalizing alignment JSON:
 
 Use Step 7's two-part verification to ensure the aligned output perfectly preserves the original text:
 
-1. **Text verification** - Extract English from aligned USFM using `extract_ult_english.py` and diff against original unaligned ULT
+1. **Text verification** - Extract English from aligned USFM using `mcp__workspace-tools__extract_ult_english` and diff against original unaligned ULT
 2. **USFM marker verification** - Compare USFM markers (\q1, \q2, \v, etc.) between aligned and original
 
 Both must match exactly. Any differences indicate the alignment process altered the text and must be corrected before finalizing.
@@ -527,10 +517,7 @@ grep -oE '\\w [^|]+\|' aligned.usfm | sed 's/\\w //;s/|//' | tr '\n' ' '
 After text verification passes, run the voice mismatch check to catch cases where an
 active Hebrew verb stem was rendered with an English passive construction:
 
-```bash
-python3 .claude/skills/utilities/scripts/check_ult_voice_mismatch.py \
-  output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm
-```
+Use `mcp__workspace-tools__check_ult_voice_mismatch` with `alignedUsfm="output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm"`.
 
 Exit code 0 = clean. Exit code 1 = mismatches found; each line shows the verse,
 Hebrew word, lemma, and the English passive phrase. Review each flagged item:

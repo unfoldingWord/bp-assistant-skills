@@ -60,10 +60,10 @@ With verse range: `TMP=tmp/deep-issue-id/<BOOK>-<CH>-v<START>-<END>`
 
 ### Fetch and Parse
 
-```bash
-python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> > $TMP/book_ult.usfm
-python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> --type ust > $TMP/book_ust.usfm 2>/dev/null || true
+Use `mcp__workspace-tools__fetch_door43` with `book="<BOOK>"`, output to `$TMP/book_ult.usfm`.
+Use `mcp__workspace-tools__fetch_door43` with `book="<BOOK>"`, `type="ust"`, output to `$TMP/book_ust.usfm`.
 
+```bash
 node .claude/skills/utilities/scripts/usfm/parse_usfm.js $TMP/book_ult.usfm \
   --chapter <N> [--verse <START>-<END>] \
   --output-json $TMP/alignments.json \
@@ -87,16 +87,11 @@ If editor notes exist, read them and pass to both analysts as additional input. 
 
 ### Compare, Detect, Index
 
-```bash
-python3 .claude/skills/issue-identification/scripts/compare_ult_ust.py \
-  $TMP/ult_plain.usfm $TMP/ust_plain.usfm \
-  --chapter <N> --output $TMP/ult_ust_diff.tsv
+Use `mcp__workspace-tools__compare_ult_ust` with `ultFile="$TMP/ult_plain.usfm"`, `ustFile="$TMP/ust_plain.usfm"`, `chapter=<N>`, `output="$TMP/ult_ust_diff.tsv"`.
 
-python3 .claude/skills/issue-identification/scripts/detection/detect_abstract_nouns.py \
-  $TMP/alignments.json --format tsv > $TMP/detected_issues.tsv
+Use `mcp__workspace-tools__detect_abstract_nouns` with `alignmentJson="$TMP/alignments.json"`, `format="tsv"`, output to `$TMP/detected_issues.tsv`.
 
-python3 .claude/skills/utilities/scripts/build_tn_index.py
-```
+Use `mcp__workspace-tools__build_tn_index` (no parameters needed for default build).
 
 Passive voice is identified by analysts during analysis (prompt-over-code). See `figs-activepassive.md` for the pattern, stative adjective exclusions, and worked examples.
 

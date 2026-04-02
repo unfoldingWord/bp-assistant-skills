@@ -44,18 +44,17 @@ This is the main comparison. The old script uses fuzzy sliding-window matching t
 ### Step 1 -- Run old script for baseline
 
 ```bash
-python3 .claude/skills/tn-writer/scripts/.old/extract_quotes_from_alignment.py \
+node .claude/skills/tn-writer/scripts/.old/extract_quotes_from_alignment.js \
     {ALIGNED} {ISSUES} --output /tmp/claude/test_old_quotes.json
 ```
+
+If no JS equivalent exists, skip this step and note that old-script baseline is unavailable.
 
 This produces a JSON array where each item has: `reference`, `gl_quote`, `orig_quote` (Hebrew), `gl_quote_roundtripped`.
 
 ### Step 2 -- Run new alignment extraction
 
-```bash
-python3 .claude/skills/tn-writer/scripts/extract_alignment_data.py \
-    {ALIGNED} --output /tmp/claude/test_alignment.json
-```
+Use `mcp__workspace-tools__extract_alignment_data` with `alignedUsfm="{ALIGNED}"`, `output="/tmp/claude/test_alignment.json"`.
 
 This produces a JSON object keyed by `"chapter:verse"`, where each value is an array of alignment records: `{eng, heb, heb_pos, strong}`.
 
@@ -127,22 +126,11 @@ If none found, report clearly and skip this test.
 
 ### Step 2 -- Run the AT fit test
 
-```bash
-python3 .claude/skills/tn-writer/scripts/test_prompt_over_code.py \
-    --test at-fit --chapter {chapter_number} \
-    --report /tmp/claude/poc_atfit.json
-```
+Use `mcp__workspace-tools__verify_at_fit` with:
+- `preparedJson="/tmp/claude/prepared_notes.json"` and `generatedJson="/tmp/claude/generated_notes.json"` if those files exist
+- or `notesTsv="{path_to_notes_tsv}"` if a notes TSV was found instead
 
-If prepared/generated JSON was found, add:
-```
-    --prepared-json /tmp/claude/prepared_notes.json \
-    --generated-json /tmp/claude/generated_notes.json
-```
-
-If a notes TSV was found instead, add:
-```
-    --notes {path_to_notes_tsv}
-```
+Write results to `/tmp/claude/poc_atfit.json`.
 
 ### Step 3 -- Read results
 

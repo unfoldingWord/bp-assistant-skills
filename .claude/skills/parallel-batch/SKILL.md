@@ -28,17 +28,13 @@ This orchestrator only splits and merges -- run it as **haiku**. Each tn-writer 
 
 ### Step 1: Split the Issue TSV
 
-```bash
-python3 .claude/skills/parallel-batch/scripts/split_tsv.py \
-    output/issues/<BOOK>/<BOOK>-<CH>.tsv \
-    --chunk-size 24
-```
+Use `mcp__workspace-tools__split_tsv` with `inputTsv="output/issues/<BOOK>/<BOOK>-<CH>.tsv"`, `chunkSize=24`.
 
-The script:
+The tool:
 - Auto-detects stanza boundaries for known chapters (PSA 119 -> 8-verse stanzas)
-- Groups stanzas into chunks of roughly `--chunk-size` verses
+- Groups stanzas into chunks of roughly `chunkSize` verses
 - Writes chunk files to the same directory: `<BOOK>-<CH>-v<START>-<END>.tsv`
-- Prints the output file paths to stdout (one per line)
+- Returns the output file paths (one per line)
 - Each chunk file includes the header row and intro rows (first chunk only)
 
 For PSA 119 with `--chunk-size 24`, you get chunks like: v1-24, v25-48, v49-72, v73-96, v97-120, v121-144, v145-176 (three stanzas per chunk).
@@ -62,13 +58,9 @@ Wait for all subagents to complete before proceeding.
 
 ### Step 3: Merge Output Notes
 
-```bash
-python3 .claude/skills/parallel-batch/scripts/merge_tsvs.py \
-    --glob "output/notes/<BOOK>/<BOOK>-<CH>-v*.tsv" \
-    -o output/notes/<BOOK>/<BOOK>-<CH>.tsv
-```
+Use `mcp__workspace-tools__merge_tsvs` with `glob="output/notes/<BOOK>/<BOOK>-<CH>-v*.tsv"`, `output="output/notes/<BOOK>/<BOOK>-<CH>.tsv"`.
 
-The merge script:
+The merge tool:
 - Deduplicates headers (keeps first)
 - Sorts by verse number (intro first, then ascending)
 - Removes duplicate rows (same Reference + SupportReference + Quote)
@@ -102,10 +94,9 @@ To add more entries, edit the `STANZA_TABLE` dict in `split_tsv.py`.
 
 ## Example: PSA 119
 
-```bash
+```
 # Split into ~24-verse chunks (3 stanzas each)
-python3 .claude/skills/parallel-batch/scripts/split_tsv.py \
-    output/issues/PSA/PSA-119.tsv --chunk-size 24
+mcp__workspace-tools__split_tsv(inputTsv="output/issues/PSA/PSA-119.tsv", chunkSize=24)
 
 # Outputs:
 #   output/issues/PSA/PSA-119-v1-24.tsv
@@ -118,7 +109,5 @@ python3 .claude/skills/parallel-batch/scripts/split_tsv.py \
 
 # Launch 7 parallel tn-writer subagents (one per chunk)
 # After all complete, merge:
-python3 .claude/skills/parallel-batch/scripts/merge_tsvs.py \
-    --glob "output/notes/PSA/PSA-119-v*.tsv" \
-    -o output/notes/PSA/PSA-119.tsv
+mcp__workspace-tools__merge_tsvs(glob="output/notes/PSA/PSA-119-v*.tsv", output="output/notes/PSA/PSA-119.tsv")
 ```

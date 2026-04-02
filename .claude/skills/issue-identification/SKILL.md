@@ -167,13 +167,8 @@ Read through the entire chapter to understand the big picture:
 - **Genre indicators**: Note poetry sections, dialogue patterns, narrative vs. instruction
 
 For any unusual phrases noticed, check the published TN index first, then fall back to raw grep:
-```bash
-# Fast: check index for keyword classification precedent
-python3 .claude/skills/utilities/scripts/build_tn_index.py --lookup "phrase"
 
-# Fallback: raw grep when index doesn't have what you need
-grep -i "phrase or key words" data/published-tns/tn_*.tsv | head -10
-```
+Use `mcp__workspace-tools__build_tn_index` with `lookup="phrase"` for keyword classification precedent. Fallback: raw grep `data/published-tns/tn_*.tsv`.
 
 #### Pass 2: Segment-Level Grammar Focus
 For each paragraph or segment identified in Pass 1:
@@ -183,18 +178,7 @@ For each paragraph or segment identified in Pass 1:
 - **Quotation structure**: Note quote margins, nested quotes, indirect speech
 - **Pronoun chains**: Track who "he/they/you" refer to through the segment
 
-When uncertain about a construction:
-```bash
-# Fast: check index for keyword or issue type
-python3 .claude/skills/utilities/scripts/build_tn_index.py --lookup "keyword"
-python3 .claude/skills/utilities/scripts/build_tn_index.py --issue figs-metonymy
-
-# Check prior decisions
-grep "keyword" data/quick-ref/issue_decisions.csv 2>/dev/null
-
-# Fallback: raw grep when index doesn't have what you need
-grep -i "key phrase from segment" data/published-tns/tn_*.tsv
-```
+When uncertain about a construction, use `mcp__workspace-tools__build_tn_index` with `lookup="keyword"` or `issue="figs-metonymy"` for fast precedent lookups. Check prior decisions with `grep "keyword" data/quick-ref/issue_decisions.csv`. Fallback: raw grep `data/published-tns/tn_*.tsv`.
 
 #### Pass 3: Verse-by-Verse Analysis with Task Checklist
 
@@ -355,15 +339,9 @@ grep -i "heart" data/templates.csv
 ```
 
 ### Published TN Index
-Pre-built index of all published translation notes by issue type and keyword. Use for fast precedent lookups instead of raw grep:
+Pre-built index of all published translation notes by issue type and keyword. Use for fast precedent lookups instead of raw grep.
 
-```bash
-# Check how a keyword was classified across all published notes
-python3 .claude/skills/utilities/scripts/build_tn_index.py --lookup "hand"
-
-# List examples for a specific issue type
-python3 .claude/skills/utilities/scripts/build_tn_index.py --issue figs-metaphor
-```
+Use `mcp__workspace-tools__build_tn_index` with `lookup="hand"` for keyword lookups or `issue="figs-metaphor"` for issue type examples.
 
 Source: `data/cache/tn_index.json` (built from `data/published-tns/`)
 
@@ -387,16 +365,16 @@ grep -i "figs-metonymy" data/published-tns/tn_1SA.tsv | head -20
 grep -i "fallen\|sword" data/published-tns/tn_*.tsv
 ```
 
-## Available Scripts
+## Available Tools
 
-| Script | Location | Purpose |
-|--------|----------|---------|
-| fetch_door43.py | utilities/scripts/ | Fetch USFM from Door43 (supports `--type ust` for UST) |
-| parse_usfm.js | utilities/scripts/usfm/ | Parse USFM, extract alignments and plain text (usfm-js) |
-| compare_ult_ust.py | scripts/ | Compare ULT/UST plain text to identify divergences suggesting issues |
-| detect_abstract_nouns.py | scripts/detection/ | Find abstract nouns (591 word list). Use `--text "..."` for plain English |
-| check_tw_headwords.py | scripts/ | Check names/unknowns against tW headwords - filters translate-names/translate-unknown |
-| build_tn_index.py | utilities/scripts/ | Published TN index lookup. `--lookup "hand"` for keyword, `--issue figs-metaphor` for issue type |
+| Tool | Purpose |
+|------|---------|
+| `mcp__workspace-tools__fetch_door43` | Fetch USFM from Door43 (supports `type="ust"` for UST) |
+| `parse_usfm.js` (node) | Parse USFM, extract alignments and plain text (usfm-js) |
+| `mcp__workspace-tools__compare_ult_ust` | Compare ULT/UST plain text to identify divergences suggesting issues |
+| `mcp__workspace-tools__detect_abstract_nouns` | Find abstract nouns (591 word list). Use `text="..."` for plain English |
+| `mcp__workspace-tools__check_tw_headwords` | Check names/unknowns against tW headwords - filters translate-names/translate-unknown |
+| `mcp__workspace-tools__build_tn_index` | Published TN index lookup. `lookup="hand"` for keyword, `issue="figs-metaphor"` for issue type |
 
 ### Ambiguity Detection (Cross-Cutting Check)
 
@@ -453,8 +431,8 @@ See `reference/ambiguity_patterns.md` for detailed examples from published notes
 
 ## Troubleshooting
 
-- **fetch_door43.py fails**: Check network connectivity and that the book/chapter exists on Door43. The script retries 3 times with backoff. If the resource was recently published, allow a few minutes for CDN propagation.
-- **detect_abstract_nouns.py returns empty**: The detection script found no abstract nouns in the passage. This is normal for short or concrete passages. Verify the input USFM has content and is not a header-only file.
+- **fetch_door43 fails**: Check network connectivity and that the book/chapter exists on Door43. The tool retries 3 times with backoff. If the resource was recently published, allow a few minutes for CDN propagation.
+- **detect_abstract_nouns returns empty**: The detection tool found no abstract nouns in the passage. This is normal for short or concrete passages. Verify the input USFM has content and is not a header-only file.
 - **Too many issues flagged**: If a passage generates more than ~30 issues, review for duplicates and low-confidence entries. Use the confidence threshold filter (0.7 default) and check that the same verse span is not being flagged by overlapping issue types.
 - **Too few issues flagged**: Ensure all 7 category modules ran. Check the log for skipped categories (usually caused by missing input files). Re-run with `--categories all` to force all categories.
 

@@ -31,22 +31,14 @@ cd "$TQ_REPO" && git pull origin master
 
 ### Step 2: Run Preparation Script
 
-```bash
-# Single chapter
-python3 .claude/skills/tq-writer/scripts/prepare_tq.py PSA --chapter 150 \
-    --output /tmp/claude/prepared_tq.json
+Use `mcp__workspace-tools__prepare_tq` with `book="PSA"`, `chapter=150`, `output="/tmp/claude/prepared_tq.json"` for a single chapter. For a whole book, omit `chapter` and pass `wholeBook=true`.
 
-# Whole book
-python3 .claude/skills/tq-writer/scripts/prepare_tq.py PSA --whole-book \
-    --output /tmp/claude/prepared_tq.json
-```
-
-The script auto-detects ULT/UST from:
+The tool auto-detects ULT/UST from:
 1. `output/AI-ULT/` and `output/AI-UST/` (AI-generated files)
 2. Repo clones at `$DOOR43_REPOS_PATH/en_ult` and `en_ust`
 3. Door43 fetch as fallback
 
-Override with `--ult-path` or `--ust-path` if needed.
+Override with `ultPath` or `ustPath` if needed.
 
 ### Step 3: Read Guidelines
 
@@ -79,34 +71,15 @@ Write the result as a TSV file to `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` (zero-
 
 ### Step 5: Post-Process Quotes
 
-```bash
-python3 .claude/skills/utilities/scripts/curly_quotes.py output/tq/PSA/PSA-150.tsv --in-place
-```
+Use `mcp__workspace-tools__curly_quotes` with `input="output/tq/PSA/PSA-150.tsv"`, `inPlace=true`.
 
 ### Step 6: Verify Output
 
-```bash
-python3 .claude/skills/tq-writer/scripts/verify_tq.py output/tq/PSA/PSA-150.tsv \
-    --input-json /tmp/claude/prepared_tq.json
-```
+Use `mcp__workspace-tools__verify_tq` with `tsvFile="output/tq/PSA/PSA-150.tsv"`, `inputJson="/tmp/claude/prepared_tq.json"`.
 
 ### Step 7: Insertion (when ready)
 
-Reuse `insert_tn_rows.py` from repo-insert -- it works on TQ files too since both share the Reference column in the first position:
-
-```bash
-# Dry run first
-python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
-    --book-file $DOOR43_REPOS_PATH/en_tq/tq_PSA.tsv \
-    --source-file output/tq/PSA/PSA-150.tsv \
-    --dry-run
-
-# Apply
-python3 .claude/skills/repo-insert/scripts/insert_tn_rows.py \
-    --book-file $DOOR43_REPOS_PATH/en_tq/tq_PSA.tsv \
-    --source-file output/tq/PSA/PSA-150.tsv \
-    --backup
-```
+Use `door43-push-cli.js` with `--type tn` (TQ uses the same insertion path as TN). For interactive dry-run preview, use the `repo-insert` skill's Step 2 guidance.
 
 ## Input Format
 
