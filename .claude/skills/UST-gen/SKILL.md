@@ -15,6 +15,21 @@ In restricted runs, use workspace MCP tools instead of shell/python snippets:
 - `mcp__workspace-tools__check_ust_passives`
 - `mcp__workspace-tools__curly_quotes`
 
+## Pipeline Context
+
+If `--context <path>` is provided, read the context.json file first. Treat it as authoritative.
+
+Use these fields when present:
+- `sources.ult` — authoritative ULT for this chapter. In the normal pipeline this is the just-generated, issue-reviewed ULT. In `UST`-only runs the pipeline runner has already chosen between the freshest local generated ULT and freshly fetched `en_ult` master.
+- `sources.ultFull` — full-book ULT file when the runner fetched one
+- `sources.hebrew` — Hebrew source path
+- `sources.issues` — authoritative issues TSV path when available
+
+When a context file is provided:
+- Do not substitute published ULT from `data/published_ult_english/`
+- Do not guess issue-file locations
+- Do not fetch another ULT unless the context is missing the needed source
+
 ## Important: T4T-Based Workflow
 
 The UST creation process starts with the **T4T (Translation for Translators)** as the base text. The goal is to **modify T4T as little as possible** while ensuring it is:
@@ -109,7 +124,7 @@ These markers are valuable pre-identified translation issues - use them to infor
 Check that T4T accurately represents the Hebrew meaning:
 
 1. **Read Hebrew source** — use `mcp__workspace-tools__read_usfm_chapter` on `data/hebrew_bible/[BOOK].usfm` for the target chapter only
-2. **Read corresponding ULT** — use `mcp__workspace-tools__read_usfm_chapter` on `data/published_ult_english/[BOOK].usfm` for the target chapter only
+2. **Read corresponding ULT** — if `--context` was provided, read `sources.ult` from context.json. Otherwise use `mcp__workspace-tools__read_usfm_chapter` on the freshest available local ULT, falling back to a fresh `mcp__workspace-tools__fetch_door43` from `en_ult`
 3. **Note any discrepancies** where T4T misunderstands Hebrew meaning
 
 Key relationship:
@@ -125,7 +140,7 @@ The purpose of this step is to catch T4T meaning errors — places where the T4T
 
 Before generating UST, check for any pre-identified translation issues:
 
-1. Look for issue files at `output/issues/[BOOK]-[CHAPTER].tsv`
+1. If `--context` was provided and `sources.issues` is set, use that exact issues TSV path. Otherwise look for issue files at `output/issues/<BOOK>/<BOOK>-<CHAPTER>.tsv` and verse-range variants under `output/issues/<BOOK>/`
 2. If found, read the identified issues - these flag constructions needing attention:
    - **figs-activepassive**: MUST convert to active voice in UST
    - **figs-abstractnouns**: Consider verbal/clausal forms
@@ -412,20 +427,12 @@ Use `mcp__workspace-tools__fetch_t4t` with `books=["PSA", "1KI"]` (or omit `book
 
 ### Vocabulary lookup
 
-```bash
-# 1. Check authoritative UST decisions
-grep -i "UST" data/issues_resolved_optimized.txt | grep -i "[term]"
+Use `Grep` for quick text lookups in:
+- `data/issues_resolved_optimized.txt` (or `data/issues_resolved.txt`)
+- `data/quick-ref/ust_decisions.csv`
+- `data/glossary/*.csv`
 
-# 2. Check prior UST vocabulary decisions
-grep "H2617" data/quick-ref/ust_decisions.csv 2>/dev/null
-
-# 5. Check glossaries (UST_GLOSS column)
-grep "[term]" data/glossary/hebrew_ot_glossary.csv
-
-# 6. Compare T4T to ULT for same verse
-grep "1:1" data/t4t/11-1KI.usfm
-grep "1:1" data/published_ult_english/11-1KI.usfm
-```
+When comparing T4T to ULT, prefer chapter reads from `mcp__workspace-tools__read_usfm_chapter` using the authoritative ULT path from context when available.
 
 For steps 3 and 4 (UST Strong's index), use `mcp__workspace-tools__build_ust_index` with `lookup="H2617"` or `compare="H2617"`.
 
@@ -437,13 +444,9 @@ Use `mcp__workspace-tools__build_ust_index` with optional parameters:
 - `stats=true` — index statistics
 - No parameters — build/refresh UST index (daily staleness check)
 
-### Parse aligned USFM (for Hebrew verification)
-```bash
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js \
-  data/published_ult/[BOOK].usfm \
-  --chapter [N] \
-  --output-json /tmp/alignments.json
-```
+### Alignment and Hebrew verification
+
+If alignment data is needed, use the aligned ULT supplied by the pipeline context or the workspace MCP alignment tools. Do not rely on ad hoc shell scripts or `/tmp` files.
 
 ---
 
@@ -492,13 +495,13 @@ Before finalizing UST output, verify:
 | Sacrifice Terms | `data/glossary/sacrifice_terminology.csv` | UST_GLOSS column where available |
 | Measurements | `data/glossary/biblical_measurements.csv` | UST_GLOSS column where available |
 | Biblical Phrases | `data/glossary/biblical_phrases.csv` | UST_GLOSS column where available |
-| Published ULT | `data/published_ult_english/*.usfm` | Meaning verification |
+| Context ULT | `context.json -> sources.ult` | Meaning verification (authoritative when present) |
 | UST Strong's Index | `data/cache/ust_index.json` | Published UST renderings by Strong's number |
 | UST Decisions | `data/quick-ref/ust_decisions.csv` | Prior UST vocabulary decisions |
 | UST Patterns | `reference/ust_patterns.md` | Transformation rules |
 | Style Guide | `../reference/gl_guidelines.md` | Shared style rules |
 
-**Note:** `data/published_ust/` contains older UST that may not meet current standards. Use T4T as your base, not published UST. The UST Strong's index is still useful for seeing how published UST renders specific Hebrew words -- treat it as precedent to consider, not authority to follow.
+**Note:** `data/published_ust/` contains older UST that may not meet current standards. Use T4T as your base, not published UST. The UST Strong's index is still useful for seeing how published UST renders specific Hebrew words -- treat it as precedent to consider, not authority to follow. Likewise, when context.json is present, its ULT path overrides any published-ULT fallback.
 
 ---
 

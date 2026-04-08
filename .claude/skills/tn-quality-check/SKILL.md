@@ -17,12 +17,12 @@ In restricted runs, use workspace MCP tools instead of direct shell/python comma
 
 ## Pipeline Context
 
-If `--context <path>` is provided, read the context.json file for authoritative ULT/UST paths (`sources.ult`, `sources.ust`). Use these instead of searching for files.
+If `--context <path>` is provided, read the context.json file for authoritative ULT/UST paths (`sources.ult`, `sources.ust`) and persistent artifact paths (`runtime.preparedNotes`, `runtime.generatedNotes`, `runtime.tnQualityFindings`). Use these instead of searching for files or writing to `/tmp/`.
 
 ## Prerequisites
 
 - Assembled TN TSV (from tn-writer Step 8-9)
-- `prepared_notes.json` (from tn-writer Step 2a)
+- prepared-notes JSON (from `runtime.preparedNotes` in context.json, or fallback path if no context)
 - Plain ULT and UST USFM files (from context.json `sources.ult`/`sources.ust` if available)
 - Book code (for master TN ID collision check)
 
@@ -59,9 +59,9 @@ Use `mcp__workspace-tools__check_tn_quality` with:
 - `ultUsfm`
 - `ustUsfm`
 - `book`
-- `output: "/tmp/claude/tn_quality_findings.json"`
+- `output: runtime.tnQualityFindings` from context.json when available, otherwise `tmp/claude/tn_quality_findings.json`
 
-Read the stderr output for a summary. Read `/tmp/claude/tn_quality_findings.json` for full details.
+Read the stderr output for a summary. Read `runtime.tnQualityFindings` from context.json when available, otherwise `tmp/claude/tn_quality_findings.json`, for full details.
 
 ### Step 2: Review Findings
 
@@ -143,15 +143,15 @@ Flag inconsistencies with the specific note IDs and the conflicting interpretati
 For each issue found in Steps 1-3, fix it directly in the source files. Do not just report — fix.
 
 **For note text issues** (template drift, wrong verbiage, AT naturalness, "Here" rule, wrong issue type, cross-verse inconsistency):
-- Edit `/tmp/claude/generated_notes.json` — update the note text for the affected ID(s).
+- Edit the generated-notes path from context.json (`runtime.generatedNotes`) or the fallback `tmp/claude/generated_notes.json` — update the note text for the affected ID(s).
 
 **For quote boundary issues** (restructuring scope, parallelism scope, orphaned words):
-- Edit `/tmp/claude/prepared_notes.json` — update `gl_quote`, `gl_quote_roundtripped`, and `orig_quote` for the affected item(s).
+- Edit the prepared-notes path from context.json (`runtime.preparedNotes`) or the fallback `tmp/claude/prepared_notes.json` — update `gl_quote`, `gl_quote_roundtripped`, and `orig_quote` for the affected item(s).
 
 **For removal** (antithetical parallelism notes, redundant structural notes):
-- Remove the row from the assembled TSV directly. Also remove the entry from `generated_notes.json`.
+- Remove the row from the assembled TSV directly. Also remove the entry from the generated-notes JSON.
 
-After any changes to `generated_notes.json` or `prepared_notes.json`, re-run assembly and post-processing:
+After any changes to the generated-notes JSON or prepared-notes JSON, re-run assembly and post-processing:
 
 Re-assemble with `mcp__workspace-tools__assemble_notes`, then run `mcp__workspace-tools__curly_quotes` (`inPlace: true`).
 

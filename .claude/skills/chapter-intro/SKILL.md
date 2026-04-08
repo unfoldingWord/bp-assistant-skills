@@ -1,16 +1,16 @@
 ---
 name: chapter-intro
 description: Write chapter introductions for biblical text chapters summarizing themes and key content. Use when asked to write a chapter introduction or after pipeline completes.
-allowed-tools: Read, Grep, Glob, Bash, Write, Edit
+allowed-tools: Read, Grep, Glob, Write, Edit
 ---
 
 # Chapter Introduction
 
-Generate a brief chapter introduction that orients translators to a psalm's type, key concepts, and any distinctive translation challenges. Target length: 300-600 characters. Run this after the pipeline (ULT-gen, issue-identification, UST-gen) has completed for a chapter.
+Generate a brief chapter introduction that orients translators to the chapter's overall movement, key concepts, and any distinctive translation challenges. Target length: 300-600 characters. Run this after the pipeline has completed for a chapter.
 
 ## Arguments
 
-When invoked as `/chapter-intro psa 18`:
+When invoked as `/chapter-intro isa 51`:
 - First argument: Book abbreviation (psa, gen, 2sa, etc.)
 - Second argument: Chapter number
 
@@ -21,7 +21,7 @@ Book abbreviations follow standard 3-letter codes or common variants:
 
 ## Pipeline Context
 
-If `--context <path>` is provided, read the context.json file for authoritative source paths (`sources.ult`, `sources.ust`, `sources.issues`). Use these instead of searching for files.
+If `--context <path>` is provided, read the context.json file for authoritative source paths (`sources.ult`, `sources.ust`, `sources.issues`, `sources.hebrew`). Use these instead of searching for files.
 
 ## Workflow
 
@@ -46,38 +46,38 @@ Read the following files. Not all may exist; work with what's available.
 - Hebrew source: find the chapter in `data/hebrew_bible/` (search for the book's USFM file containing the chapter)
 
 **Reference materials (consult as needed):**
-- Published TN intros for style reference: `data/published-tns/tn_PSA.tsv` (grep for `^PSA\t<chapter>\tintro`)
+- Published TN intros for style reference: published TN intro rows for the same book when available
 - Translation Words for key terms: use `mcp__workspace-tools__check_tw_headwords` with `terms=["term1", "term2"]` or browse `data/en_tw/`
-- Translation Academy for psalm type definitions: `data/ta-flat/`
+- Translation Academy articles relevant to the chapter's literary form or recurring translation issues
 
 ### Step 2: Read the Style Guide
 
 Read `.claude/skills/reference/gl_guidelines.md` for spelling, punctuation, and register rules that apply to all generated content (American English spelling, Oxford comma, curly quotes, formal register, etc.).
 
-### Step 3: Determine Psalm Type
+### Step 3: Determine Chapter Function
 
-Parse the superscription (verse 1 or "front" matter) for authorship, genre markers, and performance instructions.
+Identify the chapter's role in the book and its dominant literary movement. Look for:
+- speaker changes
+- shifts between narration, poetry, prophecy, exhortation, or prayer
+- repeated themes or key images
+- distinctive translation challenges that affect the whole chapter rather than one verse
 
-Classify the psalm type (lament, praise/hymn, thanksgiving, wisdom, royal/messianic, trust/confidence, worship, imprecatory, penitential). Check known groups:
-- Psalms 120-134: songs of ascents
-- Psalms 146-150: Hallel psalms
-
-This feeds the 1-2 sentence classification in the Structure and Formatting section.
+This feeds the 1-2 sentence overview in the Structure and Formatting section.
 
 ### Step 4: Draft the Introduction
 
-Write a short intro using the template below. The entire intro should be 300-600 characters. Each section is 1-2 sentences. Only include the Translation Issues section when there is a genuinely distinctive challenge (extended metaphor spanning multiple verses, speaker ambiguity, acrostic pattern, etc.). Most psalms will not need it.
+Write a short intro using the template below. The entire intro should be 300-600 characters. Each section is 1-2 sentences. Only include the Translation Issues section when there is a genuinely distinctive challenge (speaker ambiguity, extended metaphor spanning multiple verses, abrupt shifts in audience, repeated legal or ritual terms, etc.).
 
 Use `[[rc://*/tw/dict/bible/kt/<term>]]` or `[[rc://*/tw/dict/bible/other/<term>]]` for Translation Word links. Use `[Book Chapter](../book/chapter/verse.md)` for cross-references.
 
 #### Template
 
 ```
-# Psalm N Introduction
+# <Book> <Chapter> Introduction
 
 ## Structure and Formatting
 
-[1-2 sentences: psalm type classification and brief characterization. Include a tW or tA link.]
+[1-2 sentences: chapter function, literary movement, and brief characterization. Include a tW or tA link when it materially helps translators.]
 
 ## Religious and Cultural Concepts in This Chapter
 
@@ -98,7 +98,7 @@ Use `[[rc://*/tw/dict/bible/kt/<term>]]` or `[[rc://*/tw/dict/bible/other/<term>
 
 #### Quality Checks
 
-- Psalm type matches actual content
+- Introduction matches the chapter's actual content and literary function
 - tW links use correct `[[rc://...]]` format
 - Content is translator-oriented, not devotional
 - No verse-level detail that belongs in translation notes

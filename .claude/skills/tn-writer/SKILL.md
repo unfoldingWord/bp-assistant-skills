@@ -34,8 +34,11 @@ If `--context <path>` is provided, read the context.json file first. It contains
 - `sources.ust` — current UST for this chapter
 - `sources.ultAligned` — aligned ULT if available
 - `sources.issues` — issues TSV path
+- `runtime.preparedNotes` — persistent JSON output path for prepared notes
+- `runtime.generatedNotes` — persistent JSON output path for generated notes
+- `runtime.alignmentData` — persistent JSON output path for alignment data
 
-When a context file is provided, use these paths as your inputs. Do not fetch from Door43 or look in `/tmp/` — the context file has the correct, current versions.
+When a context file is provided, use these paths as your inputs and outputs. Do not fetch from Door43 or write to `/tmp/` — the context file has the correct, current versions and persistent artifact paths under the pipeline working directory.
 
 ## Workflow
 
@@ -43,7 +46,7 @@ When a context file is provided, use these paths as your inputs. Do not fetch fr
 
 If `--context` was provided, use the paths from `sources.ult` and `sources.ust` in context.json. These are the authoritative source files provided by the pipeline runner.
 
-If no context is available, fall back to checking `/tmp/ult_plain.usfm` and `/tmp/ust_plain.usfm`. If those are also missing, fetch with `mcp__workspace-tools__fetch_door43` and prepare plain files with workspace tooling before continuing.
+If no context is available, fall back to `tmp/claude/ult_plain.usfm` and `tmp/claude/ust_plain.usfm`. If those are also missing, fetch with `mcp__workspace-tools__fetch_door43` and prepare plain files with workspace tooling before continuing.
 
 ### Step 2a: Run the Preparation Script
 
@@ -52,9 +55,9 @@ Use `mcp__workspace-tools__prepare_notes` with:
 - `ultUsfm`
 - `ustUsfm`
 - `alignedUsfm`
-- `output: "/tmp/claude/prepared_notes.json"`
+- `output: runtime.preparedNotes` from context.json when available, otherwise `tmp/claude/prepared_notes.json`
 
-This produces a JSON file with fully-assembled prompts for each item, plus alignment data at `/tmp/claude/alignment_data.json`.
+This produces a JSON file with fully-assembled prompts for each item, plus alignment data at `runtime.alignmentData` from context.json when available, otherwise `tmp/claude/alignment_data.json`.
 
 The script automatically:
 - Filters out items with "has tW article" in the explanation (Translation Words already covers them)
@@ -63,7 +66,7 @@ The script automatically:
 
 Options:
 - `--aligned-usfm PATH` -- Extract alignment data from aligned ULT (preferred). Auto-detected if omitted and aligned file exists at the standard path (`output/AI-ULT/<BOOK>/<BOOK>-<CHAPTER>-aligned.usfm`).
-- `--alignment-json PATH` -- Custom output path for alignment data (default: `/tmp/claude/alignment_data.json`)
+- `--alignment-json PATH` -- Custom output path for alignment data (default: `runtime.alignmentData` from context or `tmp/claude/alignment_data.json`)
 - `--skip-lang` -- Skip language conversion (keep original English quotes)
 - `--skip-ids` -- Skip ID generation
 
@@ -71,13 +74,13 @@ Note: `orig_quote` fields in the prepared JSON will be empty when using aligned 
 
 ### Step 2b: Review Alignment Data
 
-Read `/tmp/claude/alignment_data.json` directly using the Read tool. The file is a JSON object keyed by `"chapter:verse"` — review the first few entries to understand the English-to-Hebrew word mappings (fields: `eng`, `heb`, `heb_pos`, `strong`).
+Read `runtime.alignmentData` directly using the Read tool when context is available; otherwise read `tmp/claude/alignment_data.json`. The file is a JSON object keyed by `"chapter:verse"` — review the first few entries to understand the English-to-Hebrew word mappings (fields: `eng`, `heb`, `heb_pos`, `strong`).
 
 ### Step 2c: Fill Hebrew Quotes (script + manual fallback)
 
 Run `mcp__workspace-tools__fill_orig_quotes` with:
-- `preparedJson: "/tmp/claude/prepared_notes.json"`
-- `alignmentJson: "/tmp/claude/alignment_data.json"`
+- `preparedJson: runtime.preparedNotes` from context.json when available, otherwise `tmp/claude/prepared_notes.json`
+- `alignmentJson: runtime.alignmentData` from context.json when available, otherwise `tmp/claude/alignment_data.json`
 - (hebrewUsfm omitted — auto-detected from book code)
 
 The script deterministically matches English gl_quote words to alignment data and extracts exact Hebrew spans from the UHB source USFM. It updates `prepared_notes.json` in place.
@@ -89,7 +92,7 @@ Review the output — it reports how many items were resolved and lists any that
 3. Collect the Hebrew `heb` values for matched entries
 4. Read the Hebrew source verse from `data/hebrew_bible/*-<BOOK>.usfm`
 5. Extract the exact Unicode span covering those Hebrew words from the source (copy character-for-character; do not concatenate `heb` values)
-6. Write the updated JSON back to `/tmp/claude/prepared_notes.json`
+6. Write the updated JSON back to the same persistent prepared-notes path
 
 ### Step 2d: Resolve gl_quote from alignment (script)
 
@@ -101,7 +104,7 @@ This uses the alignment data to find English words mapped to the Hebrew in orig_
 
 ### Step 3: Verify Hebrew Quotes
 
-After filling orig_quote values, read `/tmp/claude/prepared_notes.json` and scan for items where `orig_quote` is empty and the reference does not end with `:front`. Report any missing items.
+After filling orig_quote values, read the prepared-notes path from context.json (or `tmp/claude/prepared_notes.json` if no context) and scan for items where `orig_quote` is empty and the reference does not end with `:front`. Report any missing items.
 
 Investigate any items still missing `orig_quote`. Common causes:
 - The gl_quote doesn't match any words in the alignment data (check for typos)
@@ -111,7 +114,7 @@ Investigate any items still missing `orig_quote`. Common causes:
 
 Run the narrow-quote flagger against the prepared JSON:
 
-Use `mcp__workspace-tools__flag_narrow_quotes` with `preparedJson: "/tmp/claude/prepared_notes.json"`.
+Use `mcp__workspace-tools__flag_narrow_quotes` with the prepared-notes path from context.json (or `tmp/claude/prepared_notes.json` if no context).
 
 Review flagged items. These quotes are correct for focusing the note body on the issue, but may need wider phrase boundaries for AT fit later. Keep this list in mind during note generation -- write initial ATs that anticipate the surrounding phrase context.
 
@@ -141,7 +144,7 @@ If `issues_resolved.txt` contains a decision about how a specific issue type sho
 
 ### Step 6: Generate Notes (write keyed JSON, not TSV)
 
-Read `/tmp/claude/prepared_notes.json`. For each item, generate a note and write it to a JSON object keyed by the item's `id`. Write the result to `/tmp/claude/generated_notes.json`.
+Read the prepared-notes path from context.json (or `tmp/claude/prepared_notes.json` if no context). For each item, generate a note and write it to a JSON object keyed by the item's `id`. Write the result to `runtime.generatedNotes` from context.json when available, otherwise `tmp/claude/generated_notes.json`.
 
 Process one item at a time. Each note addresses exactly one item from the prepared JSON, which corresponds to one issue in one verse. Never create summary notes that combine or reference multiple verse occurrences of the same pattern (e.g., do not write "The author uses synecdoche in verses 2, 5, and 6"). Each verse gets its own self-contained note even when the same figure recurs across the chapter.
 
@@ -179,7 +182,7 @@ Output format -- a flat JSON object mapping item ID to note text:
 }
 ```
 
-Write this to `/tmp/claude/generated_notes.json`. Do NOT assemble the TSV yourself -- the assembly script handles that to prevent row misalignment.
+Write this to the generated-notes path from context.json when available, otherwise `tmp/claude/generated_notes.json`. Do NOT assemble the TSV yourself -- the assembly script handles that to prevent row misalignment.
 
 ### Step 7: Expand Narrow Quotes and AT Fit Check (iterative)
 
