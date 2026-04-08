@@ -78,6 +78,11 @@ Numerical intensification common in Hebrew poetry:
 
 8. **First instance in a psalm**: For the first parallelism identified in a psalm (or chapter), add `t: first instance` to the explanation. This routes the note writer to a template that introduces parallelism as a pattern and asks translators to establish a team-wide approach for the rest of the psalm. Only mark one occurrence per psalm as `t: first instance`.
 
+9. **Unique exception marker (rare)**: By default, only one parallelism note per chapter is kept by the JS normalizer. If an additional parallelism note is genuinely required, include both:
+   - `q: unique-parallelism`
+   - `reason: tricola|pivot|ellipsis-critical|structure-shift`
+   Without both markers, additional parallelism notes are dropped automatically.
+
 ---
 
 ## NOT figs-parallelism
@@ -185,3 +190,4 @@ From Issues Resolved: "For figs-parallelism, a variety of ATs can be suggested, 
 - The boundary between doublet and parallelism is fuzzy - editorial discretion
 - A variety of ATs can be suggested, beyond just "A, yes, B"
 - In poetry, psalms pair terms like "rejoice" and "be glad" - ULT preserves both
+- JS enforcement is authoritative: only synonymous parallelism survives; antithetical/synthetic rows are removed during normalization
