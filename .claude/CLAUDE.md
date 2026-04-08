@@ -52,7 +52,7 @@ This file is for interactive Claude Code sessions only. Skills at runtime get th
 - `hebrew-reference/` - Hebrew language reference (placeholder)
 
 ## Git Discipline
-- The remote is named `github`, not `origin`. Always use `git push github` (not `git push`).
+- Remote is `origin` (`unfoldingWord/bp-assistant-skills`). Standard `git push` works.
 - ALWAYS `git add` and `git commit` new files immediately after creating them (not in output, data, tmp folders)
 - Run `git status` before any branch operation (checkout, reset, merge, rebase)
 - NEVER do `git reset --hard` or `git clean` without checking for untracked files first
