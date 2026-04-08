@@ -13,6 +13,9 @@ Generate a brief chapter introduction that orients translators to the chapter's 
 When invoked as `/chapter-intro isa 51`:
 - First argument: Book abbreviation (psa, gen, 2sa, etc.)
 - Second argument: Chapter number
+- Optional hint args from notes pipeline:
+  - `--parallelism-signal high`
+  - `--parallelism-count <N>`
 
 Book abbreviations follow standard 3-letter codes or common variants:
 - psa, ps -> PSA
@@ -22,6 +25,8 @@ Book abbreviations follow standard 3-letter codes or common variants:
 ## Pipeline Context
 
 If `--context <path>` is provided, read the context.json file for authoritative source paths (`sources.ult`, `sources.ust`, `sources.issues`, `sources.hebrew`). Use these instead of searching for files.
+
+If `artifacts.parallelism_signal` is present in context.json (or `--parallelism-signal high` is passed), treat it as a chapter-level hint only: mention recurring parallelism briefly in "Translation Issues in This Chapter" if that section is included, without adding verse-level detail.
 
 ## Workflow
 
@@ -67,6 +72,8 @@ This feeds the 1-2 sentence overview in the Structure and Formatting section.
 ### Step 4: Draft the Introduction
 
 Write a short intro using the template below. The entire intro should be 300-600 characters. Each section is 1-2 sentences. Only include the Translation Issues section when there is a genuinely distinctive challenge (speaker ambiguity, extended metaphor spanning multiple verses, abrupt shifts in audience, repeated legal or ritual terms, etc.).
+
+When a high parallelism hint is present, keep the note brief (one short sentence) and chapter-level (for example, recurring synonymous parallel lines), without listing individual verses.
 
 Use `[[rc://*/tw/dict/bible/kt/<term>]]` or `[[rc://*/tw/dict/bible/other/<term>]]` for Translation Word links. Use `[Book Chapter](../book/chapter/verse.md)` for cross-references.
 
