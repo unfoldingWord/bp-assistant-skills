@@ -76,7 +76,7 @@ Note: `orig_quote` fields in the prepared JSON will be empty when using aligned 
 
 Read `runtime.alignmentData` directly using the Read tool when context is available; otherwise read `tmp/claude/alignment_data.json`. The file is a JSON object keyed by `"chapter:verse"` — review the first few entries to understand the English-to-Hebrew word mappings (fields: `eng`, `heb`, `heb_pos`, `strong`).
 
-### Step 2c: Fill Hebrew Quotes (script + manual fallback)
+### Step 2c: Fill Hebrew Quotes (deterministic first, bounded fallback)
 
 Run `mcp__workspace-tools__fill_orig_quotes` with:
 - `preparedJson: runtime.preparedNotes` from context.json when available, otherwise `tmp/claude/prepared_notes.json`
@@ -85,14 +85,11 @@ Run `mcp__workspace-tools__fill_orig_quotes` with:
 
 The script deterministically matches English gl_quote words to alignment data and extracts exact Hebrew spans from the UHB source USFM. It updates `prepared_notes.json` in place.
 
-Review the output — it reports how many items were resolved and lists any that couldn't be matched automatically. For unresolved items only, manually fill `orig_quote` using the alignment data and Hebrew source:
-
-1. Read the alignment data for the item's verse
-2. Semantically identify which English aligned words correspond to the `gl_quote`
-3. Collect the Hebrew `heb` values for matched entries
-4. Read the Hebrew source verse from `data/hebrew_bible/*-<BOOK>.usfm`
-5. Extract the exact Unicode span covering those Hebrew words from the source (copy character-for-character; do not concatenate `heb` values)
-6. Write the updated JSON back to the same persistent prepared-notes path
+If unresolved items remain:
+- Run at most one bounded fallback pass focused only on unresolved IDs.
+- Do not create ad-hoc scratch scripts for repeated file surgery.
+- Do not loop on marker-based JSON edits.
+- If unresolved items still remain after one pass, stop fallback and report unresolved IDs for graceful degradation tagging in the pipeline.
 
 ### Step 2d: Resolve gl_quote from alignment (script)
 
@@ -184,7 +181,7 @@ Output format -- a flat JSON object mapping item ID to note text:
 
 Write this to the generated-notes path from context.json when available, otherwise `tmp/claude/generated_notes.json`. Do NOT assemble the TSV yourself -- the assembly script handles that to prevent row misalignment.
 
-### Step 7: Expand Narrow Quotes and AT Fit Check (iterative)
+### Step 7: Expand Narrow Quotes and AT Fit Check (bounded)
 
 Run the verification script to see all substitutions:
 
@@ -207,9 +204,9 @@ For each substitution that reads unnaturally (broken grammar, orphaned words, ve
 
 4. **Rewrite the AT** in `generated_notes.json` to fit the expanded quote boundary. The AT should now be a seamless replacement for the wider phrase.
 
-5. **Re-run verify_at_fit.py**. Repeat until every substitution reads as natural English.
+5. **Re-run verify_at_fit.py** once after fixes. Do not run open-ended iterative loops.
 
-Do not proceed to assembly until every substitution line has been reviewed and reads correctly.
+Do not proceed to assembly with known malformed rows, but do not run open-ended fix loops. If a small unresolved subset remains after one bounded pass, report it for pipeline-level graceful degradation handling.
 
 When reviewing each substitution line from verify_at_fit.py, check specifically:
 

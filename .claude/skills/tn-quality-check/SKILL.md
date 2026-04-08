@@ -142,6 +142,12 @@ Flag inconsistencies with the specific note IDs and the conflicting interpretati
 
 For each issue found in Steps 1-3, fix it directly in the source files. Do not just report — fix.
 
+Guardrails for this step:
+- Use deterministic tools first.
+- If a bounded AI rescue pass is enabled by the pipeline, keep it to one pass and unresolved IDs only.
+- Do not perform open-ended manual JSON surgery loops.
+- Do not create recurring marker/delete-line patch workflows.
+
 **For note text issues** (template drift, wrong verbiage, AT naturalness, "Here" rule, wrong issue type, cross-verse inconsistency):
 - Edit the generated-notes path from context.json (`runtime.generatedNotes`) or the fallback `tmp/claude/generated_notes.json` — update the note text for the affected ID(s).
 
@@ -151,11 +157,11 @@ For each issue found in Steps 1-3, fix it directly in the source files. Do not j
 **For removal** (antithetical parallelism notes, redundant structural notes):
 - Remove the row from the assembled TSV directly. Also remove the entry from the generated-notes JSON.
 
-After any changes to the generated-notes JSON or prepared-notes JSON, re-run assembly and post-processing:
+After any changes to the generated-notes JSON or prepared-notes JSON, re-run assembly and post-processing once:
 
 Re-assemble with `mcp__workspace-tools__assemble_notes`, then run `mcp__workspace-tools__curly_quotes` (`inPlace: true`).
 
-Then re-run the mechanical check script to confirm no new errors were introduced. Repeat until clean.
+Then re-run the mechanical check script to confirm no new errors were introduced. If unresolved quote-matching items remain after one bounded pass, report them (the pipeline may tag rows for graceful degradation instead of blocking push).
 
 ### Step 5: Write Report
 
