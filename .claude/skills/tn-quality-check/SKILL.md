@@ -161,7 +161,7 @@ After any changes to the generated-notes JSON or prepared-notes JSON, re-run ass
 
 Re-assemble with `mcp__workspace-tools__assemble_notes`, then run `mcp__workspace-tools__curly_quotes` (`inPlace: true`).
 
-Then re-run the mechanical check script to confirm no new errors were introduced. If unresolved quote-matching items remain after one bounded pass, report them (the pipeline may tag rows for graceful degradation instead of blocking push).
+After fixing, you may re-run `check_tn_quality` **at most once** to verify the fixes landed. If issues persist after that one re-check, add them to the quality report as "unresolved — needs manual review" and stop. Do not run a third check cycle.
 
 ### Step 5: Write Report
 
