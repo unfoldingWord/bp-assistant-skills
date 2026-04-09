@@ -42,87 +42,27 @@ When a context file is provided, use these paths as your inputs and outputs. Do 
 
 ## Workflow
 
-### Step 1: Ensure ULT/UST USFM Files Exist
+### Step 1: Read Prepared Data
 
-If `--context` was provided, use the paths from `sources.ult` and `sources.ust` in context.json. These are the authoritative source files provided by the pipeline runner.
+The pipeline runner has already completed all mechanical preparation before invoking this skill:
+- Parsed the issues TSV into writer packets (`prepare_notes`)
+- Filled Hebrew orig_quotes from alignment data (`fill_orig_quotes`)
+- Resolved gl_quotes to ULT English spans (`resolve_gl_quotes`)
+- Flagged narrow quotes that may need expansion (`flag_narrow_quotes`)
 
-If no context is available, fall back to `tmp/claude/ult_plain.usfm` and `tmp/claude/ust_plain.usfm`. If those are also missing, fetch with `mcp__workspace-tools__fetch_door43` and prepare plain files with workspace tooling before continuing.
+Read `runtime.preparedNotes` from context.json. Each item has all fields populated including `writer_packet`, `orig_quote`, `gl_quote`, templates, AT policy, and style rules. Do not re-run preparation MCP tools.
 
-### Step 2a: Run the Preparation Script
+If any items have empty `orig_quote` (and reference does not end with `:front`), note them for graceful degradation -- do not attempt manual resolution loops.
 
-Use `mcp__workspace-tools__prepare_notes` with:
-- `inputTsv`
-- `ultUsfm`
-- `ustUsfm`
-- `alignedUsfm`
-- `output: runtime.preparedNotes` from context.json when available, otherwise `tmp/claude/prepared_notes.json`
+Items flagged as narrow quotes are correct for focusing the note body on the issue, but may need wider phrase boundaries for AT fit later. Keep this in mind during note generation -- write initial ATs that anticipate the surrounding phrase context.
 
-This produces a JSON file with packetized prepared items for note writing, plus alignment data at `runtime.alignmentData` from context.json when available, otherwise `tmp/claude/alignment_data.json`.
+If no context.json is provided (standalone invocation outside the pipeline), fall back to the MCP tools: `mcp__workspace-tools__prepare_and_validate` runs all four steps in one call.
 
-The script automatically:
-- Filters out items with "has tW article" in the explanation (Translation Words already covers them)
-- Sorts output so `front` references come before verse references
-- Extracts alignment data (English-to-Hebrew word mappings) from aligned USFM
-- Parses `t:` and `i:` directives into deterministic fields
-- Resolves one selected template when possible and strips AT boilerplate from it
-- Computes `at_policy`, `style_rules`, and `writer_packet` so note generation does not have to re-decide them
-
-Options:
-- `--aligned-usfm PATH` -- Extract alignment data from aligned ULT (preferred). Auto-detected if omitted and aligned file exists at the standard path (`output/AI-ULT/<BOOK>/<BOOK>-<CHAPTER>-aligned.usfm`).
-- `--alignment-json PATH` -- Custom output path for alignment data (default: `runtime.alignmentData` from context or `tmp/claude/alignment_data.json`)
-- `--skip-lang` -- Skip language conversion (keep original English quotes)
-- `--skip-ids` -- Skip ID generation
-
-Note: `orig_quote` fields in the prepared JSON will be empty when using aligned USFM. Hebrew quotes are filled in Step 2c below.
-
-### Step 2b: Review Alignment Data
-
-Read `runtime.alignmentData` directly using the Read tool when context is available; otherwise read `tmp/claude/alignment_data.json`. The file is a JSON object keyed by `"chapter:verse"` — review the first few entries to understand the English-to-Hebrew word mappings (fields: `eng`, `heb`, `heb_pos`, `strong`).
-
-### Step 2c: Fill Hebrew Quotes (deterministic first, bounded fallback)
-
-Run `mcp__workspace-tools__fill_orig_quotes` with:
-- `preparedJson: runtime.preparedNotes` from context.json when available, otherwise `tmp/claude/prepared_notes.json`
-- `alignmentJson: runtime.alignmentData` from context.json when available, otherwise `tmp/claude/alignment_data.json`
-- (hebrewUsfm omitted — auto-detected from book code)
-
-The script deterministically matches English gl_quote words to alignment data and extracts exact Hebrew spans from the UHB source USFM. It updates `prepared_notes.json` in place.
-
-If unresolved items remain:
-- Run at most one bounded fallback pass focused only on unresolved IDs.
-- Do not create ad-hoc scratch scripts for repeated file surgery.
-- Do not loop on marker-based JSON edits.
-- If unresolved items still remain after one pass, stop fallback and report unresolved IDs for graceful degradation tagging in the pipeline.
-
-### Step 2d: Resolve gl_quote from alignment (script)
-
-After orig_quote is filled, run the reverse-lookup script to update gl_quote to the correct ULT English span:
-
-Use `mcp__workspace-tools__resolve_gl_quotes` with `preparedJson` and `alignmentJson`.
-
-This uses the alignment data to find English words mapped to the Hebrew in orig_quote, then locates the contiguous span in the ULT verse (including `{supply}` words). Review the output for any warnings about unmatched items.
-
-### Step 3: Verify Hebrew Quotes
-
-After filling orig_quote values, read the prepared-notes path from context.json (or `tmp/claude/prepared_notes.json` if no context) and scan for items where `orig_quote` is empty and the reference does not end with `:front`. Report any missing items.
-
-Investigate any items still missing `orig_quote`. Common causes:
-- The gl_quote doesn't match any words in the alignment data (check for typos)
-- The aligned USFM is missing alignment for that verse
-
-### Step 4: Flag Narrow Quotes
-
-Run the narrow-quote flagger against the prepared JSON:
-
-Use `mcp__workspace-tools__flag_narrow_quotes` with the prepared-notes path from context.json (or `tmp/claude/prepared_notes.json` if no context).
-
-Review flagged items. These quotes are correct for focusing the note body on the issue, but may need wider phrase boundaries for AT fit later. Keep this list in mind during note generation -- write initial ATs that anticipate the surrounding phrase context.
-
-### Step 5: Read the Style Guide
+### Step 2: Read the Style Guide
 
 Read `reference/note-style-guide.md` for the note writing rules.
 
-### Step 5a: Check canonical sources
+### Step 2a: Check canonical sources
 
 Before generating notes, check for content team decisions that affect this chapter's issues:
 
@@ -142,7 +82,7 @@ Canonical vocabulary references (read-only -- never modify these):
 
 If `issues_resolved.txt` contains a decision about how a specific issue type should be handled, follow it. If a note references a Hebrew term, use the rendering from canonical CSVs unless `issues_resolved.txt` specifies otherwise.
 
-### Step 6: Generate Notes (write keyed JSON, not TSV)
+### Step 3: Generate Notes (write keyed JSON, not TSV)
 
 Read the prepared-notes path from context.json (or `tmp/claude/prepared_notes.json` if no context). For each item, generate a note and write it to a JSON object keyed by the item's `id`. Write the result to `runtime.generatedNotes` from context.json when available, otherwise `tmp/claude/generated_notes.json`.
 
@@ -170,8 +110,8 @@ As you work through items, keep a mental map of interpretive commitments you hav
    - The AT must fit seamlessly: removing `gl_quote` from `ult_verse` and inserting the AT should read as natural English
    - The AT must differ from the UST phrasing in `ust_verse`
    - Use minimal changes to the ULT wording; only change what the translation issue requires
-   - For items flagged as narrow in Step 4: the narrow gl_quote is still correct in the prompt (it focuses the note body on the issue). But write the initial AT with the surrounding phrase context in mind, since the quote boundary may be expanded for AT fit in Step 7.
-   - If the gl_quote boundary creates an orphaned preposition or conjunction, the preferred fix is to expand the gl_quote in Step 7, not to include the orphaned word only in the AT.
+   - For items flagged as narrow: the narrow gl_quote is still correct in the prompt (it focuses the note body on the issue). But write the initial AT with the surrounding phrase context in mind, since the quote boundary may be expanded for AT fit in Step 4.
+   - If the gl_quote boundary creates an orphaned preposition or conjunction, the preferred fix is to expand the gl_quote in Step 4, not to include the orphaned word only in the AT.
    - For restructuring issue types (figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result, grammar-connect-condition-fact): if the note suggests reordering parts of the verse, ensure the gl_quote spans the full area being restructured. The AT must show the complete restructured text, not just a fragment.
    - For figs-parallelism: ensure the gl_quote captures both full parallel phrases, not just the key parallel terms. Check whether the parallelism involves ellipsis (words omitted in one phrase that are understood from the other) — if so, a separate figs-ellipsis note may be needed.
    - For figs-ellipsis: the AT must supply the actual missing words from context, even if they come from a prior verse. If v23 omits a subject stated in v22, the AT must include that subject so the result is a complete, standalone clause.
@@ -192,7 +132,7 @@ Output format -- a flat JSON object mapping item ID to note text:
 
 Write this to the generated-notes path from context.json when available, otherwise `tmp/claude/generated_notes.json`. Do NOT assemble the TSV yourself -- the assembly script handles that to prevent row misalignment.
 
-### Step 7: Expand Narrow Quotes and AT Fit Check (bounded)
+### Step 4: Expand Narrow Quotes and AT Fit Check (bounded)
 
 Run the verification script to see all substitutions:
 
@@ -245,7 +185,7 @@ Also check:
 - Fix any ERRORS (gl_quote not found -- usually a curly brace or case issue)
 - Verify no AT is identical to UST phrasing
 
-### Step 8: Assemble Output TSV (script)
+### Step 5: Assemble Output TSV (script)
 
 Run the assembly script to produce the final TSV. The script reads metadata from the prepared JSON and note text from the generated JSON, matching by ID. This prevents note/row misalignment.
 
@@ -253,7 +193,7 @@ If `--output <path>` was provided in the invocation, use that exact path for `as
 
 Use `mcp__workspace-tools__assemble_notes` with `preparedJson`, `generatedJson`, and the determined output path.
 
-### Step 9: Post-Process
+### Step 6: Post-Process
 
 Run curly quote conversion on the output:
 
@@ -267,7 +207,7 @@ Strip bold from any quoted word that doesn't exactly match the ULT verse text:
 
 Use `mcp__workspace-tools__verify_bold_matches` with `tsvFile` set to the notes TSV path and `ultUsfm` set to the plain ULT USFM path.
 
-### Step 10: Final Review
+### Step 7: Final Review
 
 Read the assembled TSV alongside the aligned ULT. For each row, verify:
 
@@ -281,7 +221,7 @@ Read the assembled TSV alongside the aligned ULT. For each row, verify:
 
 Fix any issues found and rewrite the TSV row(s) if needed. This is a lightweight review pass, not a regeneration -- just catch structural problems the scripts can't judge.
 
-### Step 11: Gemini Review (optional, activation only)
+### Step 8: Gemini Review (optional, activation only)
 
 Skip unless `--gemini` is explicitly passed.
 
