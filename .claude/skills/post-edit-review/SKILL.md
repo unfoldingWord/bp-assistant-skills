@@ -10,17 +10,17 @@ After humans edit the ULT/UST, adapt existing issues to match their changes.
 ## Pipeline Context
 
 If `--context <path>` is provided, read the context.json file. It contains:
-- `sources.ult` — the current human-edited ULT from Door43 master (fetched fresh by the pipeline runner)
+- `sources.ultMasterPlain` — the current human-edited ULT chapter, fetched fresh from Door43 master and stripped of alignment markers by the pipeline runner. Use this as the authoritative human-edited text.
 - `sources.ust` — the current human-edited UST from Door43 master
-
-Use these as the authoritative human-edited text. Compare against the AI-generated versions in `output/AI-ULT/{BOOK}/` and `output/AI-UST/{BOOK}/`.
 
 ## Inputs
 
 - **Book**: 3-letter abbreviation (PSA, GEN, 2SA, etc.)
 - **Chapter**: number
-- AI-generated ULT/UST (from `output/AI-ULT/{BOOK}/`, `output/AI-UST/{BOOK}/`)
-- Human-edited ULT/UST — from `--context` sources (preferred) or fetch via `mcp__workspace-tools__fetch_door43`
+- AI-generated ULT: `output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}.usfm` (plain, pre-alignment version — do NOT load the `-aligned.usfm` files)
+- AI-generated UST: `output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}.usfm`
+- Human-edited ULT: `context.sources.ultMasterPlain` (preferred) — already fetched and alignment-stripped by the pipeline runner. If context is unavailable, fetch via `mcp__workspace-tools__fetch_door43`.
+- Human-edited UST: `context.sources.ust` (preferred), otherwise fetch via `mcp__workspace-tools__fetch_door43`
 - Existing issues TSV (from `output/issues/{BOOK}/`)
 
 ## When This Runs
@@ -47,36 +47,6 @@ Human edits affect existing issues in three ways:
 
 3. **New issue appears** -- human edit creates a translation issue that wasn't in the
    AI-generated text. Add an issue for it.
-
-## Step 0: Quick Diff Gate
-
-**Model: Haiku** — this is a diff check, not a reasoning task.
-
-Run this before spinning up any agents. If there are no human edits, skip the full pipeline immediately.
-
-### Procedure
-
-1. **Fetch master ULT and UST** from Door43 via `mcp__workspace-tools__fetch_door43`.
-   - This is mandatory — no fallback to cached copies.
-   - Retry up to 5 times on any failure. If all 5 attempts fail, abort the entire skill with a clear error message.
-
-2. **Load aligned AI-generated files**:
-   - ULT: `output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm`
-   - UST: `output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm`
-   - These are the post-alignment versions. Use them, not the raw generated files.
-
-3. **Extract the target chapter** from both the fetched master and the AI-generated files.
-   - Locate `\c <CHAPTER>` markers to find the start line.
-   - The chapter ends at the next `\c` marker or end of file.
-   - Slice out only that chapter's content from each file.
-
-4. **Diff the slices** — literal comparison, no stripping or normalization.
-   - Diff master ULT chapter vs AI-generated ULT chapter.
-   - Diff master UST chapter vs AI-generated UST chapter.
-
-5. **Gate decision**:
-   - If **both diffs are empty**: print `No human edits detected — skipping post-edit review.` and exit the skill cleanly (success). Do not write any output files. The pipeline runner will advance normally to the next step.
-   - If **any diff exists**: proceed to the Diff Analyzer and Issue Reconciler below.
 
 ## Team Composition
 
