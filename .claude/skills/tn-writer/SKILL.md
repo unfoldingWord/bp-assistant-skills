@@ -5,7 +5,7 @@ description: Generate translation notes from issue identification TSV. Uses prom
 
 # Translation Note Writer
 
-Generate translation notes from issue identification output. A preparation script handles all deterministic work (template matching, language conversion, ID generation, prompt assembly), then Claude generates the note text.
+Generate translation notes from issue identification output. The preparation stage owns deterministic work and note interpretation (template matching, `t:` / `i:` parsing, AT policy, issue-type rules, language conversion, ID generation, prompt assembly). Claude's job is the prose: write the note text for one prepared item, then do at most one bounded rewrite pass if AT-fit fails.
 
 ## MCP-First Execution
 
@@ -57,12 +57,15 @@ Use `mcp__workspace-tools__prepare_notes` with:
 - `alignedUsfm`
 - `output: runtime.preparedNotes` from context.json when available, otherwise `tmp/claude/prepared_notes.json`
 
-This produces a JSON file with fully-assembled prompts for each item, plus alignment data at `runtime.alignmentData` from context.json when available, otherwise `tmp/claude/alignment_data.json`.
+This produces a JSON file with packetized prepared items for note writing, plus alignment data at `runtime.alignmentData` from context.json when available, otherwise `tmp/claude/alignment_data.json`.
 
 The script automatically:
 - Filters out items with "has tW article" in the explanation (Translation Words already covers them)
 - Sorts output so `front` references come before verse references
 - Extracts alignment data (English-to-Hebrew word mappings) from aligned USFM
+- Parses `t:` and `i:` directives into deterministic fields
+- Resolves one selected template when possible and strips AT boilerplate from it
+- Computes `at_policy`, `style_rules`, and `writer_packet` so note generation does not have to re-decide them
 
 Options:
 - `--aligned-usfm PATH` -- Extract alignment data from aligned ULT (preferred). Auto-detected if omitted and aligned file exists at the standard path (`output/AI-ULT/<BOOK>/<BOOK>-<CHAPTER>-aligned.usfm`).
@@ -151,9 +154,17 @@ As you work through items, keep a mental map of interpretive commitments you hav
    - `ai_writes_at_agent` -- Generate the note AND an alternate translation
    - `given_at_agent` -- Generate the note only (AT already provided or not needed)
 
-2. Read the `prompt` field -- it contains all context (templates, verse text, explanation). Generate the note following the style guide.
+2. Read the `writer_packet` field first. This is the authoritative contract for note generation. It already contains the selected template, parsed directives, AT policy, and issue-type style rules. Use the `prompt` field only as a compact rendering of that packet.
 
-3. For items with `needs_at: true`, the note must include an alternate translation — notes missing one will fail quality check:
+3. Follow `at_policy`, not raw inference:
+   - `required` -- the note must include an alternate translation
+   - `forbidden` -- do not add an alternate translation
+   - `provided` -- use the provided AT as context if needed, but do not output a new one unless the packet already contains a programmatic note
+   - `not_needed` -- do not add an alternate translation
+
+4. For items where `writer_packet.programmatic_note` is non-empty, write that note text exactly and move on. Do not reinterpret the row.
+
+5. For items with `at_policy: required`, the note must include an alternate translation — notes missing one will fail quality check:
    - Place the AT at the end of the note: `Alternate translation: [text here]`
    - Use square brackets, not quotes, around the AT text
    - The AT must fit seamlessly: removing `gl_quote` from `ult_verse` and inserting the AT should read as natural English
@@ -166,7 +177,7 @@ As you work through items, keep a mental map of interpretive commitments you hav
    - For figs-ellipsis: the AT must supply the actual missing words from context, even if they come from a prior verse. If v23 omits a subject stated in v22, the AT must include that subject so the result is a complete, standalone clause.
    - Connecting words in ATs: If the gl_quote includes words like "and," "but," "to," "in," "from," ensure these appear in the AT. Do not silently drop conjunctions or prepositions that are part of the quoted text.
 
-4. For items with `tcm_mode: true`:
+6. For items with `tcm_mode: true`:
    - Present multiple interpretations using the "This could mean:" format
    - Each interpretation gets its own AT in square brackets
 
@@ -313,10 +324,10 @@ Reference	ID	Tags	SupportReference	Quote	Occurrence	Note
 
 | Type | Condition | What happens |
 |------|-----------|--------------|
-| `writes_at` | No AT provided, templates have AT section | Generate note + AT |
-| `given_at` | AT already provided | Generate note only |
+| `writes_at` | `at_policy` is `required` | Generate note + AT |
+| `given_at` | `at_policy` is `provided`, `forbidden`, or `not_needed` | Generate note only |
 | `see_how_at` | Explanation starts with "see how", no AT | Generate AT only |
-| `see_how` | Explanation starts with "see how", has AT | Generate note with given AT |
+| `see_how` | Explanation starts with "see how", has AT | Prefer the programmatic note in `writer_packet.programmatic_note` |
 
 ## Special Modes
 
@@ -325,7 +336,7 @@ When explanation starts with "TCM", present multiple interpretations:
 "This could mean: (1) [interpretation]. Alternate translation: [AT] or (2) [interpretation]. Alternate translation: [AT]"
 
 ### i: prefix
-Information that must be included in the note. May reference other verses.
+Information that must be included in the note. Already parsed into `must_include` during preparation. Treat it as authoritative.
 
 ### t: prefix
-Hint about which template variant to use.
+Hint about which template variant to use. Preparation resolves this into `template_type`, `template_locked`, and `template_text`; do not re-decide the template at generation time unless the packet explicitly left it unresolved.

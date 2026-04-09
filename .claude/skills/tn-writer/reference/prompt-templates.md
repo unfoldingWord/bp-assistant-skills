@@ -1,6 +1,6 @@
 # Prompt Templates Reference
 
-These are the prompt templates used by `prepare_notes.py` when assembling prompts. The script substitutes variables and outputs the fully-assembled prompt in the JSON file.
+These are the legacy prompt templates used when `prepare_notes.py` assembles a rendered `prompt` field. The preferred contract is now the per-item `writer_packet`, which already carries the selected template, AT policy, parsed directives, and style rules.
 
 ## writes_at_prompt
 
@@ -28,7 +28,7 @@ When you make the alternate translation, it should fit seamlessly back into the 
 
 Check the UST for the same verse to make sure that your alternate translation is not the same as the UST. If it is, come up with another alternate translation idea. Here is the UST for that verse: `{ust_verse}`
 
-Use the template(s) provided below. There may be more than one template; if so, discern which particular template is needed in this instance and use it. The explanation of the issue may indicate what template to use.
+Use the selected template provided below. Do not choose a different template variant unless the prepared packet explicitly left the template unresolved.
 
 {templates}
 
@@ -56,7 +56,7 @@ The following input may or may not occur:
 
 - If there is any data here, it is a previous note written by AI that the human editor did not find sufficient: `{ai_tn}`
 
-Use the template(s) provided below. There may be more than one template; if so, discern which particular template is needed in this instance and use it.
+Use the selected template provided below. Do not choose a different template variant unless the prepared packet explicitly left the template unresolved.
 
 {templates}
 
