@@ -25,10 +25,10 @@ cd bp-assistant-skills
 npm install
 
 # Fetch reference data (Hebrew Bible, Translation Words, etc.)
-# These are gitignored and must be fetched separately:
-python3 .claude/skills/utilities/scripts/fetch_hebrew_bible.py
-python3 .claude/skills/utilities/scripts/build_strongs_index.py
-# Other data directories (en_tw, published-tns, ta-flat, etc.) should be
+# These are gitignored. When running via the bot, use the "setup data" DM command.
+# For local use, run the curation script directly:
+node .claude/skills/utilities/scripts/curate-published-data.mjs
+# Other data directories (en_tw, ta-flat, etc.) should be
 # cloned from their respective Door43 repos into data/
 ```
 
@@ -80,7 +80,7 @@ All skills live in `.claude/skills/`. Each has a `SKILL.md` defining the prompt 
 
 ### Note & Question Writing
 - **`tn-writer`** -- Deterministic prep script + LLM note generation following style guide
-- **`tn-quality-check`** -- Mechanical checks (ID format, Hebrew quotes, AT syntax, bold accuracy) plus optional deep semantic review
+- **`tn-quality-check`** -- Full semantic review of generated notes. When run from the pipeline, mechanical checks (ID format, Hebrew quotes, AT syntax, bold accuracy) are pre-run in Node.js before the skill invokes — Claude reads findings and does one fix pass, no re-check loop.
 - **`parallel-batch`** -- Split long chapters into verse-range chunks, run tn-writer in parallel, merge results (respects PSA 119 stanza boundaries)
 - **`tq-writer`** -- Update translation questions to align with current ULT/UST
 
@@ -164,5 +164,4 @@ The 5 glossary CSVs and `issues_resolved.txt` are protected from modification. `
 ## Dependencies
 
 - Node.js 22+ (usfm-js ^3.4.3 for USFM parsing, Proskomma for word lookups)
-- Python 3.10+ (data processing, Hebrew quote extraction, quality checks)
 - [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) (Agent SDK for skill execution)
