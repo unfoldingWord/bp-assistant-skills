@@ -167,7 +167,7 @@ With verse range: `output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv`
 
 After all chunks are complete, concatenate into `output/issues/<BOOK>/<BOOK>-<CH>.tsv` (strip duplicate headers, preserve verse ordering).
 
-Same format as base issue-identification:
+Same format as base issue-identification (see that skill for full rules — key points: ULT text must be copied verbatim, use `&` only for genuinely discontinuous phrases):
 ```
 [book]	[chapter:verse]	[supportreference]	[ULT text]			[explanation if needed]
 ```

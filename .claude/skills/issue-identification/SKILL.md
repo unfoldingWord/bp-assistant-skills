@@ -462,14 +462,15 @@ Format:
 | book | 3-letter abbreviation (psa, gen, mat, etc.) |
 | chapter:verse | Single-verse reference (78:17). Never use verse ranges — see rules below. |
 | supportreference | Issue type (figs-metaphor, writing-pronouns, etc.) |
-| ULT text | English phrase where issue occurs — from one verse only, continuous text preferred |
+| ULT text | English phrase copied verbatim from the ULT — exact words, exact inflections, from one verse only |
 | (empty) | Reserved |
 | (empty) | Reserved |
 | explanation | Brief note if issue not obvious from text (optional) |
 
 **Reference and quote rules**:
 - References must be single-verse. If a literary device (parallelism, repetition) spans verses, put the issue on the first verse and mention the surrounding verses in the explanation column. The only exception is `translate-versebridge`, which spans two verses by definition.
-- The ULT text column should contain continuous text from that one verse. Avoid discontinuous quotes (indicated by `&` breaks). If the relevant words are separated, expand the quote to include the intervening text rather than using ampersands.
+- The ULT text column must be **copied verbatim** from the ULT verse — use the exact words and inflections that appear in the ULT. Do not paraphrase, change verb forms (e.g. "stumbled" when ULT says "stumbling"), or substitute synonyms (e.g. "ashamed" when ULT says "shame"). Downstream tooling matches these words mechanically against alignment data; mismatches cause failures.
+- Prefer a single continuous span of ULT text. Use `&` to join **only genuinely discontinuous** phrases — where unrelated text separates the relevant words in the verse. If the phrases are adjacent or separated only by punctuation/conjunctions, expand the quote to include the connecting text instead. Good `&` use: two different referents for "these" separated by a clause. Bad `&` use: "oppose my opponents & fight those fighting me" when the ULT reads "oppose my opponents; fight those fighting me" — just quote the full span.
 
 **Ordering**: Within each verse, output issues in ULT reading order:
 1. **First to last** by start position of the quoted phrase in the ULT verse
