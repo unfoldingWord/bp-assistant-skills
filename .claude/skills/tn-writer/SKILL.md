@@ -115,7 +115,8 @@ As you work through items, keep a mental map of interpretive commitments you hav
    - For restructuring issue types (figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result, grammar-connect-condition-fact): if the note suggests reordering parts of the verse, ensure the gl_quote spans the full area being restructured. The AT must show the complete restructured text, not just a fragment.
    - For figs-parallelism: ensure the gl_quote captures both full parallel phrases, not just the key parallel terms. Check whether the parallelism involves ellipsis (words omitted in one phrase that are understood from the other) — if so, a separate figs-ellipsis note may be needed.
    - For figs-ellipsis: the AT must supply the actual missing words from context, even if they come from a prior verse. If v23 omits a subject stated in v22, the AT must include that subject so the result is a complete, standalone clause.
-   - Connecting words in ATs: If the gl_quote includes words like "and," "but," "to," "in," "from," ensure these appear in the AT. Do not silently drop conjunctions or prepositions that are part of the quoted text.
+   - Connecting words in ATs: If the gl_quote is a **contiguous** span and includes words like "and," "but," "to," "in," "from," ensure these appear in the AT. Do not silently drop conjunctions or prepositions that are part of the quoted text.
+   - Discontinuous gl_quotes: If the gl_quote contains `…` (the English quote spans non-adjacent parts of the ULT), the AT must also use `…` between the parts — `[first part … second part]`. Never use "and" to join non-adjacent AT fragments.
 
 6. For items with `tcm_mode: true`:
    - Present multiple interpretations using the "This could mean:" format

@@ -43,7 +43,8 @@ Generate an alternate translation when the matched templates contain "Alternate 
 An alternate translation should be a seamless replacement for the text in which the translation issue occurs. If you remove the GLQuote from the ULT verse and replace it with the AT, it should read correctly as natural English.
 
 ### Conjunction and Preposition Handling
-Hebrew prefixes (waw = "and", bet = "in", lamed = "to", mem = "from") are attached
+This rule applies only when the gl_quote is a **contiguous** span of text. Hebrew
+prefixes (waw = "and", bet = "in", lamed = "to", mem = "from") are attached
 to the Hebrew word but correspond to separate English words. When a gl_quote boundary
 does not include an adjacent conjunction or preposition in the ULT, your AT must
 account for this:
@@ -54,6 +55,9 @@ account for this:
   "And": [And he traveled] not just [he traveled]
 - If the ULT reads "the one causing his neighbor to drink" for a Hebrew participle,
   the AT must keep "the one": [the one overpowering his neighbor] not just [overpowering his neighbor]
+
+**Do not apply this rule to discontinuous quotes.** If the gl_quote contains `…`, the
+AT must use `…` between parts — not "and". See "Discontinuous ATs" below.
 
 ### Capitalization in ATs
 Match the sentence position of the gl_quote:
@@ -85,6 +89,17 @@ Do not include punctuation at the start or end of the AT brackets unless the not
 
 ### Discontinuous ATs
 When an AT covers non-adjacent text, use a single pair of brackets with a true ellipsis character between the parts: `[I desire peace … they desire war]` (spaces around the ellipsis).
+
+The trigger is whether the **English gl_quote** spans non-adjacent ULT text (contains `…`), regardless of whether the Hebrew OrigQuote uses `&`. Four scenarios:
+
+| gl_quote | AT |
+|---|---|
+| Contiguous (no `…`) | Normal replacement — no ellipsis needed |
+| Contiguous (no `…`), Hebrew has `&` | AT is still a normal replacement — no ellipsis |
+| Discontinuous (`…`), Hebrew has `&` | AT **must** use `…` between the parts |
+| Discontinuous (`…`), Hebrew is one span | AT **must** use `…` between the parts |
+
+Never use "and" to join non-adjacent AT fragments.
 
 ### Restructuring Notes
 For issue types that suggest reordering text (figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result, grammar-connect-condition-fact, or any note suggesting putting one part of the verse before another), the gl_quote must cover the **entire area** being restructured, and the AT must show the full restructured result. For example, if the note says "put the second half of the verse before the first half," the gl_quote should be approximately the whole verse and the AT should be the whole verse reordered. Do not quote only one fragment of a reordering — the reader needs to see both the original order and the proposed new order.
