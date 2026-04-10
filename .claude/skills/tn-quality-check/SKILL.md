@@ -99,36 +99,40 @@ For each note with an AT: mentally substitute the AT for the gl_quote in the ULT
 
 This is the semantic complement to the script's mechanical AT fit check (Check 7 + 10).
 
-#### 3d. Antithetical parallelism filtering
+#### 3d. AT derived from ULT, not borrowed from UST
+
+An AT should read like a targeted edit of the ULT — changing only what the note's issue requires and leaving everything else intact. The mechanical check (check 6) catches verbatim UST matches and high word overlap, but subtler borrowing slips through. For each note with an AT, check whether the AT's phrasing tracks the ULT with a focused substitution, or whether it appears to have been lifted from the UST instead. An AT that restructures the whole clause or resolves multiple issues at once is a sign of UST borrowing — the AT should only address the single issue its note describes.
+
+#### 3e. Antithetical parallelism filtering
 
 If a `figs-parallelism` note exists, check whether the two phrases express:
 - **Similar ideas** (synonymous parallelism) -- the note is appropriate
 - **Opposite ideas** (antithetical parallelism) -- the note should not exist; flag for removal
 
-#### 3e. Note suppression opportunities
+#### 3f. Note suppression opportunities
 
 If a semantic note (idiom, metaphor, metonymy) covers the same phrase or overlapping text as a structural note (possession, activepassive) in the same verse, flag the structural note as potentially redundant. The semantic note is more informative and usually subsumes the structural one.
 
-#### 3f. Duplicate or combinable notes
+#### 3g. Duplicate or combinable notes
 
 Flag notes in the same verse that:
 - Address the same phrase with overlapping issue types
 - Could be combined into a single note (e.g., two `grammar-connect` notes for the same connector)
 - Are made redundant by another note's AT
 
-#### 3g. "Here" rule compliance
+#### 3h. "Here" rule compliance
 
 The mechanical check (check 24) catches the most common violations. In semantic review, verify that notes flagged by check 24 are genuinely wrong (not false positives), and look for subtler cases the script may miss (e.g., "Here, **The** king..." where the bolded word starts with uppercase).
 
-#### 3h. Restructuring quote scope
+#### 3i. Restructuring quote scope
 
 For figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result, or any note suggesting text reordering: verify the gl_quote spans the entire area being restructured, and the AT shows the full restructured text. Flag notes where the quote captures only a fragment of the reordering.
 
-#### 3i. Parallelism quote scope
+#### 3j. Parallelism quote scope
 
 For figs-parallelism notes: verify the gl_quote includes both complete parallel phrases, not just key words. Flag notes where only nouns or fragments are quoted. Also check whether the parallelism involves ellipsis (words implied from the other phrase) — if so, flag that a figs-ellipsis note may also be needed.
 
-#### 3j. Cross-verse interpretive consistency
+#### 3k. Cross-verse interpretive consistency
 
 Scan for notes that reference or depend on interpretations from nearby verses. Specifically:
 
@@ -197,7 +201,8 @@ The script runs these checks:
  3  id_collision                    error       No ID collisions with master TN on Door43
  4  empty_quote / no_hebrew         error       Quote column has Hebrew characters
  5  at_syntax                       error       ATs use [square brackets]
- 6  at_matches_ust                  error/warn  AT text is not identical to UST phrasing
+ 6  at_matches_ust                  error       AT text appears verbatim in UST (exact substring match)
+ 6b at_not_ust                      warning     AT text has >85% word overlap with UST phrasing
  7  gl_quote_not_in_ult             error       gl_quote appears in ULT verse (expected for discontinuous quotes using ... notation)
  8  bold_not_in_ult                 error       Bolded text appears verbatim in ULT verse
  9  rc_link_in_note                 error       Note column has no rc:// links
