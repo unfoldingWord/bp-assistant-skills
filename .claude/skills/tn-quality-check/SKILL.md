@@ -15,6 +15,8 @@ In restricted runs, use workspace MCP tools instead of direct shell/python comma
 - `mcp__workspace-tools__assemble_notes`
 - `mcp__workspace-tools__curly_quotes`
 
+**Prohibited:** Do NOT write Python, bash, or other scripts to `/tmp/` or anywhere else. Use the Edit tool for TSV/JSON fixes and MCP tools for batch operations.
+
 ## Pipeline Context
 
 If `--context <path>` is provided, read the context.json file for authoritative ULT/UST paths and persistent artifact paths. Use these instead of searching for files or writing to `/tmp/`.

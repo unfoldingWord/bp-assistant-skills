@@ -87,14 +87,27 @@ The pronoun doesn't point to specific people:
 > "After he fathered Enosh, Seth lived"
 - Note: "Make sure it is clear in your translation whom each pronoun refers to. Alternate translation: [After Enosh was born, Seth lived]"
 
+## Restraint Principle — Less Is More
+
+**Only flag a pronoun when a translator reading the verse in context would genuinely struggle to identify the referent.** Most pronouns are obvious — flag the exceptions, not the norm.
+
+Do **NOT** flag when:
+- Only one person/entity is active in the passage and the pronoun clearly refers to them
+- The referent was explicitly named in the same verse or the immediately preceding verse and no other candidate intervenes
+- The pronoun is a possessive ("his sword") where the possessor is the obvious subject of the sentence
+- The passage is addressing God/Yahweh and "he/him" clearly refers to God throughout
+- A psalm or prayer has a consistent speaker (David) and subject (God or the wicked) — pronouns alternate predictably between these two parties
+
+**Target**: Aim for roughly 2–5 writing-pronouns notes per chapter for typical narrative/poetry. If you find yourself flagging 8+ per chapter, you are almost certainly over-flagging. Step back and ask: "Would a careful translator actually be confused here?"
+
 ## Decision Process
 
 ```
 Is there a pronoun (he/she/it/they/him/her/them/etc.)?
     |
-    +-- Is the referent potentially unclear?
+    +-- Is the referent genuinely ambiguous? (multiple plausible candidates, no recent naming)
     |   |
-    |   +-- YES --> Could readers identify who/what it refers to?
+    |   +-- YES --> Could a careful reader still figure it out from context?
     |       |
     |       +-- NO --> Write clarifying note
     |       |
