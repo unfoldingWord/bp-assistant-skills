@@ -31,7 +31,8 @@ When running in restricted mode, use workspace MCP tools instead of direct shell
 
 If `--context <path>` is provided, read the context.json file first. It contains the authoritative source paths:
 - `sources.ult` — current ULT for this chapter (fetched fresh from Door43 by the pipeline runner)
-- `sources.ust` — current UST for this chapter
+- `sources.ustPlain` — current UST for this chapter, **alignment markers stripped** — use this for reading
+- `sources.ust` — raw UST USFM with alignment markers intact (very large for long chapters — do not read directly)
 - `sources.ultAligned` — aligned ULT if available
 - `sources.issues` — issues TSV path
 - `runtime.preparedNotes` — persistent JSON output path for prepared notes

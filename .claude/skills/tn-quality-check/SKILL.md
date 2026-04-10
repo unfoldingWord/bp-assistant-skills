@@ -17,13 +17,13 @@ In restricted runs, use workspace MCP tools instead of direct shell/python comma
 
 ## Pipeline Context
 
-If `--context <path>` is provided, read the context.json file for authoritative ULT/UST paths (`sources.ult`, `sources.ust`) and persistent artifact paths (`runtime.preparedNotes`, `runtime.generatedNotes`, `runtime.tnQualityFindings`). Use these instead of searching for files or writing to `/tmp/`.
+If `--context <path>` is provided, read the context.json file for authoritative ULT/UST paths and persistent artifact paths. Use these instead of searching for files or writing to `/tmp/`.
 
 ## Prerequisites
 
 - Assembled TN TSV (from tn-writer Step 8-9)
 - prepared-notes JSON (from `runtime.preparedNotes` in context.json, or fallback path if no context)
-- Plain ULT and UST USFM files (from context.json `sources.ult`/`sources.ust` if available)
+- Plain ULT and UST USFM files (from context.json `sources.ult`/`sources.ustPlain` if available — use `ustPlain`, not `ust` which contains raw alignment markers)
 - Book code (for master TN ID collision check)
 
 ## Parameters
@@ -56,8 +56,8 @@ Strips any literal `\n` from the end of Note cells in-place. Run this before any
 Use `mcp__workspace-tools__check_tn_quality` with:
 - `tsvPath`
 - `preparedJson`
-- `ultUsfm`
-- `ustUsfm`
+- `ultUsfm` — use `sources.ult` (plain ULT) from context.json
+- `ustUsfm` — use `sources.ustPlain` (not `sources.ust`) from context.json
 - `book`
 - `output: runtime.tnQualityFindings` from context.json when available, otherwise `tmp/claude/tn_quality_findings.json`
 
