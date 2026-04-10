@@ -63,6 +63,8 @@ Lighter-weight than the initial pipeline -- this is review, not full generation.
 - Unchanged verses can be skipped entirely.
 
 ### Agent 2: Issue Reconciler
+- Before writing any output file, read the current file contents first (sub-agents have their own
+  context and the Write tool requires a prior Read in the same context).
 - For each existing issue in changed verses:
   - Does the gl_quote still appear in the human-edited ULT? If not, flag for update or removal.
   - Does the issue still exist? If not, mark for removal.
@@ -87,9 +89,26 @@ Output:  - Updated issues TSV
 
 ## Outputs
 
+Read each target file before writing it. Sub-agents run in their own context and the Write tool
+requires a prior Read in the same context, even if the parent agent already read the file.
+
 1. `output/issues/<BOOK>/<BOOK>-<CHAPTER>.tsv` -- updated issues matching human ULT
 2. `output/review/<BOOK>/<BOOK>-<CHAPTER>-changelog.tsv` -- what changed and why
 3. Update `output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}.usfm` with the editor's text so downstream tools (tn-writer) use the authoritative version rather than stale AI text
+
+### Issues TSV format
+
+The issues TSV must have exactly 7 tab-separated columns with NO row numbers and NO header row:
+
+```
+Book	Reference	SupportReference	GLQuote	NeedsAT	ATProvided	Explanation
+```
+
+- **Book**: uppercase 3-letter code (e.g. `PSA`, `GEN`) — never lowercase
+- **Reference**: `chapter:verse` (e.g. `37:1`)
+- Example row: `PSA	37:1	figs-doublet	evildoers & doers of unrighteousness			doublet explanation`
+
+Do not prepend row numbers, line counts, or any additional columns. The pipeline parser expects exactly column 0 = uppercase book code.
 
 ## Edge Cases
 
