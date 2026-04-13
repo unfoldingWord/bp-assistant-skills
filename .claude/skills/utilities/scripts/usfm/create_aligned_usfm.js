@@ -699,7 +699,7 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
       // Get Hebrew metadata
       const hebrewMeta = [];
       for (const idx of align.hebrew_indices) {
-        const hw = hebrewWords[idx] || mapping.hebrew_words[idx];
+        const hw = hebrewWords[idx] || mapping.hebrew_words?.[idx];
         if (hw) {
           hebrewMeta.push({ hw, idx });
         }
@@ -713,14 +713,14 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
       } else if (hebrewMeta.length === 1) {
         // Single Hebrew word — all English children go inside one milestone
         const { hw, idx } = hebrewMeta[0];
-        const sourceWord = mapping.hebrew_words[idx]?.word || hw.word;
+        const sourceWord = mapping.hebrew_words?.[idx]?.word || hw.word;
         verseObjects.push(buildZalnMilestone(hw, sourceWord, children));
       } else {
         // Multiple Hebrew words — nest milestones, innermost holds the children
         let innermost = children;
         for (let j = hebrewMeta.length - 1; j >= 0; j--) {
           const { hw, idx } = hebrewMeta[j];
-          const sourceWord = mapping.hebrew_words[idx]?.word || hw.word;
+          const sourceWord = mapping.hebrew_words?.[idx]?.word || hw.word;
           innermost = [buildZalnMilestone(hw, sourceWord, innermost)];
         }
         verseObjects.push(...innermost);
@@ -749,8 +749,81 @@ function parseReference(ref) {
   };
 }
 
+// Normalize mapping data — support two AI-produced compact formats in addition to the
+// canonical {reference, english_text, alignments:[{english:[], hebrew_indices:[]}]} format.
+//
+// Compact format 1 — verse-keyed object (produced by ULT-alignment skill):
+//   {"1": [{hebrew_indices, hebrew_words, english_words, bracketed}], "2": [...]}
+//
+// Compact format 2 — flat array with verse field (produced by UST-alignment skill):
+//   [{verse:1, hebrew_indices, hebrew_words, english_words, bracketed}, ...]
+//
+// Both compacts are grouped by verse and expanded to the canonical per-verse format.
+function applyBrackets(words, bracketed) {
+  if (!Array.isArray(bracketed) || bracketed.length === 0) return words;
+  return words.map((w, i) => (bracketed[i] ? `{${w}}` : w));
+}
+
+function compactGroupsToCanonical(groups, bookCode, chapterNum) {
+  // groups: array of {verse, hebrew_indices, hebrew_words, english_words, bracketed}
+  const byVerse = {};
+  for (const g of groups) {
+    const v = g.verse;
+    if (!byVerse[v]) byVerse[v] = [];
+    byVerse[v].push(g);
+  }
+  return Object.entries(byVerse)
+    .sort(([a], [b]) => parseInt(a) - parseInt(b))
+    .map(([verseStr, entries]) => {
+      const verseNum = parseInt(verseStr, 10);
+      const alignments = entries.map(e => ({
+        english: applyBrackets(e.english_words || [], e.bracketed),
+        hebrew_indices: e.hebrew_indices || [],
+      }));
+      const english_text = alignments.map(a => a.english.join(' ')).join(' ');
+      return {
+        reference: `${bookCode} ${chapterNum || verseNum}:${verseNum}`,
+        english_text,
+        alignments,
+      };
+    });
+}
+
+function normalizeMapping(raw, bookCode, chapter) {
+  // Already canonical: array of per-verse objects with reference + english_text + alignments
+  if (Array.isArray(raw) && raw.length > 0 && raw[0].reference && raw[0].alignments) return raw;
+
+  // Compact format 2: flat array with verse + english_words fields (no alignments wrapper)
+  if (Array.isArray(raw) && raw.length > 0 && raw[0].verse !== undefined && raw[0].english_words !== undefined) {
+    return compactGroupsToCanonical(raw, bookCode, chapter);
+  }
+
+  // Compact format 1: verse-keyed object {"1": [...groups...], "2": [...]}
+  if (!Array.isArray(raw) && typeof raw === 'object') {
+    const flatGroups = [];
+    for (const [verseStr, entries] of Object.entries(raw)) {
+      const verseNum = parseInt(verseStr, 10);
+      if (!Array.isArray(entries)) continue;
+      for (const entry of entries) {
+        flatGroups.push({ ...entry, verse: verseNum });
+      }
+    }
+    return compactGroupsToCanonical(flatGroups, bookCode, chapter);
+  }
+
+  // Fallback: wrap single object
+  return Array.isArray(raw) ? raw : [raw];
+}
+
+// Extract book code from Hebrew USFM headers (e.g. "ZEC")
+const hebrewBookCode = (() => {
+  const idHeader = (hebrewParsed.headers || []).find(h => h.tag === 'id');
+  if (!idHeader) return 'UNK';
+  return idHeader.content.trim().split(/\s+/)[0].toUpperCase();
+})();
+
 // Process mapping data
-const mappings = Array.isArray(mappingData) ? mappingData : [mappingData];
+const mappings = normalizeMapping(mappingData, hebrewBookCode, filterChapter);
 
 // Build output structure
 const outputJson = {
