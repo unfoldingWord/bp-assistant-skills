@@ -51,7 +51,13 @@ The pipeline runner has already completed all mechanical preparation before invo
 - Resolved gl_quotes to ULT English spans (`resolve_gl_quotes`)
 - Flagged narrow quotes that may need expansion (`flag_narrow_quotes`)
 
-Read `runtime.preparedNotes` from context.json. Each item has all fields populated including `writer_packet`, `orig_quote`, `gl_quote`, templates, AT policy, and style rules. Do not re-run preparation MCP tools.
+**Do not use the raw `Read` tool on `runtime.preparedNotes`** — the file can exceed the SDK's 10K-token read limit and cause an error. Instead, use the `mcp__workspace-tools__read_prepared_notes` tool:
+
+1. `read_prepared_notes({ preparedJson: <path>, summaryOnly: true })` — get total count and item IDs
+2. `read_prepared_notes({ preparedJson: <path>, start: 0, end: 19 })` — fetch items 0–19
+3. Continue in batches of ≤20 until all items are loaded (check `hasMore` in the response)
+
+Each item has all fields populated including `writer_packet`, `orig_quote`, `gl_quote`, templates, AT policy, and style rules. Do not re-run preparation MCP tools.
 
 If any items have empty `orig_quote` (and reference does not end with `:front`), note them for graceful degradation -- do not attempt manual resolution loops.
 
@@ -85,7 +91,7 @@ If `issues_resolved.txt` contains a decision about how a specific issue type sho
 
 ### Step 3: Generate Notes (write keyed JSON, not TSV)
 
-Read the prepared-notes path from context.json (or `tmp/claude/prepared_notes.json` if no context). For each item, generate a note and write it to a JSON object keyed by the item's `id`. Write the result to `runtime.generatedNotes` from context.json when available, otherwise `tmp/claude/generated_notes.json`.
+Use `mcp__workspace-tools__read_prepared_notes` to load all items from the prepared-notes path (see Step 1 above for batching protocol). For each item, generate a note and write it to a JSON object keyed by the item's `id`. Write the result to `runtime.generatedNotes` from context.json when available, otherwise `tmp/claude/generated_notes.json`.
 
 Process one item at a time. Each note addresses exactly one item from the prepared JSON, which corresponds to one issue in one verse. Never create summary notes that combine or reference multiple verse occurrences of the same pattern (e.g., do not write "The author uses synecdoche in verses 2, 5, and 6"). Each verse gets its own self-contained note even when the same figure recurs across the chapter.
 
