@@ -19,7 +19,7 @@ When running in restricted mode, use workspace MCP tools instead of direct shell
 - `mcp__workspace-tools__assemble_notes`
 - `mcp__workspace-tools__curly_quotes`
 - `mcp__workspace-tools__fix_hebrew_quotes` — pass `output` param to write to file instead of returning inline
-- `mcp__workspace-tools__generate_ids`
+- `mcp__workspace-tools__generate_ids` — do not call when running inside the pipeline: IDs are pre-populated by the pipeline runner during mechanical prep. Calling this again risks collisions.
 
 ## Prerequisites
 
@@ -50,6 +50,9 @@ The pipeline runner has already completed all mechanical preparation before invo
 - Filled Hebrew orig_quotes from alignment data (`fill_orig_quotes`)
 - Resolved gl_quotes to ULT English spans (`resolve_gl_quotes`)
 - Flagged narrow quotes that may need expansion (`flag_narrow_quotes`)
+- Generated unique 4-char TN IDs for every item (`generate_ids`)
+
+Each item's `id` field is already populated. Do not generate or overwrite IDs — doing so risks collisions with upstream or within the chapter.
 
 **Do not use the raw `Read` tool on `runtime.preparedNotes`** — the file can exceed the SDK's 10K-token read limit and cause an error. Instead, use the `mcp__workspace-tools__read_prepared_notes` tool:
 
@@ -196,6 +199,7 @@ This is complementary to tn-quality-check -- Gemini does semantic/judgment revie
 - **verify_at_fit.py ERRORS**: The alignment token check failed. Common causes: stale ULT (re-fetch with fetch_door43.py), or orig_quote spans a verse boundary. Fix the quote and re-run verification.
 - **assemble_notes.py missing items**: Rows were filtered out during assembly. Check that every row has a non-empty SupportReference and that the issue type matches a known TA article.
 - **QUOTE_NOT_FOUND from lang_convert.js**: The Greek/Hebrew quote could not be located in the source text. Verify the quote is copied exactly from the USFM (including cantillation marks for Hebrew).
+- **assemble_notes fails repeatedly**: If `assemble_notes` returns an error twice in a row, stop immediately. Do not attempt to debug or repair the prepared JSON — it is a pipeline input, not your output. Report the error and the paths to any files already written (generated_notes.json) so a human can intervene.
 
 ## Input Format
 
