@@ -98,26 +98,14 @@ As you work through items, keep a mental map of interpretive commitments you hav
 2. Read the `writer_packet` field first. This is the authoritative contract for note generation. It already contains the selected template, parsed directives, AT policy, and issue-type style rules. Use the `prompt` field only as a compact rendering of that packet.
 
 3. Follow `at_policy`, not raw inference:
-   - `required` -- the note must include an alternate translation
+   - `required` -- do NOT include an alternate translation. The pipeline generates ATs separately after note writing. Write only the explanatory note text.
    - `forbidden` -- do not add an alternate translation
    - `provided` -- use the provided AT as context if needed, but do not output a new one unless the packet already contains a programmatic note
    - `not_needed` -- do not add an alternate translation
 
 4. For items where `writer_packet.programmatic_note` is non-empty, write that note text exactly and move on. Do not reinterpret the row.
 
-5. For items with `at_policy: required`, the note must include an alternate translation — notes missing one will fail quality check:
-   - Place the AT at the end of the note: `Alternate translation: [text here]`
-   - Use square brackets, not quotes, around the AT text
-   - The AT must fit seamlessly: removing `gl_quote` from `ult_verse` and inserting the AT should read as natural English
-   - The AT must differ from the UST phrasing in `ust_verse`
-   - Use minimal changes to the ULT wording; only change what the translation issue requires
-   - For items flagged as narrow: the narrow gl_quote is still correct in the prompt (it focuses the note body on the issue). But write the initial AT with the surrounding phrase context in mind, since the quote boundary may be expanded for AT fit in Step 4.
-   - If the gl_quote boundary creates an orphaned preposition or conjunction, the preferred fix is to expand the gl_quote in Step 4, not to include the orphaned word only in the AT.
-   - For restructuring issue types (figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result, grammar-connect-condition-fact): if the note suggests reordering parts of the verse, ensure the gl_quote spans the full area being restructured. The AT must show the complete restructured text, not just a fragment.
-   - For figs-parallelism: ensure the gl_quote captures both full parallel phrases, not just the key parallel terms. Check whether the parallelism involves ellipsis (words omitted in one phrase that are understood from the other) — if so, a separate figs-ellipsis note may be needed.
-   - For figs-ellipsis: the AT must supply the actual missing words from context, even if they come from a prior verse. If v23 omits a subject stated in v22, the AT must include that subject so the result is a complete, standalone clause.
-   - Connecting words in ATs: If the gl_quote is a **contiguous** span and includes words like "and," "but," "to," "in," "from," ensure these appear in the AT. Do not silently drop conjunctions or prepositions that are part of the quoted text.
-   - Discontinuous gl_quotes: If the gl_quote contains `…` (the English quote spans non-adjacent parts of the ULT), the AT must also use `…` between the parts — `[first part … second part]`. Never use "and" to join non-adjacent AT fragments.
+5. Do not generate alternate translations. The pipeline handles AT generation as a separate step after note writing. For all items with `at_policy: required`, write only the explanatory note text. The pipeline will programmatically append `Alternate translation: [text]` after generating ATs with a focused, validated process.
 
 6. For items with `tcm_mode: true`:
    - Present multiple interpretations using the "This could mean:" format
@@ -134,58 +122,16 @@ Output format -- a flat JSON object mapping item ID to note text:
 
 Write this to the generated-notes path from context.json when available, otherwise `tmp/claude/generated_notes.json`. Do NOT assemble the TSV yourself -- the assembly script handles that to prevent row misalignment.
 
-### Step 4: Expand Narrow Quotes and AT Fit Check (bounded)
+### Step 4: Skip — AT Generation Handled by Pipeline
 
-Run the verification script to see all substitutions:
+AT generation is handled separately by the pipeline after note writing. Do not generate, verify, or fix alternate translations. Proceed directly to assembly.
 
-Use `mcp__workspace-tools__verify_at_fit` with `preparedJson` and `generatedJson`.
+The pipeline will:
+1. Generate ATs using focused per-item API calls with a constrained prompt
+2. Validate each AT by programmatically substituting it into the verse
+3. Append `Alternate translation: [text]` to each note programmatically
 
-Read the full stdout -- every substitution line is the review, not just the error summary at the end.
-
-For each substitution that reads unnaturally (broken grammar, orphaned words, verb agreement issues):
-
-1. **Expand the gl_quote** to a wider phrase boundary in the ULT verse. For example, if `distress` sits inside "in my distress", expand the quote to `in my distress`.
-
-2. **Roundtrip the expanded quote** to verify Hebrew alignment. Build a one-row TSV with the expanded quote and run:
-   ```bash
-   echo -e "Reference\tID\tTags\tQuote\tOccurrence\tNote\n<REF>\t\t<SREF>\t<EXPANDED_QUOTE>\t1\t" | \
-       node .claude/skills/tn-writer/scripts/lang_convert.js roundtrip unfoldingWord/en_ult/master <BOOK> -
-   ```
-   Verify the roundtripped OrigQuote has Hebrew content and the GLQuote matches.
-
-3. **Update prepared_notes.json** -- set `gl_quote`, `gl_quote_roundtripped`, and `orig_quote` for the expanded item.
-
-4. **Rewrite the AT** in `generated_notes.json` to fit the expanded quote boundary. The AT should now be a seamless replacement for the wider phrase.
-
-5. **Re-run verify_at_fit.py** once after fixes. Do not run open-ended iterative loops.
-
-Do not proceed to assembly with known malformed rows, but do not run open-ended fix loops. If a small unresolved subset remains after one bounded pass, report it for pipeline-level graceful degradation handling.
-
-When reviewing each substitution line from verify_at_fit.py, check specifically:
-
-1. **Orphaned conjunctions**: Is there a lonely "And", "But", "So", "Then"
-   immediately before [the AT]? If yes, either:
-   - Expand gl_quote to include the conjunction, OR
-   - Rewrite the AT to include the conjunction
-
-2. **Orphaned prepositions**: Is there a lonely "in", "to", "from", "by", "for",
-   "with" before [the AT]? Same fix as above.
-
-3. **Capitalization**: Does the first word of the AT match its sentence position?
-   - Start of verse/sentence → capitalize
-   - Mid-sentence → lowercase
-   - Fix by rewriting the AT with correct case
-
-4. **Read the full result sentence**: Does it parse as natural English? Watch for
-   broken grammar at the boundaries.
-
-5. **Restructuring scope**: For infostructure/logic notes (figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result), verify the gl_quote and AT cover the full restructured area. If only a fragment is quoted, expand to include the complete reordering.
-
-6. **Parallelism scope**: For parallelism notes (figs-parallelism), verify the gl_quote includes both entire parallel phrases. If only key words are quoted, expand to capture the full parallel structures.
-
-Also check:
-- Fix any ERRORS (gl_quote not found -- usually a curly brace or case issue)
-- Verify no AT is identical to UST phrasing
+If items have narrow gl_quotes that may need expansion for AT fit, the pipeline handles this during AT generation.
 
 ### Step 5: Assemble Output TSV (script)
 
