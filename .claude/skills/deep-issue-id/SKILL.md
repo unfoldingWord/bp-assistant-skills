@@ -51,45 +51,29 @@ Read `orchestration-conventions.md` for chapter padding and model assignments.
 
 ### Working Directory
 
-```bash
-TMP=tmp/deep-issue-id/<BOOK>-<CH>       # e.g. tmp/deep-issue-id/PSA-119
-mkdir -p $TMP
-```
+Set `TMP=tmp/deep-issue-id/<BOOK>-<CH>` (e.g. `tmp/deep-issue-id/PSA-119`). MCP tools create output directories automatically — no shell mkdir needed.
 
 With verse range: `TMP=tmp/deep-issue-id/<BOOK>-<CH>-v<START>-<END>`
 
 ### Fetch and Parse
 
-Use `mcp__workspace-tools__fetch_door43` with `book="<BOOK>"`, output to `$TMP/book_ult.usfm`.
-Use `mcp__workspace-tools__fetch_door43` with `book="<BOOK>"`, `type="ust"`, output to `$TMP/book_ust.usfm`.
+**Without context**: Use `mcp__workspace-tools__fetch_door43` with `book="<BOOK>"`, output to `$TMP/book_ult.usfm`. Repeat with `type="ust"` for `$TMP/book_ust.usfm`.
 
-```bash
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js $TMP/book_ult.usfm \
-  --chapter <N> [--verse <START>-<END>] \
-  --output-json $TMP/alignments.json \
-  --output-plain $TMP/ult_plain.usfm
+**With context** (`--context <path>` was provided): Use `sources.ultFull` and `sources.ustFull` directly as the full-book paths — no copy needed.
 
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js $TMP/book_ust.usfm \
-  --chapter <N> [--verse <START>-<END>] \
-  --plain-only > $TMP/ust_plain.usfm 2>/dev/null || true
-```
+In both cases, extract chapter plain text using MCP tools:
+- `mcp__workspace-tools__read_usfm_chapter` with `file=<fullBookUltPath>`, `chapter=<N>`, `verseStart`/`verseEnd` if verse range applies, `plain=true`, `output="$TMP/ult_plain.usfm"`
+- `mcp__workspace-tools__read_usfm_chapter` with `file=<fullBookUstPath>`, `chapter=<N>`, same verse range, `plain=true`, `output="$TMP/ust_plain.usfm"`
 
 ### Editor Notes
 
-```bash
-EDITOR_NOTES="data/editor-notes/<BOOK>.md"
-if [ -f "$EDITOR_NOTES" ]; then
-  cat "$EDITOR_NOTES"
-fi
-```
-
-If editor notes exist, read them and pass to both analysts as additional input. Each analyst should factor these human observations into their analysis.
+Use Glob to check if `data/editor-notes/<BOOK>.md` exists. If it does, read it with the Read tool and pass its content to both analysts as additional input. Each analyst should factor these human observations into their analysis.
 
 ### Compare, Detect, Index
 
 Use `mcp__workspace-tools__compare_ult_ust` with `ultFile="$TMP/ult_plain.usfm"`, `ustFile="$TMP/ust_plain.usfm"`, `chapter=<N>`, `output="$TMP/ult_ust_diff.tsv"`.
 
-Use `mcp__workspace-tools__detect_abstract_nouns` with `alignmentJson="$TMP/alignments.json"`, `format="tsv"`, output to `$TMP/detected_issues.tsv`.
+Use `mcp__workspace-tools__detect_abstract_nouns` with the plain ULT text (read `$TMP/ult_plain.usfm` and pass as `text`), `format="tsv"`. Write the result to `$TMP/detected_issues.tsv` using the Write tool.
 
 Use `mcp__workspace-tools__build_tn_index` (no parameters needed for default build).
 
@@ -152,9 +136,7 @@ With verse range: `output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv`
 
 Only run if `--gemini` is explicitly passed. Skip by default. If running: read `gemini-review-wave.md`. Only the `issues` stage applies (deep-issue-id doesn't generate ULT/UST).
 
-```bash
-python3 .claude/skills/utilities/scripts/gemini_review.py --stage issues --book <BOOK> --chapter <CHAPTER>
-```
+Note: the Gemini review script requires Python and is only available in CLI/host mode, not inside the Docker pipeline container.
 
 ## Guiding Principle
 
@@ -175,11 +157,11 @@ Same format as base issue-identification (see that skill for full rules — key 
 ## Flow
 
 ```
-Setup:    Fetch human ULT/UST from Door43 master
-          Parse -> alignment JSON + plain text (chapter-filtered)
-          Compare ULT/UST divergence patterns
-          Run automated detection (abstract nouns)
-          Build published TN index
+Setup:    Fetch human ULT/UST from Door43 master (or use pipeline context)
+          read_usfm_chapter -> plain text (chapter-filtered)
+          compare_ult_ust -> divergence patterns
+          detect_abstract_nouns -> detected_issues.tsv
+          build_tn_index
 
 Wave 2:   Task: Structure ──────┐  (2 parallel sub-agents,
           Task: Rhetoric ───────┘   each writes TSV to $TMP/)
@@ -188,5 +170,5 @@ Wave 3:   Task: Challenger ─────── reads both TSVs, writes rulings
 
 Wave 4a:  Orchestrator merges ──── applies rulings, deduplicates
 
-Gemini:   gemini_review.py --stage issues (optional)
+Gemini:   gemini-review-wave.md --stage issues (CLI/host only, optional)
 ```
