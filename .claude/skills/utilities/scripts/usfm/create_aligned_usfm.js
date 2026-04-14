@@ -793,6 +793,9 @@ function normalizeMapping(raw, bookCode, chapter) {
   // Already canonical: array of per-verse objects with reference + english_text + alignments
   if (Array.isArray(raw) && raw.length > 0 && raw[0].reference && raw[0].alignments) return raw;
 
+  // Single canonical object (not in array)
+  if (!Array.isArray(raw) && raw && raw.reference && raw.alignments) return [raw];
+
   // Compact format 2: flat array with verse + english_words fields (no alignments wrapper)
   if (Array.isArray(raw) && raw.length > 0 && raw[0].verse !== undefined && raw[0].english_words !== undefined) {
     return compactGroupsToCanonical(raw, bookCode, chapter);
