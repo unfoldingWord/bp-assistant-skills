@@ -346,3 +346,13 @@ H3452,יְשִׁימוֹן,wasteland,ISA,ISA 43:19-20 - rivers in the wasteland,
 H7854,שָׂטָן,the adversary,ALL,ZEC 3,With article ha-satan; follows Job published ULT pattern (adversary 43.5% dominant); more literal than transliteration Satan,2026-04-10,AI
 H6603,פִּתּוּחַ,engraving,ALL,ZEC 3:9,Published ULT uses inscription; engraving is dominant Strong's rendering,2026-04-10,AI
 H5749b,עוּד,solemnly charged,ALL,ZEC 3:6,Hiphil of ud = to solemnly charge/admonish; published ULT had Next which loses the verb meaning,2026-04-10,AI
+H6960a,קָוָה,waited (inf abs: Waiting, I waited),ALL,PSA 40:1 infinitive absolute + perfect qavoh qivviti,Inf abs pattern preserved as reduplication per ULT rules. Published ULT has 'patiently' which obscures the form.,2026-04-13,AI
+H3738b,כָּרָה,dug,ALL,PSA 40:6 ears you have dug for me,Literal idiom preserved. Published ULT has 'opened' which is interpretive. Hebrew idiom should stay literal for TN explanation.,2026-04-13,AI
+H7588,שָׁאוֹן,roaring,ALL,PSA 40:2 pit of roaring,"Construct chain preserved literally. Published ULT has 'horrible' which is interpretive. Other occurrences: roar (PSA 65), uproar, tumult.",2026-04-13,AI
+H4578,מֵעֶה,inward parts,ALL,PSA 40:8 in the midst of my inward parts,Body-part idiom preserved literally per ULT rules. Published has 'heart' which is interpretive.,2026-04-13,AI
+H7286,רָדַד,subdue,ALL,ISA 45:1 - Qal infinitive construct; nations before Cyrus,PSA 144:1 'subduing'; published ULT ISA 45 uses 'subdue',2026-04-14,AI
+H1921,הָדַר,rough places,ALL,ISA 45:2 - plural noun hadurim; uneven/rough terrain,Published ULT has 'mountains'; root hadar can mean swelling/uneven ground; paired with yashar (level),2026-04-14,AI
+H3655,כָּנָה,gave a title of honor,ALL,ISA 45:4 - Piel 1cs with 2ms suffix; bestowing honorary title on Cyrus,JOB 32:6 'give a title'; published ULT ISA 45:4 'gave you a name of honor',2026-04-14,AI
+H7491,רָעַף,drip down,ALL,ISA 45:8 - Hiphil imperative; heavens dripping/raining,PSA 65 'drip'; published ISA 45 'Rain down'; 'drip' is more literal for the root,2026-04-14,AI
+H6736,צִיר,idols,ALL,ISA 45:16 - craftsmen of idols/images,Only 1 published occurrence; 'idols' matches published ULT ISA 45:16,2026-04-14,AI
+H0857,אָתָה,the things to come,ALL,ISA 45:11 - Qal participle feminine plural with article; things that are coming,Published ULT ISA uses 'signs' but root means 'come'; participle = 'coming things/things to come',2026-04-14,AI
