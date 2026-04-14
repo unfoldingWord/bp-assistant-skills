@@ -16,16 +16,20 @@ All paths relative to project root:
 - `data/en_tw/` - English Translation Words
 - `data/published-tns/` - Published Translation Notes
 - `data/ta-flat/` - Translation Academy (flat format)
-- `data/published_ult/` - Published ULT (Hebrew)
-- `data/published_ult_english/` - Published ULT (English)
-- `data/published_ust/` - Published UST (Hebrew)
-- `data/published_ust_english/` - Published UST (English)
+- `data/published_ult/` - Published ULT (Hebrew, release-tagged, authoritative for precedent/indexes)
+- `data/published_ult_english/` - Published ULT (English, extracted from published_ult)
+- `data/published_ust/` - Published UST (Hebrew, release-tagged, authoritative for precedent/indexes)
+- `data/published_ust_english/` - Published UST (English, extracted from published_ust)
+- `data/master_ult/` - Master-branch ULT for non-published books (working reference, always fresh, not indexed)
+- `data/master_ust/` - Master-branch UST for non-published books (working reference, always fresh, not indexed)
 - `data/hebrew_bible/` - Hebrew source texts
 - `data/glossary/` - Glossary data
 - `data/editor-feedback/` - Editor feedback and corrections
 - `data/t4t/` - Translation for Translators data
 - `data/cache/` - Generated indexes (Strong's index JSON, ~4MB)
 - `data/quick-ref/` - Accumulated decisions from ULT-gen runs (CSV)
+
+**published_* vs master_***: `published_*` contains only the 25 v88 officially released OT books, fetched from the pinned release tag — these are authoritative for vocabulary precedent and Strong's index. `master_*` is for pipeline work on non-published books; always fetch fresh before use, values are not to be considered authoritative.
 - `translation-issues.csv` - All 94 translation issues (complete)
 
 ## Output

@@ -187,9 +187,14 @@ async function discoverPublishedBooks() {
 
   const release = releases[0];
   const tag = release.tag_name;
-  log('Latest release: ' + tag + ' (' + release.published_at + ')');
+  // target_commitish is the branch the release was cut from (e.g. "release_v88").
+  // This is what we use to fetch USFM — it resolves correctly via raw/branch/ URLs.
+  const releaseBranch = release.target_commitish || 'master';
+  log('Latest release: ' + tag + ' (branch: ' + releaseBranch + ', ' + release.published_at + ')');
 
   // Extract book codes from asset names: en_ult_01-GEN_v88_A4.html
+  // Only OT books (num <= MAX_OT_NUMBER). Do not hardcode additional books —
+  // if a book is not in the release assets it is not published.
   const bookSet = new Set();
   for (const asset of release.assets || []) {
     const m = asset.name.match(/en_ult_(\d+)-(\w+)_v\d+/);
@@ -201,17 +206,14 @@ async function discoverPublishedBooks() {
     }
   }
 
-  // PSA is published but not always in release assets (published separately)
-  bookSet.add('19-PSA');
-
   const books = [...bookSet].sort();
   log('Published OT books: ' + books.length + ' (' + books.map(b => b.split('-')[1]).join(', ') + ')');
-  return { tag, books };
+  return { tag, releaseBranch, books };
 }
 
 // ── Step 2-3: Fetch Door43 data (ULT, UST, TN, Hebrew, T4T) ───────────────
 
-async function fetchDoor43Data(books, force, manifest) {
+async function fetchDoor43Data(books, force, manifest, releaseBranch) {
   const dirs = {
     ult:    resolve(DATA_DIR, 'published_ult'),
     ust:    resolve(DATA_DIR, 'published_ust'),
@@ -237,9 +239,14 @@ async function fetchDoor43Data(books, force, manifest) {
     const filename = num + '-' + code + '.usfm';
     const tnFilename = 'tn_' + code + '.tsv';
 
+    // ULT and UST are fetched from the release branch (target_commitish) so
+    // published_* folders contain officially released content, not whatever
+    // happens to be on master. TN, Hebrew Bible, and T4T do not follow the
+    // same release discipline, so they continue to pull from master.
+    const ultUstRef = releaseBranch ? 'branch/' + releaseBranch : 'branch/master';
     const targets = [
-      { url: DOOR43_RAW + '/' + REPOS.ult + '/raw/branch/master/' + filename, dest: resolve(dirs.ult, filename) },
-      { url: DOOR43_RAW + '/' + REPOS.ust + '/raw/branch/master/' + filename, dest: resolve(dirs.ust, filename) },
+      { url: DOOR43_RAW + '/' + REPOS.ult + '/raw/' + ultUstRef + '/' + filename, dest: resolve(dirs.ult, filename) },
+      { url: DOOR43_RAW + '/' + REPOS.ust + '/raw/' + ultUstRef + '/' + filename, dest: resolve(dirs.ust, filename) },
       { url: DOOR43_RAW + '/' + REPOS.tn + '/raw/branch/master/' + tnFilename, dest: resolve(dirs.tn, tnFilename) },
       { url: DOOR43_RAW + '/' + REPOS.uhb + '/raw/branch/master/' + filename, dest: resolve(dirs.hebrew, filename) },
       { url: DOOR43_RAW + '/' + REPOS.t4t + '/raw/branch/master/' + filename, dest: resolve(dirs.t4t, filename) },
@@ -872,7 +879,7 @@ async function main() {
   // Step 2-3: Fetch Door43 data
   let newBooks = [];
   if (runStep('fetch-door43')) {
-    newBooks = await fetchDoor43Data(releaseInfo.books, force, { ...manifest, _pendingTag: releaseInfo.tag });
+    newBooks = await fetchDoor43Data(releaseInfo.books, force, { ...manifest, _pendingTag: releaseInfo.tag }, releaseInfo.releaseBranch);
   }
 
   // Step 4: Fetch Google data
@@ -902,6 +909,7 @@ async function main() {
   // Update manifest
   writeManifest({
     release: releaseInfo.tag,
+    releaseBranch: releaseInfo.releaseBranch,
     books: releaseInfo.books,
     lastRun: today(),
     lastNewBooks: newBooks.length ? newBooks : (manifest.lastNewBooks || []),
