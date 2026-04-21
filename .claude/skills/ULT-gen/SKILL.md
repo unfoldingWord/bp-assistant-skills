@@ -127,7 +127,7 @@ For אַף / אַפַּיִם (H0639), keep the body-part sense: singular אַף
 
 Consult `reference/literalness_patterns.md` for these patterns:
 - **Hiphil causatives**: Use "made [verb]" ("made see" not "showed")
-- **Construct chains**: Keep "X of Y" ("city of fortification")
+- **Construct chains**: Keep "X of Y" ("city of fortification"). When a pronominal suffix is attached to the dependent noun inside the chain, keep the suffix on that noun in English: "the land of your destruction" not "your land of destruction."
 - **Verbal idioms**: Preserve noun ("do valor" not "do valiantly")
 - **לְ + role/status noun**: Keep the prepositional phrase ("as a servant"), not an infinitive ("to be a servant")
 
@@ -435,6 +435,7 @@ Before finalizing ULT output, verify:
 - [ ] Project glossary checked for editorial decisions
 - [ ] Prepositions marked with brackets when implied
 - [ ] Literalness patterns applied (see reference/literalness_patterns.md)
+- [ ] Pronominal suffixes in construct chains stay on the noun they modify ("the land of your destruction," not "your land of destruction")
 - [ ] Substantive participles default to agent-noun form ("fearers"); expansion is editor discretion
 - [ ] Large numbers use numerals with commas (12,000)
 - [ ] Vocabulary scripts were run for key terms
