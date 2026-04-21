@@ -23,6 +23,19 @@ Only preserve Hebrew word order when:
 - An element is clearly fronted for emphasis
 - The English result is grammatically natural
 
+## Niphal Passive Voice
+
+Niphal verbs express passive or reflexive action. Always render them with English passive voice — never convert a Niphal to an English active verb:
+
+| Hebrew Stem | Literal ULT | NOT |
+|-------------|-------------|-----|
+| Niphal imperfect (passive) | "will be dissipated" | "will vanish" |
+| Niphal perfect (passive) | "was reckoned" | "counted" |
+| Niphal imperative | "be gathered" | "gather" |
+
+**ISA 51:6 ruling**: The Niphal imperfect describing the heavens "like smoke" must carry English passive voice: "will be dissipated like smoke," NOT "will vanish like smoke." Rendering a Niphal passive as an English active verb misrepresents the Hebrew stem and strips the divine-agency implication.
+
+Only use a reflexive English construction (e.g., "hid himself") when the Niphal root is inherently reflexive in meaning. For all passive Niphals, use "be/was/will be [verb]-ed."
 ## Hiphil Causatives
 
 Render Hiphil stems with explicit two-verb causative structure:
