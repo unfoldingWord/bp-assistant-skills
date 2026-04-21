@@ -25,6 +25,8 @@ data/issues_resolved.txt
 data/templates.csv
 data/tw_headwords.json
 data/cache/
+data/master_ult/
+data/master_ust/
 .cache/
 
 # Local repo clones (used at runtime by door43-push)
@@ -37,6 +39,9 @@ door43-repos/
 merge.py
 merge2.py
 exports/
+parse_psa36.sh
+run_parse_commands.js
+test/
 
 noAI/
 
