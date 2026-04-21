@@ -48,6 +48,21 @@ Use this path convention for intermediate files:
 
 Do not rely on shell commands in restricted environments. When a tool needs to write a file under `tmp/`, pass that target path and let the tool create parent directories.
 
+## Critical Orchestrator Rule
+
+This pipeline uses async teammates. Narrative waiting is not enough.
+
+Between waves, the orchestrator must explicitly:
+1. Poll agent state with `TaskGet` or `TaskList`
+2. Verify the expected files exist
+3. Only then continue to the next wave
+
+Do not return success after launching agents or after seeing partial progress.
+The task is only complete after all required Wave 1-6 outputs exist on disk:
+- `output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`
+- `output/issues/<BOOK>/<BOOK>-<CH>.tsv`
+- `output/AI-UST/<BOOK>/<BOOK>-<CH>.usfm`
+
 ### Fetch T4T for the Book
 
 Use `mcp__workspace-tools__fetch_t4t` with `{"books":["<BOOK>"]}`.
@@ -117,6 +132,11 @@ Each writes their TSV to `$TMP/wave2_*.tsv`.
 
 Wait for both analysts to send their "file written" messages. Do NOT proceed to Wave 3 until both files exist.
 
+Required before Wave 3:
+- Both Wave 2 analyst tasks show completed via `TaskGet` or `TaskList`
+- `$TMP/wave2_structure.tsv` exists
+- `$TMP/wave2_rhetoric.tsv` exists
+
 ## Wave 3: Challenge and Defend
 
 Read `.claude/skills/issue-identification/challenger-protocol.md`. Spawn the challenger (`model: "sonnet"`, name: "challenger"). The Wave 2 analysts and ULT agent are all still alive.
@@ -132,9 +152,16 @@ Send `shutdown_request` to the challenger after rulings are written -- it has no
 
 Output: `$TMP/wave3_challenges.tsv`
 
+Required before Wave 4a:
+- Challenger task shows completed via `TaskGet` or `TaskList`
+- `$TMP/wave3_challenges.tsv` exists
+
 ## Wave 4a: Merge
 
 Read `.claude/skills/issue-identification/merge-procedure.md`. Orchestrator merges all findings. Writes `$TMP/merged_issues.tsv`.
+
+Required before Wave 4b:
+- `$TMP/merged_issues.tsv` exists
 
 ## Wave 4b: ULT Revision
 
@@ -157,6 +184,10 @@ This is more natural than a separate agent applying changes -- the original tran
 
 Wait for the ULT agent's confirmation before proceeding.
 
+Required before Wave 5 or final issues write:
+- `ult-gen` task is still alive and has responded
+- revised `output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm` exists
+
 ## Wave 5: Verification
 
 **Skip condition**: If Wave 4b produced no ULT changes (challenger found no rendering issues), skip Wave 5 entirely. Write the merged issues directly to final output and proceed to Wave 6. The analysts already verified their work during Wave 2 cross-reading and Wave 3 challenge/defend -- re-verifying against an unchanged ULT adds cost without value.
@@ -175,6 +206,10 @@ Each analyst:
 Wait for both analysts to confirm, then update the merged issues based on verification feedback.
 
 Final issues written to `output/issues/<BOOK>/<BOOK>-<CH>.tsv`.
+
+Required before Wave 6:
+- If Wave 5 ran, both analyst verification tasks show completed
+- `output/issues/<BOOK>/<BOOK>-<CH>.tsv` exists
 
 ### Final Check
 Before writing to output/issues/, verify ordering within each verse: first-to-last by ULT position, longest-to-shortest when phrases nest. The orchestrator performs this final write.
@@ -206,6 +241,12 @@ The UST agent:
 3. Writes alignment hints to `output/AI-UST/hints/<BOOK>/<BOOK>-<CH>.json` (per UST-gen Step 7.5)
 4. Sends message to team-lead: "UST complete"
 
+Required before returning success:
+- `ust-gen` task shows completed via `TaskGet` or `TaskList`
+- `output/AI-UST/<BOOK>/<BOOK>-<CH>.usfm` exists
+- `output/issues/<BOOK>/<BOOK>-<CH>.tsv` exists
+- `output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm` exists
+
 ## Wave 7: Gemini Review (optional, activation only)
 
 Read `.claude/skills/issue-identification/gemini-review-wave.md`. Only run if `--gemini` is explicitly passed. Skip by default.
@@ -220,11 +261,15 @@ After Wave 7 (or Wave 6 if Gemini was not requested):
 2. Wait for shutdown confirmations
 3. `TeamDelete` to clean up team resources
 
+Do not treat cleanup as optional. The orchestrator remains responsible for the
+team until shutdown is complete.
+
 ## Troubleshooting
 
 - **Agent never sends "file written" message**: The sub-agent may have stalled or encountered an error silently. Check the agent's output log. If the agent is idle, send it a follow-up message asking for status. Restart the agent if unresponsive after 2 attempts.
 - **ULT agent does not respond to revision requests**: The agent may have lost context. Re-send the revision request with the full file path and specific line numbers. If still unresponsive, terminate and re-spawn the agent.
 - **Team cleanup fails**: Orphaned agent processes can remain after pipeline completion. Use `TeamDelete` to clean up, or manually check `~/.claude/teams/` for stale team files.
+- **You launched agents and are now "waiting"**: Use `TaskGet` or `TaskList` immediately. Do not end the task while waiting for background teammates.
 
 ## Outputs
 
