@@ -121,6 +121,8 @@ ULT keeps Hebrew idioms in their literal form. Do not substitute English equival
 
 Body-part idioms especially must stay literal - this is where Hebrew differs most from English and where translation notes will explain the meaning.
 
+For אַף / אַפַּיִם (H0639), keep the body-part sense: singular אַף = "nose"; dual אַפַּיִם = "nostrils." Do not confuse this root with face/faces language.
+
 #### D. Literalness Patterns
 
 Consult `reference/literalness_patterns.md` for these patterns:
