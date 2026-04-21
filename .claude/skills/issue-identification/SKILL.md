@@ -250,6 +250,7 @@ When you encounter these words, ALWAYS check the specific issue listed:
 
 | Keyword | Always Check |
 |---------|--------------|
+| singular "a/an" + noun in a general statement (e.g. "a man who...") | figs-genericnoun |
 | man, men, brothers, sons, fathers | figs-gendernotations (generic masculine?) |
 | like, as, than | figs-simile before figs-metaphor |
 | hand, hands, eyes, face | figs-metonymy or figs-synecdoche (body part for action/person?) |
