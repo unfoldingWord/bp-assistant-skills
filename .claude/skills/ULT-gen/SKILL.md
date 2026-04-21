@@ -174,6 +174,18 @@ Isaiah 49 regression examples:
 - 49:19 -> "the ones having swallowed you" (not "those who swallowed you")
 - 49:21 -> "having gone into exile" (not "exiled")
 
+Isaiah 50 regression examples:
+- 50:1 -> preserve the appositive idiom: "Where is this, the certificate..."
+- 50:2 -> use the intransitive verbal sense: "being short" (not "shortening")
+- 50:2 -> render אִם as "if": "Or if there is..."
+- 50:2 -> use the established Hiphil gloss for נָצַל: "deliver" (not "rescue")
+- 50:2 -> keep the preposition instrumental: "with my rebuke" (not "at my rebuke")
+- 50:2 -> keep the clause verbal: "from there being no water" (not nominal "from lack of water")
+- 50:4 -> keep לִמּוּדִים consistent as "learned" throughout the verse
+- 50:5 -> preserve the verbal form: "I did not rebel" (not adjectival "I was not rebellious")
+- 50:7 -> preserve the active sense: "I will not have shame" (not passive "I will not be ashamed")
+- 50:8-9 -> bracket supplied verbs explicitly: "{is} near", "Who {is} he"
+
 **Substantive participles:**
 Default to agent-noun forms when English has them:
 - יִרְאֵי שְׁמֶךָ -> "the fearers of your name"
