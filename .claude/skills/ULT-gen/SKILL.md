@@ -441,6 +441,7 @@ Before finalizing ULT output, verify:
 - [ ] לְ + role/status nouns stay prepositional ("as a servant"), not infinitival ("to be a servant")
 - [ ] Selah uses `\qs Selah \qs*` format on its own line (space after Selah before closing tag)
 - [ ] Emphatic doubling preserved without adding words ("day, day" not "day {by} day")
+- [ ] Quotation marks placed only at the very start and very end of a direct quotation block — **no continuer (opening) mark at the start of mid-passage verses** within an ongoing quotation (gl_guidelines.md §Quotation Marks)
 
 ---
 
