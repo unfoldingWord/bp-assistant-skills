@@ -105,7 +105,7 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | 3rd person jussive (prayer) | May he/they [verb] | He/they will [verb] | read yiqtol as jussive in petitionary psalms; editor PSA 72 throughout (16 of 20 verses) |
 | Participial noun phrase | agent noun preferred (fearers, dwellers, singers) | who [verb] | default to English agent-noun -er forms; fall back to "those [verb]ing" or "the ones [verb]ing" when no natural agent noun exists. Avoid relative clause "who [verb]". Expanding agent nouns to full phrases is editor discretion, not an AI rule (some like "callers" or "lovers" may need expansion in context) |
 | Jussive positive | May they [verb] | Let them [verb] | use "May they" for positive jussive/wish forms; editor PSA 83:16-18; 126:6 |
-| Partitive kol | all of the [noun] | all the [noun] | add "of" after "all" with definite nouns; editor PSA 82:5,8; 83:11,18; 89:16,41,47; 145:9,14,17,18,20 (HIGH FREQ in PSA 145) |
+| Partitive kol | all of the [noun] | all the [noun] | add "of" after "all" with definite nouns; editor PSA 82:5,8; 83:11,18; 89:16,41,47; 145:9,14,17,18,20 (HIGH FREQ in PSA 145); ISA 51:13,18,20 (closes #28) |
 | Hebrew perfect (ongoing) | present tense | past/perfect tense | render Hebrew perfect as English present when context is ongoing/habitual/devotional or lament; editor PSA 88:1,7,9,13,16,17 (12 instances -- strongest evidence); also PSA 120:5; 122:2,4,5; 126:3; 130:1,5 |
 | hayah (stative) | {are} | have been | for stative uses of hayah perfect, use present "{are}" not "have been"; editor PSA 82:8; 83:8 |
 | Article in construct | bare noun | the [noun] | drop English "the" before nouns in construct chains and before abstract nouns; editor PSA 121:2; 125:3,5; 126:1,6; 127:2; 130:4,7 |
