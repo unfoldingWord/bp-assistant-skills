@@ -64,6 +64,15 @@ Comparatives with מִן use English comparative form:
 | gadol mimmenni | "greater than I" | "great from me" |
 | X + min (comparative) | "X-er than Y" | "X away from Y" |
 
+## Role/Status Prepositions
+
+When לְ marks a role, office, or resulting status before a noun, preserve it as a prepositional phrase rather than converting it into an infinitive:
+
+| Hebrew Pattern | Literal ULT | NOT |
+|----------------|-------------|-----|
+| לְ + role noun | "as a/an [role]" | "to be a/an [role]" |
+| יֹצְרִי מִבֶּטֶן לְעֶבֶד לוֹ | "formed me from the womb as his servant" | "formed me from the womb to be his servant" |
+
 ## Emphatic Doubling
 
 Preserve Hebrew doubling without adding words:

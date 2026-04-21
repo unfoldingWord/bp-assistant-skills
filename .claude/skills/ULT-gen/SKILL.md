@@ -129,6 +129,7 @@ Consult `reference/literalness_patterns.md` for these patterns:
 - **Hiphil causatives**: Use "made [verb]" ("made see" not "showed")
 - **Construct chains**: Keep "X of Y" ("city of fortification")
 - **Verbal idioms**: Preserve noun ("do valor" not "do valiantly")
+- **לְ + role/status noun**: Keep the prepositional phrase ("as a servant"), not an infinitive ("to be a servant")
 
 #### E. Verb Forms
 
@@ -314,6 +315,7 @@ Hebrew vocatives at clause end should stay there:
 | מִן + שָׂגַב | separation | "away from" | "from" |
 | עַל | governing | "over" | "on" |
 | לְ + infinitive | purpose | "to [verb]" | - |
+| לְ + noun (role/status) | role/resulting status | "as a/an [noun]" | "to be a/an [noun]" |
 
 ### Step 6: Format as USFM
 
@@ -439,6 +441,7 @@ Before finalizing ULT output, verify:
 - [ ] Psalm superscriptions use "chief musician" and periods between elements
 - [ ] Superscription placement matches Hebrew anchoring (`\v 1`-embedded vs standalone `\d`)
 - [ ] Comparatives with מִן use "-er than" form ("higher than I")
+- [ ] לְ + role/status nouns stay prepositional ("as a servant"), not infinitival ("to be a servant")
 - [ ] Selah uses `\qs Selah \qs*` format on its own line (space after Selah before closing tag)
 - [ ] Emphatic doubling preserved without adding words ("day, day" not "day {by} day")
 
