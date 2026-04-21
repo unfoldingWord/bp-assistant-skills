@@ -404,3 +404,10 @@ H4893a,מִשְׁחָת,disfigured,ALL,ISA 52:14 - disfigured beyond a man; publ
 H5137b,נָזָה,sprinkle,ALL,ISA 52:15 - he will sprinkle many nations; Hiphil 3ms,Hiphil of nazah = sprinkle (cultic usage in LEV); published ISA 52 also uses 'sprinkle',2026-04-21,AI
 H2649,חִפָּזוֹן,haste,ALL,ISA 52:12 - not go out in haste; dominant rendering 28.6%,"Published ISA 52 uses 'rush'; 'haste' is dominant in index (EXO 12:11, DEU 16:3)",2026-04-21,AI
 H7919a,שָׂכַל,act wisely,ALL,ISA 52:13 - my servant will act wisely; Hiphil 3ms,Published ISA 52 and PSA 2:10 both use 'act wisely' for Hiphil; EXO 1:10 also uses 'act wisely',2026-04-21,AI
+H3928,לִמּוּדִים,learned,ALL,ISA 50:4 tongue of the learned,"Agent noun plural; preserves literal form over 'the disciples' or 'the trained'.",2026-04-21,human
+H0518,אִם,if,ALL,ISA 50:2 disjunctive rhetorical questions,"Render אִם...לֹא as 'if...why' not 'whether'; preserves interrogative force. See H0518 in quick-ref context.",2026-04-21,human
+H7337,רָחָב,being short,ALL,ISA 50:2 intransitive verbal sense,"Intransitive קָצַר used here for H7337 idiom of insufficiency; render verbal form 'being short' not nominal 'shortening'.",2026-04-21,human
+H3068+H6635,יְהוָה צְבָאוֹת,Yahweh of Armies,ALL,divine title throughout Isaiah,"Never 'Yahweh of hosts' (archaic). Always 'Yahweh of Armies'. See H6635b entry for Armies decision.",2026-04-21,human
+H3254,יָסַף,add,ALL,ISA 51:22 I will add no more,"Hiphil 'to add'; not 'again' (which loses the verbal force). Render 'add...again' if adverb is needed.",2026-04-21,human
+H6924,קֶדֶם,antiquity,ALL,ISA 51:9 arm of antiquity / arm of the days of antiquity,"Hebrew noun not adjective; not 'ancient' or 'of old'. Extends PSA 74 entry (same rule applies in ISA 51:9).",2026-04-21,human
+H1755,דּוֹר,generation,ALL,ISA 51:8 construct chain דּוֹר דּוֹרִים — generation of generations,"Preserve both construct and plural; not 'generation after generation' (adds implied word). See literalness_patterns.md.",2026-04-21,human

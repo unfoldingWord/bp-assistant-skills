@@ -121,13 +121,11 @@ ULT keeps Hebrew idioms in their literal form. Do not substitute English equival
 
 Body-part idioms especially must stay literal - this is where Hebrew differs most from English and where translation notes will explain the meaning.
 
-For אַף / אַפַּיִם (H0639), keep the body-part sense: singular אַף = "nose"; dual אַפַּיִם = "nostrils." Do not confuse this root with face/faces language.
-
 #### D. Literalness Patterns
 
 Consult `reference/literalness_patterns.md` for these patterns:
 - **Hiphil causatives**: Use "made [verb]" ("made see" not "showed")
-- **Construct chains**: Keep "X of Y" ("city of fortification"). When a pronominal suffix is attached to the dependent noun inside the chain, keep the suffix on that noun in English: "the land of your destruction" not "your land of destruction."
+- **Construct chains**: Keep "X of Y" ("city of fortification"). See reference file for pronominal suffix and plural-construct details.
 - **Verbal idioms**: Preserve noun ("do valor" not "do valiantly")
 - **לְ + role/status noun**: Keep the prepositional phrase ("as a servant"), not an infinitive ("to be a servant")
 
@@ -167,24 +165,7 @@ Do not flatten Hebrew participles into more natural English forms:
 - Do not replace verbal participles with simple adjectives when the Hebrew form is still verbal.
 - Do not replace active participles with passive shortcuts such as bare past participles.
 
-Isaiah 49 regression examples:
-- 49:5 -> "the one having formed me" (not "the one who formed me")
-- 49:8 -> "the inheritances being desolate" (not "the desolate inheritances")
-- 49:17 -> "the ones having torn you down and the ones having desolated you" (not "those who tore you down and those who made you desolate")
-- 49:19 -> "the ones having swallowed you" (not "those who swallowed you")
-- 49:21 -> "having gone into exile" (not "exiled")
-
-Isaiah 50 regression examples:
-- 50:1 -> preserve the appositive idiom: "Where is this, the certificate..."
-- 50:2 -> use the intransitive verbal sense: "being short" (not "shortening")
-- 50:2 -> render אִם as "if": "Or if there is..."
-- 50:2 -> use the established Hiphil gloss for נָצַל: "deliver" (not "rescue")
-- 50:2 -> keep the preposition instrumental: "with my rebuke" (not "at my rebuke")
-- 50:2 -> keep the clause verbal: "from there being no water" (not nominal "from lack of water")
-- 50:4 -> keep לִמּוּדִים consistent as "learned" throughout the verse
-- 50:5 -> preserve the verbal form: "I did not rebel" (not adjectival "I was not rebellious")
-- 50:7 -> preserve the active sense: "I will not have shame" (not passive "I will not be ashamed")
-- 50:8-9 -> bracket supplied verbs explicitly: "{is} near", "Who {is} he"
+For verse-specific participle decisions see `data/quick-ref/ult_decisions.csv` and `data/glossary/project_glossary.md`.
 
 **Substantive participles:**
 Default to agent-noun forms when English has them:
@@ -440,8 +421,7 @@ Before finalizing ULT output, verify:
 - [ ] Formal register maintained throughout
 - [ ] No split infinitives
 - [ ] Cohortatives rendered as "Let me/us..."
-- [ ] Participles use "-ing" forms consistently
-- [ ] Participles are not flattened into relative clauses ("who/that ..."), adjectival shortcuts, or passive bare participles
+- [ ] Participles use "-ing" forms and are not flattened into relative clauses ("who/that"), adjectives, or passive shortcuts
 - [ ] Emphatic pronouns preserved ("I, I will...")
 - [ ] Vocative word order preserved
 - [ ] Project glossary checked for editorial decisions
