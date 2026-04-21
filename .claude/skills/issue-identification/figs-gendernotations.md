@@ -52,6 +52,7 @@ Do NOT use figs-gendernotations for:
 - Write notes when **masculine terms include women but readers might not realize this**
 - For **frequent phrases** (e.g., "the sons of Israel"), discuss in introduction; do not write notes to every instance
 - **Not necessary** to write notes to words like "person" that are feminine in Hebrew but already inclusive in English
+- Singular generic phrases like "a man who..." belong in figs-genericnoun instead of figs-gendernotations
 - For gentilics (Jezreelitess, Shunammitess), ULT uses gendered forms matching Hebrew; this is separate from figs-gendernotations
 
 ## Categories
@@ -66,6 +67,7 @@ Do NOT use figs-gendernotations for:
 - **man** (anthropos, adam, ish, enosh, geber) -> "person" or "human"
 - **men** (anthropoi, anashim) -> "people" or "humans"
 - **mankind/humanity** references
+- Singular generic phrases like "a man who..." belong in figs-genericnoun instead
 
 ### 3. Third-Person Pronouns
 - Generic **he/him/his** in proverbs, laws, general statements

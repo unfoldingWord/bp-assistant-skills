@@ -161,6 +161,7 @@ Read issue-type files from `.claude/skills/issue-identification/` as needed. The
 
 | Keyword | Always Check |
 |---------|--------------|
+| singular "a/an" + noun in a general statement (e.g. "a man who...") | figs-genericnoun |
 | man, men, brothers, sons, fathers | figs-gendernotations |
 | like, as, than | figs-simile before figs-metaphor |
 | hand, hands, eyes, heart, face | figs-metonymy or figs-synecdoche |
