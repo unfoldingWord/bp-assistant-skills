@@ -97,8 +97,23 @@ Do **NOT** flag when:
 - The pronoun is a possessive ("his sword") where the possessor is the obvious subject of the sentence
 - The passage is addressing God/Yahweh and "he/him" clearly refers to God throughout
 - A psalm or prayer has a consistent speaker (David) and subject (God or the wicked) — pronouns alternate predictably between these two parties
+- The UST already replaces the pronoun with the referent or otherwise makes the identity unmistakable
+- You already flagged the first occurrence of that same pronoun/referent pair in the verse and later occurrences add no new ambiguity
 
 **Target**: Aim for roughly 2–5 writing-pronouns notes per chapter for typical narrative/poetry. If you find yourself flagging 8+ per chapter, you are almost certainly over-flagging. Step back and ask: "Would a careful translator actually be confused here?"
+
+## Quote Selection
+
+For `writing-pronouns`, quote the **smallest exact ULT span that identifies the issue**:
+- For an unclear referent, quote only the first ambiguous pronoun (for example, `he`, `him`, `his`, `they`)
+- For an independent/emphatic pronoun, quote the doubled pronoun construction itself (for example, `I, I` or `you, you`)
+- For an indefinite pronoun, quote only that pronoun or its minimal clause if needed to distinguish the indefinite use
+
+Do **NOT** quote the whole verse when the issue is just one pronoun. The note should anchor to the first occurrence that needs clarification.
+
+If the same pronoun with the same referent appears multiple times in one verse:
+- Flag only the first occurrence that a translator must resolve
+- Do not add extra `writing-pronouns` rows for later repetitions unless a new ambiguity appears
 
 ## Decision Process
 
@@ -109,7 +124,11 @@ Is there a pronoun (he/she/it/they/him/her/them/etc.)?
     |   |
     |   +-- YES --> Could a careful reader still figure it out from context?
     |       |
-    |       +-- NO --> Write clarifying note
+    |       +-- NO --> Does the UST already make the referent explicit?
+    |           |
+    |           +-- YES --> No note needed
+    |           |
+    |           +-- NO --> Write one clarifying note on the first ambiguous pronoun only
     |       |
     |       +-- YES --> No note needed
     |

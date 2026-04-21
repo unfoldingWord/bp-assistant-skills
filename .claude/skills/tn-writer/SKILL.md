@@ -176,6 +176,11 @@ Read the assembled TSV alongside the aligned ULT. For each row, verify:
 6. **Quote scope** -- the Hebrew quote covers the right range (not too narrow or too wide for the issue)
 7. **No duplicate UST phrasing** -- ATs should differ from the UST for the same verse
 
+For `writing-pronouns` rows, apply three extra checks during final review:
+1. If the referent is already obvious from the verse context or made explicit by the UST, remove the note instead of preserving a low-value pronoun explanation.
+2. Narrow the Quote/GLQuote anchor to the first pronoun occurrence that actually needs clarification; do not leave a full-verse span for a single pronoun issue.
+3. If multiple `writing-pronouns` rows in the same verse explain the same referent, keep only the first necessary note and remove later duplicates.
+
 Fix any issues found and rewrite the TSV row(s) if needed. This is a lightweight review pass, not a regeneration -- just catch structural problems the scripts can't judge.
 
 ### Step 8: Gemini Review (optional, activation only)
