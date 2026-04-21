@@ -161,6 +161,18 @@ Participles should use "-ing" forms to preserve their verbal noun quality:
 - מֹשֵׁל -> "is ruling" (not "rules")
 - שֹׁמֵעַ -> "Who is hearing?" (not "Who hears?")
 
+Do not flatten Hebrew participles into more natural English forms:
+- Do not switch substantive participles to relative clauses with "who/that" when a participial form is available.
+- Do not replace verbal participles with simple adjectives when the Hebrew form is still verbal.
+- Do not replace active participles with passive shortcuts such as bare past participles.
+
+Isaiah 49 regression examples:
+- 49:5 -> "the one having formed me" (not "the one who formed me")
+- 49:8 -> "the inheritances being desolate" (not "the desolate inheritances")
+- 49:17 -> "the ones having torn you down and the ones having desolated you" (not "those who tore you down and those who made you desolate")
+- 49:19 -> "the ones having swallowed you" (not "those who swallowed you")
+- 49:21 -> "having gone into exile" (not "exiled")
+
 **Substantive participles:**
 Default to agent-noun forms when English has them:
 - יִרְאֵי שְׁמֶךָ -> "the fearers of your name"
@@ -415,6 +427,7 @@ Before finalizing ULT output, verify:
 - [ ] No split infinitives
 - [ ] Cohortatives rendered as "Let me/us..."
 - [ ] Participles use "-ing" forms consistently
+- [ ] Participles are not flattened into relative clauses ("who/that ..."), adjectival shortcuts, or passive bare participles
 - [ ] Emphatic pronouns preserved ("I, I will...")
 - [ ] Vocative word order preserved
 - [ ] Project glossary checked for editorial decisions
