@@ -139,8 +139,10 @@ Consult `reference/literalness_patterns.md` for these patterns:
 | Infinitive construct | "to [verb]" |
 | Infinitive absolute | Show reduplication: "acquitting he will not acquit" (not "certainly") |
 | Participle | Present tense; NO brackets for be-verb |
-| Imperative | Command form |
-| Jussive/Cohortative | "Let him/me..." or subjunctive |
+| Imperative | Command form ("Do not fear") |
+| Jussive (3rd person) | "May he/she/they [verb]" (not "Let him/them...") |
+| Jussive (2nd person negative, אַל) | "May you not [verb]" (NEVER imperative "Do not [verb]") |
+| Cohortative (1st person) | "Let me/us [verb]" |
 
 Keep finite verbs as plain finite clauses; do not prepend relative pronouns such as "who" or "that" to indicative verbs.
 
@@ -155,6 +157,20 @@ Hebrew cohortatives (1cs/1cp with ה- ending or lengthened form) express desire 
 - אֶשְׁמֹרָה -> "Let me wait" (not "I will watch")
 - אֲזַמֵּרָה -> "Let me make music" (not "I will make music")
 
+#### Jussive Recognition
+
+Hebrew jussives (shortened yiqtol, modal/optative mood) express wishes, prayers, or permissions — never commands. They must **never** be rendered as English imperatives.
+
+**Negative jussive (2nd person, with אַל):** Render as "May you not [verb]" — NOT as an imperative "Do not [verb]":
+- אַל־תִּירְאִי -> "May you not fear" (not "Do not fear")
+- אַל־תֵּחַת -> "May you not be dismayed" (not "Do not be dismayed")
+- The negative particle אַל with a jussive form marks an optative wish, not a prohibition command. Distinguish carefully from לֹא + imperative, which is a true command.
+
+**Positive jussive (3rd person):** Render as "May he/she/they [verb]" — NOT "Let him/her/them [verb]":
+- Reserve "Let him/them..." for cohortatives (1st person).
+- In petitionary or doxological contexts, read shortened yiqtols as jussives and render with "May..."
+
+See `data/glossary/project_glossary.md` Phrases section for editorial attestations.
 #### Participle Handling
 
 Participles should use "-ing" forms to preserve their verbal noun quality:
@@ -424,6 +440,7 @@ Before finalizing ULT output, verify:
 - [ ] Formal register maintained throughout
 - [ ] No split infinitives
 - [ ] Cohortatives rendered as "Let me/us..."
+- [ ] Negative jussives rendered as "May you not [verb]" (NEVER as imperative "Do not [verb]"); positive jussives as "May he/they [verb]"
 - [ ] Participles use "-ing" forms and are not flattened into relative clauses ("who/that"), adjectives, or passive shortcuts
 - [ ] Finite verbs stay finite and are not wrapped in relative clauses ("who/that")
 - [ ] Emphatic pronouns preserved ("I, I will...")
