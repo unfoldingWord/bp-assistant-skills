@@ -142,6 +142,8 @@ Consult `reference/literalness_patterns.md` for these patterns:
 | Imperative | Command form |
 | Jussive/Cohortative | "Let him/me..." or subjunctive |
 
+Keep finite verbs as plain finite clauses; do not prepend relative pronouns such as "who" or "that" to indicative verbs.
+
 **Preserve verb form distinctions in parallel structures:**
 When a participle and perfect appear in parallel, do not conform them:
 - "the one putting our soul among the living, and he does not allow our foot to slip" (participle + perfect)
@@ -164,6 +166,7 @@ Do not flatten Hebrew participles into more natural English forms:
 - Do not switch substantive participles to relative clauses with "who/that" when a participial form is available.
 - Do not replace verbal participles with simple adjectives when the Hebrew form is still verbal.
 - Do not replace active participles with passive shortcuts such as bare past participles.
+- Do not wrap plain finite verbs in relative clauses; keep them as finite English verbs unless the Hebrew form itself is participial.
 
 For verse-specific participle decisions see `data/quick-ref/ult_decisions.csv` and `data/glossary/project_glossary.md`.
 
@@ -422,6 +425,7 @@ Before finalizing ULT output, verify:
 - [ ] No split infinitives
 - [ ] Cohortatives rendered as "Let me/us..."
 - [ ] Participles use "-ing" forms and are not flattened into relative clauses ("who/that"), adjectives, or passive shortcuts
+- [ ] Finite verbs stay finite and are not wrapped in relative clauses ("who/that")
 - [ ] Emphatic pronouns preserved ("I, I will...")
 - [ ] Vocative word order preserved
 - [ ] Project glossary checked for editorial decisions
