@@ -49,9 +49,11 @@ Not every abstract noun needs a note. Create notes when:
 3. Theological significance warrants explanation
 4. Concept may be unfamiliar to readers
 
-### Combining Adjacent Abstract Nouns
+### Note Scope for Multiple Abstract Nouns
 
-When two or more abstract nouns appear in the same verse or adjacent phrases, combine them into a single issue rather than creating separate notes. For example, if a verse contains both "justice" and "righteousness" as abstract nouns, create one issue that covers both. This avoids cluttering the notes with repetitive "If your language does not use an abstract noun..." text. The single note can address both nouns with a combined AT.
+Create a separate issue for each abstract noun occurrence that needs a note. Do not combine abstract nouns from different poetic lines, parallel phrases, or other adjacent clauses into a single issue. For example, if one line contains "justice" and the parallel line contains "righteousness," create two issues so each line can receive its own note and its own alternate translation.
+
+Only keep abstract nouns together when they function as a single fixed expression that must be reworded as one unit. Otherwise, prefer one issue per abstract noun.
 
 ---
 
