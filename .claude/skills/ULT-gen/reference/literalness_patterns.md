@@ -44,6 +44,10 @@ Preserve as "X of Y" - always show the "of" to mark the construct relationship, 
 | sir rachitsi | "tub of my washing" | "my washbasin" |
 | yayin tar'elah | "wine of staggering" | "staggering wine" |
 
+**Pronominal suffix placement in construct chains**: when a suffix attaches to the dependent noun, keep it there in English ("the land of your destruction," not "your land of destruction").
+
+**Plural construct with repeated noun** (`דּוֹר דּוֹרִים` and similar): preserve both the construct and the plural — "the generation of generations," not "generation {after} generation."
+
 ## Literal Verbal Idioms
 
 Keep verb + noun form rather than verb + adverb:
