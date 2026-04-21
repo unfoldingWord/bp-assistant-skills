@@ -8,12 +8,13 @@ description: Multi-agent adversarial issue identification for human-authored ULT
 Adversarial multi-agent issue identification against human-authored ULT/UST from repo master. Same analytical depth as initial-pipeline waves 2-3-4a, but skips AI text generation since the human text already exists.
 
 This skill orchestrates issue-identification agents. Shared orchestration
-patterns are in sibling reference files (read each at the relevant stage):
-- `orchestration-conventions.md` (start)
-- `analyst-domains.md` (Wave 2)
-- `challenger-protocol.md` (Wave 3)
-- `merge-procedure.md` (Wave 4a)
-- `gemini-review-wave.md` (after merge)
+patterns are in the issue-identification skill directory (read each at the
+relevant stage):
+- `.claude/skills/issue-identification/orchestration-conventions.md` (start)
+- `.claude/skills/issue-identification/analyst-domains.md` (Wave 2)
+- `.claude/skills/issue-identification/challenger-protocol.md` (Wave 3)
+- `.claude/skills/issue-identification/merge-procedure.md` (Wave 4a)
+- `.claude/skills/issue-identification/gemini-review-wave.md` (after merge)
 
 Analysts receive `.claude/agents/issue-identification.md` when spawned.
 
@@ -47,7 +48,8 @@ When context is available, skip the "Fetch and Parse" step's fetch commands and 
 
 ## Setup (orchestrator runs directly)
 
-Read `orchestration-conventions.md` for chapter padding and model assignments.
+Read `.claude/skills/issue-identification/orchestration-conventions.md` for
+chapter padding and model assignments.
 
 ### Working Directory
 
@@ -98,8 +100,8 @@ If `TeamCreate` and `Agent` are available (CLI mode), use them instead per
 
 ## Wave 2: Issue Identification
 
-Read `analyst-domains.md` for domain assignments. Spawn both analysts in
-parallel. Each analyst receives:
+Read `.claude/skills/issue-identification/analyst-domains.md` for domain
+assignments. Spawn both analysts in parallel. Each analyst receives:
 
 - The agent instructions from `.claude/agents/issue-identification.md`
 - Their domain assignment (structure or rhetoric)
@@ -115,7 +117,8 @@ Wait for both analysts to complete before proceeding.
 
 ## Wave 3: Challenge
 
-Read `challenger-protocol.md`. Spawn a challenger sub-agent (`model: "sonnet"`).
+Read `.claude/skills/issue-identification/challenger-protocol.md`. Spawn a
+challenger sub-agent (`model: "sonnet"`).
 
 The challenger reads both analyst TSVs (`$TMP/wave2_structure.tsv`, `$TMP/wave2_rhetoric.tsv`) and writes rulings to `$TMP/wave3_challenges.tsv`.
 
@@ -127,14 +130,17 @@ Output: `$TMP/wave3_challenges.tsv`
 
 ## Wave 4a: Merge
 
-Read `merge-procedure.md`. The orchestrator merges all findings, applies rulings, deduplicates, and orders.
+Read `.claude/skills/issue-identification/merge-procedure.md`. The orchestrator
+merges all findings, applies rulings, deduplicates, and orders.
 
 Output: `output/issues/<BOOK>/<BOOK>-<CH>.tsv`
 With verse range: `output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv`
 
 ## Gemini Review (optional, activation only)
 
-Only run if `--gemini` is explicitly passed. Skip by default. If running: read `gemini-review-wave.md`. Only the `issues` stage applies (deep-issue-id doesn't generate ULT/UST).
+Only run if `--gemini` is explicitly passed. Skip by default. If running: read
+`.claude/skills/issue-identification/gemini-review-wave.md`. Only the `issues`
+stage applies (deep-issue-id doesn't generate ULT/UST).
 
 Note: the Gemini review script requires Python and is only available in CLI/host mode, not inside the Docker pipeline container.
 

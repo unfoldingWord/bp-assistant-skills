@@ -81,6 +81,13 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | שָׂבַר | H7663b | wait for | look to | editor PSA 145:15; Piel = hope/wait, not merely "look" |
 | תְּהִלָּה | H8416 | psalm (in superscription) | praise | use "psalm" in superscription context; "praise" in body text; editor PSA 145:1 |
 | יָדָה | H3034 | thank | praise | Hiphil yadah = usually "thank", but "praise" suits some contexts better (e.g. "praise your name" -- otherwise this is personification). General principle editors can adjust. |
+| אָז (m:אָז) | H0227b | from then | from of old | render מֵאָז as "from then" consistently; editor ISA 48:3,5,7,8 |
+| אַף | H0637 | indeed | also | emphatic particle; render "indeed" not "also"; distinct from H0639 nose/anger; editor ISA 48:12,13,15 |
+| קָבַץ | H6908 | gather | assemble | Niphal "gather"; reserve "assemble" for H0622 אָסַף; editor ISA 48:14 |
+| נָצַל (Hiphil) | H5337 | deliver | rescue | project preference; editor ISA 47:14 |
+| אִישׁ | H0376 | a man | each | use indefinite "a man" for distributive אִישׁ, not "each"; editor ISA 47:15 |
+| דָּרַךְ (Hiphil) | H1869 | making [X] tread | leading | show Hiphil explicitly; "tread" root resonates through Isaiah; editor ISA 48:17 |
+| עָדִין | H5719 | luxuriant {one} | overindulged one | adjective, not passive participle; editor ISA 47:8 |
 
 ## Phrases
 
@@ -88,7 +95,7 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 |----------------|-----|-----|-------|
 | צַר־לִי | trouble to me | my distress | preserve prepositional structure |
 | מָגִנֵּנוּ אֲדֹנָי | Lord our shield | our shield, Lord | preserve vocative order |
-| וַאֲנִי + verb | I, I [verb] | I [verb] | emphatic pronoun doubling: preserve the doubled pronoun to reflect Hebrew emphasis (e.g., "I, I said" 82:6, "you, you will inherit" 82:8) |
+| וַאֲנִי + verb | I, I [verb] | I [verb] | emphatic pronoun doubling: preserve the doubled pronoun to reflect Hebrew emphasis (e.g., "I, I said" 82:6, "you, you will inherit" 82:8). If Hebrew has triple pronoun (e.g., אֲנִי אֲנִי דִּבַּרְתִּי at ISA 48:15 adds 3rd in light of אֲנִי in preceding verb), preserve the count. |
 | הַמִּתְקוֹמְמַי | the ones rising up against me | who rise up against me | participle as noun |
 | יוֹם יוֹם | day, day | day {by} day | preserve doubling without added words |
 | כֵּן (adverbial) | Thus | So | formal connector |
@@ -114,3 +121,11 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | Adversative waw (contrast) | but | and | use "but" for waw when clause contrasts with preceding (e.g., preserving faithful vs destroying wicked); editor PSA 145:20 |
 | Yiqtol gnomic/habitual | present tense | future tense | render yiqtol as English present (not future) in gnomic/attribute statements about God's character; editor PSA 145:19 (does/hears/saves) |
 | Niphal ptcp verbal form | [verb]ing [adjective] | [adjective] [noun] | render Niphal participle as verbal "making wonderful" / "making fearful" not adjectival "wonderful deeds" / "fearful deeds"; editor PSA 145:5,6 |
+| Hiphil causative | explicit "make [X] [verb]" / "cause [X] to [verb]" | idiomatic English (e.g., "mentioning", "leading", "continue to") | render Hiphil causatives explicitly, preserving the causative force. E.g., יַזְכִּירוּ "make {one} remember" not "mentioning"; מַדְרִיכֲךָ "making you tread" not "leading"; תוֹסִיפִי יִקְרְאוּ "you will make {them} add {that} they should call" not "they will continue to call"; editor ISA 47:1,5; 48:1,3,17 |
+| בְּתוּלַת בַּת [Noun] | virgin of the daughter of [Noun] | virgin daughter of [Noun] | preserve double genitive chain; editor ISA 47:1 |
+| pronoun [I] doubling preserves count | I, I, I [verb] | I, I [verb] or I [verb] | when Hebrew has an explicit pronoun before a finite verb that already encodes 1cs, count preceding אֲנִי plus verb subject = pronouns to output. ISA 48:15: אֲנִי אֲנִי דִּבַּרְתִּי = "I, I, I have spoken" (editor) |
+| preposition + infinitive construct + suffix | because I [verb]ed / so that he [verb]s | from my [verb]ing / by my [verb]ing | ULT convention: render מִדַּעְתִּי "Because I knew" not "From my knowing"; expand to finite clause; editor ISA 48:4 |
+| לְפָנַי (with or without preceding prep) | to my face | before my face | preserve "to my face" (לְ + face); "before my face" is double translation; editor ISA 48:19 |
+| Hebrew qatal (prophetic future) | future tense | past tense | in prophetic oracle contexts, qatal may function as prophetic perfect; render as future when context is imminent future judgment (situational); editor ISA 47:14 |
+| Synonymous parallelism with split subject | preserve subject alignment across cola | collapse into compound predicate | when parallel lines have distinct subjects (e.g., "he...his name"), do not flatten into a single compound predicate; editor ISA 48:19 |
+| לֹא מֵרֹאשׁ בַּסֵּתֶר דִּבַּרְתִּי | "From the beginning, I have not spoken in secret" | "Not from the beginning in secret have I spoken" | the negation has scope over "in secret," not over the full clause; the generated structure mistakenly suggests "I started speaking secretly later"; editor ISA 48:16 |
