@@ -58,6 +58,15 @@ Keep verb + noun form rather than verb + adverb:
 | asah tsedaqah | "do righteousness" | "act righteously" |
 | dibber shalom | "speak peace" | "speak peacefully" |
 
+## Relative Clauses
+
+Do not turn a Hebrew verbal clause into an English relative clause just because it modifies a noun.
+
+- **Participles** should stay participial: use "-ing" forms, agent nouns, or "the ones/those [verb]-ing" where needed.
+- **Indicatives / finite verbs** should stay finite: use a plain English verb without prepending "who/that".
+
+Use a relative clause only when the Hebrew syntax actually requires one.
+
 ## Comparative Constructions
 
 Comparatives with מִן use English comparative form:
