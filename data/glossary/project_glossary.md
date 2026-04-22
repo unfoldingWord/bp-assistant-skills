@@ -99,6 +99,8 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | הַמִּתְקוֹמְמַי | the ones rising up against me | who rise up against me | participle as noun |
 | יוֹם יוֹם | day, day | day {by} day | preserve doubling without added words |
 | כֵּן (adverbial) | Thus | So | formal connector |
+| מַה־לִּי פֹה | what to me here | what do I have here | preserve the bare Hebrew idiom literally; do not expand it into a paraphrase |
+| הִנְנִי | behold me | behold, here am I | literal announcement/availability formula; do not expand or bracket an explanatory gloss |
 | Jussive negative | may you not [verb] | do not [verb] | form-based: use jussive for 2nd person negative wishes, not imperative; editor PSA 69:6,17; 70:5 |
 | Concessive waw | Though...yet | And...and | discretionary: read waw as concessive in contrast contexts; editor PSA 69:10-11,20 |
 | Fronted predicate | subject-first | predicate-first | discretionary: editor normalizes Hebrew fronted predicates to English SVO; PSA 69:4,33; 70:2,4,5; 82:3,4,5; 89:1,15,20,23,34,44; 145:3,8,9,17,18 (HIGH FREQ in PSA 145) |
