@@ -36,6 +36,14 @@ Niphal verbs express passive or reflexive action. Always render them with Englis
 **ISA 51:6 ruling**: The Niphal imperfect describing the heavens "like smoke" must carry English passive voice: "will be dissipated like smoke," NOT "will vanish like smoke." Rendering a Niphal passive as an English active verb misrepresents the Hebrew stem and strips the divine-agency implication.
 
 Only use a reflexive English construction (e.g., "hid himself") when the Niphal root is inherently reflexive in meaning. For all passive Niphals, use "be/was/will be [verb]-ed."
+
+## Active Voice Preservation
+
+Do not convert an active or stative Hebrew form into an English passive just because the passive sounds idiomatic. If the Hebrew stem is active, preserve an active or stative English rendering instead:
+
+- "he will be very high" not "he will be greatly exalted"
+- "marveled" not "were appalled"
+
 ## Hiphil Causatives
 
 Render Hiphil stems with explicit two-verb causative structure:
@@ -45,6 +53,7 @@ Render Hiphil stems with explicit two-verb causative structure:
 | hirita (Hiphil of ראה) | "made see" | "showed" |
 | hishqitanu (Hiphil of שקה) | "made drink" | "gave to drink" |
 | hirashta (Hiphil of רעש) | "made tremble" | "shook" |
+| hishmia (Hiphil of שמע) | "made hear" / "caused to hear" | "announced" |
 
 ## Construct Chains
 
@@ -80,6 +89,13 @@ Do not turn a Hebrew verbal clause into an English relative clause just because 
 
 Use a relative clause only when the Hebrew syntax actually requires one.
 
+## Predicate Adjectives
+
+When Hebrew uses an adjective predicatively, keep the English copula if needed to show the predicate relationship. Do not collapse it into an attributive adjective phrase:
+
+- "how they are beautiful" not "how beautiful"
+- "he will be very high" not "greatly exalted"
+
 ## Comparative Constructions
 
 Comparatives with מִן use English comparative form:
@@ -107,3 +123,7 @@ Preserve Hebrew doubling without adding words:
 |--------|-------------|-----|
 | yom yom | "day, day" | "day {by} day" |
 | dor wador | "generation and generation" | - |
+
+## Disjunctive Conjunctions
+
+When Hebrew waw separates alternatives, render it as English "or", not "and". Do not force plural agreement in English when the Hebrew subject remains singular.
