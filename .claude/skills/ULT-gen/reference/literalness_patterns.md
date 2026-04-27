@@ -32,10 +32,15 @@ Niphal verbs express passive or reflexive action. Always render them with Englis
 | Niphal imperfect (passive) | "will be dissipated" | "will vanish" |
 | Niphal perfect (passive) | "was reckoned" | "counted" |
 | Niphal imperative | "be gathered" | "gather" |
+| Niphal participle (passive) | "desolated" | "desolate" |
 
 **ISA 51:6 ruling**: The Niphal imperfect describing the heavens "like smoke" must carry English passive voice: "will be dissipated like smoke," NOT "will vanish like smoke." Rendering a Niphal passive as an English active verb misrepresents the Hebrew stem and strips the divine-agency implication.
 
-Only use a reflexive English construction (e.g., "hid himself") when the Niphal root is inherently reflexive in meaning. For all passive Niphals, use "be/was/will be [verb]-ed."
+**ISA 54:3 ruling**: The Niphal participle נְשַׁמּוֹת must render as "desolated cities" (verbal passive participial form), NOT "desolate cities" (plain adjective). The participial verbal form preserves the sense of being in a state brought about by action.
+
+Only use a reflexive English construction (e.g., "hid himself") when the Niphal root is inherently reflexive in meaning. For all passive Niphals, use "be/was/will be [verb]-ed" or the participial "-ed" form as appropriate to the grammatical context.
+
+**Stem-dependent rendering for שָׁמַם (H8074):** Qal/stative stem → active "marveled" (ISA 52:14 — do NOT convert to passive "were appalled"); Niphal participle → passive "desolated" (ISA 54:3 — do NOT flatten to adjective "desolate"). See ult_decisions.csv H8074.
 
 ## Active Voice Preservation
 
