@@ -175,7 +175,7 @@ H3034,יָדָה,thank,ALL,145:10 All your works will thank you,Hiphil yadah = u
 H0571,אֶמֶת,truth,ALL,145:18 call on him in truth,Situational: 'truth' in 145:18 vs 'trustworthiness' in 71:22. Context-dependent.,2026-02-23,AI
 H7623b,שָׁבַח,proclaim,ALL,145:4 Generation to generation will proclaim,Situational: 'proclaim' when declaring works (145:4) vs 'extol' when praising God directly (117:1).,2026-02-23,AI
 H1369,גְּבוּרָה,power,ALL,145:11 they will speak of your power,Singular = 'power'. Plural = 'mighty acts' (71:16). Context-dependent.,2026-02-23,AI
-H5769,עוֹלָם,eternities,ALL,145:13 kingdom of all of eternities,Plural עוֹלָמִים = 'eternities'. Singular = 'forever/ages'. Editor PSA 145.,2026-02-23,human
+H5769,עוֹלָם,eternities / eternity,ALL,145:13 kingdom of all of eternities; ISA 55:13 a sign of eternity,"Plural עוֹלָמִים = 'eternities'. Singular standalone = 'forever/ages'. In construct chain as dependent genitive = 'eternity' (noun, not adjective). ISA 55:13 ruling: 'a sign of eternity' not 'an everlasting sign'. Editor PSA 145; ISA 55:13.",2026-04-27,human
 H7356b,רַחַם,compassions,ALL,"145:9 his compassions are over all of his works; ISA 54:7 with great compassions","Plural = 'compassions'. Not singular 'compassion'. Editor PSA 145; ISA 54:7.",2026-02-23,human
 H2502a,חָלַץ,rescue,ALL,140:1 Rescue me Yahweh,Piel imperative. Dominant Psalms rendering: Rescue (PSA 6:4),2026-02-24,AI
 H5919,עַכְשׁוּב,viper,ALL,140:3 venom of a viper,Hapax legomenon. Traditionally spider/asp. Serpent context = viper.,2026-02-24,AI
@@ -418,3 +418,6 @@ H3605,כָּל,all of the [noun],ALL,"ISA 51:13,18,20; ISA 52:5,10; ISA 54:5,10,
 H1121,בֵּן,sons of,ISA,"ISA 54:1 sons of the desolated one (×2)","Render as 'sons of' not 'children of' — בֵּן is male offspring; 'children' is gender-neutral and less literal. ISA 54:1 has two occurrences of בְּנֵי.",2026-04-27,human
 H6723,צִיָּה,dryness,ISA,"ISA 53:1 from ground of dryness (not 'from dry ground')","Construct chain must be preserved: noun + of + noun. The Hebrew צִיָּה is a noun (dryness) not an adjective; render as 'ground of dryness'. Per literalness_patterns.md §Construct Chains.",2026-04-27,human
 H6352,פֶּחָם,coal,ISA,"ISA 54:16 who fans the coal into flame","Hebrew is singular; render 'coal' not 'coals'. Number morphology must match Hebrew.",2026-04-27,human
+H6771,צָמֵא,the thirsty / everyone thirsty,ALL,ISA 55:1 kol-tsame — substantive adjective,Qal adjective used as substantive noun; render as nominal adjective not relative clause. 'everyone thirsty' not 'all who are thirsty'. See literalness_patterns.md §Substantive Adjectives.,2026-04-27,human
+H2896,טוֹב,the good,ALL,ISA 55:2 ha-tov — substantive adjective with article,Nominal adjective; do not expand to relative clause 'what is good'. 'the good' is the correct form. See literalness_patterns.md §Substantive Adjectives.,2026-04-27,human
+H0226,אוֹת,a sign of,ALL,ISA 55:13 construct chain with eternity,In construct chain preserve genitive: 'a sign of eternity' not 'an everlasting sign'. See literalness_patterns.md §Construct Chains §Adjective-noun collapse forbidden.,2026-04-27,human
