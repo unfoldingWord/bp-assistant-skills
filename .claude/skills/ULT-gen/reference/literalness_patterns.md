@@ -102,6 +102,8 @@ Do not turn a Hebrew verbal clause into an English relative clause just because 
 
 Use a relative clause only when the Hebrew syntax actually requires one.
 
+**ISA 54:17 ruling**: The yiqtol תָּקוּם (H6965, Qal imperfect 3fs from קוּם) modifies לָשׁוֹן (tongue) as a relative verbal clause without an explicit Hebrew relative pronoun. Render it participially — "every tongue rising against you" — NOT "every tongue that rises against you." Do not insert the English relative pronoun "that" when none exists in the Hebrew.
+
 ## Substantive Adjectives
 
 When Hebrew uses an adjective (or Qal stative) as a substantive — with or without the article — render it as a nominal adjective in English. Do NOT expand it into a relative clause with "who is," "what is," or similar:
