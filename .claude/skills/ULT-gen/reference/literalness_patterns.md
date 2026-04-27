@@ -73,6 +73,14 @@ Preserve as "X of Y" - always show the "of" to mark the construct relationship, 
 
 **Pronominal suffix placement in construct chains**: when a suffix attaches to the dependent noun, keep it there in English ("the land of your destruction," not "your land of destruction").
 
+**Adjective-noun collapse forbidden**: When Hebrew uses a construct chain where the dependent noun is commonly rendered as an English adjective, keep the genitive "X of Y" form; do not collapse it into "adjective + noun":
+
+| Hebrew | Literal ULT | NOT |
+|--------|-------------|-----|
+| אוֹת עוֹלָם | "a sign of eternity" | "an everlasting sign" |
+
+**ISA 55:13 ruling**: לְאוֹת עוֹלָם is a construct chain; render "a sign of eternity," not "an everlasting sign." The noun עוֹלָם must remain as a dependent genitive.
+
 **Plural construct with repeated noun** (`דּוֹר דּוֹרִים` and similar): preserve both the construct and the plural — "the generation of generations," not "generation {after} generation."
 
 ## Literal Verbal Idioms
@@ -93,6 +101,33 @@ Do not turn a Hebrew verbal clause into an English relative clause just because 
 - **Indicatives / finite verbs** should stay finite: use a plain English verb without prepending "who/that".
 
 Use a relative clause only when the Hebrew syntax actually requires one.
+
+## Substantive Adjectives
+
+When Hebrew uses an adjective (or Qal stative) as a substantive — with or without the article — render it as a nominal adjective in English. Do NOT expand it into a relative clause with "who is," "what is," or similar:
+
+| Hebrew Pattern | Literal ULT | NOT |
+|----------------|-------------|-----|
+| כָּל-צָמֵא (kol tsame) | "everyone thirsty" | "all who are thirsty" |
+| הַטּוֹב (ha-tov) | "the good" | "what is good" |
+
+Do not insert "who is," "what is," or any relative pronoun between the determiner and the adjective.
+
+**ISA 55:1 ruling**: כָּל-צָמֵא = "everyone thirsty" (not "all who are thirsty"). The adjective צָמֵא is substantive; no relative clause is needed.
+**ISA 55:2 ruling**: הַטּוֹב = "the good" (not "what is good"). The nominalized adjective does not need a "what is" relative-clause expansion.
+
+## Prepositional Nominals with Negation
+
+Hebrew expresses "one who has no X" as a prepositional-existential construction (e.g., אֲשֶׁר אֵין לוֹ כֶּסֶף = "to whom there is no silver"). Preserve the Hebrew prepositional structure; do not convert it to an English possession verb or verbal clause:
+
+| Hebrew Pattern | Literal ULT | NOT |
+|----------------|-------------|-----|
+| אֲשֶׁר אֵין לוֹ כֶּסֶף | "to whom {is} no silver" | "whoever has no money" |
+| לְלֹא בְשֹׂבְעָה | "for {what is} not to sufficiency" | "for what does not satisfy" |
+
+Supply only the minimum bracketed copula ({is}) needed for English grammar. Do not introduce "has" or convert a Hebrew prepositional noun phrase (e.g., שְׂבָעָה "sufficiency/satiety") into a verb.
+
+**ISA 55:2 rulings**: Preserve the prepositional-nominal forms. Do not rewrite the existential negation as a possession verb, and do not verbalize the noun שְׂבָעָה.
 
 ## Predicate Adjectives
 
