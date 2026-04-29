@@ -1,0 +1,21 @@
+name: Deploy BP Assistant
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch bp-assistant deploy
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          test -n "$GH_TOKEN"
+          gh workflow run deploy.yml --repo unfoldingWord/bp-assistant -f confirm=yes
