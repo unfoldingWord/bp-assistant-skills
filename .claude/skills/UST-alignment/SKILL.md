@@ -66,7 +66,7 @@ Same JSON structure as ULT alignment:
 
 | Aspect | ULT | UST |
 |--------|-----|-----|
-| English arrays | 1-3 words typical | 5-15 words common |
+| English arrays | 1-3 words typical | 1-5 words preferred; larger only when restructuring requires it |
 | Hebrew indices | Usually 1 per entry | Often 3-5 per entry |
 | Split alignment | Rare | Common (same Hebrew index in multiple entries) |
 | `{brackets}` | Grammar additions | Implied information |
@@ -183,31 +183,33 @@ Brackets are **pre-determined** by the UST-gen skill. The alignment skill preser
 
 ## Alignment Principles
 
-### 1. Meaning Groups Over Word-Level Precision
+### 1. Prefer Granular Alignment; Group Only When Necessary
 
-Group Hebrew words that collectively produce a single English phrase. "Smaller" in UST context means phrase-level, not word-level.
+**Default to the smallest unit that is meaningful.** Where one Hebrew word clearly renders one English word or short phrase, align them 1-to-1. Only group multiple Hebrew words together when the English rendering of those words genuinely cannot be divided into smaller pieces.
 
-**Typical UST alignment:**
+**Example where grouping IS justified** (prepositional phrase restructured into a full relative clause — no sub-phrase can be independently assigned):
 ```json
 {"hebrew_indices": [3, 4, 5, 6], "english": ["does", "not", "do", "what", "evil", "people", "tell", "him", "to", "do,"]}
 ```
 
-This groups a negation + verb + preposition-noun + adjective because the UST restructures them into a single clause.
+Large groups like this are **exceptions**, not the default. Before using a group of 4+ Hebrew indices, verify that no smaller split is possible.
 
-### 2. Smaller Groups Still Preferred When Possible
+### 2. Apply the Granularity Hierarchy
 
-Only merge Hebrew words when the meaning genuinely cannot be divided:
+Follow the decision ladder from `reference/ust_alignment_rules.md`: 1-to-1 first, then small N-to-M, then large groups only as a last resort.
 
-**Good -- separated when meaning allows:**
+**Preferred — 1-to-1 or small groups when meaning allows:**
 ```json
 {"hebrew_indices": [1], "english": ["wicked", "people"]},
 {"hebrew_indices": [2], "english": ["are", "like"]}
 ```
 
-**Avoid -- unnecessarily large groups:**
+**Avoid — unnecessarily large groups when the above split is possible:**
 ```json
 {"hebrew_indices": [1, 2, 3, 4], "english": ["wicked", "people", "are", "like", "chaff", "..."]}
 ```
+
+When in doubt, ask: "Can I split this entry into two or three smaller, still-meaningful entries?" If yes, split it.
 
 ### 3. Split Alignment
 
