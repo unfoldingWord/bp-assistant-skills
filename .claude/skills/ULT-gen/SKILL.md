@@ -268,7 +268,6 @@ Preserve Hebrew doubling without adding words:
 Brackets mark words added for English grammar not present in Hebrew.
 
 **USE brackets for:**
-- Copulas when Hebrew has none: "Your God {is} my God"
 - Implied verbs: "she had been {living} there"
 - Genitive absolute constructions: "{while} they {were} eating"
 - Implied subjects when needed for clarity: "{it was} good"
@@ -284,6 +283,7 @@ Brackets mark words added for English grammar not present in Hebrew.
 **Prefer fewer implied words**: When Hebrew uses a preposition + infinitive construct (e.g., min + infinitive), render it with the Hebrew preposition rather than restructuring into an English purpose/result clause with added implied words. Preserve Hebrew word order when the meaning is clear in English.
 
 **DO NOT use brackets for:**
+- **Standard nominal-clause copulas ("is"/"are") are NOT bracketed**: Hebrew nominal clauses (subject + predicate, no explicit verb) strongly imply the copula; do not bracket it in standard constructions: "Yahweh is my shepherd" (not "Yahweh {is} my shepherd"), "Your God is my God" (not "Your God {is} my God"). Reserve `{is}`/`{are}` brackets only for genuinely ambiguous cases or structurally unusual constructions (e.g., inverted word-order: "To me {is} Gilead"; existential negation: "to whom {is} no silver").
 - **Participles with be-verbs are NEVER bracketed**: "Yahweh is giving" (not "Yahweh {is} giving"), "he was walking" (not "he {was} walking"), "they are dwelling" (not "they {are} dwelling"). The auxiliary verb is required English grammar for participle constructions.
 - Words within semantic range of Hebrew: "hill country" (not "hill {country}")
 - **Articles are NEVER bracketed**: "the head" (not "{the} head"), "the land" (not "{the} land"). The definite article never needs brackets regardless of whether Hebrew has an explicit article.
@@ -361,7 +361,7 @@ Hebrew vocatives at clause end should stay there:
 Hebrew poetry uses parallelism. Use `\q1` for the first line of each verse, then `\q2` for continuation lines:
 
 ```usfm
-\q1 \v 3 Because your covenant faithfulness {is} better than life,
+\q1 \v 3 Because your covenant faithfulness is better than life,
 \q2 my lips will praise you.
 ```
 
