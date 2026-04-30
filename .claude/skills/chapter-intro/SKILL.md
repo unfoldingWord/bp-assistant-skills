@@ -114,7 +114,7 @@ Use `[[rc://*/tw/dict/bible/kt/<term>]]` or `[[rc://*/tw/dict/bible/other/<term>
 ### Step 5: Format and Insert into Issue File
 
 **Format the intro for TSV storage:**
-1. Escape all newlines as literal `\n` (two characters: backslash + n)
+1. Escape actual newline characters as literal `\n` (two characters: backslash + n). **This is the ONLY escaping needed.** Do NOT escape Unicode characters — en-dashes (–), em-dashes (—), curly quotes (“ ” ‘ ’), apostrophes (’), or any other non-ASCII character — as `\u` sequences. Write all such characters as their actual Unicode characters.
 2. The intro content goes in column 7 (the explanation/content column)
 
 **Build the issue TSV row (7 tab-separated columns, matching issue TSV format):**
@@ -146,3 +146,4 @@ If the issue file already has an intro row (first line contains `:intro`), repla
 **Confirm the result** by reading back the first 3 lines of the file to verify:
 1. The intro row is correctly placed as the first data line
 2. The intro is a **single TSV line** — no actual newline characters in the content. All markdown line breaks must be literal two-character `\n` sequences. If you see the intro spanning multiple lines in the file, fix it immediately.
+3. There are no `\u` escape sequences in the content (e.g., `\u2013`, `\u201c`). If you see any, the file must be rewritten with the actual Unicode characters substituted in place of the escape sequences.
