@@ -67,15 +67,15 @@ Rules for AI updates:
 - Follow tq-guidelines.md for content rules (third person, present tense, ESL level, etc.)
 - If a row already matches the current ULT/UST, leave it unchanged
 
-Write the result as a TSV file to `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` (zero-padded chapter, e.g., `PSA/PSA-150.tsv`), or `output/tq/{BOOK}/{BOOK}.tsv` for whole-book processing.
+Write the result as a TSV file to `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` (chapter zero-padded to 3 digits, e.g., `PSA/PSA-006.tsv` for chapter 6, `PSA/PSA-023.tsv` for chapter 23, `PSA/PSA-150.tsv` for chapter 150), or `output/tq/{BOOK}/{BOOK}.tsv` for whole-book processing.
 
 ### Step 5: Post-Process Quotes
 
-Use `mcp__workspace-tools__curly_quotes` with `input="output/tq/PSA/PSA-150.tsv"`, `inPlace=true`.
+Use `mcp__workspace-tools__curly_quotes` with `input="output/tq/PSA/PSA-006.tsv"`, `inPlace=true`.
 
 ### Step 6: Verify Output
 
-Use `mcp__workspace-tools__verify_tq` with `tsvFile="output/tq/PSA/PSA-150.tsv"`, `inputJson="/tmp/claude/prepared_tq.json"`.
+Use `mcp__workspace-tools__verify_tq` with `tsvFile="output/tq/PSA/PSA-006.tsv"`, `inputJson="/tmp/claude/prepared_tq.json"`.
 
 ### Step 7: Insertion (when ready)
 
