@@ -67,7 +67,7 @@ Rules for AI updates:
 - Follow tq-guidelines.md for content rules (third person, present tense, ESL level, etc.)
 - If a row already matches the current ULT/UST, leave it unchanged
 
-Write the result as a TSV file to `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` (chapter zero-padded to 3 digits, e.g., `PSA/PSA-006.tsv` for chapter 6, `PSA/PSA-023.tsv` for chapter 23, `PSA/PSA-150.tsv` for chapter 150), or `output/tq/{BOOK}/{BOOK}.tsv` for whole-book processing.
+Write the result as a TSV file to `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` using exactly 3-digit chapter padding (e.g., `PSA/PSA-007.tsv`, `PSA/PSA-023.tsv`, `PSA/PSA-150.tsv`), or `output/tq/{BOOK}/{BOOK}.tsv` for whole-book processing.
 
 ### Step 5: Post-Process Quotes
 
