@@ -245,7 +245,12 @@ Hebrew: בֵּית אֱלֹהִים (house of God)
 {"hebrew_indices": [1], "english": ["God"]}
 ```
 
-The "of" goes with the first word (construct form) since it represents the construct relationship.
+**Critical rule for "of":** The English word "of" that renders a Hebrew construct relationship has NO corresponding Hebrew preposition — it comes from the construct *form* (morphology) of the **first noun** (nomen regens / head noun). Therefore:
+- "of" MUST align to the **first** noun in the construct pair
+- NEVER align "of" to the second (dependent) noun
+- NEVER leave "of" unaligned
+
+For three-word chains (e.g., "word of the house of Yahweh"), each interior noun carries its own "of" (because it governs the next noun). Only the final absolute noun has no "of".
 
 ### 7. Word Order Differences
 
@@ -491,7 +496,7 @@ Before finalizing alignment JSON:
 - [ ] Articles align with their head nouns
 - [ ] Direct object markers align with following noun
 - [ ] Bracketed words align to the Hebrew word they support
-- [ ] Construct chains are split (each word aligned separately)
+- [ ] Construct chains are split (each word aligned separately); English "of" is with the **first** (head) noun, never the second noun, never unaligned
 - [ ] `english_text` contains the exact English translation with correct word order
 - [ ] Hebrew words copied exactly from source (not typed manually)
 
