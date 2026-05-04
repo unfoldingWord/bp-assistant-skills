@@ -31,6 +31,13 @@ TQ answers should capture the *idea* of the content so that any translation deri
 - Do not write from the reader's perspective ("you should...") or first-person
 - Example: "What does David say about Yahweh?" not "What should you know about Yahweh?"
 
+### Author References in Psalms (PSA)
+- When referring to the human author of a psalm, use **"the psalmist"** — never "the writer" or "the author"
+- If the psalm's superscription attributes it to a named author (e.g., David, Asaph, the sons of Korah), use that name instead
+- This applies consistently across all PSA TQ questions and responses
+- Good: "What does the psalmist say Yahweh does for him?"
+- Avoid: "What does the writer say about God?" or "What does the author claim?"
+
 ### Pronoun-Antecedent Agreement
 - Ensure pronouns clearly refer to their antecedents
 - When the antecedent is ambiguous, use the noun instead of a pronoun
