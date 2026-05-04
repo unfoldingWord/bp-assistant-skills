@@ -155,6 +155,10 @@ The "he" is not bracketed because it's encoded in the Hebrew verb form.
 
 ## Construct Chains
 
+### How Hebrew Construct Works
+
+In Biblical Hebrew, a construct phrase (e.g., *sēfer ha-tôrāh* — "the book of the law") expresses a genitive relationship through **morphological linking**, not through a separate preposition. There is no Hebrew word for "of" — the English word "of" is supplied by the translator to render the construct relationship. Because "of" comes from the construct *form* of the **first noun** (the nomen regens / head noun), it MUST align to that first noun.
+
 ### Required: Split Strategy
 
 For two-word constructs, each word MUST be its own alignment entry:
@@ -163,12 +167,27 @@ For two-word constructs, each word MUST be its own alignment entry:
 |--------|---------|-----------|
 | בֵּית הַמֶּ֫לֶךְ | house of the king | `[bayit_idx]` → `["house", "of"]`; `[melek_idx]` → `["the", "king"]` |
 | דְּבַר יהוה | word of Yahweh | `[davar_idx]` → `["word", "of"]`; `[yhwh_idx]` → `["Yahweh"]` |
+| סֵ֫פֶר הַתּוֹרָה | the book of the law | `[sefer_idx]` → `["the", "book", "of"]`; `[torah_idx]` → `["the", "law"]` |
 
-The "of" goes with the first word (construct form) since it represents the construct relationship.
+The "of" goes with the **first word** (nomen regens / head noun / construct form) since it represents the construct relationship expressed by that word's morphology.
+
+### NEVER Do This
+
+| Wrong | Why |
+|-------|-----|
+| `[head_idx]` → `["house"]`; `[dep_idx]` → `["of", "the", "king"]` | "of" aligned to second (dependent) noun — WRONG |
+| `[head_idx]` → `["house"]`; `[dep_idx]` → `["the", "king"]`; "of" unaligned | "of" left unaligned — WRONG |
+| `[head_idx, dep_idx]` → `["house", "of", "the", "king"]` | entire chain collapsed — WRONG |
 
 ### Complex Constructs
 
-Three+ word chains: split at each word boundary, attaching "of" to the preceding construct noun.
+Three+ word chains: split at each word boundary, attaching "of" to the **preceding** construct noun (not to the following noun):
+
+| Hebrew | English | Alignment |
+|--------|---------|-----------|
+| דְּבַר בֵּית יהוה | word of the house of Yahweh | `[davar_idx]` → `["word", "of"]`; `[bayit_idx]` → `["the", "house", "of"]`; `[yhwh_idx]` → `["Yahweh"]` |
+
+Each interior noun gets "of" appended because it is itself a construct form governing the next noun. Only the final (absolute) noun in the chain has no "of".
 
 ## Occurrence Tracking
 
@@ -210,4 +229,4 @@ In poetry, the same concept may be expressed twice. Align each Hebrew word to it
 4. **Articles attached**: "the", "a" never standalone
 5. **Brackets attached**: {added} words align to supporting Hebrew word
 6. **Order correct**: Alignments follow English word order
-7. **Constructs split**: Each word in construct chain aligned separately
+7. **Constructs split**: Each word in construct chain aligned separately; English "of" is with the first (head) noun, never with the second noun and never unaligned
