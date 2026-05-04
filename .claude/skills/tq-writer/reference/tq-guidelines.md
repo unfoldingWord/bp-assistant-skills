@@ -54,6 +54,7 @@ TQ answers should capture the *idea* of the content so that any translation deri
 ### Verse References
 - Verify that verse references in the Reference column match the actual content of the question and answer
 - If a question spans multiple verses, use range notation (e.g., 150:3-5)
+- **Preserve multi-verse reference spans exactly** — if the source row is `18:9-10` or `24:1-2`, the output must carry that same range. Never collapse a span to only the first verse number; a narrowed reference fails downstream merge/delete matching and produces duplicate rows.
 - Ensure the answer can be found in the referenced verse(s)
 
 ## Update Rules
