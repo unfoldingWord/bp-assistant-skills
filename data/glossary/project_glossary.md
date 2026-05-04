@@ -9,7 +9,7 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | מִשְׂגָּב | H4869 | stronghold | high tower | |
 | הָמָה | H1993 | growl | howl | threatening noise, not mournful |
 | הָרַג | H2026 | slay | kill | formal register for psalmic petition |
-| צְבָאוֹת | H6635 | armies | hosts | ULT: "Yahweh of Armies" (not "hosts"). UST: "Yahweh, the commander of the heavenly armies" (not "Yahweh of Armies") |
+| צְבָאוֹת | H6635 | armies (default) / hosts (JER) | — | ULT default: "Yahweh of Armies". Exception: JER ULT uses "Yahweh of hosts" — always use "Yahweh of hosts" in Jeremiah notes. UST: "Yahweh, the commander of the heavenly armies". |
 | שָׂבַע | H7646 | full | satisfied | fits eating context |
 | לוּן | H3885 | lodge | spend the night | concise |
 | עַז | H5794 | mighty | strong ones | |
