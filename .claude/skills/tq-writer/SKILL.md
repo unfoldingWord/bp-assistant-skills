@@ -63,7 +63,8 @@ Rules for AI updates:
 - Return the full set of rows for the chapter (not just changed ones)
 - Preserve existing IDs -- do not change the ID column
 - Preserve Tags, Quote, and Occurrence columns as-is (usually empty)
-- Only modify Reference (if verse range changed), Question, and Response
+- Only modify Reference (if the ULT/UST content has genuinely moved to a different verse), Question, and Response
+- **Multi-verse reference spans**: if the source row carries a range reference (e.g., `18:9-10`, `24:1-2`), copy it exactly into the output — do NOT collapse it to only the first verse
 - Follow tq-guidelines.md for content rules (third person, present tense, ESL level, etc.)
 - If a row already matches the current ULT/UST, leave it unchanged
 
