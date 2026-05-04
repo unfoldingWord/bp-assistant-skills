@@ -5,6 +5,11 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      skip_pipeline_check:
+        description: 'Bypass /health/pipelines guard (use only if bot is unreachable)'
+        required: false
+        default: 'no'
 
 permissions:
   contents: read
@@ -12,7 +17,50 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      HEALTH_URL: https://uw-bt-bot.fly.dev/health/pipelines
+      MAX_WAIT_MINUTES: '90'
     steps:
+      - name: Wait for active pipelines to clear
+        if: ${{ github.event.inputs.skip_pipeline_check != 'yes' }}
+        run: |
+          set -u
+          deadline=$(( $(date +%s) + MAX_WAIT_MINUTES * 60 ))
+          unreachable=0
+          while :; do
+            now=$(date +%s)
+            if [ "$now" -ge "$deadline" ]; then
+              echo "::error::Active pipelines did not clear within ${MAX_WAIT_MINUTES} minutes. Use workflow_dispatch with skip_pipeline_check=yes to override after manual verification."
+              exit 1
+            fi
+            http_code=$(curl -sS -o /tmp/health.body -w '%{http_code}' --max-time 30 "$HEALTH_URL" || echo "000")
+            if [ "$http_code" = "404" ]; then
+              echo "::warning::$HEALTH_URL returned 404; running bot does not expose the guard endpoint. Proceeding with deploy dispatch."
+              break
+            fi
+            if [ "$http_code" != "200" ]; then
+              unreachable=$((unreachable + 1))
+              echo "Could not reach $HEALTH_URL (HTTP ${http_code}, attempt ${unreachable})"
+              if [ "$unreachable" -ge 5 ]; then
+                echo "::error::$HEALTH_URL unreachable after 5 attempts. If the bot is crashed, re-run via workflow_dispatch with skip_pipeline_check=yes."
+                exit 1
+              fi
+              sleep 30
+              continue
+            fi
+            body="$(cat /tmp/health.body)"
+            unreachable=0
+            active=$(echo "$body" | jq -r '.active')
+            if [ "$active" = "0" ]; then
+              echo "No active pipelines. Proceeding with deploy dispatch."
+              echo "$body" | jq -r '"Bot up since " + .processStartedAt'
+              break
+            fi
+            echo "Active pipelines: $active. Rechecking in 60s."
+            echo "$body" | jq -r '.pipelines[] | "  - " + .pipelineType + " " + (.scope | tostring) + " (age " + (.ageSeconds | tostring) + "s)"'
+            sleep 60
+          done
+
       - name: Dispatch bp-assistant deploy
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
