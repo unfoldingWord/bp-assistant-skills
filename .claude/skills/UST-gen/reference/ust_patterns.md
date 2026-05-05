@@ -35,6 +35,16 @@ Hebrew idioms are **explained** in UST rather than preserved literally.
 | bosom | "lie in your bosom" | "sleep close to you" |
 | loins | "gird your loins" | "prepare yourself" |
 
+**Critical: Do not introduce English body-part idioms in UST output.**
+
+The table above shows Hebrew body-part idioms being replaced with plain English. The reverse problem is equally prohibited: do **not** use English body-part idioms as output renderings, even when they seem natural. English body-part idioms (e.g., "hand over," "turn a blind eye," "give a hand," "put one's foot down," "shoulder the burden") carry idiomatic meaning not tied to literal physical actions. UST must express the plain meaning directly.
+
+| Context | Wrong (English body-part idiom) | Correct (plain meaning) |
+|---------|---------------------------------|-------------------------|
+| God delivering a city to enemies (JER 20:5) | "I will hand over to the enemy everything valuable" | "I will enable their soldiers to take away everything valuable" |
+| Transferring/surrendering something | "hand over the city" | "give the city to the enemy" / "allow the enemy to take the city" |
+| Ignoring something | "turn a blind eye to" | "ignore" / "refuse to notice" |
+
 ---
 
 ## 2. Abstract Noun Transformations
@@ -296,6 +306,16 @@ Real examples where generated UST was too literal. Use these to calibrate your o
 | LAM 3:6 | "made me dwell in dark places, like the dead of long ago" | "put me in a hopeless condition where I feel dead" | "put me in a completely hopeless state, as if everyone has forgotten me" |
 
 The test: after removing the Hebrew image, does your English phrasing use a spatial, physical, or sensory metaphor for the same concept? If so, rephrase as what actually happened.
+
+### English body-part idiom introduced in output (no Hebrew body-part idiom present)
+
+This failure type is distinct: the Hebrew source uses a plain verb (e.g., נָתַן "give/deliver"), but the generator reaches for a natural-sounding English body-part idiom as its rendering. Because body-part idioms are idiomatic (non-literal) English, they violate the UST requirement for plain, direct language.
+
+| Verse | Hebrew verb | Generated (English body-part idiom) | Correct UST |
+|-------|------------|--------------------------------------|-------------|
+| JER 20:5 | נָתַן "give/deliver" | "I will also hand over to the enemy everything valuable from this city" | "I will enable their soldiers to take away everything valuable from this city" |
+
+Rule: if no human hands are literally reaching out and transferring something, do not write "hand over." Apply the same test to all English body-part idioms.
 
 ### T4T "It is as though" imagery stated as literal fact
 
