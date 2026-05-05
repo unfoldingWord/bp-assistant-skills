@@ -16,7 +16,7 @@ TQ answers should capture the *idea* of the content so that any translation deri
 - Questions and responses must match the *ideas* in the ULT, not its literal wording
 - The ULT often preserves Hebrew idioms and structures that would confuse ESL readers -- express the same idea in plain, accessible English
 - Use key terms from the ULT (proper nouns, theological terms like "covenant faithfulness") but restate Hebrew idioms in natural English
-- If the ULT uses "Yahweh," the TQ should use "Yahweh" (not "the LORD")
+- If the ULT or UST uses "Yahweh" in a verse, both the question and the response for that verse must also use "Yahweh" — never substitute "God", "the LORD", or any other form for the divine name
 - Example: ULT says "for length of days" -- the TQ answer should say "for as long as he lives," not repeat the Hebrew idiom
 - Example: ULT says "waters of rest" -- the TQ answer should say "quiet waters" or "peaceful waters"
 - The test: could an ESL reader understand the answer without needing to look up what the phrase means?
