@@ -101,7 +101,7 @@ Reference	ID	Tags	Quote	Occurrence	Question	Response
 ```
 
 - **Reference**: chapter:verse (e.g., "150:1" or "150:3-5")
-- **ID**: 4-character alphanumeric identifier (preserve existing)
+- **ID**: 4-character alphanumeric identifier (`[a-z][a-z0-9]{3}`); preserve existing IDs on unchanged or lightly edited rows. IDs **must be globally unique within the entire book's TSV** — no two rows may share the same ID, even if they cover different verse references (e.g., `53:2` and `53:2-3` are separate rows and must have distinct IDs). When generating a new ID for a new row, verify it does not already appear in any other row in the current output before finalising it.
 - **Tags**: Usually empty for TQs
 - **Quote**: Usually empty for TQs
 - **Occurrence**: Usually empty for TQs
