@@ -62,6 +62,7 @@ Reference	ID	Tags	Quote	Occurrence	Question	Response
 Rules for AI updates:
 - Return the full set of rows for the chapter (not just changed ones)
 - Preserve existing IDs -- do not change the ID column
+- **ID uniqueness is mandatory**: Before emitting each row, check its ID against every ID already written in the current output (across all chapters processed so far in this session). If a collision is detected — including between a single-verse row and a multi-verse range row that covers the same verse — assign a new unique 4-char ID (`[a-z][a-z0-9]{3}`) to the colliding row and confirm the replacement ID is not already in use. Never emit two rows with the same ID.
 - Preserve Tags, Quote, and Occurrence columns as-is (usually empty)
 - Only modify Reference (if the ULT/UST content has genuinely moved to a different verse), Question, and Response
 - **Multi-verse reference spans**: if the source row carries a range reference (e.g., `18:9-10`, `24:1-2`), copy it exactly into the output — do NOT collapse it to only the first verse
@@ -77,6 +78,14 @@ Use `mcp__workspace-tools__curly_quotes` with `input="output/tq/PSA/PSA-006.tsv"
 ### Step 6: Verify Output
 
 Use `mcp__workspace-tools__verify_tq` with `tsvFile="output/tq/PSA/PSA-006.tsv"`, `inputJson="/tmp/claude/prepared_tq.json"`.
+
+### Step 6.5: Duplicate ID Check
+
+After writing all chapter files, scan the full output for duplicate IDs before proceeding to insertion. Use `mcp__workspace-tools__check_tn_quality` with `tsvFile` pointing to the output TSV and look for any `id_duplicate` findings. For multi-chapter or whole-book runs, check each chapter file in sequence and maintain a cross-chapter seen-ID set.
+
+If `check_tn_quality` is unavailable for TQ files, perform the check manually: read all output rows, collect the ID column, and report any ID that appears more than once. Fix any duplicate by replacing the later-occurring ID with a freshly generated unique value before proceeding to insertion.
+
+> **Why this step exists**: `verify_tq` (Step 6) does not detect duplicate IDs. Duplicates break downstream processing software (merge/delete matching fails). This explicit check is the safety net against AI sessions that generate the same random ID for two different verse rows (e.g., one for verse 53:2 and one for the range 53:2-3).
 
 ### Step 7: Insertion (when ready)
 
