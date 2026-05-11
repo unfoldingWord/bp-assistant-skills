@@ -14,10 +14,11 @@ TQ answers should capture the *idea* of the content so that any translation deri
 
 ### Match the Content, Not the Form
 - Questions and responses must match the *ideas* in the content, using plain, non-figurative language
-- **Prefer UST non-figurative wording**: The UST is the authoritative source of plain-language renderings. When the ULT uses figurative language (idioms, metaphors, symbolic images), always check the UST first and use its non-figurative wording in both the question and the response. Do not independently paraphrase ULT figures when the UST already provides a plain equivalent.
+- **Prefer ULT language by default**: Use ULT phrasing for questions and responses whenever the ULT text is plain and accessible to ESL readers — this keeps TQ language close to the source translators are working from.
+- **Fall back to UST for metaphor or complex text**: Switch to UST wording when the ULT rendering is metaphorical, uses Hebrew idioms, or is otherwise not plain/accessible English. Do not independently paraphrase ULT figures when the UST already provides a plain equivalent.
 - This applies to both questions and responses — if the ULT says "the apple of his eye" and the UST says "the one he cares for most," both the question and response must use the UST's plain phrasing, not the ULT's figure
-- The ULT often preserves Hebrew idioms and structures that would confuse ESL readers -- the UST's rendering is the authoritative guide for expressing the same idea in plain, accessible English
-- Use key terms from the ULT (proper nouns, theological terms like "covenant faithfulness") but restate Hebrew idioms following the UST wording
+- The ULT often preserves Hebrew idioms and structures that would confuse ESL readers — in those cases the UST's rendering is the guide for expressing the same idea in plain, accessible English
+- Always use key terms from the ULT (proper nouns, theological terms like "covenant faithfulness"); only substitute UST wording for figurative or complex ULT expressions
 - If the ULT or UST uses "Yahweh" in a verse, both the question and the response for that verse must also use "Yahweh" — never substitute "God", "the LORD", or any other form for the divine name
 - Example: ULT says "for length of days"; UST says "as long as he lives" — the TQ answer should say "as long as he lives," not repeat the Hebrew idiom
 - Example: ULT says "waters of rest"; UST says "quiet streams of water" — the TQ answer should say "quiet water," following the UST's non-figurative rendering

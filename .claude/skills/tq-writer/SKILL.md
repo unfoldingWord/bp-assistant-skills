@@ -50,7 +50,7 @@ Read `/tmp/claude/prepared_tq.json`. For each chapter:
 
 1. Read the existing TQ rows from `tq_rows_by_chapter`
 2. Read the ULT text from `ult_by_verse` and UST text from `ust_by_verse`
-3. Compare each TQ row's question and response against the current ULT and UST; **use the UST's non-figurative wording as the primary source for plain-language phrasing in both questions and responses** — where the ULT uses figurative language, the UST's rendering takes precedence
+3. Compare each TQ row's question and response against the current ULT and UST; **default to ULT language** for questions and responses; **fall back to UST language only when the ULT rendering is metaphorical, uses Hebrew idioms, or is otherwise not plain/accessible English** — use the UST's non-figurative wording for those cases
 4. Update rows where needed following the guidelines
 
 **Output format:** Write updated TSV rows to the output file, one chapter at a time. Include the header row. Use the same 7-column format:
