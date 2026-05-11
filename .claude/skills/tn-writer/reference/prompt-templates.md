@@ -81,6 +81,8 @@ issue type: {sref}
 
 blank template: {template}
 
+Do not include final punctuation in the alternate translation. Do not end the AT text with a period, question mark, exclamation mark, or comma — even if the ULT text being replaced ends with one. The AT replaces the *words*, not the surrounding punctuation. The only exception is a `figs-rquestion` note, where changing `?` to `.` or `!` is the explicit point of the note.
+
 Return only the text of the generated alternate translation.
 ```
 
