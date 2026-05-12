@@ -18,7 +18,7 @@ Follow `../../reference/gl_guidelines.md` for shared style rules (formality, num
 ## Formatting
 
 ### Bold
-In the note, put in markdown bold formatting any words or phrases that you quote from the given text or from the rest of the verse. Only use quotation marks where there may be quotation marks in the original text that you are quoting. Use markdown bold formatting only for the first occurrence of quoted words or phrases. Quotations from other verses in the Bible should be put in quotation marks. Do not bold anything except an exact quote from the verse.
+Every word or phrase quoted verbatim from the GLQuote or from anywhere in the ULT verse **must** appear in Markdown bold (`**word**`) in the note body. This is a required formatting rule, not optional. Whenever you reproduce exact ULT words in the note, wrap them in bold — for example, if the GLQuote is "his steadfast love" and the note explains it, write "**his steadfast love** refers to..." not "his steadfast love refers to...". Only use quotation marks where there are quotation marks in the original text being quoted. Apply bold to the **first occurrence** of each quoted word or phrase only; do not re-bold the same phrase if it appears again later in the same note. Quotations from other verses in the Bible should be put in quotation marks, not bold. Do not bold anything except an exact verbatim quote from the current verse.
 
 ### Capitalization and Grammatical Forms
 When you quote words or phrases from the given text or the rest of the verse, match the capitalization, number, and grammatical forms exactly. For example, if the text says "horses," do not write a note saying, "A **horse** is (definition)." Say, "The term **horses** describes (definition)."
