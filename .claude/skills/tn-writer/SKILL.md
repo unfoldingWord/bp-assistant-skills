@@ -175,7 +175,6 @@ Read the assembled TSV alongside the aligned ULT. For each row, verify:
 5. **AT fit** -- if an Alternate Translation is present, mentally substitute it for the GLQuote in the ULT verse and confirm it reads naturally
 6. **Quote scope** -- the Hebrew quote covers the right range (not too narrow or too wide for the issue)
 7. **No duplicate UST phrasing** -- ATs should differ from the UST for the same verse
-8. **Bold formatting** -- every word or phrase quoted verbatim from the GLQuote or ULT verse text in the Note field must appear in `**bold**`. Scan each note for ULT words used without bold and add it. Do not bold any word that does not appear verbatim in the ULT verse.
 
 For `writing-pronouns` rows, apply three extra checks during final review:
 1. If the referent is already obvious from the verse context or made explicit by the UST, remove the note instead of preserving a low-value pronoun explanation.
