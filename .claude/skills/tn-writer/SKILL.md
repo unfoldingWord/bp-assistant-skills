@@ -120,6 +120,15 @@ As you work through items, keep a mental map of interpretive commitments you hav
    - Present multiple interpretations using the "This could mean:" format
    - Each interpretation gets its own AT in square brackets
 
+7. For items with `note_type: "hint"` (editor-marked TN row hints):
+   - Read the `seed` field for authorial guidance from a human translator.
+   - When `seed` is a stub like `"This could mean: (1) NOTE Alternate translation: [ALT] (2) NOTE Alternate translation: [ALT]"`, expand each placeholder — replace `NOTE` with a real interpretive option and `[ALT]` with an actual alternate translation, in the same template shape.
+   - When `seed` is a one-line reason ("Could be either the neighbor's view or the speaker's view"), build the note around that framing.
+   - When `seed` is empty or null, write a fresh note as you would for any item, using `orig_quote` and `sref` as the anchors.
+   - Never echo the seed verbatim. The seed is direction, not output.
+   - The item's `id` is the editor's stable row id; do not change or replace it. Assembly will use it as the TSV ID column so the editor can update the existing row in place.
+   - Hint items skip the see-how detection pass and don't carry a `writer_packet`. Treat them like a `given_at` item: generate note text only.
+
 Output format -- a flat JSON object mapping item ID to note text:
 ```json
 {
@@ -231,6 +240,7 @@ Reference	ID	Tags	SupportReference	Quote	Occurrence	Note
 | `given_at` | `at_policy` is `provided`, `forbidden`, or `not_needed` | Generate note only |
 | `see_how_at` | Explanation starts with "see how", no AT | Generate AT only |
 | `see_how` | Explanation starts with "see how", has AT | Prefer the programmatic note in `writer_packet.programmatic_note` |
+| `hint` | Editor-marked TN row hint (carries `seed`, `hintRowId`, `fromHint: true`) | Expand `seed` into a complete note; keep the pre-assigned `id` so the editor can UPDATE in place |
 
 ## Special Modes
 
@@ -243,3 +253,13 @@ Information that must be included in the note. Already parsed into `must_include
 
 ### t: prefix
 Hint about which template variant to use. Preparation resolves this into `template_type`, `template_locked`, and `template_text`; do not re-decide the template at generation time unless the packet explicitly left it unresolved.
+
+### Editor-marked TN row hints
+
+Some prepared items represent rows a human translator pre-marked in bible-editor as "hints" — the translator already chose the issue type and quote, optionally seeded a stub or one-line reason, and queued the row for AI expansion. These items are easy to spot: `note_type: "hint"`, a `seed` string (may be null), `hintRowId` equal to `id`, and `fromHint: true`. The pipeline guarantees:
+
+- No competing item exists for the same `(verse, supportReference, fuzzy-quote)` — the human's framing has already displaced any AI-derived issue on that slot.
+- The item's `id` is the editor's stable row id and must not be regenerated; assembly writes it to the TSV's ID column unchanged so the editor can UPDATE the existing stub row in place rather than INSERT a new one.
+- `writer_packet`, `template_text`, and `at_policy` are absent or generic. Hints don't go through the template / AT-policy selector; rely on `seed` + `sref` + `orig_quote` for the note's content and shape.
+
+Expand `seed` into a fully-formed note (see Step 3 item 7). Never echo it verbatim and never drop the row.
