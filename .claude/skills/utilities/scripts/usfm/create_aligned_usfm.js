@@ -291,8 +291,8 @@ function extractHebrewWords(hebrewParsed, chapter, verse) {
   for (const obj of verseData.verseObjects) {
     if (obj.tag === 'w' && obj.type === 'word') {
       words.push({
-        word: (obj.text).normalize('NFC'),
-        lemma: (obj.lemma || '').normalize('NFC'),
+        word: obj.text,
+        lemma: obj.lemma || '',
         strong: obj.strong || '',
         morph: obj.morph || ''
       });
@@ -484,10 +484,7 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
     for (const idx of (align.hebrew_indices || [])) {
       const hw = (mapping.hebrew_words || [])[idx];
       if (hw && hw.word) {
-        const key = hw.word.normalize('NFC');
-
-        hebrewWordTotalOccurrences[key] =
-          (hebrewWordTotalOccurrences[key] || 0) + 1;
+        hebrewWordTotalOccurrences[hw.word] = (hebrewWordTotalOccurrences[hw.word] || 0) + 1;
       }
     }
   }
@@ -718,14 +715,14 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
       } else if (hebrewMeta.length === 1) {
         // Single Hebrew word — all English children go inside one milestone
         const { hw, idx } = hebrewMeta[0];
-        const sourceWord = (mapping.hebrew_words?.[idx]?.word || hw.word).normalize('NFC');
+        const sourceWord = mapping.hebrew_words?.[idx]?.word || hw.word;
         verseObjects.push(buildZalnMilestone(hw, sourceWord, children));
       } else {
         // Multiple Hebrew words — nest milestones, innermost holds the children
         let innermost = children;
         for (let j = hebrewMeta.length - 1; j >= 0; j--) {
           const { hw, idx } = hebrewMeta[j];
-          const sourceWord = (mapping.hebrew_words?.[idx]?.word || hw.word).normalize('NFC');
+          const sourceWord = mapping.hebrew_words?.[idx]?.word || hw.word;
           innermost = [buildZalnMilestone(hw, sourceWord, innermost)];
         }
         verseObjects.push(...innermost);
