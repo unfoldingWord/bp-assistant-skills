@@ -284,4 +284,3 @@ if __name__ == "__main__":
     # RUN
     heb_data, stripped_heb_data = extract_heb_data(heb_file)
     update_usfm(usfm_file, heb_data, stripped_heb_data)
-    
