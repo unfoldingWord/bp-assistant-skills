@@ -22,7 +22,6 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { dirname } from 'path';
 import usfm from 'usfm-js';
-import { spawn } from "child_process";
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -291,8 +290,8 @@ function extractHebrewWords(hebrewParsed, chapter, verse) {
   for (const obj of verseData.verseObjects) {
     if (obj.tag === 'w' && obj.type === 'word') {
       words.push({
-        word: (obj.text).normalize('NFC'),
-        lemma: (obj.lemma || '').normalize('NFC'),
+        word: obj.text,
+        lemma: obj.lemma || '',
         strong: obj.strong || '',
         morph: obj.morph || ''
       });
@@ -479,15 +478,11 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
   // Hebrew word index can be referenced by multiple alignment groups in UST,
   // and each reference produces a \zaln-s milestone.
   const hebrewWordTotalOccurrences = {};
-
   for (const align of (mapping.alignments || [])) {
     for (const idx of (align.hebrew_indices || [])) {
       const hw = (mapping.hebrew_words || [])[idx];
       if (hw && hw.word) {
-        const key = hw.word.normalize('NFC');
-
-        hebrewWordTotalOccurrences[key] =
-          (hebrewWordTotalOccurrences[key] || 0) + 1;
+        hebrewWordTotalOccurrences[hw.word] = (hebrewWordTotalOccurrences[hw.word] || 0) + 1;
       }
     }
   }
@@ -718,14 +713,14 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
       } else if (hebrewMeta.length === 1) {
         // Single Hebrew word — all English children go inside one milestone
         const { hw, idx } = hebrewMeta[0];
-        const sourceWord = (mapping.hebrew_words?.[idx]?.word || hw.word).normalize('NFC');
+        const sourceWord = mapping.hebrew_words?.[idx]?.word || hw.word;
         verseObjects.push(buildZalnMilestone(hw, sourceWord, children));
       } else {
         // Multiple Hebrew words — nest milestones, innermost holds the children
         let innermost = children;
         for (let j = hebrewMeta.length - 1; j >= 0; j--) {
           const { hw, idx } = hebrewMeta[j];
-          const sourceWord = (mapping.hebrew_words?.[idx]?.word || hw.word).normalize('NFC');
+          const sourceWord = mapping.hebrew_words?.[idx]?.word || hw.word;
           innermost = [buildZalnMilestone(hw, sourceWord, innermost)];
         }
         verseObjects.push(...innermost);
@@ -1098,75 +1093,4 @@ if (outputFile) {
   console.error(`Wrote aligned USFM to ${outputFile}`);
 } else {
   console.log(outputUsfm);
-}
-
-///////
-// Post-Processing with Python
-///////
-
-// Run a Python script as a child process and capture its output.
-function runPythonWithTimeout(args, timeoutMs = 120000) {
-  return new Promise((resolve, reject) => {
-    const proc = spawn("python3", args);
-
-    let stdout = "";
-    let stderr = "";
-    let settled = false;
-
-    const timer = setTimeout(() => {
-      if (settled) return;
-
-      settled = true;
-      proc.kill("SIGKILL");
-      reject(new Error(`Python timed out after ${timeoutMs} ms`));
-    }, timeoutMs);
-
-    proc.stdout.on("data", (d) => {
-      stdout += d.toString();
-    });
-
-    proc.stderr.on("data", (d) => {
-      stderr += d.toString();
-    });
-
-    proc.on("error", (err) => {
-      if (settled) return;
-
-      settled = true;
-      clearTimeout(timer);
-      reject(err);
-    });
-
-    proc.on("close", (code) => {
-      if (settled) return;
-
-      settled = true;
-      clearTimeout(timer);
-
-      if (code === 0) {
-        resolve({ stdout, stderr });
-      } else {
-        reject(
-          new Error(
-            stderr || `Python exited with code ${code}`
-          )
-        );
-      }
-    });
-  });
-}
-
-try {
-  const pythonResult = await runPythonWithTimeout(
-    [
-      "replace_hebrew.py",
-      hebrewFile,
-      outputFile,
-    ],
-    120000);
-
-  console.log("[notes] Python result:", pythonResult);
-
-} catch (err) {
-  console.warn(`[notes] Python step failed (non-fatal): ${err.message}`);
 }
