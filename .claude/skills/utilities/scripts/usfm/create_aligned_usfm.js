@@ -22,7 +22,6 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { dirname } from 'path';
 import usfm from 'usfm-js';
-import { spawn } from "child_process";
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -1095,75 +1094,4 @@ if (outputFile) {
   console.error(`Wrote aligned USFM to ${outputFile}`);
 } else {
   console.log(outputUsfm);
-}
-
-///////
-// Post-Processing with Python
-///////
-
-// Run a Python script as a child process and capture its output.
-function runPythonWithTimeout(args, timeoutMs = 120000) {
-  return new Promise((resolve, reject) => {
-    const proc = spawn("python3", args);
-
-    let stdout = "";
-    let stderr = "";
-    let settled = false;
-
-    const timer = setTimeout(() => {
-      if (settled) return;
-
-      settled = true;
-      proc.kill("SIGKILL");
-      reject(new Error(`Python timed out after ${timeoutMs} ms`));
-    }, timeoutMs);
-
-    proc.stdout.on("data", (d) => {
-      stdout += d.toString();
-    });
-
-    proc.stderr.on("data", (d) => {
-      stderr += d.toString();
-    });
-
-    proc.on("error", (err) => {
-      if (settled) return;
-
-      settled = true;
-      clearTimeout(timer);
-      reject(err);
-    });
-
-    proc.on("close", (code) => {
-      if (settled) return;
-
-      settled = true;
-      clearTimeout(timer);
-
-      if (code === 0) {
-        resolve({ stdout, stderr });
-      } else {
-        reject(
-          new Error(
-            stderr || `Python exited with code ${code}`
-          )
-        );
-      }
-    });
-  });
-}
-
-try {
-  const pythonResult = await runPythonWithTimeout(
-    [
-      "replace_hebrew.py",
-      hebrewFile,
-      outputFile,
-    ],
-    120000);
-
-  console.log("[notes] Python result:", pythonResult);
-
-} catch (err) {
-  console.warn(`[notes] Python step failed (non-fatal): ${err.message}`);
 }
