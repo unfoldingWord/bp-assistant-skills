@@ -305,6 +305,12 @@ Rules:
 
 Apply all shared style rules from `../reference/gl_guidelines.md` (formality, numbers, punctuation, capitalization, spelling). ULT-specific rules below:
 
+**Multi-Word Names:**
+Names that are made up of multiple words (e.g., Lo Ruhamah or Maher Shalal Hash Baz) should be written as separate capped words. They should not be hyphenated or lower case. So:
+- "Lo Ruhamah" (not "Lo-Ruhamah" or "Lo ruhamah")
+- "Maher Shalal Hash Baz" (not "Maher-Shalal-Hash-Baz" or "Maher shalal hash baz")
+- "Beth Aven" (not "Beth-Aven" or "Beth aven")
+
 **Word Order:**
 - Use English standard SVO order; do not woodenly follow Hebrew word order
 - Prepositional phrases fronted in Hebrew (temporal, locative, source, indirect object, etc.) should go in their natural English position unless the fronting serves a clear discourse function (focus, contrast, topic shift)
