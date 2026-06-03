@@ -83,7 +83,7 @@ sin, evil, truth, wisdom, knowledge, obedience
 **Words for spoken or written communication**: Terms that refer to things people say, write, or enact are not abstract nouns -- they denote concrete communicative acts or their written/spoken products. Do not flag these:
 - "commandment(s)", "statute(s)", "precept(s)", "ordinance(s)", "decree(s)"
 - "testimony/testimonies", "law(s)", "rule(s)", "regulation(s)"
-- "word(s)" (when referring to what someone said or wrote), "saying(s)", "promise(s)"
+- "word(s)" (when referring to what someone said or wrote), "saying(s)", "promise(s)", "declaration(s)"
 - "instruction(s)", "charge", "covenant", "oath"
 
 These words may appear in doublets (figs-doublet) or parallelism but should not receive figs-abstractnouns notes. Even though some end in abstract-looking suffixes (-ment, -tion), they refer to concrete things that people speak, write, or establish.
