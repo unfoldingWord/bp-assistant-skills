@@ -23,11 +23,8 @@ Key characteristics:
 ## When to Use writing-quotations
 
 Use this issue when:
-1. The quote margin uses **"saying"** or similar participle to introduce speech
-2. The text has **"answered and said"** or similar double-verb patterns
-3. Direct speech occurs **without any quote margin** (no "he said")
-4. A **prophetic formula** frames a quotation ("Thus says Yahweh" ... "For Yahweh has spoken")
-5. The quote margin **position** may need adjustment for naturalness
+1. The text has **"answered and said"** or similar double-verb patterns
+2. Direct speech occurs **without any quote margin** (no "he said")
 
 ---
 
@@ -35,11 +32,8 @@ Use this issue when:
 
 | Pattern | Decision | Notes |
 |---------|----------|-------|
-| "saying" introducing quotes | writing-quotations | Standard quote margin |
 | "answered and said" | writing-quotations | "and said" is quote margin like "saying" |
 | Direct speech without quote margin | writing-quotations | ULT uses quotation marks; suggest adding speech identifier |
-| "Thus says Yahweh" ... "For Yahweh has spoken" | writing-quotations | Concluding phrase is quote margin with emphasis |
-| "saying" used frequently in book | Book/chapter intro | Don't need separate note for each instance |
 
 ### Special Case: "Answered and Said"
 
@@ -54,45 +48,23 @@ This common Hebrew construction requires writing-quotations:
 - Write a separate **figs-explicit** note for the situation response
 - Example: "The elders are responding to a situation, not something that someone said here."
 
-### Special Case: Prophetic Message Frames
-
-When a prophetic message begins "Thus says Yahweh" and ends "For Yahweh has spoken":
-- End the direct quotation **before** "For Yahweh has spoken"
-- Write a writing-quotations note explaining this is a concluding quote margin
-- Note may indicate that the concluding quote margin adds emphasis
-
 ---
 
 ## Common Patterns Requiring writing-quotations Notes
 
-### 1. "Saying" (Greek: legon/legontes)
-
-| Example | Note Approach |
-|---------|---------------|
-| "came to him, saying" | Natural way to introduce quotes |
-| "the prophet, saying" | Introducing Scripture citation |
-| "commanded him, saying" | May suggest "commanded" alone |
-
-### 2. "Answered and Said"
+### 1. "Answered and Said"
 
 | Example | Note Approach |
 |---------|---------------|
 | "answered and said to him" | May combine to "answered" or "replied" |
 | "answered and said" (responding to situation) | Separate figs-explicit for situation |
 
-### 3. Missing Quote Margins
+### 2. Missing Quote Margins
 
 | Example | Note Approach |
 |---------|---------------|
 | Direct speech without "he said" | Suggest adding speech identifier |
 | Dialogue without clear speaker | Help identify who is speaking |
-
-### 4. Quote Margin Position
-
-| Example | Note Approach |
-|---------|---------------|
-| Margin at start in source | May work better at end or middle |
-| Long quote with margin at end | May work better at start |
 
 ---
 
@@ -122,30 +94,14 @@ When a prophetic message begins "Thus says Yahweh" and ends "For Yahweh has spok
 
 1. **Identify quote margins in the text**:
    - Look for speech verbs (said, answered, commanded, asked, replied, etc.)
-   - Look for participles introducing speech (saying, declaring, etc.)
    - Check for missing margins (direct speech without introduction)
 
 2. **Determine the pattern**:
 
    | Pattern | Action |
    |---------|--------|
-   | "saying" after speech verb | Note about natural introduction |
    | "answered and said" | Note about combining verbs |
    | No quote margin present | Note about adding identifier |
-   | Prophetic frame | Note about concluding margin |
-
-3. **Check for book-level patterns**:
-   - If "saying" is used frequently, discuss in book intro
-   - First instance in book refers back to intro
-   - First instance in new chapters refers back to first instance
-
-4. **Decide on note placement**:
-
-   | Frequency | Strategy |
-   |-----------|----------|
-   | Occasional use | Individual notes |
-   | Frequent use in book | Book intro + first instance note |
-   | Every chapter | Book intro + chapter first instance notes |
 
 ---
 
@@ -157,22 +113,4 @@ When a prophetic message begins "Thus says Yahweh" and ends "For Yahweh has spok
 | **figs-quotations** | Quote TYPE (direct vs indirect) | Converting between types |
 | **figs-quotemarks** | Quote MARKING (punctuation) | Indicating boundaries |
 | **figs-quotesinquotes** | Quote NESTING (layers) | Simplifying nested quotes |
-
----
-
-## Book Introduction Strategy
-
-When "saying" or "answered and said" appears frequently:
-
-1. **Book Introduction**: Explain the Hebrew/Greek pattern
-   - "Hebrew often uses 'answered and said' where English would use just 'answered' or 'said'"
-   - "The participle 'saying' frequently introduces direct quotations"
-
-2. **First Instance in Book**: Note pointing to book intro
-   - "See the discussion of this phrase in the introduction to this book"
-
-3. **First Instance in Subsequent Chapters**: Note pointing back
-   - "See how you translated this in [1:5](../01/05.md)"
-
-4. **Other Instances**: Usually no note needed if pattern is established
 
