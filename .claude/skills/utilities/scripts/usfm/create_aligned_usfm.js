@@ -267,8 +267,9 @@ function extractUsfmMarkers(ultContent, chapter, verse, hasDText = false) {
         .replace(/[{}\[\]]/g, '')          // Remove brackets
         .trim();
       const startWords = textAfterMarker.split(/\s+/).slice(0, 3).map(w =>
-        w.replace(/[.,;:!?'"\u201C\u201D\u2018\u2019]/g, '').toLowerCase()
+        w.replace(/[.,;:!?'"\u201C\u201D\u2018\u2019…—-]/g, '').toLowerCase()
       );
+      console.log(`Start words:`, startWords)
       markers.push({ marker: lineMarkerMatch[1], position: -1, startWords });
     }
   }
@@ -324,7 +325,7 @@ function countWordOccurrences(alignments) {
 function reorderAlignmentsByEnglishText(alignments, englishText) {
   // Tokenize english_text
   const englishWords = englishText
-    .replace(/[.,;:!?"']/g, ' ')  // Remove punctuation
+    .replace(/[.,;:!?"'…—-]/g, ' ')  // Remove punctuation
     .replace(/[{}]/g, '')          // Remove brackets
     .split(/\s+/)
     .filter(w => w.length > 0)
@@ -427,9 +428,9 @@ function reorderAlignmentsByEnglishText(alignments, englishText) {
  */
 function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
   // Normalize a word for matching: strip brackets and punctuation, lowercase
-  const normalizeWord = (w) => w.replace(/[{}.,;:!?"']/g, '').toLowerCase();
+  const normalizeWord = (w) => w.replace(/[{}.,;:!?"'…—-]/g, '').toLowerCase();
   // Case-sensitive key for occurrence counting: strip brackets and punctuation, keep case
-  const occurrenceKey = (w) => w.replace(/[{}.,;:!?"']/g, '');
+  const occurrenceKey = (w) => w.replace(/[{}.,;:!?"'…—-]/g, '');
 
   // Tokenize english_text to get the authoritative word order
   // Keep original words with punctuation for output
@@ -472,6 +473,22 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
     occurrence: occurrence.toString(),
     occurrences: occurrences.toString()
   });
+
+  const splitPunctuation = (word) => {
+    const leadingMatch = word.match(/^([“"'‘(\[{]+)(.*)$/);
+    const leadingPunct = leadingMatch ? leadingMatch[1] : '';
+    const withoutLeading = leadingMatch ? leadingMatch[2] : word;
+
+    const trailingMatch = withoutLeading.match(/^(.*?)([.,;:!?…—\-”"'’)\]}]+)$/);
+    const coreWord = trailingMatch ? trailingMatch[1] : withoutLeading;
+    const trailingPunct = trailingMatch ? trailingMatch[2] : '';
+
+    return {
+      leadingPunct,
+      coreWord,
+      trailingPunct
+    };
+  };
 
   // Count total occurrences of each Hebrew source word as it will be emitted.
   // Count from alignment entries (not hebrew_words array), because the same
@@ -582,11 +599,14 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
       const occurrences = wordTotalOccurrences[occKey];
 
       const strippedBrackets = rawWord.replace(/[{}]/g, '');
-      const punctMatch = strippedBrackets.match(/^(.*?)([.,;:!?]+)$/);
-      const cleanWord = punctMatch ? punctMatch[1] : strippedBrackets;
-      const trailingPunct = punctMatch ? punctMatch[2] : '';
 
-      const wordObj = buildWordObject(cleanWord, occurrence, occurrences);
+      const {
+        leadingPunct,
+        coreWord,
+        trailingPunct
+      } = splitPunctuation(strippedBrackets);
+
+      const wordObj = buildWordObject(coreWord, occurrence, occurrences);
 
       if (!isFirstEmitted) {
         verseObjects.push({ type: 'text', text: isBracketed ? ' ' : '\n' });
@@ -595,6 +615,10 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
 
       if (ustMode && isGroupStart) verseObjects.push({ type: 'text', text: '{' });
       if (!ustMode && isBracketed) verseObjects.push({ type: 'text', text: '{' });
+
+      if (leadingPunct) {
+        verseObjects.push({ type: 'text', text: leadingPunct });
+      }
 
       verseObjects.push(wordObj);
 
@@ -619,11 +643,19 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
         const occurrences = wordTotalOccurrences[occKey];
 
         const strippedBrackets = rawWord.replace(/[{}]/g, '');
-        const punctMatch = strippedBrackets.match(/^(.*?)([.,;:!?]+)$/);
-        const cleanWord = punctMatch ? punctMatch[1] : strippedBrackets;
-        const trailingPunct = punctMatch ? punctMatch[2] : '';
 
-        childWordObjs.push({ wordObj: buildWordObject(cleanWord, occurrence, occurrences), trailingPunct, i });
+        const {
+          leadingPunct,
+          coreWord,
+          trailingPunct
+        } = splitPunctuation(strippedBrackets);
+
+        childWordObjs.push({
+          wordObj: buildWordObject(coreWord, occurrence, occurrences),
+          leadingPunct,
+          trailingPunct,
+          i
+        });
       }
 
       // Bracket logic: per-word awareness for ULT, group-level for UST
@@ -644,6 +676,8 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
       if (ustMode && isGroupStart) verseObjects.push({ type: 'text', text: '{' });
 
       // Build children array with bracket handling
+      const beforeMilestone = [];
+      const afterMilestone = [];
       const children = [];
 
       if (!ustMode) {
@@ -658,16 +692,18 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
         let inBracketRun = firstChildBracketed;
 
         for (let k = 0; k < childWordObjs.length; k++) {
-          const childBracketed = bracketStatus[childWordObjs[k].i];
+          const child = childWordObjs[k];
+          const childBracketed = bracketStatus[child.i];
+
+          const isFirstWord = k === 0;
+          const isLastWord = k === childWordObjs.length - 1;
 
           if (k > 0) {
             if (inBracketRun && !childBracketed) {
-              // Transition bracketed → non-bracketed: close bracket, then separator
               children.push({ type: 'text', text: '}' });
               inBracketRun = false;
               children.push({ type: 'text', text: '\n' });
             } else if (!inBracketRun && childBracketed) {
-              // Transition non-bracketed → bracketed: separator, then open bracket
               children.push({ type: 'text', text: '\n' });
               children.push({ type: 'text', text: '{' });
               inBracketRun = true;
@@ -676,9 +712,22 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
             }
           }
 
-          children.push(childWordObjs[k].wordObj);
-          if (childWordObjs[k].trailingPunct) {
-            children.push({ type: 'text', text: childWordObjs[k].trailingPunct });
+          if (child.leadingPunct) {
+            if (isFirstWord) {
+              beforeMilestone.push({ type: 'text', text: child.leadingPunct });
+            } else {
+              children.push({ type: 'text', text: child.leadingPunct });
+            }
+          }
+
+          children.push(child.wordObj);
+
+          if (child.trailingPunct) {
+            if (isLastWord) {
+              afterMilestone.push({ type: 'text', text: child.trailingPunct });
+            } else {
+              children.push({ type: 'text', text: child.trailingPunct });
+            }
           }
         }
 
@@ -689,10 +738,31 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
       } else {
         // UST mode: standard children building (group-level brackets handled outside)
         for (let k = 0; k < childWordObjs.length; k++) {
-          if (k > 0) children.push({ type: 'text', text: '\n' });
-          children.push(childWordObjs[k].wordObj);
-          if (childWordObjs[k].trailingPunct) {
-            children.push({ type: 'text', text: childWordObjs[k].trailingPunct });
+          const child = childWordObjs[k];
+
+          const isFirstWord = k === 0;
+          const isLastWord = k === childWordObjs.length - 1;
+
+          if (k > 0) {
+            children.push({ type: 'text', text: '\n' });
+          }
+
+          if (child.leadingPunct) {
+            if (isFirstWord) {
+              beforeMilestone.push({ type: 'text', text: child.leadingPunct });
+            } else {
+              children.push({ type: 'text', text: child.leadingPunct });
+            }
+          }
+
+          children.push(child.wordObj);
+
+          if (child.trailingPunct) {
+            if (isLastWord) {
+              afterMilestone.push({ type: 'text', text: child.trailingPunct });
+            } else {
+              children.push({ type: 'text', text: child.trailingPunct });
+            }
           }
         }
       }
@@ -715,7 +785,9 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
         // Single Hebrew word — all English children go inside one milestone
         const { hw, idx } = hebrewMeta[0];
         const sourceWord = mapping.hebrew_words?.[idx]?.word || hw.word;
+        verseObjects.push(...beforeMilestone);
         verseObjects.push(buildZalnMilestone(hw, sourceWord, children));
+        verseObjects.push(...afterMilestone);
       } else {
         // Multiple Hebrew words — nest milestones, innermost holds the children
         let innermost = children;
@@ -724,7 +796,9 @@ function buildAlignedVerseObjects(mapping, hebrewWords, ustMode = false) {
           const sourceWord = mapping.hebrew_words?.[idx]?.word || hw.word;
           innermost = [buildZalnMilestone(hw, sourceWord, innermost)];
         }
+        verseObjects.push(...beforeMilestone);
         verseObjects.push(...innermost);
+        verseObjects.push(...afterMilestone);
       }
 
       if (ustMode && isGroupEnd) verseObjects.push({ type: 'text', text: '}' });
@@ -784,18 +858,35 @@ function compactGroupsToCanonical(groups, bookCode, chapterNum) {
       const english_text = alignments.map(a => a.english.join(' ')).join(' ');
       return {
         reference: `${bookCode} ${chapterNum || verseNum}:${verseNum}`,
-        english_text,
+        english_text: normalizeEnglishText(english_text),
         alignments,
       };
     });
 }
 
+ // Add space after em and en dash for later punctuation tracking
+function normalizeEnglishText(text) {
+  return String(text || '')
+    // em dash or en dash immediately followed by a non-space
+    .replace(/([…—–])(?=\S)/g, '$1 ')
+}
+
 function normalizeMapping(raw, bookCode, chapter) {
   // Already canonical: array of per-verse objects with reference + english_text + alignments
-  if (Array.isArray(raw) && raw.length > 0 && raw[0].reference && raw[0].alignments) return raw;
+  if (Array.isArray(raw) && raw.length > 0 && raw[0].reference && raw[0].alignments) {
+    return raw.map(v => ({
+      ...v,
+      english_text: normalizeEnglishText(v.english_text)
+    }));
+  }
 
   // Single canonical object (not in array)
-  if (!Array.isArray(raw) && raw && raw.reference && raw.alignments) return [raw];
+  if (!Array.isArray(raw) && raw && raw.reference && raw.alignments) {
+    return [{
+      ...raw,
+      english_text: normalizeEnglishText(raw.english_text)
+    }];
+  }
 
   // Compact format 2: flat array with verse + english_words fields (no alignments wrapper)
   if (Array.isArray(raw) && raw.length > 0 && raw[0].verse !== undefined && raw[0].english_words !== undefined) {
@@ -1001,7 +1092,7 @@ for (const [verseRef, markers] of Object.entries(versePoetryMarkers)) {
         const wordMatches = line.matchAll(/\\w\s+([^|]+)\|/g);
         for (const match of wordMatches) {
           alignedWords.push({
-            word: match[1].toLowerCase().replace(/[.,;:!?'"\u201C\u201D\u2018\u2019]/g, ''),
+            word: match[1].toLowerCase().replace(/[.,;:!?'"\u201C\u201D\u2018\u2019…—-]/g, ''),
             lineIndex: i,
             matchOffset: match.index
           });
