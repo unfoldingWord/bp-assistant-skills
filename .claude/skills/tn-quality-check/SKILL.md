@@ -14,8 +14,11 @@ In restricted runs, use workspace MCP tools instead of direct shell/python comma
 - `mcp__workspace-tools__check_tn_quality`
 - `mcp__workspace-tools__assemble_notes`
 - `mcp__workspace-tools__curly_quotes`
+- `mcp__workspace-tools__update_note_text` — set one generated note's text by id
+- `mcp__workspace-tools__update_prepared_quote` — set a prepared note's quote fields by id
+- `mcp__workspace-tools__remove_note` — remove a note by id from generated_notes.json and/or the TSV
 
-**Prohibited:** Do NOT write Python, bash, or other scripts to `/tmp/` or anywhere else. Use the Edit tool for TSV/JSON fixes and MCP tools for batch operations.
+**Prohibited:** Do NOT write Python, bash, or other scripts to `/tmp/` or anywhere else. Do NOT hand-`Edit` `generated_notes.json` or `prepared_notes.json` — use the structured `update_note_text` / `update_prepared_quote` / `remove_note` tools, which locate items by id and never produce "string to replace not found" errors. If an `Edit` ever returns "string to replace not found", do not retry it: re-Read once or switch to the structured tool; if the target still can't be matched, tag the row unresolved and move on.
 
 ## Pipeline Context
 
@@ -155,13 +158,13 @@ Guardrails for this step:
 - Do not create recurring marker/delete-line patch workflows.
 
 **For note text issues** (template drift, wrong verbiage, AT naturalness, "Here" rule, wrong issue type, cross-verse inconsistency):
-- Edit the generated-notes path from context.json (`runtime.generatedNotes`) or the fallback `tmp/claude/generated_notes.json` — update the note text for the affected ID(s).
+- Use `mcp__workspace-tools__update_note_text` with `generatedJson` (= `runtime.generatedNotes` from context.json, or the fallback `tmp/claude/generated_notes.json`), the affected `id`, and the full replacement `note` text. Do not hand-`Edit` the JSON.
 
 **For quote boundary issues** (restructuring scope, parallelism scope, orphaned words):
-- Edit the prepared-notes path from context.json (`runtime.preparedNotes`) or the fallback `tmp/claude/prepared_notes.json` — update `gl_quote`, `gl_quote_roundtripped`, and `orig_quote` for the affected item(s).
+- Use `mcp__workspace-tools__update_prepared_quote` with `preparedJson` (= `runtime.preparedNotes`, or fallback `tmp/claude/prepared_notes.json`), the affected `id`, and the changed `glQuote` / `glQuoteRoundtripped` / `origQuote` fields. Do not hand-`Edit` the JSON.
 
 **For removal** (antithetical parallelism notes, redundant structural notes):
-- Remove the row from the assembled TSV directly. Also remove the entry from the generated-notes JSON.
+- Use `mcp__workspace-tools__remove_note` with the `id`, `generatedJson` (= `runtime.generatedNotes`), and `tsvFile` (the assembled TSV) — it drops the entry from the JSON and the matching TSV row in one call.
 
 After any changes to the generated-notes JSON or prepared-notes JSON, re-run assembly and post-processing once:
 
