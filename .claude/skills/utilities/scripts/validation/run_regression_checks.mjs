@@ -28,7 +28,7 @@ import { parseStructure, stripFetchedHeader } from './validate_usfm_structure.mj
 import { checkDuplicateIds } from './check_duplicate_ids.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DEFAULT_CHECKS = resolve(__dirname, '../regression/regression-checks.json');
+const DEFAULT_CHECKS = resolve(__dirname, '../../regression/regression-checks.json');
 
 const USFM_STAGES = new Set(['ULT', 'UST', 'alignment']);
 const TSV_STAGES = new Set(['TN', 'TQ']);
