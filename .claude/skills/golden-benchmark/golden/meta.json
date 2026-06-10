@@ -1,0 +1,51 @@
+{
+  "fetchedAt": "2026-06-10T03:04:49.291Z",
+  "ultUstRef": "v88",
+  "chapters": {
+    "JOS 1": {
+      "ult": {
+        "url": "https://git.door43.org/unfoldingWord/en_ult/raw/tag/v88/06-JOS.usfm",
+        "bytes": 73248
+      },
+      "ust": {
+        "url": "https://git.door43.org/unfoldingWord/en_ust/raw/tag/v88/06-JOS.usfm",
+        "bytes": 80240
+      },
+      "tn": {
+        "url": "https://git.door43.org/unfoldingWord/en_tn/raw/branch/master/tn_JOS.tsv",
+        "bytes": 20512,
+        "rows": 54
+      }
+    },
+    "NAM 1": {
+      "ult": {
+        "url": "https://git.door43.org/unfoldingWord/en_ult/raw/tag/v88/34-NAM.usfm",
+        "bytes": 41962
+      },
+      "ust": {
+        "url": "https://git.door43.org/unfoldingWord/en_ust/raw/tag/v88/34-NAM.usfm",
+        "bytes": 51894
+      },
+      "tn": {
+        "url": "https://git.door43.org/unfoldingWord/en_tn/raw/branch/master/tn_NAM.tsv",
+        "bytes": 24127,
+        "rows": 63
+      }
+    },
+    "MAL 1": {
+      "ult": {
+        "url": "https://git.door43.org/unfoldingWord/en_ult/raw/tag/v88/39-MAL.usfm",
+        "bytes": 54886
+      },
+      "ust": {
+        "url": "https://git.door43.org/unfoldingWord/en_ust/raw/tag/v88/39-MAL.usfm",
+        "bytes": 61382
+      },
+      "tn": {
+        "url": "https://git.door43.org/unfoldingWord/en_tn/raw/branch/master/tn_MAL.tsv",
+        "bytes": 27343,
+        "rows": 80
+      }
+    }
+  }
+}

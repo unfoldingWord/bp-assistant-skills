@@ -83,7 +83,23 @@ Use `mcp__workspace-tools__verify_tq` with `tsvFile="output/tq/PSA/PSA-006.tsv"`
 
 After writing all chapter files, scan the full output for duplicate IDs before proceeding to insertion. Use `mcp__workspace-tools__check_tn_quality` with `tsvFile` pointing to the output TSV and look for any `id_duplicate` findings. For multi-chapter or whole-book runs, check each chapter file in sequence and maintain a cross-chapter seen-ID set.
 
-If `check_tn_quality` is unavailable for TQ files, perform the check manually: read all output rows, collect the ID column, and report any ID that appears more than once. Fix any duplicate by replacing the later-occurring ID with a freshly generated unique value before proceeding to insertion.
+If `check_tn_quality` is unavailable for TQ files, run the dedicated checker instead — it validates ID format and finds duplicates within and across files in one pass (pass all chapter files from this session together, and optionally check collisions against the published book TSV):
+
+Option A — MCP tool (preferred, works without Bash):
+```
+mcp__workspace-tools__check_duplicate_ids({
+  files: ["output/tq/{BOOK}/{BOOK}-{CH1}.tsv", "output/tq/{BOOK}/{BOOK}-{CH2}.tsv"],
+  against: ["door43-repos/en_tq/tq_{BOOK}.tsv"]
+})
+```
+
+Option B — Bash (when available):
+```bash
+node .claude/skills/utilities/scripts/validation/check_duplicate_ids.mjs \
+  output/tq/{BOOK}/{BOOK}-*.tsv --against door43-repos/en_tq/tq_{BOOK}.tsv
+```
+
+Exit code 1 means duplicates or malformed IDs were found; fix each by replacing the later-occurring ID with a freshly generated unique value, re-run until clean, and only then proceed to insertion.
 
 > **Why this step exists**: `verify_tq` (Step 6) does not detect duplicate IDs. Duplicates break downstream processing software (merge/delete matching fails). This explicit check is the safety net against AI sessions that generate the same random ID for two different verse rows (e.g., one for verse 53:2 and one for the range 53:2-3).
 

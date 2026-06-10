@@ -1,0 +1,1212 @@
+[
+  {
+    "issue": 82,
+    "title": "Bold-format GLQuote words when directly quoted in Note field",
+    "classification": "global",
+    "stage": "TN",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "invariant",
+        "name": "ult_quote_bolded_in_note",
+        "explain": "For each TN row, any verbatim ULT-verse word sequence (3+ words) appearing in the Note field outside ** markers and outside the Alternate translation quotes must be flagged as an unbolded direct quote"
+      }
+    ],
+    "notes": "Cross-file check: needs the ULT verse text. Complements tn-quality-check check 8 (bold_not_in_ult). Advisory in this runner."
+  },
+  {
+    "issue": 80,
+    "title": "TN: AT snippets should omit final punctuation unless it differs from ULT",
+    "classification": "global",
+    "stage": "TN",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "Alternate translation: \\[[^\\]]*\\.\\]",
+        "flags": "",
+        "explain": "AT must not end with a period before the closing bracket (the default ULT sentence ending is omitted); ? and ! are allowed as intentional differences, and figs-rquestion rows are exempt",
+        "skipRowMatching": "figs-rquestion"
+      }
+    ],
+    "notes": "figs-rquestion rows are exempted by the runner (their ATs legitimately end with . or !). Runner skips this pattern on rows whose SupportReference contains figs-rquestion."
+  },
+  {
+    "issue": 77,
+    "title": "TQ writing: prefer ULT language, fall back to UST for metaphor/complex text",
+    "classification": "not-mechanizable",
+    "stage": "TQ",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [],
+    "notes": "Semantic decision; not expressible as pattern logic."
+  },
+  {
+    "issue": 76,
+    "title": "TQ writer should use UST non-figurative language for questions and answers",
+    "classification": "not-mechanizable",
+    "stage": "TQ",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [],
+    "notes": "Requires semantic comparison against the UST."
+  },
+  {
+    "issue": 74,
+    "title": "TQ skill produces duplicate row IDs across verse entries",
+    "classification": "global",
+    "stage": "TQ",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "invariant",
+        "name": "no_duplicate_ids",
+        "explain": "ID column values must be unique across the entire book TSV, including rows produced by separate chunked or batched runs"
+      }
+    ],
+    "notes": "Observed: ID fx0w duplicated on PSA 53:2 and 53:2-3. Runner implements via check_duplicate_ids."
+  },
+  {
+    "issue": 72,
+    "title": "TQ writer should use 'Yahweh' when UST/ULT use that name",
+    "classification": "global",
+    "stage": "TQ",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "\\bthe LORD\\b",
+        "flags": "",
+        "explain": "The small-caps convention 'the LORD' never appears in ULT/UST, so it is categorically wrong in TQ output (case-sensitive: 'the Lord' for Adonai is legitimate)"
+      },
+      {
+        "type": "invariant",
+        "name": "yahweh_mirrors_source",
+        "explain": "For each verse whose ULT or UST text contains 'Yahweh', the TQ Question and Response for that verse must use 'Yahweh' rather than substituting 'God' or another title"
+      }
+    ],
+    "notes": "Invariant is cross-file (advisory in this runner). Reported instance: Psalm 105:27."
+  },
+  {
+    "issue": 70,
+    "title": "UST skill uses body-part idioms (e.g. 'hand over') in non-literal contexts",
+    "classification": "global",
+    "stage": "UST",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "\\bhand(?:ed|s|ing)?\\s+over\\s+to\\b",
+        "flags": "i",
+        "explain": "Idiom 'hand over to X' is banned in UST, which must use plain non-idiomatic language"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "\\bhand(?:ed|s|ing)?\\s+(?:him|her|it|me|us|them|you)\\s+over\\b",
+        "flags": "i",
+        "explain": "Idiom 'hand X over' form of the same body-part idiom"
+      }
+    ],
+    "notes": "Reported at JER 20:5. Scoped to UST; 'hand over' could be a legitimate literal rendering in ULT."
+  },
+  {
+    "issue": 68,
+    "title": "PSA TQs: use 'the psalmist' not 'the writer'",
+    "classification": "global",
+    "stage": "TQ",
+    "book": "PSA",
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "\\bthe writer\\b",
+        "flags": "i",
+        "explain": "Psalms TQs must refer to the author as 'the psalmist', never 'the writer'"
+      }
+    ],
+    "notes": "Applies only to Psalms TQ files."
+  },
+  {
+    "issue": 65,
+    "title": "Alignment: map English 'of' to first noun in Hebrew construct phrase",
+    "classification": "global",
+    "stage": "alignment",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "invariant",
+        "name": "of_aligned_to_construct_head",
+        "explain": "English 'of' rendering a Hebrew construct relationship must sit inside the zaln group of the head noun (construct state), not the following absolute-state noun"
+      }
+    ],
+    "notes": "Needs x-morph parsing; advisory in this runner."
+  },
+  {
+    "issue": 63,
+    "title": "Alignment: hazot not mapped to 'this' in ULT and UST",
+    "classification": "global",
+    "stage": "alignment",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "invariant",
+        "name": "hazot_aligned_to_this",
+        "explain": "Every zaln group whose x-lemma is zot must include the English word 'this'/'This' within the group span"
+      }
+    ],
+    "notes": "Advisory in this runner."
+  },
+  {
+    "issue": 61,
+    "title": "Use 'Yahweh of hosts' in JER ULT-based notes",
+    "classification": "global",
+    "stage": "TN",
+    "book": "JER",
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "invariant",
+        "name": "divine_title_matches_ult",
+        "explain": "When a JER note quotes YHWH tsevaot, the English rendering must match the JER ULT text of that verse ('Yahweh of hosts')"
+      }
+    ],
+    "notes": "Master JER ULT is mixed (65 hosts vs 18 Armies); safe form is match-the-ULT-verse. Advisory in this runner. Deliberately opposite to issue 27 for fresh ULT-gen drafts."
+  },
+  {
+    "issue": 58,
+    "title": "TQ writer collapses multi-verse ref spans to single verse",
+    "classification": "pinned",
+    "stage": "TQ",
+    "book": "PSA",
+    "chapter": null,
+    "verse": "18:9-10; 24:1-2",
+    "checks": [
+      {
+        "type": "must_match",
+        "pattern": "^18:9-10\\tbcbs\\t",
+        "flags": "m",
+        "explain": "PSA 18:9-10: row bcbs must keep the multi-verse span",
+        "wholeFile": true,
+        "onlyChapter": 18
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "^18:9\\tbcbs\\t",
+        "flags": "m",
+        "explain": "PSA 18:9-10: row bcbs collapsed to single verse",
+        "wholeFile": true,
+        "onlyChapter": 18
+      },
+      {
+        "type": "must_match",
+        "pattern": "^24:1-2\\tqw0f\\t",
+        "flags": "m",
+        "explain": "PSA 24:1-2: row qw0f must keep the multi-verse span",
+        "wholeFile": true,
+        "onlyChapter": 24
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "^24:1\\tqw0f\\t",
+        "flags": "m",
+        "explain": "PSA 24:1-2: row qw0f collapsed to single verse",
+        "wholeFile": true,
+        "onlyChapter": 24
+      }
+    ],
+    "notes": "Applies only when regenerating PSA 18/24 TQs from the published source (IDs persist). General invariant (refs preserved from source) needs the source TSV."
+  },
+  {
+    "issue": 53,
+    "title": "Unicode characters appearing in generated intro notes",
+    "classification": "global",
+    "stage": "TN",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "[\\u200B-\\u200D\\uFEFF\\uFFFD\\u00A0\\u00AD]",
+        "flags": "",
+        "explain": "Zero-width characters, BOM, replacement character, non-breaking space, and soft hyphen are categorically wrong in generated output"
+      }
+    ],
+    "notes": "Confirmed instance: stray unicode at ZEC 5:intro. Safe file-wide for all generated outputs (also applied to ULT/UST/TQ by the runner).",
+    "alsoStages": [
+      "ULT",
+      "UST",
+      "TQ",
+      "alignment"
+    ]
+  },
+  {
+    "issue": 49,
+    "title": "UST alignment groupings too broad",
+    "classification": "not-mechanizable",
+    "stage": "alignment",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [],
+    "notes": "Semantic judgment; only advisory heuristics possible."
+  },
+  {
+    "issue": 48,
+    "title": "Over-bracketing of {are}/{is} for implied Hebrew copula in ULT",
+    "classification": "not-mechanizable",
+    "stage": "ULT",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [],
+    "notes": "Context-dependent (compare issue 13 which REQUIRES brackets in ISA 50:8)."
+  },
+  {
+    "issue": 43,
+    "title": "ULT draft: multiple linguistic rule violations in ISA 55",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 55,
+    "verse": "1-13",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "all who are thirsty",
+        "flags": "",
+        "explain": "ISA 55:1: relative clause used instead of noun phrase"
+      },
+      {
+        "type": "must_match",
+        "pattern": "everyone thirsty",
+        "flags": "",
+        "explain": "ISA 55:1: required noun-phrase rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "whoever has no money",
+        "flags": "",
+        "explain": "ISA 55:2: relative clause with possession verb instead of prepositional nominal"
+      },
+      {
+        "type": "must_match",
+        "pattern": "to whom \\{is\\} no silver",
+        "flags": "",
+        "explain": "ISA 55:2: required prepositional nominal"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "in joy you will go out",
+        "flags": "",
+        "explain": "ISA 55:12: adverbial fronted before the verb"
+      },
+      {
+        "type": "must_match",
+        "pattern": "you will go out in joy",
+        "flags": "",
+        "explain": "ISA 55:12: adverbial must follow the verb"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "\\{the\\}",
+        "flags": "",
+        "explain": "ISA 55:12: definite articles must never be bracketed"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "an everlasting sign",
+        "flags": "",
+        "explain": "ISA 55:13: adjective-noun used instead of construct chain"
+      },
+      {
+        "type": "must_match",
+        "pattern": "a sign of eternity",
+        "flags": "",
+        "explain": "ISA 55:13: required construct-chain genitive"
+      }
+    ],
+    "notes": "Patterns verse-scoped via explain prefixes."
+  },
+  {
+    "issue": 42,
+    "title": "ULT draft: Hebrew grammatical features misrendered in ISA 53-54",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": null,
+    "verse": "53:1-54:17",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "from dry ground",
+        "flags": "",
+        "explain": "ISA 53:2: construct state flattened to adjective-noun"
+      },
+      {
+        "type": "must_match",
+        "pattern": "from ground of dryness",
+        "flags": "",
+        "explain": "ISA 53:2: required construct rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "children of",
+        "flags": "",
+        "explain": "ISA 54:1: bene must be 'sons of', not 'children of'"
+      },
+      {
+        "type": "must_match",
+        "pattern": "sons of",
+        "flags": "",
+        "explain": "ISA 54:1: required lexeme rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "do not hold back",
+        "flags": "i",
+        "explain": "ISA 54:2: jussive rendered as bare imperative"
+      },
+      {
+        "type": "must_match",
+        "pattern": "may you not hold back",
+        "flags": "i",
+        "explain": "ISA 54:2: required jussive rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "\\bdesolate\\b",
+        "flags": "",
+        "explain": "ISA 54:3: adjective used for passive participle"
+      },
+      {
+        "type": "must_match",
+        "pattern": "desolated",
+        "flags": "",
+        "explain": "ISA 54:3: required passive-participle rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "do not fear",
+        "flags": "i",
+        "explain": "ISA 54:4: jussive rendered as bare imperative"
+      },
+      {
+        "type": "must_match",
+        "pattern": "may you not fear",
+        "flags": "i",
+        "explain": "ISA 54:4: required jussive rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "all the earth",
+        "flags": "",
+        "explain": "ISA 54:5: construct kol not represented"
+      },
+      {
+        "type": "must_match",
+        "pattern": "all of the earth",
+        "flags": "",
+        "explain": "ISA 54:5: required construct rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "my covenant of peace",
+        "flags": "",
+        "explain": "ISA 54:10: pronominal suffix attached to wrong noun"
+      },
+      {
+        "type": "must_match",
+        "pattern": "the covenant of my peace",
+        "flags": "",
+        "explain": "ISA 54:10: suffix belongs on 'peace'"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "all your sons",
+        "flags": "",
+        "explain": "ISA 54:13: construct kol not represented"
+      },
+      {
+        "type": "must_match",
+        "pattern": "all of your sons",
+        "flags": "",
+        "explain": "ISA 54:13: required construct rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "that rises",
+        "flags": "",
+        "explain": "ISA 54:17: participle rendered as relative clause"
+      },
+      {
+        "type": "must_match",
+        "pattern": "rising",
+        "flags": "",
+        "explain": "ISA 54:17: required participial rendering"
+      }
+    ],
+    "notes": "Verse-scoped via explain prefixes. The 'all of the' construct-kol rule recurs across issues 28, 40, 42."
+  },
+  {
+    "issue": 40,
+    "title": "ULT-gen: multiple morphological fidelity failures in ISA 52",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 52,
+    "verse": "1-14",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "will no longer enter",
+        "flags": "",
+        "explain": "ISA 52:1: yasaph double clause collapsed"
+      },
+      {
+        "type": "must_match",
+        "pattern": "will not add",
+        "flags": "",
+        "explain": "ISA 52:1: yasaph rendered as its own clause"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "the uncircumcised and the unclean",
+        "flags": "",
+        "explain": "ISA 52:1: disjunction rendered as 'and'"
+      },
+      {
+        "type": "must_match",
+        "pattern": "the uncircumcised or the unclean",
+        "flags": "",
+        "explain": "ISA 52:1: required disjunctive 'or'"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "\\ball the\\b",
+        "flags": "",
+        "explain": "ISA 52:5: construct kol must be 'all of the'"
+      },
+      {
+        "type": "must_match",
+        "pattern": "all of the",
+        "flags": "",
+        "explain": "ISA 52:5: required construct rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "how beautiful",
+        "flags": "",
+        "explain": "ISA 52:7: adjective treated as attributive rather than predicate"
+      },
+      {
+        "type": "must_match",
+        "pattern": "how they are beautiful",
+        "flags": "",
+        "explain": "ISA 52:7: predicate adjective with copula"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "announcing",
+        "flags": "",
+        "explain": "ISA 52:7: Hiphil stem collapsed to simple active"
+      },
+      {
+        "type": "must_match",
+        "pattern": "making \\{one\\} hear",
+        "flags": "",
+        "explain": "ISA 52:7: required causative Hiphil rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "greatly exalted",
+        "flags": "",
+        "explain": "ISA 52:13: active Hebrew rendered as passive"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "were appalled",
+        "flags": "",
+        "explain": "ISA 52:14: active Hebrew rendered as passive"
+      },
+      {
+        "type": "must_match",
+        "pattern": "marveled",
+        "flags": "",
+        "explain": "ISA 52:14: required active rendering"
+      }
+    ],
+    "notes": "Verse-scoped via explain prefixes."
+  },
+  {
+    "issue": 29,
+    "title": "ULT draft uses 'continue' instead of preferred 'add' for yasaph (ISA 51:22)",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 51,
+    "verse": "22",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "you will not continue to drink it again",
+        "flags": "",
+        "explain": "ISA 51:22: yasaph rendered as 'continue'"
+      },
+      {
+        "type": "must_match",
+        "pattern": "you will not add to drink it again",
+        "flags": "",
+        "explain": "ISA 51:22: project-preferred 'add' for yasaph"
+      }
+    ],
+    "notes": "Quick-ref H3254 generalizes 'add' for yasaph; global ban on 'continue' unsafe."
+  },
+  {
+    "issue": 28,
+    "title": "ULT draft uses 'all the' instead of 'all of the' for construct kol (ISA 51:13,18,20)",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 51,
+    "verse": "13,18,20",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "\\ball the\\b",
+        "flags": "",
+        "explain": "ISA 51:13: construct kol not represented"
+      },
+      {
+        "type": "must_match",
+        "pattern": "all of the",
+        "flags": "",
+        "explain": "ISA 51:13: required construct rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "\\ball the\\b",
+        "flags": "",
+        "explain": "ISA 51:18: construct kol not represented"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "\\ball the\\b",
+        "flags": "",
+        "explain": "ISA 51:20: construct kol not represented"
+      }
+    ],
+    "notes": "Glossary 'Partitive kol' makes this near-global for ULT; kept verse-pinned for safety."
+  },
+  {
+    "issue": 27,
+    "title": "ULT draft uses 'Yahweh of hosts' instead of standard 'Yahweh of Armies'",
+    "classification": "global",
+    "stage": "ULT",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "Yahweh of hosts",
+        "flags": "",
+        "explain": "ULT-gen standard rendering for YHWH tsevaot is 'Yahweh of Armies', never 'Yahweh of hosts' (archaic)"
+      }
+    ],
+    "notes": "Applies to freshly generated ULT/UST drafts only — published JER legitimately contains 'hosts' (see issue 61)."
+  },
+  {
+    "issue": 26,
+    "title": "ULT draft uses adjective 'old' instead of noun 'antiquity' for qedem (ISA 51:9)",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 51,
+    "verse": "9",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "\\bold\\b",
+        "flags": "",
+        "explain": "ISA 51:9: qedem rendered as adjective 'old'"
+      },
+      {
+        "type": "must_match",
+        "pattern": "antiquity",
+        "flags": "",
+        "explain": "ISA 51:9: required noun rendering"
+      }
+    ],
+    "notes": "Verse-scoped; 'old' is legitimate elsewhere."
+  },
+  {
+    "issue": 25,
+    "title": "ULT draft fails to represent construct chain and plural for 'generation of generations' (ISA 51:8)",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 51,
+    "verse": "8",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "generation \\{?after\\}? generation",
+        "flags": "",
+        "explain": "ISA 51:8: interpretive gloss replacing the construct chain"
+      },
+      {
+        "type": "must_match",
+        "pattern": "to the generation of generations",
+        "flags": "",
+        "explain": "ISA 51:8: required construct chain with plural"
+      }
+    ],
+    "notes": "Quick-ref H1755 confirms."
+  },
+  {
+    "issue": 24,
+    "title": "ULT draft renders jussive as imperative instead of 'May you not…' (ISA 51:7)",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 51,
+    "verse": "7",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "do not fear",
+        "flags": "i",
+        "explain": "ISA 51:7: jussive rendered as bare imperative"
+      },
+      {
+        "type": "must_match",
+        "pattern": "may you not fear",
+        "flags": "i",
+        "explain": "ISA 51:7: required jussive rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "do not be dismayed",
+        "flags": "i",
+        "explain": "ISA 51:7: jussive rendered as bare imperative"
+      },
+      {
+        "type": "must_match",
+        "pattern": "may you not be dismayed",
+        "flags": "i",
+        "explain": "ISA 51:7: required jussive rendering"
+      }
+    ],
+    "notes": "Verse-scoped."
+  },
+  {
+    "issue": 23,
+    "title": "ULT draft incorrectly adds continuer quotation mark mid-passage (ISA 51:7)",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 51,
+    "verse": "7",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "\\\\v 7 “",
+        "flags": "",
+        "explain": "ISA 51:7: no continuer quotation mark at the start of a mid-passage verse",
+        "wholeFile": true
+      }
+    ],
+    "notes": "Whole-file pattern (includes the verse marker). Assumes unaligned draft USFM."
+  },
+  {
+    "issue": 22,
+    "title": "ULT draft misrepresents verb stem: Niphal/Qal voice errors in ISA 51",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 51,
+    "verse": "6,20",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "will vanish",
+        "flags": "",
+        "explain": "ISA 51:6: Niphal passive rendered as active"
+      },
+      {
+        "type": "must_match",
+        "pattern": "will be dissipated",
+        "flags": "",
+        "explain": "ISA 51:6: required passive rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "\\bfilled\\b",
+        "flags": "",
+        "explain": "ISA 51:20: Qal active participle rendered as passive"
+      },
+      {
+        "type": "must_match",
+        "pattern": "being full",
+        "flags": "",
+        "explain": "ISA 51:20: required active participial rendering"
+      }
+    ],
+    "notes": "Verse-scoped."
+  },
+  {
+    "issue": 21,
+    "title": "ULT draft uses relative clauses instead of participial/finite forms (ISA 51)",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 51,
+    "verse": "2,9-10,12",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "who cut",
+        "flags": "",
+        "explain": "ISA 51:9: participle rendered as relative clause"
+      },
+      {
+        "type": "must_match",
+        "pattern": "the one having hewn",
+        "flags": "",
+        "explain": "ISA 51:9: required participial phrase"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "who pierced",
+        "flags": "",
+        "explain": "ISA 51:9: participle rendered as relative clause"
+      },
+      {
+        "type": "must_match",
+        "pattern": "the one having pierced",
+        "flags": "",
+        "explain": "ISA 51:9: required participial phrase"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "who dried up",
+        "flags": "",
+        "explain": "ISA 51:10: participle rendered as relative clause"
+      },
+      {
+        "type": "must_match",
+        "pattern": "the one having dried up",
+        "flags": "",
+        "explain": "ISA 51:10: required participial phrase"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "who is comforting you",
+        "flags": "",
+        "explain": "ISA 51:12: participle rendered as relative clause"
+      },
+      {
+        "type": "must_match",
+        "pattern": "the one comforting you",
+        "flags": "",
+        "explain": "ISA 51:12: required participial phrase"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "\\{who\\}",
+        "flags": "",
+        "explain": "ISA 51:2: bracketed relative pronoun must not be inserted before indicative finite verbs"
+      },
+      {
+        "type": "must_match",
+        "pattern": "she bore you",
+        "flags": "",
+        "explain": "ISA 51:2: indicative rendered as plain finite verb"
+      }
+    ],
+    "notes": "Verse-scoped."
+  },
+  {
+    "issue": 13,
+    "title": "ISA 50 ULT draft: multiple translation accuracy errors",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 50,
+    "verse": "1-9",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "Where is this certificate",
+        "flags": "",
+        "explain": "ISA 50:1: idiom not rendered"
+      },
+      {
+        "type": "must_match",
+        "pattern": "Where is this, the certificate",
+        "flags": "",
+        "explain": "ISA 50:1: required literal idiom rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "shortening",
+        "flags": "",
+        "explain": "ISA 50:2: transitive for Qal intransitive"
+      },
+      {
+        "type": "must_match",
+        "pattern": "being short",
+        "flags": "",
+        "explain": "ISA 50:2: required intransitive rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "\\brescue\\b",
+        "flags": "",
+        "explain": "ISA 50:2: wrong lexeme for natsal Hiphil"
+      },
+      {
+        "type": "must_match",
+        "pattern": "\\bdeliver\\b",
+        "flags": "",
+        "explain": "ISA 50:2: preferred lexical equivalent"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "at my rebuke",
+        "flags": "",
+        "explain": "ISA 50:2: circumstantial preposition for instrumental"
+      },
+      {
+        "type": "must_match",
+        "pattern": "with my rebuke",
+        "flags": "",
+        "explain": "ISA 50:2: required instrumental 'with'"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "from lack of water",
+        "flags": "",
+        "explain": "ISA 50:2: noun phrase for verbal clause"
+      },
+      {
+        "type": "must_match",
+        "pattern": "from there being no water",
+        "flags": "",
+        "explain": "ISA 50:2: required verbal-clause rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "I was not rebellious",
+        "flags": "",
+        "explain": "ISA 50:5: adjective for verb"
+      },
+      {
+        "type": "must_match",
+        "pattern": "I did not rebel",
+        "flags": "",
+        "explain": "ISA 50:5: required verbal rendering"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "I will not be ashamed",
+        "flags": "",
+        "explain": "ISA 50:7: passive for active"
+      },
+      {
+        "type": "must_match",
+        "pattern": "I will not have shame",
+        "flags": "",
+        "explain": "ISA 50:7: required active rendering"
+      },
+      {
+        "type": "must_match",
+        "pattern": "\\{is\\} near",
+        "flags": "",
+        "explain": "ISA 50:8: required bracketed supplied verb"
+      },
+      {
+        "type": "must_match",
+        "pattern": "Who \\{is\\} he",
+        "flags": "",
+        "explain": "ISA 50:9: required bracketed supplied verb"
+      }
+    ],
+    "notes": "Verse-scoped. Note tension with issue 48 — brackets on supplied copulas are context-dependent."
+  },
+  {
+    "issue": 12,
+    "title": "Wrong figure-of-speech template: figs-gendernotations vs figs-genericnoun for 'a man'",
+    "classification": "not-mechanizable",
+    "stage": "TN",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [],
+    "notes": "Semantic judgment; advisory heuristic only."
+  },
+  {
+    "issue": 11,
+    "title": "ULT draft ISA 49: appayim rendered as 'faces' instead of 'nostrils'",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 49,
+    "verse": "23",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "\\bfaces\\b",
+        "flags": "",
+        "explain": "ISA 49:23: dual appayim must not be rendered 'faces'"
+      },
+      {
+        "type": "must_match",
+        "pattern": "nostrils",
+        "flags": "",
+        "explain": "ISA 49:23: required rendering of dual appayim"
+      }
+    ],
+    "notes": "Verse corrected from the issue's stated 49:12 — appayim occurs at 49:23 (verified against hbo_uhb)."
+  },
+  {
+    "issue": 10,
+    "title": "ULT draft ISA 49:19: pronominal suffix attached to wrong word",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 49,
+    "verse": "19",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "your land of destruction",
+        "flags": "",
+        "explain": "ISA 49:19: suffix attached to head noun"
+      },
+      {
+        "type": "must_match",
+        "pattern": "the land of your destruction",
+        "flags": "",
+        "explain": "ISA 49:19: suffix belongs on 'destruction'"
+      }
+    ],
+    "notes": "Same category as ISA 54:10 in issue 42."
+  },
+  {
+    "issue": 9,
+    "title": "ULT draft ISA 49:5: 'to be a servant' should be 'as a servant'",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 49,
+    "verse": "5",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "to be a servant",
+        "flags": "",
+        "explain": "ISA 49:5: infinitive substituted for prepositional phrase"
+      },
+      {
+        "type": "must_match",
+        "pattern": "as a servant",
+        "flags": "",
+        "explain": "ISA 49:5: required prepositional rendering"
+      }
+    ],
+    "notes": "Verse-scoped."
+  },
+  {
+    "issue": 8,
+    "title": "ULT draft: relative clauses and adjectives instead of participles in ISA 49",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 49,
+    "verse": "5,8,17,19,21",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "the one who formed me",
+        "flags": "",
+        "explain": "ISA 49:5: relative clause for participle"
+      },
+      {
+        "type": "must_match",
+        "pattern": "the one having formed me",
+        "flags": "",
+        "explain": "ISA 49:5: required participial phrase"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "those who tore you down",
+        "flags": "",
+        "explain": "ISA 49:17: relative clause for participle"
+      },
+      {
+        "type": "must_match",
+        "pattern": "the ones having torn you down",
+        "flags": "",
+        "explain": "ISA 49:17: required participial phrase"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "those who swallowed you",
+        "flags": "",
+        "explain": "ISA 49:19: relative clause for participle"
+      },
+      {
+        "type": "must_match",
+        "pattern": "the ones having swallowed you",
+        "flags": "",
+        "explain": "ISA 49:19: required participial phrase"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "\\bexiled\\b",
+        "flags": "",
+        "explain": "ISA 49:21: passive adjective for active participle"
+      },
+      {
+        "type": "must_match",
+        "pattern": "having gone into exile",
+        "flags": "",
+        "explain": "ISA 49:21: required active participial rendering"
+      }
+    ],
+    "notes": "Verse-scoped."
+  },
+  {
+    "issue": 7,
+    "title": "ULT draft: number agreement errors in ISA 49",
+    "classification": "pinned",
+    "stage": "ULT",
+    "book": "ISA",
+    "chapter": 49,
+    "verse": "19,20,24-25",
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "\\binhabitants\\b",
+        "flags": "",
+        "explain": "ISA 49:19: plural for singular Hebrew"
+      },
+      {
+        "type": "must_match",
+        "pattern": "\\bdweller\\b",
+        "flags": "",
+        "explain": "ISA 49:19: singular required"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "\\bbereavement\\b",
+        "flags": "",
+        "explain": "ISA 49:20: singular for plural Hebrew"
+      },
+      {
+        "type": "must_match",
+        "pattern": "bereavements",
+        "flags": "",
+        "explain": "ISA 49:20: required plural"
+      },
+      {
+        "type": "must_not_match",
+        "pattern": "\\bcaptives\\b",
+        "flags": "",
+        "explain": "ISA 49:24: plural for singular Hebrew"
+      },
+      {
+        "type": "must_match",
+        "pattern": "\\bcaptive\\b",
+        "flags": "",
+        "explain": "ISA 49:24: required singular"
+      }
+    ],
+    "notes": "Verse-scoped."
+  },
+  {
+    "issue": 6,
+    "title": "Excessive pronoun notes; snippets span full verse instead of first pronoun only",
+    "classification": "global",
+    "stage": "TN",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "invariant",
+        "name": "pronoun_quote_first_occurrence_only",
+        "explain": "writing-pronouns rows: the Quote must cover only the first pronoun occurrence, not the whole verse"
+      }
+    ],
+    "notes": "Cross-file check; advisory in this runner."
+  },
+  {
+    "issue": 5,
+    "title": "Abstract noun notes not split per line as instructed",
+    "classification": "global",
+    "stage": "TN",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "invariant",
+        "name": "abstractnoun_one_note_per_line",
+        "explain": "figs-abstractnouns rows must not combine abstract nouns across parallel poetic lines"
+      }
+    ],
+    "notes": "Cross-file check; advisory in this runner."
+  },
+  {
+    "issue": 3,
+    "title": "TN-writer: multiple note quality issues in Psalms output",
+    "classification": "global",
+    "stage": "TN",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "\\t[^\\t]* & [^\\t]*\\t1\\t",
+        "flags": "",
+        "explain": "Quote field must be one continuous snippet; the ' & ' discontinuity separator is banned by this project's convention (widen the snippet instead)",
+        "wholeFile": true,
+        "generatedOnly": true
+      }
+    ],
+    "notes": "Observed in PSA 38 output. Published TNs legitimately contain '&' in Quote (e.g. NAM 1); this stricter rule applies to newly generated notes only (generatedOnly)."
+  },
+  {
+    "issue": 1,
+    "title": "Bug: AT uses 'and' instead of ellipsis for discontinuous English quotes",
+    "classification": "not-mechanizable",
+    "stage": "TN",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [],
+    "notes": "Requires alignment data to distinguish the four quote-contiguity scenarios; mechanical check lives in bp-assistant verifyAtFit()."
+  }
+]

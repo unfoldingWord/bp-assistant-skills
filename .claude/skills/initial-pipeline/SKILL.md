@@ -63,6 +63,22 @@ The task is only complete after all required Wave 1-6 outputs exist on disk:
 - `output/issues/<BOOK>/<BOOK>-<CH>.tsv`
 - `output/AI-UST/<BOOK>/<BOOK>-<CH>.usfm`
 
+### Check Reference Data Is Present
+
+Run the data preflight before launching any agents. Generation quietly degrades when `issues_resolved.txt`, the glossaries, or the Strong's index are missing — this makes the absence loud instead.
+
+Option A — MCP tool (preferred, works without Bash):
+```
+mcp__workspace-tools__preflight_data_check({ book: "<BOOK>", stage: "all" })
+```
+
+Option B — Bash (when available):
+```bash
+node .claude/skills/utilities/scripts/validation/preflight_data_check.mjs --book <BOOK> --stage all
+```
+
+If it exits non-zero, fetch the missing sources first (`fetch_*` workspace tools or `curate-published-data.mjs`) and re-run. Do not proceed with generation while required data is missing.
+
 ### Fetch T4T for the Book
 
 Use `mcp__workspace-tools__fetch_t4t` with `{"books":["<BOOK>"]}`.
