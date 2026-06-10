@@ -517,6 +517,19 @@ grep -oE '\\w [^|]+\|' aligned.usfm | sed 's/\\w //;s/|//' | tr '\n' ' '
 # Should match original ULT text word-for-word
 ```
 
+## Step 7.5: Verify Alignment Field Integrity
+
+After text verification passes, check that the milestone fields are faithful to the Hebrew source. This catches the Unicode byte-form drift behind issues #88-#91: an x-content or x-lemma that looks identical to the Hebrew but differs in bytes, plus empty fields, occurrence-numbering errors, and unaligned Hebrew words.
+
+```bash
+node .claude/skills/utilities/scripts/validation/validate_alignment_integrity.mjs \
+  --aligned output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm \
+  --hebrew data/hebrew_bible/{NN}-{BOOK}.usfm \
+  --chapter {CHAPTER}
+```
+
+Exit code 0 = clean; 1 = problems listed per verse. Fix the mapping JSON (usually by re-copying the Hebrew word byte-for-byte from the source) and re-convert before continuing. Do not hand-edit the aligned USFM to silence a finding.
+
 ## Step 8: Check for Voice Mismatches
 
 After text verification passes, run the voice mismatch check to catch cases where an

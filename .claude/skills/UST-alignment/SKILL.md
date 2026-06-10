@@ -411,6 +411,19 @@ Quick check:
 grep -oE '\\w [^|]+\|' aligned.usfm | sed 's/\\w //;s/|//' | tr '\n' ' '
 ```
 
+### Step 3: Verify Alignment Field Integrity
+
+Check that milestone fields are faithful to the Hebrew source (byte-exact x-content/x-lemma, occurrence numbering). `--ust` allows unaligned Hebrew words, which are normal for UST:
+
+```bash
+node .claude/skills/utilities/scripts/validation/validate_alignment_integrity.mjs \
+  --aligned output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm \
+  --hebrew data/hebrew_bible/{NN}-{BOOK}.usfm \
+  --chapter {CHAPTER} --ust
+```
+
+Exit code 0 = clean; 1 = problems listed per verse. Fix the mapping JSON and re-convert rather than hand-editing the aligned USFM.
+
 ## Quality Checklist
 
 Before finalizing alignment JSON:
