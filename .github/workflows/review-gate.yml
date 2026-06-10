@@ -20,46 +20,211 @@ jobs:
   review:
     if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
+    # Per-PR group prevents the cross-PR queue-eviction bug: GitHub Actions
+    # only ever holds one pending entry per concurrency group, so a single
+    # shared group across all PRs would let any new push silently evict a
+    # pending review-gate run for another PR. Cross-PR serialization on the
+    # Fly machine is enforced by the "Wait for machine to be stopped" step,
+    # which acts as a Fly-API level lock.
+    concurrency:
+      group: bp-assistant-auto-issue-handler-fly-machine-pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: false
     steps:
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - name: Start Fly Machine
+      # Resolve the reviewer machine ID dynamically. Fly deploys with
+      # --strategy immediate destroy and recreate the machine, so any
+      # FLY_MACHINE_ID secret goes stale on every deploy. Look it up at
+      # runtime instead.
+      - name: Resolve reviewer machine ID
+        id: resolve
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           FLY_APP_NAME: ${{ secrets.FLY_APP_NAME }}
-          FLY_MACHINE_ID: ${{ secrets.FLY_MACHINE_ID }}
         run: |
+          set -euo pipefail
           test -n "$FLY_API_TOKEN"
           test -n "$FLY_APP_NAME"
-          test -n "$FLY_MACHINE_ID"
-          flyctl machine start "$FLY_MACHINE_ID" --app "$FLY_APP_NAME" || true
+          machine_id="$(flyctl machines list --app "$FLY_APP_NAME" --json \
+            | node -e "let s=''; process.stdin.on('data',c=>s+=c); process.stdin.on('end',()=>{ try { const j=JSON.parse(s); const m=Array.isArray(j)?j.find(x=>x&&x.id&&String(x.state||'').toLowerCase()!=='destroyed'):null; if (m) process.stdout.write(m.id); } catch {} });")"
+          if [ -z "$machine_id" ]; then
+            echo "Could not resolve a non-destroyed machine for app $FLY_APP_NAME" >&2
+            flyctl machines list --app "$FLY_APP_NAME" >&2 || true
+            exit 1
+          fi
+          echo "Resolved reviewer machine: $machine_id"
+          echo "machine_id=$machine_id" >> "$GITHUB_OUTPUT"
 
-      - name: Run Remote Review
-        id: review
+      # Cross-workflow Fly-machine lock. We no longer rely on a shared
+      # concurrency group between this workflow and review-gate-automerge, so
+      # serialize machine access here: wait until the machine is `stopped`
+      # before reconfiguring it.
+      - name: Wait for machine to be stopped
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           FLY_APP_NAME: ${{ secrets.FLY_APP_NAME }}
+          FLY_MACHINE_ID: ${{ steps.resolve.outputs.machine_id }}
+        run: |
+          set -euo pipefail
+          get_state() {
+            flyctl machines list --app "$FLY_APP_NAME" --json 2>/dev/null \
+              | node -e "let s=''; process.stdin.on('data',c=>s+=c); process.stdin.on('end',()=>{ try { const j=JSON.parse(s); const m=Array.isArray(j)?j.find(x=>x&&x.id===process.argv[1]):null; if (m) process.stdout.write(String(m.state||'')); } catch {} });" \
+                "$FLY_MACHINE_ID" \
+              || echo ""
+          }
+          deadline=$((SECONDS + 1800))
+          state=""
+          while [ "$SECONDS" -lt "$deadline" ]; do
+            state="$(get_state)"
+            if [ "$state" = "stopped" ]; then
+              break
+            fi
+            sleep 10
+          done
+          if [ "$state" != "stopped" ]; then
+            echo "Machine never reached stopped state (last: ${state:-<unknown>}); another workflow may be holding the machine." >&2
+            exit 1
+          fi
+
+      # The reviewer Fly machine is one-shot: starting it runs run-hourly-once.sh
+      # and exits when the script returns. We can't SSH into a stopped machine,
+      # so instead we configure the machine's env vars to drive a pr-review run,
+      # start it, wait for it to exit, then read the JSON marker out of the logs.
+      - name: Configure machine for pr-review
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_APP_NAME: ${{ secrets.FLY_APP_NAME }}
+          FLY_MACHINE_ID: ${{ steps.resolve.outputs.machine_id }}
           REVIEW_REPO: ${{ github.repository }}
           REVIEW_PR: ${{ github.event.pull_request.number }}
           REVIEW_BASE: ${{ github.event.pull_request.base.sha }}
           REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
-          REVIEW_PROVIDER: both
+          REVIEW_PROVIDER: claude
         run: |
           set -euo pipefail
-          cmd="env RUN_MODE=pr-review PR_REVIEW_REPO=${REVIEW_REPO} PR_REVIEW_NUMBER=${REVIEW_PR} PR_REVIEW_BASE_SHA=${REVIEW_BASE} PR_REVIEW_HEAD_SHA=${REVIEW_HEAD} PR_REVIEW_PROVIDER=${REVIEW_PROVIDER} /app/scripts/fly/run-hourly-once.sh"
-          review_json=""
-          for attempt in 1 2 3 4 5 6; do
-            if review_json="$(flyctl ssh console --app "$FLY_APP_NAME" --command "$cmd")"; then
+          # --restart no keeps the machine from auto-looping on non-zero exits,
+          # so the wait-for-stopped poll observes a clean terminal state.
+          flyctl machine update "$FLY_MACHINE_ID" --app "$FLY_APP_NAME" --yes --skip-start --restart no \
+            --env "RUN_MODE=pr-review" \
+            --env "PR_REVIEW_REPO=${REVIEW_REPO}" \
+            --env "PR_REVIEW_NUMBER=${REVIEW_PR}" \
+            --env "PR_REVIEW_BASE_SHA=${REVIEW_BASE}" \
+            --env "PR_REVIEW_HEAD_SHA=${REVIEW_HEAD}" \
+            --env "PR_REVIEW_PROVIDER=${REVIEW_PROVIDER}"
+
+      - name: Start machine and wait for completion
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_APP_NAME: ${{ secrets.FLY_APP_NAME }}
+          FLY_MACHINE_ID: ${{ steps.resolve.outputs.machine_id }}
+        run: |
+          set -euo pipefail
+          flyctl machine start "$FLY_MACHINE_ID" --app "$FLY_APP_NAME"
+
+          # Poll until the machine leaves stopped — confirms the Fly control plane
+          # accepted the start. A fixed sleep is unreliable when the plane is under
+          # load; require an actual state transition before watching for completion.
+          get_state() {
+            flyctl machines list --app "$FLY_APP_NAME" --json 2>/dev/null \
+              | node -e "let s=''; process.stdin.on('data',c=>s+=c); process.stdin.on('end',()=>{ try { const j=JSON.parse(s); const m=Array.isArray(j)?j.find(x=>x&&x.id===process.argv[1]):null; if (m) process.stdout.write(String(m.state||'')); } catch {} });" \
+                "$FLY_MACHINE_ID" \
+              || echo ""
+          }
+
+          launch_deadline=$((SECONDS + 60))
+          state=""
+          while [ "$SECONDS" -lt "$launch_deadline" ]; do
+            state="$(get_state)"
+            # Treat empty as non-conclusive (transient Fly API error). Only break
+            # once we've observed an actual non-stopped state; otherwise an empty
+            # response would falsely satisfy the != "stopped" check.
+            if [ -n "$state" ] && [ "$state" != "stopped" ]; then
               break
             fi
-            if [ "$attempt" -eq 6 ]; then
-              exit 1
-            fi
+            sleep 2
+          done
+          if [ -z "$state" ] || [ "$state" = "stopped" ]; then
+            echo "Machine did not leave stopped state within 60s (last state: ${state:-<unknown>}); Fly control plane may be unresponsive." >&2
+            exit 1
+          fi
+
+          # Poll until the machine returns to a stopped state (entrypoint exited).
+          # Cap at ~15 minutes; review runs typically finish in a few minutes.
+          deadline=$((SECONDS + 900))
+          while [ "$SECONDS" -lt "$deadline" ]; do
+            state="$(get_state)"
+            case "$state" in
+              stopped|destroyed)
+                break
+                ;;
+              failed|crashed|error|replacing)
+                echo "Fly machine entered failure state: $state" >&2
+                exit 1
+                ;;
+            esac
             sleep 10
           done
+          if [ "$state" != "stopped" ] && [ "$state" != "destroyed" ]; then
+            echo "Machine did not return to stopped state within timeout (last state: $state)" >&2
+            exit 1
+          fi
+
+      - name: Restore machine to default mode
+        if: always() && steps.resolve.outputs.machine_id != ''
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_APP_NAME: ${{ secrets.FLY_APP_NAME }}
+          FLY_MACHINE_ID: ${{ steps.resolve.outputs.machine_id }}
+        run: |
+          set -euo pipefail
+          # Clear pr-review env vars so the next hourly cron triggers an hourly run,
+          # not another pr-review against this PR.
+          # Don't swallow restore failures. If this update fails the machine is
+          # left configured for pr-review mode and will misbehave on the next
+          # hourly run; surfacing the error gives an explicit signal to fix it.
+          if ! flyctl machine update "$FLY_MACHINE_ID" --app "$FLY_APP_NAME" --yes --skip-start \
+            --env "RUN_MODE=hourly" \
+            --env "PR_REVIEW_REPO=" \
+            --env "PR_REVIEW_NUMBER=" \
+            --env "PR_REVIEW_BASE_SHA=" \
+            --env "PR_REVIEW_HEAD_SHA=" \
+            --env "PR_REVIEW_PROVIDER="; then
+            echo "::warning::Failed to restore reviewer machine to default mode; manual intervention may be required (set RUN_MODE=hourly)." >&2
+            exit 1
+          fi
+
+      - name: Read review result from logs
+        id: review
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_APP_NAME: ${{ secrets.FLY_APP_NAME }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          # Pull recent logs and extract the latest PR_REVIEW_RESULT marker line.
+          # run-pr-review.js emits a single-line marker so we don't need to
+          # reassemble multi-line pretty JSON across log entries.
+          # The success-path JSON serializes as `{"request":...,"decision":...,...}`
+          # because executePrReview returns `{ request, ...aggregate, summary }`,
+          # so anchoring on `{"decision":` would only match the catch-block
+          # failure object and silently drop every PASS result.
+          # Scope to this run via the prNumber and headSha downstream filters
+          # (those substrings are emitted in the request block).
+          flyctl logs --app "$FLY_APP_NAME" --no-tail > all-logs.txt 2>&1 || true
+          marker_line="$(grep -E 'PR_REVIEW_RESULT:[[:space:]]*\{' all-logs.txt \
+            | grep "\"prNumber\":${PR_NUMBER}" \
+            | grep "\"headSha\":\"${HEAD_SHA}\"" \
+            | tail -1 || true)"
+          if [ -z "$marker_line" ]; then
+            echo "No PR_REVIEW_RESULT marker found in logs for PR #${PR_NUMBER} SHA ${HEAD_SHA} (run may have crashed before emitting)." >&2
+            tail -100 all-logs.txt >&2 || true
+            exit 1
+          fi
+          review_json="$(printf '%s\n' "$marker_line" | sed -E 's/^.*PR_REVIEW_RESULT:[[:space:]]*//')"
           printf '%s\n' "$review_json" > review-result.json
-          decision="$(node -e "const fs=require('fs'); const data=JSON.parse(fs.readFileSync('review-result.json','utf8')); process.stdout.write(String(data.decision||''));")"
-          summary="$(node -e "const fs=require('fs'); const data=JSON.parse(fs.readFileSync('review-result.json','utf8')); process.stdout.write(String(data.summary||''));")"
+          decision="$(node -e "const fs=require('fs'); const d=JSON.parse(fs.readFileSync('review-result.json','utf8')); process.stdout.write(String(d.decision||''));")"
+          summary="$(node -e "const fs=require('fs'); const d=JSON.parse(fs.readFileSync('review-result.json','utf8')); process.stdout.write(String(d.summary||''));")"
           {
             echo 'decision<<EOF'
             echo "$decision"
