@@ -75,26 +75,25 @@ Wait for user confirmation before proceeding. Skip this step in unattended/pipel
 
 ### Step 2.5: Pre-Push Validation
 
-Before pushing, run the validators that match the content type. These catch structural damage and previously-fixed mistakes before they reach Door43 (PRs are auto-merged, so this is the last gate).
+Before pushing, run the validators that match the content type. These catch structural damage and previously-fixed mistakes before they reach Door43 (PRs are auto-merged, so this is the last gate). Each result's first line starts `OK:` or `FAIL:`.
 
-For ULT/UST USFM (use `--source` with the Hebrew book file to confirm no verses were lost; add `validate_alignment_integrity.mjs` for aligned files):
+For ULT/UST USFM (the `source` comparison confirms no verses were lost; add `validate_alignment_integrity` for aligned files):
 
-```bash
-node .claude/skills/utilities/scripts/validation/validate_usfm_structure.mjs \
-  --usfm <file-to-push> --source data/hebrew_bible/{NN}-{BOOK}.usfm --chapter {CH}
-node .claude/skills/utilities/scripts/validation/run_regression_checks.mjs \
-  --stage ULT --file <file-to-push> --book {BOOK} --chapter {CH}
+Option A — MCP tools (preferred, works without Bash):
+```
+mcp__workspace-tools__validate_usfm_structure({ usfm: "<file-to-push>", source: "data/hebrew_bible/{NN}-{BOOK}.usfm", chapter: {CH} })
+mcp__workspace-tools__run_regression_checks({ stage: "ULT", file: "<file-to-push>", book: "{BOOK}", chapter: {CH} })
 ```
 
 For TN/TQ TSV:
-
-```bash
-node .claude/skills/utilities/scripts/validation/check_duplicate_ids.mjs <file-to-push>
-node .claude/skills/utilities/scripts/validation/run_regression_checks.mjs \
-  --stage TN --file <file-to-push> --book {BOOK} --chapter {CH}
+```
+mcp__workspace-tools__check_duplicate_ids({ files: ["<file-to-push>"] })
+mcp__workspace-tools__run_regression_checks({ stage: "TN", file: "<file-to-push>", book: "{BOOK}", chapter: {CH} })
 ```
 
-(Use `--stage UST`, `--stage TQ`, or `--stage alignment` as appropriate.) If any validator exits non-zero, stop — fix the content and re-validate before pushing. Report what failed rather than pushing around it.
+Option B — Bash (when available): the same checks as scripts under `.claude/skills/utilities/scripts/validation/` (`validate_usfm_structure.mjs`, `run_regression_checks.mjs`, `check_duplicate_ids.mjs`), exit code 1 on failure.
+
+(Use stage `UST`, `TQ`, or `alignment` as appropriate.) On `FAIL:`, stop — fix the content and re-validate before pushing. Report what failed rather than pushing around it.
 
 ### Step 3: Run door43-push-cli.js
 

@@ -413,8 +413,18 @@ grep -oE '\\w [^|]+\|' aligned.usfm | sed 's/\\w //;s/|//' | tr '\n' ' '
 
 ### Step 3: Verify Alignment Field Integrity
 
-Check that milestone fields are faithful to the Hebrew source (byte-exact x-content/x-lemma, occurrence numbering). `--ust` allows unaligned Hebrew words, which are normal for UST:
+Check that milestone fields are faithful to the Hebrew source (byte-exact x-content/x-lemma, occurrence numbering). UST mode allows unaligned Hebrew words, which are normal for UST.
 
+Option A — MCP tool (preferred, works without Bash):
+```
+mcp__workspace-tools__validate_alignment_integrity({
+  aligned: "output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm",
+  hebrew: "data/hebrew_bible/{NN}-{BOOK}.usfm",
+  chapter: {CHAPTER}, ust: true
+})
+```
+
+Option B — Bash (when available):
 ```bash
 node .claude/skills/utilities/scripts/validation/validate_alignment_integrity.mjs \
   --aligned output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm \

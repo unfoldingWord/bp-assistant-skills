@@ -83,8 +83,17 @@ Use `mcp__workspace-tools__verify_tq` with `tsvFile="output/tq/PSA/PSA-006.tsv"`
 
 After writing all chapter files, scan the full output for duplicate IDs before proceeding to insertion. Use `mcp__workspace-tools__check_tn_quality` with `tsvFile` pointing to the output TSV and look for any `id_duplicate` findings. For multi-chapter or whole-book runs, check each chapter file in sequence and maintain a cross-chapter seen-ID set.
 
-If `check_tn_quality` is unavailable for TQ files, run the standalone checker instead — it validates ID format and finds duplicates within and across files in one pass (pass all chapter files from this session together, and optionally `--against` the published book TSV to catch collisions with existing IDs):
+If `check_tn_quality` is unavailable for TQ files, run the dedicated checker instead — it validates ID format and finds duplicates within and across files in one pass (pass all chapter files from this session together, and optionally check collisions against the published book TSV):
 
+Option A — MCP tool (preferred, works without Bash):
+```
+mcp__workspace-tools__check_duplicate_ids({
+  files: ["output/tq/{BOOK}/{BOOK}-{CH1}.tsv", "output/tq/{BOOK}/{BOOK}-{CH2}.tsv"],
+  against: ["door43-repos/en_tq/tq_{BOOK}.tsv"]
+})
+```
+
+Option B — Bash (when available):
 ```bash
 node .claude/skills/utilities/scripts/validation/check_duplicate_ids.mjs \
   output/tq/{BOOK}/{BOOK}-*.tsv --against door43-repos/en_tq/tq_{BOOK}.tsv

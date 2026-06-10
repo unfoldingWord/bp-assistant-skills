@@ -521,6 +521,16 @@ grep -oE '\\w [^|]+\|' aligned.usfm | sed 's/\\w //;s/|//' | tr '\n' ' '
 
 After text verification passes, check that the milestone fields are faithful to the Hebrew source. This catches the Unicode byte-form drift behind issues #88-#91: an x-content or x-lemma that looks identical to the Hebrew but differs in bytes, plus empty fields, occurrence-numbering errors, and unaligned Hebrew words.
 
+Option A — MCP tool (preferred, works without Bash):
+```
+mcp__workspace-tools__validate_alignment_integrity({
+  aligned: "output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm",
+  hebrew: "data/hebrew_bible/{NN}-{BOOK}.usfm",
+  chapter: {CHAPTER}
+})
+```
+
+Option B — Bash (when available):
 ```bash
 node .claude/skills/utilities/scripts/validation/validate_alignment_integrity.mjs \
   --aligned output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm \
