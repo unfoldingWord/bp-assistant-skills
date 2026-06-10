@@ -269,7 +269,7 @@ function extractUsfmMarkers(ultContent, chapter, verse, hasDText = false) {
       const startWords = textAfterMarker.split(/\s+/).slice(0, 3).map(w =>
         w.replace(/[.,;:!?'"\u201C\u201D\u2018\u2019…—-]/g, '').toLowerCase()
       );
-      console.log(`Start words:`, startWords)
+      console.error(`Start words:`, startWords)
       markers.push({ marker: lineMarkerMatch[1], position: -1, startWords });
     }
   }

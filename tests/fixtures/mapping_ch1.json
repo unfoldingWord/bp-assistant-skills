@@ -1,0 +1,35 @@
+[
+  {
+    "reference": "TST 1:1",
+    "hebrew_words": [
+      {"index": 0, "word": "בְּ⁠רֵאשִׁ֖ית", "strong": "b:H7225", "lemma": "רֵאשִׁית"},
+      {"index": 1, "word": "בָּרָ֣א", "strong": "H1254a", "lemma": "בָּרָא"},
+      {"index": 2, "word": "אֱלֹהִ֑ים", "strong": "H0430", "lemma": "אֱלֹהִים"},
+      {"index": 3, "word": "אֵ֥ת", "strong": "H0853", "lemma": "אֵת"},
+      {"index": 4, "word": "הַ⁠שָּׁמַ֖יִם", "strong": "d:H8064", "lemma": "שָׁמַיִם"}
+    ],
+    "english_text": "In the beginning God created the heavens.",
+    "alignments": [
+      {"hebrew_indices": [0], "english": ["In", "the", "beginning"]},
+      {"hebrew_indices": [2], "english": ["God"]},
+      {"hebrew_indices": [1], "english": ["created"]},
+      {"hebrew_indices": [3, 4], "english": ["the", "heavens."]}
+    ]
+  },
+  {
+    "reference": "TST 1:2",
+    "hebrew_words": [
+      {"index": 0, "word": "וְ⁠שָׁלוֹם", "strong": "c:H7965", "lemma": "שָׁלוֹם"},
+      {"index": 1, "word": "ט֣וֹב", "strong": "H2896a", "lemma": "טוֹב"},
+      {"index": 2, "word": "וְ⁠שָׁלוֹם", "strong": "c:H7965", "lemma": "שָׁלוֹם"},
+      {"index": 3, "word": "יַעֲמֹ֑ד", "strong": "H5975", "lemma": "עָמַד"}
+    ],
+    "english_text": "And peace {is} good, and peace endures.",
+    "alignments": [
+      {"hebrew_indices": [0], "english": ["And", "peace"]},
+      {"hebrew_indices": [1], "english": ["{is}", "good,"]},
+      {"hebrew_indices": [2], "english": ["and", "peace"]},
+      {"hebrew_indices": [3], "english": ["endures."]}
+    ]
+  }
+]
