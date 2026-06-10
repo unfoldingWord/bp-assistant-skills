@@ -27,9 +27,9 @@
     "checks": [
       {
         "type": "must_not_match",
-        "pattern": "Alternate translation: \\[[^\\]]*[.?!]\\](?!\\s*\\(figs-rquestion\\))",
+        "pattern": "Alternate translation: \\[[^\\]]*\\.\\]",
         "flags": "",
-        "explain": "AT must not end with sentence punctuation before the closing bracket; final punctuation is omitted unless it intentionally differs from the ULT ending",
+        "explain": "AT must not end with a period before the closing bracket (the default ULT sentence ending is omitted); ? and ! are allowed as intentional differences, and figs-rquestion rows are exempt",
         "skipRowMatching": "figs-rquestion"
       }
     ],
