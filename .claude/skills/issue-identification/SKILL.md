@@ -257,6 +257,7 @@ When you encounter these words, ALWAYS check the specific issue listed:
 | heart | figs-metaphor (heart = thoughts/feelings/will; see template) |
 | all, every, never, always | figs-hyperbole (exaggeration for emphasis?) |
 | the righteous, the wicked, the poor | figs-nominaladj (adjective as noun?) |
+| wordplay, sound play, paronomasia, two words from the same Hebrew root | writing-poetry (there is no figs-paronomasia type — see writing-poetry.md "Similar Sounds") |
 
 ### Commonly Confused Issue Pairs
 
@@ -463,7 +464,7 @@ Format:
 |--------|-------------|
 | book | 3-letter abbreviation (psa, gen, mat, etc.) |
 | chapter:verse | Single-verse reference (78:17). Never use verse ranges — see rules below. |
-| supportreference | Issue type (figs-metaphor, writing-pronouns, etc.) |
+| supportreference | Issue type (figs-metaphor, writing-pronouns, etc.) — must be one of the slugs in `data/translation-issues.csv` / the [issue-types catalog](reference/issue-types-catalog.md). Never coin a new one (no `figs-paronomasia`); if no type fits, pick the closest listed type. |
 | ULT text | English phrase copied verbatim from the ULT — exact words, exact inflections, from one verse only |
 | (empty) | Reserved |
 | (empty) | Reserved |

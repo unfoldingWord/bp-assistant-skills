@@ -163,6 +163,10 @@ Guardrails for this step:
 **For quote boundary issues** (restructuring scope, parallelism scope, orphaned words):
 - Use `mcp__workspace-tools__update_prepared_quote` with `preparedJson` (= `runtime.preparedNotes`, or fallback `tmp/claude/prepared_notes.json`), the affected `id`, and the changed `glQuote` / `glQuoteRoundtripped` / `origQuote` fields. Do not hand-`Edit` the JSON.
 
+**For invalid support references** (`unknown_sref` — the issue type is not in the list, e.g. an invented slug like `figs-paronomasia`):
+- The SupportReference must be a valid issue type from `data/translation-issues.csv`. Re-select the correct one rather than deleting the note — Hebrew wordplay / sound play (words from the same root) is `writing-poetry`, not a `figs-paronomasia` of its own.
+- Set the corrected slug with `mcp__workspace-tools__update_prepared_quote`, passing the affected `id` and the `sref` field (e.g. `sref: "writing-poetry"`). If the note text was written for the wrong type, also fix it with `update_note_text`.
+
 **For removal** (antithetical parallelism notes, redundant structural notes):
 - Use `mcp__workspace-tools__remove_note` with the `id`, `generatedJson` (= `runtime.generatedNotes`), and `tsvFile` (the assembled TSV) — it drops the entry from the JSON and the matching TSV row in one call.
 
@@ -211,6 +215,7 @@ The script runs these checks:
  7  gl_quote_not_in_ult             error       gl_quote appears in ULT verse (expected for discontinuous quotes using ... notation)
  8  bold_not_in_ult                 error       Bolded text appears verbatim in ULT verse
  9  rc_link_in_note                 error       Note column has no rc:// links
+17  unknown_sref                    error       SupportReference issue type exists in data/translation-issues.csv (no invented slugs like figs-paronomasia)
 10  orphaned_conjunction/prep       warning     No orphaned words before AT in substitution
 10b dropped_conjunction             warning     gl_quote starts with conjunction but AT drops it
 11  writer_in_psalms                warning     PSA: use attributed name or "the psalmist", never "the writer" or "the author"

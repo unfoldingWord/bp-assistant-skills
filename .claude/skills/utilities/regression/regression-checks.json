@@ -1,5 +1,28 @@
 [
   {
+    "issue": "zec6-invalid-sref",
+    "title": "TN: SupportReference must be a valid issue type, never an invented slug",
+    "classification": "global",
+    "stage": "TN",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "figs-paronomasia",
+        "flags": "",
+        "explain": "There is no figs-paronomasia issue type. Hebrew wordplay / sound play (words from the same root) uses writing-poetry. Originated in a Zec 6 run that coined the slug."
+      },
+      {
+        "type": "invariant",
+        "name": "valid_support_reference",
+        "explain": "Every SupportReference slug must exist in data/translation-issues.csv. Enforced as an error by tn-quality-check unknown_sref; advisory in this runner."
+      }
+    ],
+    "notes": "Pattern check guards the specific closed bug (figs-paronomasia). The general list-membership invariant is enforced by tn-quality-check check 17 (unknown_sref, error)."
+  },
+  {
     "issue": 82,
     "title": "Bold-format GLQuote words when directly quoted in Note field",
     "classification": "global",
