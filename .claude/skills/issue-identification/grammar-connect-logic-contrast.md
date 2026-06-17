@@ -10,53 +10,45 @@ A contrast relationship shows one event or item is in contrast or opposition to 
 
 ## Categories
 
+All categories below assume the English ULT does **not** already begin with "but" / "however" / "yet" / "nevertheless" / "instead" / "rather". If it does, the contrast is already explicit and no note is written (see "Hard rule" above). The examples below show implicit-contrast cases — usually clauses joined by "and" or by no connector at all.
+
 ### 1. Contrast Between Behaviors or Beliefs
-Comparing how different groups think or act.
+Comparing how different groups think or act, where the ULT connector is "and" or absent.
 
 | Expression | Contrast |
 |------------|----------|
-| "**But** we proclaim Christ crucified" (1 Cor 1:23) | Jews seek signs, Greeks seek wisdom, but Paul preaches Christ |
-| "**But** to those who are called" (1 Cor 1:24) | What seems foolish to some is God's power to others |
-| "**But** to Israel he says" (Rom 10:21) | Gentiles found God, but Israel rejected him |
+| "He has brought down rulers... **and** has exalted the lowly" (Luke 1:52) | "and" links opposite actions toward different groups — the contrast must be made explicit |
 
 ### 2. Contrast Between Expectation and Reality
-What happened vs. what would normally be expected.
+What happened vs. what would normally be expected, where the ULT uses "and" rather than "but".
 
 | Expression | Contrast |
 |------------|----------|
-| "**But** God chose the foolish things" (1 Cor 1:27) | You'd expect God to choose the wise |
-| "**they became foolish**" (Rom 1:22) | They claimed to be wise but became foolish |
-| "**But** they had no child" (Luke 1:7) | Expected blessing for righteous people vs. reality |
+| "They claimed to be wise, **and** they became foolish" (Rom 1:22, paraphrased pattern) | Connector "and" hides the surprise; the underlying meaning is contrastive |
+| "Joseph her husband was a righteous man, **and** he did not want to expose her" (Matt 1:19 pattern) | "and" joins a description with what would be an unexpected reaction; implicit contrast |
 
 ### 3. Contrast Between Times (Past vs. Present)
-**Markers**: "But now", "Yet now"
+**Markers**: implicit "now" where the contrast with a past state is left to the reader to infer
 
 | Expression | Contrast |
 |------------|----------|
-| "**But now** the righteousness of God has been revealed" (Rom 3:21) | Under the law (before) vs. revealed righteousness (now) |
-| "**But now** having been freed from sin" (Rom 6:22) | Formerly slaves to sin vs. now freed |
-| "**Now** we do speak wisdom" (1 Cor 2:6) | Earlier said he didn't speak with wisdom |
+| "**Now** the righteousness of God has been revealed" (when ULT uses bare "now") | Under the law (before) vs. revealed righteousness (now) — bare "now" without a contrastive marker may need a note |
 
-### 4. Contrast Between Sources/Authorities
+### 4. Contrast Between Sources/Authorities (when not already signaled)
 
-| Expression | Contrast |
-|------------|----------|
-| "**not I, but the Lord**" (1 Cor 7:10) | Paul's authority vs. the Lord's direct teaching |
-| "**I, not the Lord**" (1 Cor 7:12) | Paul's apostolic authority (no direct word from Jesus) |
+Only flag when the contrast between sources is not already carried by an explicit contrastive connective. If the ULT already reads "not I, but the Lord", the contrast is explicit and no note is needed.
 
-### 5. Contrast to Introduce a New Point
+### 5. Contrast to Introduce a New Point (when implicit)
 
-| Expression | Contrast |
-|------------|----------|
-| "**But** the natural person" (1 Cor 2:14) | Spiritual people (v.13) vs. natural people |
-| "**However**, you are not in the flesh" (Rom 8:9) | People with mindset of flesh (v.8) vs. believers |
+Only flag when the introduction of the contrasting group is **not** already marked by "but"/"however". For example, a bare "the natural person…" following a description of "the spiritual person…" without any connector may need a note; "But the natural person…" does not.
 
 ### 6. Contrast Between Actions (Do This, Not That)
 
 | Expression | Contrast |
 |------------|----------|
-| "He has brought down... **and** exalted the lowly" (Luke 1:52-53) | Opposite actions toward different groups |
-| "**But** put on the Lord Jesus Christ" (Rom 13:14) | Don't make provision for flesh, but put on Christ |
+| "He has brought down... **and** exalted the lowly" (Luke 1:52-53) | Opposite actions toward different groups, joined only by "and" |
+
+Do NOT flag the parallel "Don't make provision for the flesh, **but** put on the Lord Jesus Christ" (Rom 13:14) — the "but" already makes the contrast explicit.
 
 ### 7. "Neither...Nor" Contrast
 **Pattern**: "neither X if condition, nor Y if opposite condition"
@@ -64,6 +56,8 @@ What happened vs. what would normally be expected.
 | Expression | Contrast |
 |------------|----------|
 | "**neither** are we made to lack **if** we do not eat, **nor** do we abound **if** we eat" (1 Cor 8:8) | Both have same result |
+
+The "neither…nor" construction itself is the contrastive scaffolding; this is flaggable even though the surface words include "nor", because the contrast structure may not survive translation in all languages.
 
 NOTE: This verse has TWO issues: grammar-connect-logic-contrast (for neither...nor) AND grammar-connect-condition-hypothetical (for the if clauses).
 
@@ -88,12 +82,23 @@ but, yet, however, instead, rather, on the contrary, by contrast, nevertheless, 
 ## When to Flag
 
 **FLAG** if:
+- The English ULT clause begins with **"and"** (or is asyndetic / has no connector) but the underlying contrast still needs to be made explicit for the translator
 - The contrast is IMPLICIT or UNCLEAR
 - The translator might miss the relationship between the ideas
 - Different languages need different words to make the contrast clear
 
 **Do NOT flag** if:
-- The contrast is already EXPLICIT and CLEAR (e.g., "However... Instead...")
+- The English ULT clause already begins with **"but"** — "but" is itself an explicit contrast marker, so the relationship is already clear and no `grammar-connect-logic-contrast` note is needed
+- The clause begins with any other explicit contrast marker that already makes the relationship plain (e.g., "however", "yet", "nevertheless", "instead", "rather", "on the contrary")
+- The contrast is already EXPLICIT and CLEAR
+
+### Hard rule: do not write a `grammar-connect-logic-contrast` note for a clause that starts with "but"
+
+The purpose of this note is to alert the translator that two ideas are in contrast when the English wording would not otherwise signal it. When the ULT already says "but", the signal is in the text. Writing a contrast note in that situation is redundant and is the bug this rule is designed to prevent.
+
+If the only thing you would say is "**But** here marks a contrast between X and Y", drop the note. The note belongs on the "and"/asyndetic case, not on the "but" case.
+
+If a clause beginning with "but" needs commentary for a *different* reason (e.g., "but" is functioning as a development marker rather than a contrast, or it introduces an exception), use the appropriate other issue type (see `grammar-connect-words-phrases` for non-contrastive "but", or `grammar-connect-exceptions` for exceptive "but").
 
 ---
 
@@ -130,8 +135,10 @@ but, yet, however, instead, rather, on the contrary, by contrast, nevertheless, 
 
 ## Recognition Process
 
-1. **Look for contrast markers**: but, yet, however, instead, nevertheless, etc.
+1. **Check the English connector first**:
+   - Does the clause begin with **"but"**, "however", "yet", "nevertheless", "instead", "rather", or "on the contrary"? → **STOP. Do not write a `grammar-connect-logic-contrast` note.** The contrast is already explicit. Consider `grammar-connect-words-phrases` only if the connector is functioning non-contrastively, or `grammar-connect-exceptions` if it is functioning as "except".
+   - Does the clause begin with **"and"**, with no connector at all, or with a neutral marker like "now"? → Continue.
 2. **Identify what is being contrasted**: Two groups? Expectation vs. reality? Past vs. present?
-3. **Check if contrast is clear**: Would readers understand? Is a more explicit word needed?
+3. **Check if contrast is clear despite the neutral connector**: Would the translator/reader catch the contrast without help? If yes, no note. If no, write the note.
 
-**Key Test**: Are two things being compared as opposites or as unexpected?
+**Key Test**: Two things are being compared as opposites or one is unexpected, **and** the English wording does not already say "but"/"however"/etc.
