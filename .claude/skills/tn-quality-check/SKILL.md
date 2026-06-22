@@ -87,6 +87,10 @@ Read the SupportReference column to identify the issue type (e.g., `figs-metapho
 
 Flag notes that describe the wrong issue type.
 
+**Do not reclassify a valid SupportReference.** Step 3a is only for flagging notes whose SupportReference is genuinely wrong. If the note's text already matches the SupportReference template and standard verbiage, leave the SupportReference alone — even if a different issue type might also plausibly apply. The quality-check pass must not overwrite a SupportReference that the issue-identification skill has correctly assigned.
+
+**Specifically: do not change `figs-metaphor` "behold" notes to `figs-exclamations`.** Per `issue-identification/figs-exclamations.md` and `issue-identification/figs-metaphor.md`, "behold" calling attention to information (the vast majority of cases — "Behold, I am sending...", "behold, a man came", "And behold") is **`figs-metaphor`** (speaker says "look" but means "listen/pay attention"). Only the rare case of "behold" expressing genuine visual surprise is `figs-exclamations`. If a note's SupportReference is `figs-metaphor` and the note discusses "behold" as an attention-getter (look = listen), this is correct — do not flag it and do not reclassify it to `figs-exclamations`. Related: "Behold me" (inferior to superior) is `writing-politeness`; "Behold me" (Yahweh announcing action) is `figs-idiom`. None of these should be reclassified to `figs-exclamations` by the quality-check pass.
+
 #### 3b. Template adherence
 
 For each issue type, check that the note follows the template pattern. The note should read like a natural adaptation of the template, not a completely different structure. Flag notes that deviate significantly from the expected template shape.
