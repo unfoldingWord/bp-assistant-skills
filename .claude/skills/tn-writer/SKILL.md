@@ -20,6 +20,11 @@ When running in restricted mode, use workspace MCP tools instead of direct shell
 - `mcp__workspace-tools__curly_quotes`
 - `mcp__workspace-tools__fix_hebrew_quotes` — pass `output` param to write to file instead of returning inline
 - `mcp__workspace-tools__generate_ids` — do not call when running inside the pipeline: IDs are pre-populated by the pipeline runner during mechanical prep. Calling this again risks collisions.
+- `mcp__workspace-tools__update_note_text` — set one generated note's text by id (use during Step 7 final review instead of hand-`Edit`)
+- `mcp__workspace-tools__update_prepared_quote` — set a prepared note's quote fields by id (use during Step 7 final review instead of hand-`Edit`)
+- `mcp__workspace-tools__remove_note` — remove a note by id from generated_notes.json and/or the TSV (use during Step 7 final review instead of hand-`Edit`)
+
+**Prohibited:** Do NOT write Python, bash, or other scripts to `/tmp/` or anywhere else. Do NOT hand-`Edit` `generated_notes.json`, `prepared_notes.json`, or the assembled notes TSV to revise a row's text, quote, or to delete it — use the structured `update_note_text` / `update_prepared_quote` / `remove_note` tools, which locate items by id and never produce "string to replace not found" errors. If an `Edit` ever returns "string to replace not found" against any of these files, do not retry it: switch to the structured tool; if the target still can't be matched, leave the row as-is and move on. Repeated `Edit` retries against these files will trip the runner's repeated-tool-error guardrail and fail the whole shard.
 
 ## Prerequisites
 
@@ -190,7 +195,12 @@ For `writing-pronouns` rows, apply three extra checks during final review:
 2. Narrow the Quote/GLQuote anchor to the first pronoun occurrence that actually needs clarification; do not leave a full-verse span for a single pronoun issue.
 3. If multiple `writing-pronouns` rows in the same verse explain the same referent, keep only the first necessary note and remove later duplicates.
 
-Fix any issues found and rewrite the TSV row(s) if needed. This is a lightweight review pass, not a regeneration -- just catch structural problems the scripts can't judge.
+Fix any issues found via the structured by-id tools — never hand-`Edit` `generated_notes.json`, `prepared_notes.json`, or the assembled TSV:
+- Note text problems → `mcp__workspace-tools__update_note_text` with `generatedJson`, the affected `id`, and the full replacement `note` text.
+- Quote scope / continuity / single-verse violations → `mcp__workspace-tools__update_prepared_quote` with `preparedJson`, the affected `id`, and the changed `glQuote` / `glQuoteRoundtripped` / `origQuote` fields, then re-run assembly (`assemble_notes`) and post-processing (`curly_quotes`, `fix_unicode_quotes`, `verify_bold_matches`) once.
+- Row removal (e.g. low-value pronoun note, duplicate) → `mcp__workspace-tools__remove_note` with the `id`, `generatedJson`, and `tsvFile`.
+
+This is a lightweight review pass, not a regeneration -- just catch structural problems the scripts can't judge. If `update_note_text` / `update_prepared_quote` / `remove_note` returns a "not found" or similar error twice for the same id, stop trying to fix that row and move on; do not fall back to hand-`Edit`.
 
 ### Step 8: Gemini Review (optional, activation only)
 
