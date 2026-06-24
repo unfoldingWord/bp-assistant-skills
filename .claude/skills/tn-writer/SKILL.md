@@ -94,6 +94,13 @@ Canonical vocabulary references (read-only -- never modify these):
 - `data/glossary/biblical_measurements.csv` -- weights, volumes, distances
 - `data/glossary/biblical_phrases.csv` -- grammatical and prophetic phrases
 - `data/quick-ref/ult_decisions.csv` / `ust_decisions.csv` -- prior rendering decisions
+- `data/quick-ref/tn_decisions.csv` -- accumulated TN note-phrasing / quote-selection
+  preferences learned from editor reviews (via `tn-edit-compare`). When a row's
+  `SupportReference` matches an issue you're noting (and its `Book` is `ALL` or this
+  book), prefer that note wording and quote span:
+  ```bash
+  grep -i "<SupportReference>" data/quick-ref/tn_decisions.csv 2>/dev/null
+  ```
 
 If `issues_resolved.txt` contains a decision about how a specific issue type should be handled, follow it. If a note references a Hebrew term, use the rendering from canonical CSVs unless `issues_resolved.txt` specifies otherwise.
 

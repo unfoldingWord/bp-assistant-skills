@@ -53,6 +53,11 @@ TN classification has canonical authorities. Grep them; if they contradict the
 editor's change, **do not record** it — surface it for human escalation instead:
 - `data/issues_resolved.txt` (highest authority on how issues are classified)
 - `data/templates.csv` (note-template authority)
+- the protected rendering glossaries, when a preference touches a Hebrew term or
+  rendering: `data/glossary/hebrew_ot_glossary.csv`, `data/glossary/psalms_reference.csv`,
+  `data/glossary/sacrifice_terminology.csv`, `data/glossary/biblical_phrases.csv`,
+  `data/glossary/biblical_measurements.csv`
+
 If no canonical source addresses it, proceed.
 
 ## Step 4 — Classify scope (general vs context-specific)
@@ -62,20 +67,34 @@ If no canonical source addresses it, proceed.
 - **context-specific** — confined to one chapter/verse. Scope `Book` to the book
   code and note the context; never generalize a single occurrence.
 
-## Step 5 — Turn-3 write discipline (only after the finding is confirmed)
+## Step 5 — Write discipline (mirror editor-compare's Turn-3)
+
+Like `editor-compare`, do not write memory before the finding is confirmed:
+- **Interactive use** — confirm the finding with the editor first (the editor's
+  approval is the gate), then append the rows below.
+- **Automated / overnight use** — run as a PROPOSER only: emit the rows as your
+  result and write nothing. The overnight runner / a human-merged PR materializes
+  them, so the canonical-conflict and PR-review gates still apply.
 
 Write note-phrasing / quote-selection preferences to
-`data/quick-ref/tn_decisions.csv` (read by `tn-writer`):
+`data/quick-ref/tn_decisions.csv` (read by `tn-writer`). Columns:
+`Reference,SupportReference,Note,Book,Context,Date,Source`:
 ```
 <Reference>,<SupportReference>,<concise note preference>,<BOOK or ALL>,<CH:VS context>,<YYYY-MM-DD>,editor
 ```
 Write keep/drop (over-/under-flagging) signal to
-`data/quick-ref/issue_decisions.csv` (read by `issue-identification`):
+`data/quick-ref/issue_decisions.csv` (read by `issue-identification`). Columns:
+`Phrase,IssueType,Book,Context,Notes,Date,Source` — put the `keep` or `drop`
+verdict in `Context`:
 ```
 <phrase or anchor>,<SupportReference issue type>,<BOOK or ALL>,<CH:VS context — keep|drop>,<why>,<YYYY-MM-DD>,editor
 ```
-Use `Source: editor` for human-attributed rulings. Never edit any `SKILL.md`
-body, `data/issues_resolved.txt`, or a protected glossary from this skill.
+Quote any field that contains a comma, double-quote, or newline (wrap in double
+quotes, doubling internal quotes — RFC 4180) so the row stays well-formed.
+Use `Source: editor` for human-attributed rulings. Never write any `SKILL.md`
+body, `data/issues_resolved.txt`, or a protected glossary
+(`hebrew_ot_glossary.csv`, `psalms_reference.csv`, `sacrifice_terminology.csv`,
+`biblical_phrases.csv`, `biblical_measurements.csv`) from this skill.
 
 ## Step 6 — Results-first summary
 
