@@ -33,7 +33,12 @@ If `--verses <start>-<end>` is specified:
 - Output file uses verse range: `output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv`
 - Team name includes range: `deep-issue-<BOOK>-<CH>-v<START>-<END>`
 
-After running all chunks, concatenate the chunk TSVs (stripping any duplicate headers) into the final `output/issues/<BOOK>/<BOOK>-<CH>.tsv`.
+When invoked with `--verses`, the verse-range shard
+`output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv` is the **one and only**
+final output of this run. Do NOT also write or concatenate into the
+full-chapter `output/issues/<BOOK>/<BOOK>-<CH>.tsv` — the caller consumes the
+shard directly and assembles the chapter itself. Each verse range is a separate
+invocation, so there are no other chunks for this run to merge.
 
 ## Pipeline Context
 
@@ -136,6 +141,17 @@ merges all findings, applies rulings, deduplicates, and orders.
 Output: `output/issues/<BOOK>/<BOOK>-<CH>.tsv`
 With verse range: `output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv`
 
+### Verify the output before completing (required)
+
+After writing the output TSV, **Read it back** and confirm it actually contains
+your merged findings — one issue row per kept finding, matching the count you
+are about to report. If the file is missing, empty, or has materially fewer
+rows than your merge produced, re-write it from your merged findings and verify
+again. Do not report completion or an issue count until the file on disk matches
+your merged result. A success summary over an empty or short file silently
+breaks the downstream pipeline: it generates only a chapter intro (or nothing)
+and still reports success.
+
 ## Gemini Review (optional, activation only)
 
 Only run if `--gemini` is explicitly passed. Skip by default. If running: read
@@ -153,7 +169,10 @@ The human ULT/UST is authoritative. Issues adapt to the text, not the other way 
 Without verse range: `output/issues/<BOOK>/<BOOK>-<CH>.tsv`
 With verse range: `output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv`
 
-After all chunks are complete, concatenate into `output/issues/<BOOK>/<BOOK>-<CH>.tsv` (strip duplicate headers, preserve verse ordering).
+This run writes exactly one of the above — whichever matches the request — and
+nothing else. Chapter-level assembly across verse-range shards is the caller's
+responsibility, not this skill's; never write or concatenate into the
+full-chapter file when a verse range was requested.
 
 Same format as base issue-identification (see that skill for full rules — key points: ULT text must be copied verbatim, use `&` only for genuinely discontinuous phrases):
 ```
