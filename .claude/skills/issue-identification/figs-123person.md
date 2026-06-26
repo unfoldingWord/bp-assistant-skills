@@ -22,11 +22,16 @@ A speaker normally refers to himself as "I" (first person) and to the person he 
 
 | Situation | Why NOT | Use Instead |
 |-----------|---------|-------------|
+| Speaker uses **first person** (I, me, my, mine, we, us, our) to refer to **self** | This is the default, expected grammatical person for self-reference — not a figure of speech | No note needed |
+| Addressee is referenced in **second person** (you, your) | This is the default, expected grammatical person for the addressee | No note needed |
+| Yahweh (the speaker) says "my name," "my hand," "my arm," "my people," etc. | First-person possessive self-reference is unremarkable — Yahweh is using exactly the person expected for a speaker | No note needed |
 | Prophetic message entirely in 3rd person about Yahweh | Prophet speaking ABOUT God, not FOR God | No note needed |
 | Generic/hypothetical "a man who does X" | Standard 3rd person reference | No note needed |
 | Indefinite "they" meaning people in general | Different issue | writing-pronouns |
 | Narrative descriptions of characters | Standard storytelling | No note needed |
 | Titles used as regular nouns | Not a person shift | translate-names if needed |
+
+**Key principle**: `figs-123person` flags an **unexpected** grammatical person — a speaker using 3rd person for self, a speaker using 3rd person for the addressee, or a mid-passage person shift for the same referent. A speaker using first person for self (e.g., Yahweh in Isa 41:25 saying "my name") is the **expected** grammatical person and never qualifies. Only flag when the grammatical person is genuinely surprising for the speaker/addressee relationship.
 
 ---
 
@@ -109,6 +114,7 @@ Shifts between grammatical persons referring to the same entity within a single 
    - Does Jesus use "Son of Man/the Son"? -> Type 4
    - Is this a letter introduction? -> Type 5
    - Is there mixing of persons for same referent? -> Type 6
+   - **If the speaker uses first person (I/my/me/we/our) for self, or second person (you/your) for the addressee, STOP — this is the default expected person and is NOT figs-123person.** (E.g., Yahweh saying "my name" / "my arm" / "my people" gets no note.)
 
 3. **Check Issues Resolved exclusions**:
    - Is this a prophetic message ENTIRELY in 3rd person? -> NO note needed
@@ -186,6 +192,8 @@ Shifts between grammatical persons referring to the same entity within a single 
 Before applying this classification, verify:
 - [ ] Speaker and addressee are correctly identified
 - [ ] The reference is genuinely unexpected (not standard 3rd person)
+- [ ] The speaker is NOT simply using first person (I/my/me/we/our) to refer to self — that is the default and never warrants a note (e.g., Yahweh saying "my name" in Isa 41:25)
+- [ ] The addressee is NOT simply referenced in second person (you/your) — that is the default and never warrants a note
 - [ ] This is NOT a prophetic message entirely in 3rd person
 - [ ] The purpose (humility/respect/emphasis) is clear
 - [ ] The appropriate template subtype is selected
