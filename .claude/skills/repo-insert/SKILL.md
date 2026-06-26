@@ -73,6 +73,28 @@ For interactive (non-pipeline) use, show the user what will change before pushin
 
 Wait for user confirmation before proceeding. Skip this step in unattended/pipeline mode.
 
+### Step 2.5: Pre-Push Validation
+
+Before pushing, run the validators that match the content type. These catch structural damage and previously-fixed mistakes before they reach Door43 (PRs are auto-merged, so this is the last gate). Each result's first line starts `OK:` or `FAIL:`.
+
+For ULT/UST USFM (the `source` comparison confirms no verses were lost; add `validate_alignment_integrity` for aligned files):
+
+Option A — MCP tools (preferred, works without Bash):
+```
+mcp__workspace-tools__validate_usfm_structure({ usfm: "<file-to-push>", source: "data/hebrew_bible/{NN}-{BOOK}.usfm", chapter: {CH} })
+mcp__workspace-tools__run_regression_checks({ stage: "ULT", file: "<file-to-push>", book: "{BOOK}", chapter: {CH} })
+```
+
+For TN/TQ TSV:
+```
+mcp__workspace-tools__check_duplicate_ids({ files: ["<file-to-push>"] })
+mcp__workspace-tools__run_regression_checks({ stage: "TN", file: "<file-to-push>", book: "{BOOK}", chapter: {CH} })
+```
+
+Option B — Bash (when available): the same checks as scripts under `.claude/skills/utilities/scripts/validation/` (`validate_usfm_structure.mjs`, `run_regression_checks.mjs`, `check_duplicate_ids.mjs`), exit code 1 on failure.
+
+(Use stage `UST`, `TQ`, or `alignment` as appropriate.) On `FAIL:`, stop — fix the content and re-validate before pushing. Report what failed rather than pushing around it.
+
 ### Step 3: Run door43-push-cli.js
 
 Execute the CLI wrapper which handles clone/fetch, insertion, validation (TN), commit, push, PR create, and PR merge:

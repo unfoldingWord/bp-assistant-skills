@@ -14,8 +14,11 @@ In restricted runs, use workspace MCP tools instead of direct shell/python comma
 - `mcp__workspace-tools__check_tn_quality`
 - `mcp__workspace-tools__assemble_notes`
 - `mcp__workspace-tools__curly_quotes`
+- `mcp__workspace-tools__update_note_text` — set one generated note's text by id
+- `mcp__workspace-tools__update_prepared_quote` — set a prepared note's quote fields by id
+- `mcp__workspace-tools__remove_note` — remove a note by id from generated_notes.json and/or the TSV
 
-**Prohibited:** Do NOT write Python, bash, or other scripts to `/tmp/` or anywhere else. Use the Edit tool for TSV/JSON fixes and MCP tools for batch operations.
+**Prohibited:** Do NOT write Python, bash, or other scripts to `/tmp/` or anywhere else. Do NOT hand-`Edit` `generated_notes.json` or `prepared_notes.json` — use the structured `update_note_text` / `update_prepared_quote` / `remove_note` tools, which locate items by id and never produce "string to replace not found" errors. If an `Edit` ever returns "string to replace not found", do not retry it: re-Read once or switch to the structured tool; if the target still can't be matched, tag the row unresolved and move on.
 
 ## Pipeline Context
 
@@ -83,6 +86,10 @@ Read the SupportReference column to identify the issue type (e.g., `figs-metapho
 - A `grammar-connect-*` note should identify the logical connection.
 
 Flag notes that describe the wrong issue type.
+
+**Do not reclassify a valid SupportReference.** Step 3a is only for flagging notes whose SupportReference is genuinely wrong. If the note's text already matches the SupportReference template and standard verbiage, leave the SupportReference alone — even if a different issue type might also plausibly apply. The quality-check pass must not overwrite a SupportReference that the issue-identification skill has correctly assigned.
+
+**Specifically: do not change `figs-metaphor` "behold" notes to `figs-exclamations`.** Per `issue-identification/figs-exclamations.md` and `issue-identification/figs-metaphor.md`, "behold" calling attention to information (the vast majority of cases — "Behold, I am sending...", "behold, a man came", "And behold") is **`figs-metaphor`** (speaker says "look" but means "listen/pay attention"). Only the rare case of "behold" expressing genuine visual surprise is `figs-exclamations`. If a note's SupportReference is `figs-metaphor` and the note discusses "behold" as an attention-getter (look = listen), this is correct — do not flag it and do not reclassify it to `figs-exclamations`. Related: "Behold me" (inferior to superior) is `writing-politeness`; "Behold me" (Yahweh announcing action) is `figs-idiom`. None of these should be reclassified to `figs-exclamations` by the quality-check pass.
 
 #### 3b. Template adherence
 
@@ -155,13 +162,17 @@ Guardrails for this step:
 - Do not create recurring marker/delete-line patch workflows.
 
 **For note text issues** (template drift, wrong verbiage, AT naturalness, "Here" rule, wrong issue type, cross-verse inconsistency):
-- Edit the generated-notes path from context.json (`runtime.generatedNotes`) or the fallback `tmp/claude/generated_notes.json` — update the note text for the affected ID(s).
+- Use `mcp__workspace-tools__update_note_text` with `generatedJson` (= `runtime.generatedNotes` from context.json, or the fallback `tmp/claude/generated_notes.json`), the affected `id`, and the full replacement `note` text. Do not hand-`Edit` the JSON.
 
 **For quote boundary issues** (restructuring scope, parallelism scope, orphaned words):
-- Edit the prepared-notes path from context.json (`runtime.preparedNotes`) or the fallback `tmp/claude/prepared_notes.json` — update `gl_quote`, `gl_quote_roundtripped`, and `orig_quote` for the affected item(s).
+- Use `mcp__workspace-tools__update_prepared_quote` with `preparedJson` (= `runtime.preparedNotes`, or fallback `tmp/claude/prepared_notes.json`), the affected `id`, and the changed `glQuote` / `glQuoteRoundtripped` / `origQuote` fields. Do not hand-`Edit` the JSON.
+
+**For invalid support references** (`unknown_sref` — the issue type is not in the list, e.g. an invented slug like `figs-paronomasia`):
+- The SupportReference must be a valid issue type from `data/translation-issues.csv`. Re-select the correct one rather than deleting the note — Hebrew wordplay / sound play (words from the same root) is `writing-poetry`, not a `figs-paronomasia` of its own.
+- Set the corrected slug with `mcp__workspace-tools__update_prepared_quote`, passing the affected `id` and the `sref` field (e.g. `sref: "writing-poetry"`). If the note text was written for the wrong type, also fix it with `update_note_text`.
 
 **For removal** (antithetical parallelism notes, redundant structural notes):
-- Remove the row from the assembled TSV directly. Also remove the entry from the generated-notes JSON.
+- Use `mcp__workspace-tools__remove_note` with the `id`, `generatedJson` (= `runtime.generatedNotes`), and `tsvFile` (the assembled TSV) — it drops the entry from the JSON and the matching TSV row in one call.
 
 After any changes to the generated-notes JSON or prepared-notes JSON, re-run assembly and post-processing once:
 
@@ -208,6 +219,7 @@ The script runs these checks:
  7  gl_quote_not_in_ult             error       gl_quote appears in ULT verse (expected for discontinuous quotes using ... notation)
  8  bold_not_in_ult                 error       Bolded text appears verbatim in ULT verse
  9  rc_link_in_note                 error       Note column has no rc:// links
+17  unknown_sref                    error       SupportReference issue type exists in data/translation-issues.csv (no invented slugs like figs-paronomasia)
 10  orphaned_conjunction/prep       warning     No orphaned words before AT in substitution
 10b dropped_conjunction             warning     gl_quote starts with conjunction but AT drops it
 11  writer_in_psalms                warning     PSA: use attributed name or "the psalmist", never "the writer" or "the author"

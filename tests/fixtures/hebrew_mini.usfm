@@ -1,0 +1,20 @@
+\id TST Test Hebrew Bible
+\usfm 3.0
+\ide UTF-8
+\h Test
+\toc1 Test
+\mt Test
+
+\c 1
+\p
+\v 1
+\w בְּ⁠רֵאשִׁ֖ית|lemma="רֵאשִׁית" strong="b:H7225" x-morph="He,R:Ncfsa"\w*
+\w בָּרָ֣א|lemma="בָּרָא" strong="H1254a" x-morph="He,Vqp3ms"\w*
+\w אֱלֹהִ֑ים|lemma="אֱלֹהִים" strong="H0430" x-morph="He,Ncmpa"\w*
+\w אֵ֥ת|lemma="אֵת" strong="H0853" x-morph="He,To"\w*
+\w הַ⁠שָּׁמַ֖יִם|lemma="שָׁמַיִם" strong="d:H8064" x-morph="He,Td:Ncmpa"\w*׃
+\v 2
+\w וְ⁠שָׁלוֹם|lemma="שָׁלוֹם" strong="c:H7965" x-morph="He,C:Ncmsa"\w*
+\w ט֣וֹב|lemma="טוֹב" strong="H2896a" x-morph="He,Aamsa"\w*
+\w וְ⁠שָׁלוֹם|lemma="שָׁלוֹם" strong="c:H7965" x-morph="He,C:Ncmsa"\w*
+\w יַעֲמֹ֑ד|lemma="עָמַד" strong="H5975" x-morph="He,Vqi3ms"\w*׃

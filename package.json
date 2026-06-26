@@ -4,7 +4,8 @@
   "description": "AI-assisted creation of unfoldingWord Book Package (BP) items including translation notes, ULT, and UST.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "node -e \"const{existsSync}=require('fs');if(!existsSync('.claude/skills/utilities/scripts/usfm/node_modules')){require('child_process').execSync('npm ci --silent',{cwd:'.claude/skills/utilities/scripts/usfm',stdio:'inherit'})}\"",
+    "test": "node --test tests/*.test.mjs"
   },
   "keywords": [],
   "author": "",
