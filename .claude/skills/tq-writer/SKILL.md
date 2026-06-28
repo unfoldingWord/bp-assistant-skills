@@ -60,6 +60,10 @@ Reference	ID	Tags	Quote	Occurrence	Question	Response
 ```
 
 Rules for AI updates:
+- This is an update of the existing question set, not a fresh authoring pass. Each existing row produces exactly one updated row; **the chapter's row count and verse References stay the same** unless content genuinely relocated (see guidelines). Do not add questions to improve coverage, and do not re-sequence or compress References to fit a new question order
+- Edit each question's wording in place to reflect the updated ULT/UST; keep its subject and scope. Do not replace a question with a different question on the same row
+- Prefer "what / who / where / when / how" framings; do not introduce new "why" questions (existing why-questions that work stay as-is)
+- Fail safe: if an existing row cannot be confidently matched to a verse in the prepared data, keep it unchanged rather than regenerating it
 - Return the full set of rows for the chapter (not just changed ones)
 - Preserve existing IDs -- do not change the ID column
 - **ID uniqueness is mandatory**: Before emitting each row, check its ID against every ID already written in the current output (across all chapters processed so far in this session). If a collision is detected — including between a single-verse row and a multi-verse range row that covers the same verse — assign a new unique 4-char ID (`[a-z][a-z0-9]{3}`) to the colliding row and confirm the replacement ID is not already in use. Never emit two rows with the same ID.

@@ -52,6 +52,12 @@ TQ answers should capture the *idea* of the content so that any translation deri
 - Good: "What does the psalmist say about the wicked?"
 - Avoid: "Why is it wrong to follow the wicked?"
 
+### Question Words
+- Prefer "what / who / whom / where / when / how" for comprehension checks — these ask the reader to locate content in the verse
+- Avoid introducing **new** "why" questions, even factual ones (e.g. "Why does Yahweh drive Ephraim out?"). A "why" question asks the reader to supply a reason or causal link, which is closer to interpretation than to plain comprehension, and tends to read as the wrong type
+- An existing "why" question that already functions well and matches the verse should be left as-is — this rule restrains new ones, it does not call for purging inherited ones
+- If the source row's question reflects a cause stated plainly in the verse, prefer a "what" framing: instead of "Why will Yahweh punish them?" use "What does Yahweh say he will do because of their sins?"
+
 ### Indirect Quotations
 - Use indirect quotations rather than direct quotes from the text
 - Good: "According to the psalmist, what does Yahweh do for him?"
@@ -73,6 +79,13 @@ TQ answers should capture the *idea* of the content so that any translation deri
 - Only change what needs to change to align with the updated ULT/UST
 - If the existing TQ already matches the current ULT/UST, leave it unchanged
 - Preserve existing IDs -- do not regenerate IDs for unchanged or lightly edited rows
+- **Edit wording in place; do not re-author.** Keep each existing question's subject and scope, and reword only the parts that the updated ULT/UST changed. Replacing a question with a different question on the same row is not an update — it discards a vetted comprehension check
+- **Preserve the verse Reference; do not renumber.** A row's Reference moves only if the *specific content that question asks about* genuinely relocated to a different verse in the updated text. Do not re-sequence or compress a chapter's references to fit a fresh question order
+- **One row in, one row out.** Each existing row produces exactly one updated row. Do not split one question into several, and do not fold several into one
+
+### Fail Safe When You Cannot Match a Row
+- If you cannot confidently line up an existing TQ row against a verse in `ult_by_verse` / `ust_by_verse` (for example, the verse numbering in the prepared data does not match the row's Reference), keep the row unchanged — same question, same Response, same Reference, same ID
+- Do not respond to a matching gap by regenerating the chapter's questions from the source text. Wholesale regeneration is the failure mode this skill exists to avoid: it inflates the question count, introduces off-type questions, and re-anchors references to the wrong verses
 
 ### What to Update
 - **Terminology**: If the ULT changed a term (e.g., "blessed" -> "happy"), update TQ to match
@@ -82,7 +95,8 @@ TQ answers should capture the *idea* of the content so that any translation deri
 
 ### What Not to Change
 - Do not rewrite well-functioning questions just for style preference
-- Do not add new questions unless existing coverage is clearly insufficient
+- **Hold the question count steady.** This is an update of an existing set, not a fresh authoring pass. Do not add questions to improve coverage or thoroughness. The output for a chapter should have the same number of rows as the input, save for the rare genuine exception below
+- Adding a question is a rare exception, not a default: only when a verse the existing set already covers changed so much that its row no longer has any answerable content, and even then prefer reworking the existing row over adding a new one. If you add a row, it must carry the correct verse Reference and a fresh unique ID
 - Do not remove questions unless they are clearly redundant or unanswerable from the text
 - Do not change IDs on rows that are only lightly edited
 
