@@ -14,7 +14,7 @@ source .env  # provides $DOOR43_REPOS_PATH
 ```
 
 - en_tq repo cloned at `$DOOR43_REPOS_PATH/en_tq`
-- ULT/UST available (output/ files, repo clones, or fetched from Door43)
+- ULT/UST require no local setup by default — `prepare_tq` pulls them from Door43 master; pass `ultPath`/`ustPath` to use local files instead (see Step 2)
 
 ## Workflow
 
@@ -33,12 +33,9 @@ cd "$TQ_REPO" && git pull origin master
 
 Use `mcp__workspace-tools__prepare_tq` with `book="PSA"`, `chapter=150`, `output="/tmp/claude/prepared_tq.json"` for a single chapter. For a whole book, omit `chapter` and pass `wholeBook=true`.
 
-The tool auto-detects ULT/UST from:
-1. `output/AI-ULT/` and `output/AI-UST/` (AI-generated files)
-2. Repo clones at `$DOOR43_REPOS_PATH/en_ult` and `en_ust`
-3. Door43 fetch as fallback
+By default the tool pulls ULT and UST from the current Door43 **master** text (implemented in bp-assistant PR #149): it fetches `en_ult` and `en_ust` for the book, de-aligns them (collapsing each verse and stripping alignment markup), and exposes them as `ult_by_verse` / `ust_by_verse`. It checks each file's git blob sha first and reuses a cached de-alignment when master is unchanged, so repeat runs do not re-download or re-parse. Always feed **de-aligned** text — aligned USFM parses to almost nothing. For the TQ workflow this default is correct: TQs update the *already-published* question set, whose ULT/UST is on master.
 
-Override with `ultPath` or `ustPath` if needed.
+To base questions on text that is not the current master — e.g. freshly generated AI ULT/UST for a book not yet pushed to Door43 — pass `ultPath` and/or `ustPath` pointing at those local files; an override is de-aligned the same way.
 
 ### Step 3: Read Guidelines
 
