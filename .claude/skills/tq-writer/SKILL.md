@@ -14,7 +14,7 @@ source .env  # provides $DOOR43_REPOS_PATH
 ```
 
 - en_tq repo cloned at `$DOOR43_REPOS_PATH/en_tq`
-- ULT/UST available (output/ files, repo clones, or fetched from Door43)
+- ULT/UST require no local setup — `prepare_tq` always pulls them from Door43 master (see Step 2)
 
 ## Workflow
 
@@ -33,12 +33,9 @@ cd "$TQ_REPO" && git pull origin master
 
 Use `mcp__workspace-tools__prepare_tq` with `book="PSA"`, `chapter=150`, `output="/tmp/claude/prepared_tq.json"` for a single chapter. For a whole book, omit `chapter` and pass `wholeBook=true`.
 
-The tool auto-detects ULT/UST from:
-1. `output/AI-ULT/` and `output/AI-UST/` (AI-generated files)
-2. Repo clones at `$DOOR43_REPOS_PATH/en_ult` and `en_ust`
-3. Door43 fetch as fallback
+ULT and UST always come from the current Door43 **master** text. The tool fetches `en_ult` and `en_ust` for the book, de-aligns them (collapsing each verse and stripping alignment markup), and exposes them as `ult_by_verse` / `ust_by_verse`. It checks each file's git blob sha first and reuses a cached de-alignment when master is unchanged, so repeat runs do not re-download or re-parse. This is the only valid source — do not point it at aligned USFM or at AI-generated output.
 
-Override with `ultPath` or `ustPath` if needed.
+Override with `ultPath` or `ustPath` only for local testing; an override file is de-aligned the same way.
 
 ### Step 3: Read Guidelines
 
