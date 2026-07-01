@@ -21,7 +21,7 @@ anything. Do every step with the `Task` tool (to spawn alignment subagents),
   wastes the run.
 - Per-verse conversion is done inside the subagents via
   `mcp__workspace-tools__create_aligned_usfm`; the full-chapter assembly is done
-  here via `mcp__workspace-tools__merge_aligned_usfm` (Step 2e).
+  here via `mcp__workspace-tools__merge_aligned_usfm` (Step 2f).
 - If a batch subagent fails or a tool returns an error, **re-spawn that batch or
   report the failure plainly** — do not improvise a script to work around it.
 
@@ -94,13 +94,31 @@ Launch the still-needed batch subagents in a **single message** — do not wait 
   - If running UST: spawn `ust-align-K` subagent (`model: "sonnet"`, skill: UST-alignment) for `BOOK CH --verses START-END`
 - All still-needed subagents launch at once (e.g., 4 batches × 2 types = 8 parallel subagents)
 
-If every batch is already complete, skip straight to Step 2d/2e (consistency check + merge).
+If every batch is already complete, skip straight to Step 2d/2e/2f (verify + consistency check + merge).
 
 **Parallel cap:** If the chapter has more than 5 batches per type (>90 verses), split into waves of 5 batches each. Run wave 1 (batches 1–5), wait for completion, then run wave 2 (batches 6–N). This keeps total parallel agents manageable.
 
 Wait for all subagents to complete before proceeding.
 
-## Step 2d: Consistency Check
+## Step 2d: Verify Batch Files Exist
+
+**Before doing anything else after the subagents return, confirm every expected batch file was actually written.** Subagents can return a nominal completion signal without writing their output (internal failure, API throttle, turn-budget cutoff). If you skip this check, a merge over partial batches will silently succeed and the pipeline's freshness check will later flag a `missing_output` failure — see issue #114.
+
+For each type being aligned (ULT and/or UST) and each batch K in `1..numBatches`:
+
+1. `Read` the expected batch file `output/AI-{ULT,UST}/BOOK/BOOK-CH-vSTART-vEND-aligned.usfm`.
+2. Treat the batch as **written** only if the file exists AND contains every verse in the batch range (each `\v N` present) AND has `\zaln-s` alignment markers.
+3. A file that is stale from a prior run is **not** acceptable proof — if the Read succeeds but the content does not cover the current batch range, treat it as missing.
+
+If any expected batch file is missing or incomplete:
+
+- **Do NOT proceed to Step 2e or 2f.**
+- If **≤2 batches** are missing (per type), re-spawn just those batch subagents (same prompts as Step 2c) and re-verify.
+- If more than 2 batches are missing, or a targeted re-spawn still fails to produce the files, **report failure plainly**. List the missing files and return a non-success result so the pipeline can raise `missing_output` and resume from checkpoint. Do not merge partial output.
+
+Only proceed once every expected batch file for every requested type is present and complete.
+
+## Step 2e: Consistency Check
 
 After all alignment batches complete, spawn a consistency checker to catch cross-batch inconsistencies. The same Hebrew word (same Strong's number) should get the same English alignment across the chapter.
 
@@ -121,7 +139,7 @@ If running both ULT and UST, spawn both checkers in parallel.
 
 Note: The checker does NOT re-align from scratch — it only patches inconsistencies in the already-generated partial files. Skip this step for chapters with only 2 batches (≤36 verses), where inconsistency risk is low.
 
-## Step 2e: Merge
+## Step 2f: Merge
 
 After consistency check completes, use `mcp__workspace-tools__merge_aligned_usfm` to assemble the full chapter:
 - ULT (if applicable): call with `parts` = ordered array of all ULT partial files, `output` = `output/AI-ULT/BOOK/BOOK-CH-aligned.usfm`
