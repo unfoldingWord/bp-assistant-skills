@@ -3,14 +3,29 @@ name: ULT-alignment
 
 description: Create word-level alignments between Hebrew source and English ULT text. AI produces index-based mapping JSON that a script converts to aligned USFM. Use when asked to align ULT or produce aligned ULT USFM.
 
-allowed-tools: Read, Grep, Glob, Bash
+allowed-tools: Read, Grep, Glob, Write, mcp__workspace-tools__create_aligned_usfm, mcp__workspace-tools__merge_aligned_usfm, mcp__workspace-tools__validate_alignment_json, mcp__workspace-tools__validate_alignment_integrity, mcp__workspace-tools__extract_ult_english, mcp__workspace-tools__check_ult_voice_mismatch, mcp__workspace-tools__curly_quotes
 ---
 
 ## Overview
 
 This skill maps English ULT words to Hebrew source words. The workflow is two-step:
 1. **AI creates** a simple index-based mapping (English words to Hebrew word positions)
-2. **Script converts** that mapping to properly formatted aligned USFM
+2. **The `create_aligned_usfm` MCP tool converts** that mapping to properly formatted aligned USFM
+
+## No shell — use MCP tools, never write or run scripts
+
+This skill runs **without Bash** — there is no shell. Every `bash`/`node`/`grep`/
+`sed`/`diff`/`cat` example below is illustrative only; perform the equivalent with
+the `Read`/`Grep`/`Write` tools and the `mcp__workspace-tools__*` tools.
+
+- **NEVER** write a Node/Python/shell script (e.g. `generate_*.js`) to produce or
+  combine aligned USFM, and never try to run one — it cannot be executed. This is
+  the single most common way this skill fails; do not do it.
+- Convert each verse with `mcp__workspace-tools__create_aligned_usfm` (pass
+  `output` so it writes a per-verse file). Assemble a multi-verse range with
+  `mcp__workspace-tools__merge_aligned_usfm` — see "Combining Multiple Verses".
+- If a tool returns an error, fix the mapping JSON and call it again, or report
+  the failure. Never fall back to hand-writing or scripting the USFM.
 
 ## Input Requirements
 
@@ -342,28 +357,26 @@ Both comparisons should show no differences. If there are differences, the align
 
 ## Conversion to Aligned USFM
 
-After creating the mapping JSON, convert it to aligned USFM using the conversion tool. This step is mandatory -- never write aligned USFM directly, as manual occurrence counting is error-prone.
+After creating the mapping JSON, convert it to aligned USFM with the
+`create_aligned_usfm` MCP tool. This step is mandatory -- never write aligned
+USFM directly (manual occurrence counting is error-prone) and never script it.
 
-**Option A — MCP tool (preferred, works without Bash):**
 ```
 mcp__workspace-tools__create_aligned_usfm({
   hebrew: "data/hebrew_bible/01-GEN.usfm",
   mapping: "tmp/alignments/GEN-01-001.json",
   source: "output/AI-ULT/GEN/GEN-01.usfm",
+  output: "tmp/aligned/GEN-01-001-aligned.usfm",
   chapter: 1, verse: 1
 })
 ```
 
-**Option B — Bash (when available):**
-```bash
-node .claude/skills/utilities/scripts/usfm/create_aligned_usfm.js \
-  --hebrew data/hebrew_bible/01-GEN.usfm \
-  --mapping /tmp/alignments/GEN-01-01.json \
-  --ult output/AI-ULT/GEN/GEN-01.usfm \
-  --chapter 1 --verse 1
-```
+Pass `output` to write a per-verse aligned file (also runs the x-content byte
+repair automatically); omit `output` to get the aligned USFM back as text. Use
+the `output` form so you can assemble the verses with `merge_aligned_usfm`
+(see "Combining Multiple Verses") — no shell needed.
 
-The script:
+The tool:
 1. Reads Hebrew USFM to get full word metadata (Strong's, lemma, morph, x-content)
 2. Reads your mapping JSON
 3. Parses `english_text` to determine correct word order
@@ -390,36 +403,38 @@ After converting all verses, save the combined aligned USFM to `output/AI-ULT/{B
 
 ### Combining Multiple Verses
 
-The script outputs **multi-line USFM** (one line per word/alignment). When combining verses:
+To produce a multi-verse file (a whole chapter, or a `--verses START-END` batch),
+do it entirely with MCP tools — **no shell, no script, no manual concatenation**:
 
-```bash
-# Create header
-cat > output/AI-ULT/PSA/PSA-078-44-72-aligned.usfm << 'EOF'
-\id PSA EN_ULT - Aligned
-\usfm 3.0
-\ide UTF-8
-\h Psalms
-\mt Psalms
+1. Convert each verse to its **own** per-verse file with `create_aligned_usfm`,
+   passing `output`:
+   ```
+   mcp__workspace-tools__create_aligned_usfm({
+     hebrew: "data/hebrew_bible/19-PSA.usfm",
+     mapping: "tmp/alignments/PSA-078-044.json",
+     source: "output/AI-ULT/PSA/PSA-078.usfm",
+     output: "tmp/aligned/PSA-078-044-aligned.usfm",
+     chapter: 78, verse: 44
+   })
+   ```
+   Repeat for every verse in the range (zero-pad mapping filenames, e.g.
+   `PSA-078-044.json`). Inter-verse markers (`\qa`, `\s1`, `\b`) and aligned `\d`
+   lines are emitted automatically per verse.
 
-\c 78
-EOF
-
-# Append each verse (--ult preserves poetry markers, inter-verse markers, and \d lines)
-for v in $(seq 44 72); do
-  vpad=$(printf "%03d" $v)
-  node .claude/skills/utilities/scripts/usfm/create_aligned_usfm.js \
-    --hebrew data/hebrew_bible/19-PSA.usfm \
-    --mapping alignments/PSA-078-${vpad}.json \
-    --ult output/AI-ULT/PSA/PSA-078-44-72.usfm \
-    --chapter 78 --verse $v 2>/dev/null | sed -n '/^\\[vqdsb]/,/^$/p' >> output/AI-ULT/PSA/PSA-078-44-72-aligned.usfm
-done
-```
+2. Assemble the per-verse files **in verse order** with `merge_aligned_usfm`:
+   ```
+   mcp__workspace-tools__merge_aligned_usfm({
+     parts: ["tmp/aligned/PSA-078-044-aligned.usfm", "tmp/aligned/PSA-078-045-aligned.usfm", ...],
+     output: "output/AI-ULT/PSA/PSA-078-v44-v72-aligned.usfm"
+   })
+   ```
+   `merge_aligned_usfm` keeps the first part's header and appends each subsequent
+   part's verse body — so the assembled file has one header and all verses in
+   order. This replaces the old `cat`/`node`/`sed` loop.
 
 **Notes:**
-- Use `sed -n '/^\\[vqdsb]/,/^$/p'` to capture verse line, inter-verse markers (`\qa`, `\d`, `\s1`, `\b`), and all alignment lines until blank (do NOT use `[vqdstb]` — the `t` matches `\toc` headers)
-- Do NOT use `grep "^\v"` - this only gets the first line and truncates alignments
-- Use zero-padded verse numbers in mapping filenames (e.g., `PSA-078-044.json`)
-- Inter-verse markers (`\qa`, `\s1`, `\b`, etc.) and aligned `\d` lines are inserted automatically by the script -- no manual insertion needed
+- Parts MUST be listed in ascending verse order — merge preserves the given order.
+- Never hand-write the header or `cat` verses together; let `merge_aligned_usfm` do it.
 
 ### Naming Convention
 
@@ -521,7 +536,7 @@ grep -oE '\\w [^|]+\|' aligned.usfm | sed 's/\\w //;s/|//' | tr '\n' ' '
 
 After text verification passes, check that the milestone fields are faithful to the Hebrew source. This catches the Unicode byte-form drift behind issues #88-#91: an x-content or x-lemma that looks identical to the Hebrew but differs in bytes, plus empty fields, occurrence-numbering errors, and unaligned Hebrew words.
 
-Option A — MCP tool (preferred, works without Bash):
+Use the `validate_alignment_integrity` MCP tool:
 ```
 mcp__workspace-tools__validate_alignment_integrity({
   aligned: "output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm",
@@ -530,15 +545,7 @@ mcp__workspace-tools__validate_alignment_integrity({
 })
 ```
 
-Option B — Bash (when available):
-```bash
-node .claude/skills/utilities/scripts/validation/validate_alignment_integrity.mjs \
-  --aligned output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm \
-  --hebrew data/hebrew_bible/{NN}-{BOOK}.usfm \
-  --chapter {CHAPTER}
-```
-
-Exit code 0 = clean; 1 = problems listed per verse. Fix the mapping JSON (usually by re-copying the Hebrew word byte-for-byte from the source) and re-convert before continuing. Do not hand-edit the aligned USFM to silence a finding.
+Its first line starts `OK:` (clean) or `FAIL:` (problems listed per verse). Fix the mapping JSON (usually by re-copying the Hebrew word byte-for-byte from the source) and re-convert before continuing. Do not hand-edit the aligned USFM to silence a finding.
 
 ## Step 8: Check for Voice Mismatches
 

@@ -10,6 +10,21 @@ allowed-tools: Task, Read, mcp__workspace-tools__read_usfm_chapter, mcp__workspa
 
 Spawn alignment agents in parallel and wait for them to complete.
 
+## No shell — never write or run scripts
+
+This skill and its subagents run **without Bash** — there is no shell to execute
+anything. Do every step with the `Task` tool (to spawn alignment subagents),
+`Read`, and the `mcp__workspace-tools__*` tools.
+
+- **NEVER** write a Node/Python/shell script (e.g. `generate_*.js`) to produce or
+  combine aligned USFM, and never try to run one — it cannot be executed and only
+  wastes the run.
+- Per-verse conversion is done inside the subagents via
+  `mcp__workspace-tools__create_aligned_usfm`; the full-chapter assembly is done
+  here via `mcp__workspace-tools__merge_aligned_usfm` (Step 2e).
+- If a batch subagent fails or a tool returns an error, **re-spawn that batch or
+  report the failure plainly** — do not improvise a script to work around it.
+
 ## Pipeline Context
 
 If `--context <path>` is provided, read the context.json file. It contains the authoritative source paths:
@@ -64,12 +79,22 @@ Examples:
 
 ## Step 2c: Spawn ALL Batches in Parallel
 
-Launch all batch subagents in a **single message** — do not wait between batches:
+**First, skip batches that are already done (resume support).** For each batch,
+`Read` its expected partial output (`output/AI-{ULT,UST}/BOOK/BOOK-CH-vSTART-vEND-aligned.usfm`).
+If the file already exists and contains every verse in that batch's range (each
+`\v` present, with `\zaln-s` alignment markers), that batch is complete — do NOT
+re-spawn it. Only spawn subagents for the batches still missing or incomplete.
+This lets a resumed run finish a long chapter by filling just the remaining
+batches instead of re-aligning everything (and timing out again).
 
-- For each batch K (1..numBatches):
+Launch the still-needed batch subagents in a **single message** — do not wait between batches:
+
+- For each batch K (1..numBatches) that is NOT already complete:
   - If running ULT: spawn `ult-align-K` subagent (`model: "sonnet"`, skill: ULT-alignment) for `BOOK CH --verses START-END`
   - If running UST: spawn `ust-align-K` subagent (`model: "sonnet"`, skill: UST-alignment) for `BOOK CH --verses START-END`
-- All subagents launch at once (e.g., 4 batches × 2 types = 8 parallel subagents)
+- All still-needed subagents launch at once (e.g., 4 batches × 2 types = 8 parallel subagents)
+
+If every batch is already complete, skip straight to Step 2d/2e (consistency check + merge).
 
 **Parallel cap:** If the chapter has more than 5 batches per type (>90 verses), split into waves of 5 batches each. Run wave 1 (batches 1–5), wait for completion, then run wave 2 (batches 6–N). This keeps total parallel agents manageable.
 
