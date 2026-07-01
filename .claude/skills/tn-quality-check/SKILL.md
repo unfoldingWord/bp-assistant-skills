@@ -50,6 +50,8 @@ If neither exists, report an error and exit.
 
 ## Workflow
 
+**Required final output:** Every run of this skill MUST end by (over)writing `output/quality/<BOOK>/<BOOK>-<CH>-quality.md` in Step 5. The pipeline checks that file's mtime against chapter start and fails the chapter as `stale_output` if it was not written in the current run. This holds even when there are no issues to fix, when Step 4 exits early, or when a report already exists from a prior run.
+
 ### Step 0: Fix Trailing Newlines
 
 Use `mcp__workspace-tools__fix_trailing_newlines` with `file: <NOTES_TSV>`.
@@ -178,11 +180,13 @@ After any changes to the generated-notes JSON or prepared-notes JSON, re-run ass
 
 Re-assemble with `mcp__workspace-tools__assemble_notes`, then run `mcp__workspace-tools__curly_quotes` (`inPlace: true`).
 
-After fixing, you may re-run `check_tn_quality` **at most once** to verify the fixes landed. If issues persist after that one re-check, add them to the quality report as "unresolved — needs manual review" and stop. Do not run a third check cycle.
+After fixing, you may re-run `check_tn_quality` **at most once** to verify the fixes landed. If issues persist after that one re-check, add them to the quality report as "unresolved — needs manual review" and continue to Step 5. Do not run a third check cycle. "Stop" here means stop the re-check loop, not the skill — Step 5 still runs.
 
-### Step 5: Write Report
+### Step 5: Write Report (mandatory — do not skip)
 
-Write the final quality report to `output/quality/<BOOK>/<BOOK>-<CH>-quality.md`:
+**This step is unconditional.** Every invocation of tn-quality-check MUST end by writing (overwriting) the report file below in the current run. Skipping Step 5 — because "nothing needed fixing," because you already wrote it earlier in the run, because you thought you were done after Step 4, or because a report already exists on disk — causes the pipeline's post-run freshness check to raise `stale_output` and fail the chapter (see issue #115). A pre-existing file at this path from a prior run is **not** proof that this step ran; the pipeline compares the file's mtime against chapter start.
+
+Write the final quality report to `output/quality/<BOOK>/<BOOK>-<CH>-quality.md` as the final action of this skill (after any fixes, re-checks, or early exits):
 
 ```markdown
 # TN Quality Report: <BOOK> <CHAPTER>
