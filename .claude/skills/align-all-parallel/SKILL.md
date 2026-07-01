@@ -46,7 +46,7 @@ If neither `--ult` nor `--ust` is given, run both.
 
 ## Model
 
-This skill is coordination only — run it as **haiku**. The alignment subagents require linguistic judgment — spawn each with `model: "sonnet"`.
+This skill is coordination only — run it as **low**. The alignment subagents require linguistic judgment — spawn each with `model: "medium"`.
 
 ## Step 1: Check Verse Count
 
@@ -59,8 +59,8 @@ Before spawning agents, count the verses in the chapter using `mcp__workspace-to
 
 Spawn agents in parallel:
 
-- If running ULT: spawn `ult-align` subagent (`model: "sonnet"`, skill: ULT-alignment)
-- If running UST: spawn `ust-align` subagent (`model: "sonnet"`, skill: UST-alignment)
+- If running ULT: spawn `ult-align` subagent (`model: "medium"`, skill: ULT-alignment)
+- If running UST: spawn `ust-align` subagent (`model: "medium"`, skill: UST-alignment)
 
 Wait for both to complete. Report results.
 
@@ -90,8 +90,8 @@ batches instead of re-aligning everything (and timing out again).
 Launch the still-needed batch subagents in a **single message** — do not wait between batches:
 
 - For each batch K (1..numBatches) that is NOT already complete:
-  - If running ULT: spawn `ult-align-K` subagent (`model: "sonnet"`, skill: ULT-alignment) for `BOOK CH --verses START-END`
-  - If running UST: spawn `ust-align-K` subagent (`model: "sonnet"`, skill: UST-alignment) for `BOOK CH --verses START-END`
+  - If running ULT: spawn `ult-align-K` subagent (`model: "medium"`, skill: ULT-alignment) for `BOOK CH --verses START-END`
+  - If running UST: spawn `ust-align-K` subagent (`model: "medium"`, skill: UST-alignment) for `BOOK CH --verses START-END`
 - All still-needed subagents launch at once (e.g., 4 batches × 2 types = 8 parallel subagents)
 
 If every batch is already complete, skip straight to Step 2d/2e (consistency check + merge).
@@ -104,7 +104,7 @@ Wait for all subagents to complete before proceeding.
 
 After all alignment batches complete, spawn a consistency checker to catch cross-batch inconsistencies. The same Hebrew word (same Strong's number) should get the same English alignment across the chapter.
 
-For each type being aligned (ULT and/or UST), spawn a Task subagent (`model: "sonnet"`):
+For each type being aligned (ULT and/or UST), spawn a Task subagent (`model: "medium"`):
 
 ```
 Task: "Check alignment consistency for BOOK CH (ULT|UST)"
