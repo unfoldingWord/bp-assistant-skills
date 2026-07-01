@@ -170,6 +170,15 @@ export function scoreNotes(generatedTsv, goldenTsv, chapter) {
     for (let i = 0; i < c - g; i++) unmatchedGenerated.push(k);
   }
 
+  // Verse-only matching: did we place a note on the same verse (ignoring type),
+  // to separate coverage from house-style taxonomy mirroring.
+  const goldVerse = new Map();
+  for (const r of goldNotes) goldVerse.set(r.ref, (goldVerse.get(r.ref) || 0) + 1);
+  const genVerse = new Map();
+  for (const r of genNotes) genVerse.set(r.ref, (genVerse.get(r.ref) || 0) + 1);
+  let verseMatched = 0;
+  for (const [k, c] of goldVerse) verseMatched += Math.min(c, genVerse.get(k) || 0);
+
   // Convention checks on generated notes
   const conventions = [];
   for (const r of genNotes) {
@@ -216,6 +225,8 @@ export function scoreNotes(generatedTsv, goldenTsv, chapter) {
     intro: { generated: gen.some(isIntro), golden: gold.some(isIntro) },
     typeRecall: goldNotes.length ? Number((matched / goldNotes.length).toFixed(3)) : null,
     typePrecision: genNotes.length ? Number((matched / genNotes.length).toFixed(3)) : null,
+    verseRecall: goldNotes.length ? Number((verseMatched / goldNotes.length).toFixed(3)) : null,
+    versePrecision: genNotes.length ? Number((verseMatched / genNotes.length).toFixed(3)) : null,
     unmatchedGolden,
     unmatchedGenerated,
     conventionProblems: conventions,
@@ -250,6 +261,8 @@ function renderMarkdown(scorecard) {
     lines.push(`- Notes: ${tn.counts.generated} generated vs ${tn.counts.golden} published (ratio ${tn.counts.ratio})`);
     lines.push(`- Type@verse recall (published notes we also flagged): ${tn.typeRecall === null ? 'n/a' : (tn.typeRecall * 100).toFixed(0) + '%'}`);
     lines.push(`- Type@verse precision (our notes the humans also had): ${tn.typePrecision === null ? 'n/a' : (tn.typePrecision * 100).toFixed(0) + '%'}`);
+    lines.push(`- Verse-only recall (published verses we also noted, any type): ${tn.verseRecall === null ? 'n/a' : (tn.verseRecall * 100).toFixed(0) + '%'}`);
+    lines.push(`- Verse-only precision (our noted verses the humans also noted): ${tn.versePrecision === null ? 'n/a' : (tn.versePrecision * 100).toFixed(0) + '%'}`);
     lines.push(`- Chapter intro row: generated ${tn.intro.generated ? 'yes' : 'no'} / published ${tn.intro.golden ? 'yes' : 'no'}`);
     lines.push(`- Convention problems in generated notes: ${tn.conventionProblems.length}`);
     if (tn.conventionProblems.length) {

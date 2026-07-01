@@ -26,6 +26,7 @@ const DOOR43_RAW = 'https://git.door43.org/unfoldingWord';
 
 const GOLDEN_SET = [
   { book: 'JOS', chapter: 1, fileNum: '06' },
+  { book: 'JOS', chapter: 3, fileNum: '06' },
   { book: 'NAM', chapter: 1, fileNum: '34' },
   { book: 'MAL', chapter: 1, fileNum: '39' },
 ];
