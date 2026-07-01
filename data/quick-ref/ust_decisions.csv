@@ -32,3 +32,10 @@ H4062,madhebah,raging fury,ALL,hapax legomenon; meaning debated,,2026-03-09,AI
 H3738b,כָּרָה,gave me the ability to hear and obey,PSA,"PSA 40:6 ""ears you have dug for me"" idiom",Hebrew idiom oznayim karita li - UST unpacks as giving ability to hear/obey rather than preserving literal image,2026-04-13,AI
 H0953a,בּוֹר,desperate situation,PSA,PSA 40:2 pit of roaring metaphor,Metaphor for distress/danger - UST expresses meaning not image,2026-04-13,AI
 H2063,זֹאת,this,ALL,JER and all books — feminine demonstrative הַזֹּאת / זֹאת,"Align זֹאת (including prefixed-article form הַזֹּאת) to 'this'. Standard demonstrative pronoun; render as 'this' in UST. Reported: Jeremiah BP — Grant Ailie (closes #63).",2026-05-04,human
+H1892,הֶבֶל,pointless,ECC,"ECC 1:2,14 hevel hevelim superlative - everything is completely pointless","UST meaning-based rendering. ULT uses 'futility'. UST unpacks as 'pointless' for clarity. Published UST has varied renderings (worthless, short, etc).",2026-05-08,AI
+H7469,רְעוּת,trying to control the wind,ECC,"ECC 1:14,17 re'ut ruach - pursuit/striving of wind metaphor",UST unpacks metaphor. ULT 'pursuit of wind'. UST explains the futility image as trying to control what cannot be controlled.,2026-05-08,AI
+H6953,קֹהֶלֶת,the Teacher,ECC,"ECC 1:1,2,12 - same as ULT rendering",Matches ULT. No published UST precedent. T4T uses 'Religious Teacher' and 'Preacher'.,2026-05-08,AI
+H5159,נַחֲלָה,land,NUM,NUM 27:7-11 inheritance laws,"UST index: ""land"" is dominant concrete UST rendering (5.9%); abstract ""inheritance"" unpacked to concrete ""land he owned/would have received""",2026-06-26,AI
+H6635a,צְבָאוֹת,the commander of the heavenly armies,JER,"JER 32:14,15,18 Yahweh tsvaot",UST rendering of Yahweh of Armies per UST-gen skill (vs ULT 'Yahweh of Armies'),2026-06-30,AI
+H1100,בְּלִיַּעַל,wicked,NAM,"NAM 1:11,15 counselor of worthlessness / the worthless one","UST precedent renders belial as wicked/worthless; used ""wicked"" for plain meaning",2026-07-01,AI
+H4581,מָעוֹז,protects them,NAM,NAM 1:7 for a stronghold in a day of trouble,"UST precedent renders maoz verbally as ""protects""; unpacked stronghold metaphor",2026-07-01,AI
