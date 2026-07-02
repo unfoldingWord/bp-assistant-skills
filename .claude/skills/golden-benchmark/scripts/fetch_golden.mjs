@@ -30,7 +30,7 @@ const GOLDEN_SET = [
   { book: 'MAL', chapter: 1, fileNum: '39' },
 ];
 
-function httpGet(url) {
+export function httpGet(url) {
   return new Promise((resolvePromise, reject) => {
     https.get(url, { headers: { 'User-Agent': 'golden-benchmark-fetch/1.0' } }, (res) => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
