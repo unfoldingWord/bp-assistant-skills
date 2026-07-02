@@ -11,8 +11,8 @@ Merge all Wave 2 findings after Wave 3 rulings.
    UNLESS they are competing figurative analyses (see rule 4).
 3. **Grammar independence**: Grammar issues (abstract nouns, passives,
    possession, ellipsis, nominaladj) are never merged into or displaced by
-   figurative issues on the same phrase. Script-detected figs-activepassive
-   issues always survive (content-team decision). The others are still subject
+   figurative issues on the same phrase. figs-activepassive issues always
+   survive (content-team decision: every instance gets a note). The others are still subject
    to the budget cut in step 5.
 4. **Figurative exclusivity**: When the same phrase has multiple figurative
    issue types (e.g., figs-synecdoche + figs-metonymy + figs-idiom), keep
@@ -24,7 +24,7 @@ Merge all Wave 2 findings after Wave 3 rulings.
    `golden-benchmark/golden/calibration.json` (see the Selectivity section in
    `skills/issue-identification/SKILL.md`). Cut repeat occurrences of
    formulaic markers and over-budget discourse-family findings first; never
-   cut script-detected figs-activepassive.
+   cut figs-activepassive (content-team decision: every instance gets a note).
 6. **Order**: First-to-last by ULT position within each verse,
    longest-to-shortest when phrases nest.
 7. **Output format**: Enforce the output format guardrail -- brief classification

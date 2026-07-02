@@ -312,8 +312,9 @@ After completing all identification, review your output:
    single best fit using the decision hierarchy in "Competing Figurative Analyses" above.
 
 4. **Missing overlap check**: Are there phrases that genuinely need two tags? (e.g., a simile that also contains an abstract noun - both figs-simile AND figs-abstractnouns may apply)
-   Abstract nouns, passives (figs-abstractnouns, figs-activepassive) are script-detected
-   and exist at a different analytical layer than figures of speech. They always coexist --
+   Abstract nouns (script-detected) and passives (figs-abstractnouns,
+   figs-activepassive; passives identified during analysis) exist at a
+   different analytical layer than figures of speech. They always coexist --
    a figurative issue on the same phrase does not replace a grammar issue. Other grammar-level
    issues (figs-possession, figs-ellipsis, figs-nominaladj) should also generally not be
    dropped or merged with figurative issues.

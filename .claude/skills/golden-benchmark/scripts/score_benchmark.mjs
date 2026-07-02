@@ -187,18 +187,17 @@ export function scoreNotes(generatedTsv, goldenTsv, chapter) {
     for (let v = lo; v <= hi; v++) verses.push(`${ch}:${v}`);
     return verses;
   };
-  const genVerseAvail = new Map();
-  for (const r of genNotes) {
-    for (const v of expandRef(r.ref)) genVerseAvail.set(v, (genVerseAvail.get(v) || 0) + 1);
-  }
+  // Each generated note is a single matchable unit even when its own ref is a
+  // range (it may satisfy any one of its component verses, not one per verse) —
+  // otherwise a generated range note could match twice and push precision > 1.
+  const genUnits = genNotes.map((r) => ({ verses: new Set(expandRef(r.ref)), used: false }));
   let verseMatched = 0;
   for (const r of goldNotes) {
-    for (const v of expandRef(r.ref)) {
-      if ((genVerseAvail.get(v) || 0) > 0) {
-        genVerseAvail.set(v, genVerseAvail.get(v) - 1);
-        verseMatched++;
-        break;
-      }
+    const goldVerses = expandRef(r.ref);
+    const unit = genUnits.find((u) => !u.used && goldVerses.some((v) => u.verses.has(v)));
+    if (unit) {
+      unit.used = true;
+      verseMatched++;
     }
   }
 

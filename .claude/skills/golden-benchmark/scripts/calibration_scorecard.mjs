@@ -65,7 +65,7 @@ function main() {
   const family = (prefix) => notes.filter((n) => n.type.startsWith(prefix)).length;
   const gc = family('grammar-connect-');
   const wr = family('writing-');
-  const discoursePct = round(((gc + wr) / notes.length) * 100, 1);
+  const discoursePct = notes.length ? round(((gc + wr) / notes.length) * 100, 1) : 0;
   const publishedShare = band.familyShareOfNotesPct['grammar-connect-*'] + band.familyShareOfNotesPct['writing-*'];
 
   const typeCounts = {};

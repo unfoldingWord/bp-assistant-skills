@@ -155,7 +155,7 @@ Flag inconsistencies with the specific note IDs and the conflicting interpretati
 
 #### 3l. Selectivity review
 
-Compare the chapter's note count to the published density band for its genre (see `.claude/skills/golden-benchmark/golden/calibration.json` and the Selectivity section in `issue-identification/SKILL.md`; the budget is about 1.5x the published band). If the chapter runs over, identify the weakest notes for removal — `mcp__workspace-tools__remove_note` is the fix path in Step 4. Cut first: grammar-connect-* and writing-* rows beyond a pattern's first occurrence in the chapter, then other notes a competent translator would not need. Never remove script-detected figs-activepassive notes.
+Compare the chapter's note count to the published density band for its genre (see `.claude/skills/golden-benchmark/golden/calibration.json` and the Selectivity section in `issue-identification/SKILL.md`; the budget is about 1.5x the published band). If the chapter runs over, identify the weakest notes for removal — `mcp__workspace-tools__remove_note` is the fix path in Step 4. Cut first: grammar-connect-* and writing-* rows beyond a pattern's first occurrence in the chapter, then other notes a competent translator would not need. Never remove figs-activepassive notes (content-team decision: every instance gets a note).
 
 ### Step 4: Fix Issues
 

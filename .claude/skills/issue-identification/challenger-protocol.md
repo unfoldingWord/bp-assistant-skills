@@ -35,10 +35,11 @@ The Challenger:
   (grammar-connect-*, writing-*) beyond the genre's published base rate (see
   the Selectivity section in `skills/issue-identification/SKILL.md`).
 - **Grammar issues are independent**: Abstract nouns (figs-abstractnouns) and
-  passives (figs-activepassive) are script-detected and AI-verified. They
+  passives (figs-activepassive) are systematically detected (abstract nouns
+  by script, passives during verse-by-verse analysis) and AI-verified. They
   cannot be subsumed by, merged into, or dropped in favor of figurative issues
-  on the same phrase — and script-detected figs-activepassive issues are never
-  dropped (content-team decision: every instance gets a note). Other
+  on the same phrase — and figs-activepassive issues are never dropped
+  (content-team decision: every instance gets a note). Other
   grammar-level issues (figs-possession, figs-ellipsis, figs-nominaladj)
   should not be dropped or merged in favor of figurative issues on the same
   phrase, though they remain subject to the noteworthiness bar on their own
