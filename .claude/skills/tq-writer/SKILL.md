@@ -49,6 +49,7 @@ Read `/tmp/claude/prepared_tq.json`. For each chapter:
 2. Read the ULT text from `ult_by_verse` and UST text from `ust_by_verse`
 3. Compare each TQ row's question and response against the current ULT and UST; **default to ULT language** for questions and responses; **fall back to UST language only when the ULT rendering is metaphorical, uses Hebrew idioms, or is otherwise not plain/accessible English** — use the UST's non-figurative wording for those cases
 4. Update rows where needed following the guidelines
+5. **Fill coverage gaps.** After the existing rows are updated, look at which verses in the chapter still have no question, and **aim for at least one question per verse**: for each uncovered verse where you can write a plain, answerable what/who/where/when/how comprehension question from the ULT/UST, add one. New rows carry the correct verse Reference and a fresh unique ID; they do not renumber or displace existing rows. Only skip a verse when no straightforward comprehension question can be written for it (e.g. a bare superscription or a fragment whose content is fully carried by an adjacent range row)
 
 **Output format:** Write updated TSV rows to the output file, one chapter at a time. Include the header row. Use the same 7-column format:
 
@@ -57,8 +58,8 @@ Reference	ID	Tags	Quote	Occurrence	Question	Response
 ```
 
 Rules for AI updates:
-- This is an update of the existing question set, not a fresh authoring pass. Each existing row produces exactly one updated row; **the chapter's row count and verse References stay the same** unless content genuinely relocated (see guidelines). Do not add questions to improve coverage, and do not re-sequence or compress References to fit a new question order
-- Edit each question's wording in place to reflect the updated ULT/UST; keep its subject and scope. Do not replace a question with a different question on the same row
+- This is an update-and-fill pass, not a fresh authoring pass. **Each existing row is edited in place** and produces exactly one updated row — do not re-author it, do not re-sequence or compress existing References. Separately, **add new rows to reach roughly one question per verse** where a verse currently has none and a good comprehension question can be written (see the Coverage rule in the guidelines); a coverage pass legitimately raises the row count, so the `verify_tq` >30% row-count warning is expected and not an error here
+- Edit each existing question's wording in place to reflect the updated ULT/UST; keep its subject and scope. Do not replace a question with a different question on the same row
 - Prefer "what / who / where / when / how" framings; do not introduce new "why" questions (existing why-questions that work stay as-is)
 - Fail safe: if an existing row cannot be confidently matched to a verse in the prepared data, keep it unchanged rather than regenerating it
 - Return the full set of rows for the chapter (not just changed ones)

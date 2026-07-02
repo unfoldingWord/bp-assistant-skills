@@ -81,7 +81,7 @@ TQ answers should capture the *idea* of the content so that any translation deri
 - Preserve existing IDs -- do not regenerate IDs for unchanged or lightly edited rows
 - **Edit wording in place; do not re-author.** Keep each existing question's subject and scope, and reword only the parts that the updated ULT/UST changed. Replacing a question with a different question on the same row is not an update — it discards a vetted comprehension check
 - **Preserve the verse Reference; do not renumber.** A row's Reference moves only if the *specific content that question asks about* genuinely relocated to a different verse in the updated text. Do not re-sequence or compress a chapter's references to fit a fresh question order
-- **One row in, one row out.** Each existing row produces exactly one updated row. Do not split one question into several, and do not fold several into one
+- **One existing row in, one row out.** Each existing row produces exactly one updated row — do not split one question into several, and do not fold several into one. (Adding a fresh row for a verse that has no question is a separate, allowed step — see the Coverage rule below.)
 
 ### Fail Safe When You Cannot Match a Row
 - If you cannot confidently line up an existing TQ row against a verse in `ult_by_verse` / `ust_by_verse` (for example, the verse numbering in the prepared data does not match the row's Reference), keep the row unchanged — same question, same Response, same Reference, same ID
@@ -93,10 +93,17 @@ TQ answers should capture the *idea* of the content so that any translation deri
 - **Verse references**: If content moved between verses, update the Reference column
 - **Factual accuracy**: If the Q&A no longer matches what the verse says, correct it
 
+### Coverage: Aim for One Question Per Verse
+- After the existing rows are updated in place, fill the gaps: **for each verse that has no question, add one wherever you can write a plain, answerable what/who/where/when/how comprehension question** from the ULT/UST. The target is roughly one question per verse the chapter can support.
+- This is additive and sits alongside the in-place editing of existing rows — it does not license re-authoring, renumbering, splitting, or folding existing rows. Existing coverage stays put; you are only adding where there was nothing.
+- Do not add a second question to a verse that already has one just to be thorough — coverage means reaching uncovered verses, not stacking questions.
+- Skip a verse only when no straightforward comprehension question can be written for it — e.g. a bare superscription, a formulaic refrain already answered by a nearby row, or a fragment whose content is fully carried by an adjacent range row.
+- Added questions follow every content rule above, especially the question-word discipline: prefer what/who/where/when/how and do not introduce new "why" questions.
+- Each added row carries the correct verse Reference and a fresh, globally-unique 4-char ID (`[a-z][a-z0-9]{3}`) — verify the ID against all rows already written before finalising it.
+
 ### What Not to Change
 - Do not rewrite well-functioning questions just for style preference
-- **Hold the question count steady.** This is an update of an existing set, not a fresh authoring pass. Do not add questions to improve coverage or thoroughness. The output for a chapter should have the same number of rows as the input, save for the rare genuine exception below
-- Adding a question is a rare exception, not a default: only when a verse the existing set already covers changed so much that its row no longer has any answerable content, and even then prefer reworking the existing row over adding a new one. If you add a row, it must carry the correct verse Reference and a fresh unique ID
+- **Do not re-author or renumber existing rows.** Adding coverage for uncovered verses (see the Coverage rule) is welcome; wholesale regeneration is not. Do not respond to a coverage gap by rebuilding the chapter's questions from scratch — that inflates and re-anchors the vetted rows the set already has. Keep the existing rows in place and edited only where the text changed, and add new rows only for verses that had nothing.
 - Do not remove questions unless they are clearly redundant or unanswerable from the text
 - Do not change IDs on rows that are only lightly edited
 
