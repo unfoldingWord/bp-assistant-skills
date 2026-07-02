@@ -145,3 +145,17 @@ Are there two or more events described?
                           +-- No --> No note needed
 ```
 
+---
+
+## Restraint Principle
+
+Flag only where readers might otherwise miss that two events are concurrent; a neutral "and" between clearly simultaneous actions usually needs no note.
+
+Do not flag when:
+- Simultaneity is already clear from "while"/"as"/"during"
+- The events are actually sequential (use grammar-connect-time-sequential)
+- There is a cause-effect link (use grammar-connect-logic-result)
+- It is narrative background framing (use grammar-connect-time-background)
+
+Target: published narrative uses this type only about 0.3 times per 100 verses -- roughly one note every four or five chapters. It is essentially absent from prophecy. Expect zero in most chapters.
+

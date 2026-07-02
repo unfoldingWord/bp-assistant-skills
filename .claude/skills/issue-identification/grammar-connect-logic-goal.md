@@ -144,3 +144,16 @@ Translation challenges:
    - Is the connector unclear or missing?
    - Might readers misunderstand the purpose relationship?
 
+---
+
+## Restraint Principle
+
+Genuine purpose relationships that need a note are uncommon. Flag only where the intended-outcome relationship is unclear or the connector might be misread.
+
+Do not flag when:
+- The relationship is cause-effect with no intention (use grammar-connect-logic-result)
+- The purpose is already clear from an explicit "in order to"/"so that"
+- Every infinitive of purpose appears -- most read naturally
+
+Target: published narrative uses this type only about 0.07 times per 100 verses -- on the order of one note in an entire book. Prophecy is somewhat higher (about 1 per 100 verses) but still rare. Expect zero in most chapters.
+

@@ -128,6 +128,18 @@ Is the author marking a character's presence in the story?
 
 5. **Relational intro**: "The author introduces [CHARACTER] by her relationship to [OTHER]. If your language has its own way of introducing new participants, you can use it here."
 
+## Restraint Principle
+
+Flag a participant only when the narrative actually introduces someone new or reintroduces someone after a real absence -- not every time a known character is named.
+
+Do not flag when:
+- A character already in the scene is simply named again in continuing action
+- The issue is which character a pronoun refers to (use writing-pronouns)
+- The text describes a known character's traits or history (use writing-background)
+- A standing group label ("the people," "the elders") is already established
+
+Target: published narrative averages about 1 writing-participants note per 100 verses (Joshua has 3 in the whole book; 1 Samuel about 1.7 per 100 verses). Expect zero or one per chapter. Poetry and prophecy use it very rarely. Anchor the quote to the introduction phrase itself.
+
 ## Languages Introduce Participants Differently
 
 Different languages may use:

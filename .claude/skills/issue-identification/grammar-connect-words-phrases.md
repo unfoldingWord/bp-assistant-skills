@@ -199,3 +199,16 @@ Is there a connecting word (And, But, For, Now, Or, etc.)?
 4. If standard and clear, no note needed
 
 **Key insight**: This is the catch-all for connectors that don't fit specific subcategories but still need explanation for translators.
+
+---
+
+## Restraint Principle
+
+As a catch-all, this type is easy to over-apply. Reserve it for connectors that genuinely function unexpectedly or mark a real structural transition.
+
+Do not flag when:
+- A standard connector has its ordinary, clear function
+- A more specific grammar-connect type applies (see the table above)
+- The relationship is already plain to a reader
+
+Target: published narrative averages about 2.4 notes per 100 verses (roughly one per chapter at most); poetry a little more (3.5), prophecy about 1, and note-dense Nahum has zero grammar-connect notes at all across its 47 verses. Anchor the quote to the connecting word itself.

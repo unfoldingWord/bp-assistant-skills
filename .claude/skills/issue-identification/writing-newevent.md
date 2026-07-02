@@ -37,6 +37,18 @@ These markers help readers understand story structure. Different languages have 
 3. **Scene setting**: New location, time, or participants introduced
 4. **Connector alone**: "Now," "Then," "And," "But" at episode boundaries
 
+## Restraint Principle
+
+wayyehi ("and it happened") is the most common verb form in Hebrew narrative, so treating it as an automatic trigger over-produces notes. Flag it only where it opens a genuinely new episode -- a change of scene, time, or cast -- not where it simply carries the action forward within a scene already underway.
+
+Do not flag when:
+- The marker continues an ongoing scene rather than starting a new one
+- It is a routine sequential "and"/"then" moving the same episode forward
+- A time phrase sits inside a continuing episode rather than opening one
+- You already flagged the marker that opens this same episode
+
+Target: published narrative averages about 2 writing-newevent notes per 100 verses, and published Joshua has just 2 in its entire 24 chapters. Expect at most one per chapter, and often none. Poetry and prophecy use this type very rarely. Anchor the quote to the opening marker itself, not the whole clause.
+
 ## Examples from Published Notes
 
 ### Hebrew wayyehi Pattern

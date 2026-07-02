@@ -180,3 +180,16 @@ Do NOT write notes when:
 4. **If grammar is clear**:
    - Do NOT write a note (per Issues Resolved)
 
+---
+
+## Restraint Principle
+
+The guidance above already limits this to conditions where "if"/"then" is missing or clauses need reordering; simple, well-marked conditions get no note. This type concentrates in legal case-law texts (Leviticus and the like), not in narrative or poetry.
+
+Do not flag when:
+- The condition is already clearly marked with "if...then"
+- It is imaginary or contrary-to-fact (use figs-hypo or grammar-connect-condition-contrary)
+- The structure is plain to a reader
+
+Target: published narrative averages about 0.2 notes per 100 verses and poetry about 0.5 -- a handful per book. Outside case-law material, expect zero in most chapters.
+

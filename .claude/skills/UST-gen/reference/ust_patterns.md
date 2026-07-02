@@ -263,72 +263,13 @@ UST can:
 
 ## Common Literalness Failures
 
-Real examples where generated UST was too literal. Use these to calibrate your output.
+Recurring ways generated UST comes out too literal. Verse-level examples for each pattern live in `data/quick-ref/ust_decisions.csv` (grep by book or phrase).
 
-### Preserved Hebrew metaphor (keep the image → should explain it)
-
-| Verse | Hebrew figure | Generated (too literal) | Correct UST |
-|-------|---------------|------------------------|-------------|
-| LAM 3:43 | "covered yourself in anger" | "wrapped yourself in anger" | "because you were angry" |
-| LAM 3:44 | "covered yourself in a cloud" | "hid yourself behind a cloud" | "you made yourself unreachable" |
-| LAM 4:11 | "poured out burning of his nose" | "poured out his fierce anger" | "showed how extremely angry he was" |
-| LAM 4:20 | "breath of our nostrils" | "as essential as the breath in our nostrils" | "the one who kept us alive" |
-| LAM 4:21 | "the cup will pass to you" | "drink from the cup of his anger" | "Yahweh will punish you severely" |
-
-### Preserved Hebrew simile (keep the comparison → should collapse it)
-
-| Verse | Hebrew simile | Generated (too literal) | Correct UST |
-|-------|---------------|------------------------|-------------|
-| LAM 4:7 | "purer than snow, whiter than milk, more ruddy than corals, sapphire" | "brighter than snow, whiter than milk, more ruddy than coral, like sapphires" | "very pure and healthy-looking" |
-| LAM 3:48 | "streams of water go down my eye" | "tears flow from my eyes like streams of water" | "many tears flow from my eyes" |
-
-### New English metaphor introduced (not in source at all)
-
-| Verse | Source text | Generated (wrong) | Correct UST |
-|-------|-----------|-------------------|-------------|
-| LAM 3:15 | "he saturated me with wormwood" | "he drenched me in misery" | "he caused me to suffer greatly" |
-
-"Drenched" is a metaphor. UST should never create figurative language that wasn't in the Hebrew.
-
-### Hebrew idiom kept verbatim
-
-| Verse | Hebrew idiom | Generated (too literal) | Correct UST |
-|-------|-------------|------------------------|-------------|
-| LAM 3:65 | "covering of heart" | "make their hearts stubborn" | "make them stubborn" |
-| LAM 3:66 | "from under the heavens" | "from the face of the earth" | "so they no longer exist" |
-
-### English idiom substitution (Hebrew metaphor replaced with equivalent English idiom)
-
-| Verse | Hebrew metaphor | Generated (English idiom) | Correct UST |
-|-------|----------------|--------------------------|-------------|
-| LAM 3:9 | "walled up my ways with hewn stone / made my paths crooked" | "blocked every way forward" | "stopped me from making any progress and frustrated everything I tried to do" |
-| LAM 3:10 | "a bear lying in ambush / a lion in hiding" | "waited in hiding and then attacked" | "attacked me suddenly and without warning" |
-| LAM 3:6 | "made me dwell in dark places, like the dead of long ago" | "put me in a hopeless condition where I feel dead" | "put me in a completely hopeless state, as if everyone has forgotten me" |
-
-The test: after removing the Hebrew image, does your English phrasing use a spatial, physical, or sensory metaphor for the same concept? If so, rephrase as what actually happened.
-
-### English body-part idiom introduced in output (no Hebrew body-part idiom present)
-
-This failure type is distinct: the Hebrew source uses a plain verb (e.g., נָתַן "give/deliver"), but the generator reaches for a natural-sounding English body-part idiom as its rendering. Because body-part idioms are idiomatic (non-literal) English, they violate the UST requirement for plain, direct language.
-
-| Verse | Hebrew verb | Generated (English body-part idiom) | Correct UST |
-|-------|------------|--------------------------------------|-------------|
-| JER 20:5 | נָתַן "give/deliver" | "I will also hand over to the enemy everything valuable from this city" | "I will enable their soldiers to take away everything valuable from this city" |
-
-Rule: if no human hands are literally reaching out and transferring something, do not write "hand over." Apply the same test to all English body-part idioms.
-
-### T4T "It is as though" imagery stated as literal fact
-
-| Verse | T4T (figurative framing) | Generated (dropped framing, kept image) | Correct UST |
-|-------|-------------------------|----------------------------------------|-------------|
-| LAM 3:12-13 | "It is as though he bent his bow... It is as though he shot his arrows" | "He aimed his bow... He shot his arrows deep into my body" | "He deliberately caused me intense suffering" |
-| LAM 3:16 | "It is as though he caused me to chew gravel... he has trampled me" | "He made me chew on gravel... pushed my face in ashes" | "He completely humiliated and degraded me" |
-
-When T4T says "It is as though," the content is figurative. Don't drop the framing and state the image as fact.
-
-### ULT phrasing imported into UST
-
-| Verse | ULT | T4T (correct base) | Generated (imported ULT) |
-|-------|-----|---------------------|-------------------------|
-| LAM 3:22 | "covenant faithfulness of Yahweh" | "Yahweh never stops faithfully loving us" | "Yahweh is always faithful to his covenant" |
-| LAM 3:27 | "bears a yoke" | "patiently endure suffering" | "accept the burden of discipline" |
+- **Preserved Hebrew metaphor**: the UST explains the image rather than keeping it — "because you were angry," not "wrapped yourself in anger."
+- **Preserved Hebrew simile**: collapse the comparison to its plain meaning — "many tears flow from my eyes," not "tears flow like streams of water."
+- **New English metaphor introduced**: never create figurative language that was not in the Hebrew ("drenched in misery" is a metaphor even though the source image was dropped).
+- **Hebrew idiom kept verbatim (or swapped for another idiom)**: state the meaning — "make them stubborn," not "make their hearts stubborn" or "from the face of the earth."
+- **English idiom substitution**: the test — after removing the Hebrew image, does your English phrasing use a spatial, physical, or sensory metaphor for the same concept? If so, rephrase as what actually happened.
+- **English body-part idiom introduced**: when the Hebrew has a plain verb (e.g., נָתַן "give/deliver"), do not reach for "hand over" or similar. If no human hands are literally transferring something, do not write "hand over"; apply the same test to all body-part idioms.
+- **T4T "It is as though" imagery stated as fact**: when T4T says "It is as though," the content is figurative — do not drop the framing and state the image as literal.
+- **ULT phrasing imported into UST**: the UST tracks the T4T base, not the ULT — "Yahweh never stops faithfully loving us," not "Yahweh is always faithful to his covenant."

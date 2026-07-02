@@ -33,56 +33,28 @@ Bad examples (never produce these):
 ## Core Responsibilities
 
 1. Identify figures of speech, grammatical patterns, and cultural concepts that need explanation
-2. Classify each issue with the correct issue type (93 types available)
+2. Classify each issue with the correct issue type (94 types available)
 3. Output findings in TSV format for downstream processing
 
-## Inputs (provided in task prompt)
+## Selectivity
+
+Apply the Selectivity bar in `.claude/skills/issue-identification/SKILL.md`: an issue earns its place only if a competent translator would plausibly err on it without a note, and the finding list should stay near the published density band for the chapter's genre (see `.claude/skills/golden-benchmark/golden/calibration.json`).
+
+## Inputs (provided by orchestrator — do not fetch)
+
+The task prompt provides the texts and detector output you need: the ULT (plain text and/or alignment JSON), the UST when available, any ULT/UST divergence data, and abstract-noun detection results. Do not fetch from Door43 or re-run preparation scripts.
 
 - **Book**: 3-letter abbreviation (PSA, GEN, 2SA, etc.)
 - **Chapter**: number or "all"
-- **Source**: "fetch" (from unfoldingWord) or "draft" (from output/AI-ULT/)
+- **Source**: "fetch" (editor-approved text) or "draft" (AI-generated, from output/AI-ULT/)
 
 Book abbreviations follow standard 3-letter codes: 2sam/2sa -> 2SA, gen -> GEN, psa/ps -> PSA, 1jn -> 1JN
 
 ## Workflow
 
-### Step 1: Fetch/Locate USFM Text
+### ULT/UST Divergences (if UST available)
 
-**Fetch mode (default)**:
-```bash
-python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> > /tmp/book_ult.usfm
-python3 .claude/skills/utilities/scripts/fetch_door43.py <BOOK> --type ust > /tmp/book_ust.usfm 2>/dev/null || true
-```
-
-**Draft mode** (AI-generated ULT):
-```bash
-cp output/AI-ULT/<BOOK>-<CHAPTER>.usfm /tmp/book_ult.usfm
-cp output/AI-UST/<BOOK>-<CHAPTER>.usfm /tmp/book_ust.usfm 2>/dev/null || true
-```
-
-Continue without UST if missing. Error if ULT is missing.
-
-### Step 2: Parse into Alignment JSON and Plain Text
-
-```bash
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js /tmp/book_ult.usfm \
-  --chapter <N> \
-  --output-json /tmp/alignments.json \
-  --output-plain /tmp/ult_plain.usfm
-
-node .claude/skills/utilities/scripts/usfm/parse_usfm.js /tmp/book_ust.usfm \
-  --plain-only > /tmp/ust_plain.usfm 2>/dev/null || true
-```
-
-### Step 3: Compare ULT/UST (if UST available)
-
-```bash
-python3 .claude/skills/issue-identification/scripts/compare_ult_ust.py \
-  /tmp/ult_plain.usfm /tmp/ust_plain.usfm \
-  --chapter <N> --output /tmp/ult_ust_diff.tsv
-```
-
-Divergence patterns suggest issues:
+Where the UST diverges from the ULT beyond synonym or clarity changes, there may be a translation issue. Divergence patterns suggest issues:
 | Pattern | Suggested Issue |
 |---------|----------------|
 | UST adds clarifying words | figs-explicit |
@@ -93,25 +65,13 @@ Divergence patterns suggest issues:
 | UST changes passive to active | figs-activepassive |
 | UST expands/explains phrase | figs-idiom |
 
-### Step 4: Run Automated Detection Scripts
+### Detection Results
 
-Every passive construction needs a note. Every abstract noun should be evaluated.
+Every passive construction needs a note; identify passives yourself during analysis using the patterns in `figs-activepassive.md`. Abstract-noun detection results are provided — evaluate each one.
 
-```bash
-python3 .claude/skills/issue-identification/scripts/detection/detect_activepassive.py \
-  /tmp/alignments.json --format tsv >> /tmp/detected_issues.tsv
+### Names/Unknowns Against Translation Words
 
-python3 .claude/skills/issue-identification/scripts/detection/detect_abstract_nouns.py \
-  /tmp/alignments.json --format tsv >> /tmp/detected_issues.tsv
-```
-
-### Step 5: Check Names/Unknowns Against Translation Words
-
-Before flagging translate-names or translate-unknown, check for tW articles:
-
-```bash
-python3 .claude/skills/issue-identification/scripts/check_tw_headwords.py "term1" "term2"
-```
+Before flagging translate-names or translate-unknown, check for tW articles (`check_tw_headwords` results, provided or via the workspace tool):
 
 - **matches in "names" category**: NO translate-names note needed
 - **matches in "kt" or "other" category**: NO translate-unknown note needed
@@ -119,10 +79,10 @@ python3 .claude/skills/issue-identification/scripts/check_tw_headwords.py "term1
 
 Exception: If a term with a tW article is used FIGURATIVELY, use the appropriate figurative note instead.
 
-### Step 6: Manual Analysis - Four-Pass Workflow
+### Manual Analysis - Four-Pass Workflow
 
 #### Pass 0: Review ULT/UST Differences
-If `/tmp/ult_ust_diff.tsv` exists, review it to prime attention on divergent verses.
+If divergence data was provided, review it to prime attention on divergent verses.
 
 #### Pass 1: Chapter Overview
 Read through entire chapter noting:
@@ -139,13 +99,13 @@ For each paragraph/segment:
 - Pronoun chains: track referents through segment
 
 #### Pass 3: Verse-by-Verse Analysis
-For each verse, systematically check all 93 issue types. Use TaskCreate to track checklist.
+For each verse, work through the 7 issue categories (not every individual type); open a specific type file only when you have a candidate hit to confirm and classify. Use TaskCreate to track the checklist, one task per category per verse.
 
-Integrate detection script output first - passives and abstract nouns are pre-identified.
+Integrate detection output first - abstract nouns are pre-identified; identify passives yourself.
 
 ## Issue Type Reference
 
-Read issue-type files from `.claude/skills/issue-identification/` as needed. The 93 issue types are organized in categories:
+Read issue-type files from `.claude/skills/issue-identification/` as needed. The 94 issue types are organized in categories:
 
 - **A. Discourse Structure**: writing-newevent, writing-background, figs-quotations, writing-poetry, etc.
 - **B. Grammar**: figs-activepassive, writing-pronouns, figs-abstractnouns, figs-possession, etc.
@@ -218,13 +178,13 @@ grep -i "figs-metonymy" data/published-tns/tn_*.tsv | head -20
 
 ## Output Format
 
-Write TSV to `output/issues/[BOOK]-[CHAPTER].tsv`
+Write TSV to `output/issues/[BOOK]/[BOOK]-[CHAPTER].tsv` (always use the book subfolder)
 
-For **draft** source, append "D" to indicate draft: `output/issues/[BOOK]-[CHAPTER]D.tsv`
+For **draft** source, append "D" to indicate draft: `output/issues/[BOOK]/[BOOK]-[CHAPTER]D.tsv`
 
 Examples:
-- Fetch mode: `PSA-063.tsv`, `GEN-01.tsv`, `2SA-01.tsv`
-- Draft mode: `PSA-063D.tsv`, `GEN-01D.tsv`, `2SA-01D.tsv`
+- Fetch mode: `output/issues/PSA/PSA-063.tsv`, `output/issues/GEN/GEN-01.tsv`, `output/issues/2SA/2SA-01.tsv`
+- Draft mode: `output/issues/PSA/PSA-063D.tsv`
 
 Format:
 ```
@@ -241,10 +201,7 @@ Format:
 | (empty) | Reserved |
 | explanation | Brief note if issue not obvious |
 
-**Multi-term formatting**: When an issue spans multiple related terms, use " & " to separate them (not ellipsis). This ensures proper downstream language conversion.
-- Correct: `teeth & fangs of young lions`
-- Correct: `God & Yahweh`
-- Wrong: `teeth...fangs of young lions`
+**Multi-term formatting**: Prefer a single continuous span of ULT text. Use `&` to join **only genuinely discontinuous** phrases — where unrelated text separates the relevant words in the verse. If the phrases are adjacent or separated only by punctuation or conjunctions, expand the quote to include the connecting text instead. Never use ellipsis (`...`) to join terms — downstream tooling matches these words mechanically.
 
 Example:
 ```
@@ -263,7 +220,7 @@ psa	78:19	figs-rquestion	Is God able			rhetorical - asserting doubt
 
 ## Quality Standards
 
-- Every issue must have a valid issue_type from the 93 defined types
+- Every issue must have a valid issue_type from the 94 defined types
 - Explanations must be concise and actionable
 - Check for duplicates and overlapping issues before finalizing
-- When in doubt, include it - easier for reviewers to delete than identify from scratch
+- Apply the Selectivity bar (see above) before finalizing the list

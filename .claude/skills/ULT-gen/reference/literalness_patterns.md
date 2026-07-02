@@ -34,13 +34,11 @@ Niphal verbs express passive or reflexive action. Always render them with Englis
 | Niphal imperative | "be gathered" | "gather" |
 | Niphal participle (passive) | "desolated" | "desolate" |
 
-**ISA 51:6 ruling**: The Niphal imperfect describing the heavens "like smoke" must carry English passive voice: "will be dissipated like smoke," NOT "will vanish like smoke." Rendering a Niphal passive as an English active verb misrepresents the Hebrew stem and strips the divine-agency implication.
-
-**ISA 54:3 ruling**: The Niphal participle נְשַׁמּוֹת must render as "desolated cities" (verbal passive participial form), NOT "desolate cities" (plain adjective). The participial verbal form preserves the sense of being in a state brought about by action.
+Render Niphal participles with the verbal passive participial form ("desolated cities"), not a plain adjective ("desolate cities") — the participle preserves the sense of a state brought about by action.
 
 Only use a reflexive English construction (e.g., "hid himself") when the Niphal root is inherently reflexive in meaning. For all passive Niphals, use "be/was/will be [verb]-ed" or the participial "-ed" form as appropriate to the grammatical context.
 
-**Stem-dependent rendering for שָׁמַם (H8074):** Qal/stative stem → active "marveled" (ISA 52:14 — do NOT convert to passive "were appalled"); Niphal participle → passive "desolated" (ISA 54:3 — do NOT flatten to adjective "desolate"). See ult_decisions.csv H8074.
+Some roots are stem-dependent (active in Qal, passive in Niphal) — check `data/quick-ref/ult_decisions.csv` for per-root rulings (e.g. H8074, H4414).
 
 ## Active Voice Preservation
 
@@ -79,7 +77,7 @@ Preserve as "X of Y" - always show the "of" to mark the construct relationship, 
 |--------|-------------|-----|
 | אוֹת עוֹלָם | "a sign of eternity" | "an everlasting sign" |
 
-**ISA 55:13 ruling**: לְאוֹת עוֹלָם is a construct chain; render "a sign of eternity," not "an everlasting sign." The noun עוֹלָם must remain as a dependent genitive.
+The dependent noun remains a genitive noun (see `ult_decisions.csv` H5769 for עוֹלָם).
 
 **Plural construct with repeated noun** (`דּוֹר דּוֹרִים` and similar): preserve both the construct and the plural — "the generation of generations," not "generation {after} generation."
 
@@ -100,9 +98,7 @@ Do not turn a Hebrew verbal clause into an English relative clause just because 
 - **Participles** should stay participial: use "-ing" forms, agent nouns, or "the ones/those [verb]-ing" where needed.
 - **Indicatives / finite verbs** should stay finite: use a plain English verb without prepending "who/that".
 
-Use a relative clause only when the Hebrew syntax actually requires one.
-
-**ISA 54:17 ruling**: The yiqtol תָּקוּם (H6965, Qal imperfect 3fs from קוּם) modifies לָשׁוֹן (tongue) as a relative verbal clause without an explicit Hebrew relative pronoun. Render it participially — "every tongue rising against you" — NOT "every tongue that rises against you." Do not insert the English relative pronoun "that" when none exists in the Hebrew.
+Use a relative clause only when the Hebrew syntax actually requires one. When a yiqtol modifies a noun as a relative verbal clause without an explicit Hebrew relative pronoun, render it participially ("every tongue rising against you"), not as an English relative clause ("every tongue that rises against you") — do not insert "that" when none exists in the Hebrew (see `ult_decisions.csv` H6965).
 
 ## Substantive Adjectives
 
@@ -113,10 +109,7 @@ When Hebrew uses an adjective (or Qal stative) as a substantive — with or with
 | כָּל-צָמֵא (kol tsame) | "everyone thirsty" | "all who are thirsty" |
 | הַטּוֹב (ha-tov) | "the good" | "what is good" |
 
-Do not insert "who is," "what is," or any relative pronoun between the determiner and the adjective.
-
-**ISA 55:1 ruling**: כָּל-צָמֵא = "everyone thirsty" (not "all who are thirsty"). The adjective צָמֵא is substantive; no relative clause is needed.
-**ISA 55:2 ruling**: הַטּוֹב = "the good" (not "what is good"). The nominalized adjective does not need a "what is" relative-clause expansion.
+Do not insert "who is," "what is," or any relative pronoun between the determiner and the adjective (per-word rulings: `ult_decisions.csv` H6771, H2896).
 
 ## Prepositional Nominals with Negation
 
@@ -127,9 +120,7 @@ Hebrew expresses "one who has no X" as a prepositional-existential construction 
 | אֲשֶׁר אֵין לוֹ כֶּסֶף | "to whom {is} no silver" | "whoever has no money" |
 | לְלֹא בְשֹׂבְעָה | "for {what is} not to sufficiency" | "for what does not satisfy" |
 
-Supply only the minimum bracketed copula ({is}) needed for English grammar. Do not introduce "has" or convert a Hebrew prepositional noun phrase (e.g., שְׂבָעָה "sufficiency/satiety") into a verb.
-
-**ISA 55:2 rulings**: Preserve the prepositional-nominal forms. Do not rewrite the existential negation as a possession verb, and do not verbalize the noun שְׂבָעָה.
+Supply only the minimum bracketed copula ({is}) needed for English grammar. Do not introduce "has" or convert a Hebrew prepositional noun phrase (e.g., שְׂבָעָה "sufficiency/satiety") into a verb (see `ult_decisions.csv` H7654).
 
 ## Predicate Adjectives
 

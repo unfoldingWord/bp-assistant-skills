@@ -191,3 +191,16 @@ Ask yourself:
 3. Can the meaning be preserved with "only" or by reversing the order?
 
 If YES to these --> grammar-connect-exceptions
+
+---
+
+## Restraint Principle
+
+Flag only where the "general statement plus exception" structure could actually read as a contradiction in translation; many exceptions are clear as written.
+
+Do not flag when:
+- The exception is already plain and unlikely to confuse
+- The relation is really a contrast between two things (use grammar-connect-logic-contrast)
+- "Unless"/"if not" is functioning as a condition (use grammar-connect-condition-*)
+
+Target: published narrative averages about 0.9 notes per 100 verses -- roughly one every five chapters (Joshua has 7 in the book, 1 Samuel 6). It is essentially absent from prophecy. Expect zero in most chapters.

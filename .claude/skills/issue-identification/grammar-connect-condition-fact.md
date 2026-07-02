@@ -109,3 +109,16 @@ A factual condition is a conditional statement where the speaker KNOWS the condi
 ### Hebrew
 - 'im (if) can introduce factual conditions
 - Context and rhetorical structure determine meaning
+
+---
+
+## Restraint Principle
+
+Flag only where reading "if" as "since"/"because" genuinely changes how a translator handles the clause; not every factual-sounding "if" needs a note.
+
+Do not flag when:
+- The condition is a real open possibility (use grammar-connect-condition-hypothetical)
+- The speaker knows it is false (use grammar-connect-condition-contrary)
+- Replacing "if" with "since" adds nothing for the reader
+
+Target: published narrative averages about 0.2 notes per 100 verses -- roughly one every five chapters -- and poetry and prophecy less. Expect zero in most chapters.
