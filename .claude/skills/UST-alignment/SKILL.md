@@ -296,10 +296,18 @@ Use `mcp__workspace-tools__validate_alignment_json` with `files` set to the arra
 
 ### Step 9: Save JSON
 
-Write to scratchpad or output directory:
+Write mapping JSON to `tmp/alignments/` using this exact naming:
 ```
-/tmp/claude-*/scratchpad/alignments/PSA-001-001.json
+tmp/alignments/{BOOK}-{CH}-{VVV}-ust.json      # e.g. tmp/alignments/PSA-001-001-ust.json
 ```
+
+**Naming rules (must match ULT-alignment for consistency):**
+- **Type token** — always end the basename with `-ust` (ULT uses `-ult`). ULT and UST
+  subagents run in parallel and share `tmp/alignments/` and `tmp/aligned/`; without a
+  distinct type token they silently overwrite each other's intermediates. Do NOT rely on
+  padding differences to avoid collisions — always use the token.
+- **Chapter** — zero-pad to 2 digits (`05`); books with ≥100 chapters (Psalms) use 3 (`001`).
+- **Verse** — zero-pad to 3 digits (`001`).
 
 ## Conversion to Aligned USFM
 
@@ -313,9 +321,9 @@ get the aligned USFM back as text.
 ```
 mcp__workspace-tools__create_aligned_usfm({
   hebrew: "data/hebrew_bible/19-PSA.usfm",
-  mapping: "tmp/alignments/PSA-001-001.json",
+  mapping: "tmp/alignments/PSA-001-001-ust.json",
   source: "output/AI-UST/PSA/PSA-001.usfm",
-  output: "tmp/aligned/PSA-001-001-aligned.usfm",
+  output: "tmp/aligned/PSA-001-001-ust-aligned.usfm",
   ust: true,
   chapter: 1, verse: 1
 })
@@ -350,18 +358,18 @@ Do it entirely with MCP tools — **no shell, no script, no manual concatenation
    ```
    mcp__workspace-tools__create_aligned_usfm({
      hebrew: "data/hebrew_bible/19-PSA.usfm",
-     mapping: "tmp/alignments/PSA-001-001.json",
+     mapping: "tmp/alignments/PSA-001-001-ust.json",
      source: "output/AI-UST/PSA/PSA-001.usfm",
-     output: "tmp/aligned/PSA-001-001-aligned.usfm",
+     output: "tmp/aligned/PSA-001-001-ust-aligned.usfm",
      ust: true, chapter: 1, verse: 1
    })
    ```
-   Repeat for every verse in the range (zero-pad mapping filenames).
+   Repeat for every verse in the range (zero-pad mapping filenames and keep the `-ust` token).
 
 2. Assemble the per-verse files **in verse order** with `merge_aligned_usfm`:
    ```
    mcp__workspace-tools__merge_aligned_usfm({
-     parts: ["tmp/aligned/PSA-001-001-aligned.usfm", "tmp/aligned/PSA-001-002-aligned.usfm", ...],
+     parts: ["tmp/aligned/PSA-001-001-ust-aligned.usfm", "tmp/aligned/PSA-001-002-ust-aligned.usfm", ...],
      output: "output/AI-UST/PSA/PSA-001-aligned.usfm"
    })
    ```

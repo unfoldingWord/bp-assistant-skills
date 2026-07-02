@@ -318,11 +318,19 @@ This checks that every Hebrew index is aligned, every English word appears exact
 
 ### Step 6: Save JSON
 
-Write to scratchpad or output directory:
+Write mapping JSON to `tmp/alignments/` using this exact naming:
 
 ```
-/tmp/claude-*/scratchpad/alignments/GEN-01-01.json
+tmp/alignments/{BOOK}-{CH}-{VVV}-ult.json      # e.g. tmp/alignments/GEN-01-001-ult.json
 ```
+
+**Naming rules (must match UST-alignment for consistency):**
+- **Type token** — always end the basename with `-ult` (UST uses `-ust`). ULT and UST
+  subagents run in parallel and share `tmp/alignments/` and `tmp/aligned/`; without a
+  distinct type token they silently overwrite each other's intermediates. Do NOT rely on
+  padding differences to avoid collisions — always use the token.
+- **Chapter** — zero-pad to 2 digits (`05`); books with ≥100 chapters (Psalms) use 3 (`078`).
+- **Verse** — zero-pad to 3 digits (`001`).
 
 ### Step 7: Verify Text Preservation
 
@@ -364,9 +372,9 @@ USFM directly (manual occurrence counting is error-prone) and never script it.
 ```
 mcp__workspace-tools__create_aligned_usfm({
   hebrew: "data/hebrew_bible/01-GEN.usfm",
-  mapping: "tmp/alignments/GEN-01-001.json",
+  mapping: "tmp/alignments/GEN-01-001-ult.json",
   source: "output/AI-ULT/GEN/GEN-01.usfm",
-  output: "tmp/aligned/GEN-01-001-aligned.usfm",
+  output: "tmp/aligned/GEN-01-001-ult-aligned.usfm",
   chapter: 1, verse: 1
 })
 ```
@@ -411,20 +419,20 @@ do it entirely with MCP tools — **no shell, no script, no manual concatenation
    ```
    mcp__workspace-tools__create_aligned_usfm({
      hebrew: "data/hebrew_bible/19-PSA.usfm",
-     mapping: "tmp/alignments/PSA-078-044.json",
+     mapping: "tmp/alignments/PSA-078-044-ult.json",
      source: "output/AI-ULT/PSA/PSA-078.usfm",
-     output: "tmp/aligned/PSA-078-044-aligned.usfm",
+     output: "tmp/aligned/PSA-078-044-ult-aligned.usfm",
      chapter: 78, verse: 44
    })
    ```
-   Repeat for every verse in the range (zero-pad mapping filenames, e.g.
-   `PSA-078-044.json`). Inter-verse markers (`\qa`, `\s1`, `\b`) and aligned `\d`
+   Repeat for every verse in the range (zero-pad mapping filenames and keep the
+   `-ult` token, e.g. `PSA-078-044-ult.json`). Inter-verse markers (`\qa`, `\s1`, `\b`) and aligned `\d`
    lines are emitted automatically per verse.
 
 2. Assemble the per-verse files **in verse order** with `merge_aligned_usfm`:
    ```
    mcp__workspace-tools__merge_aligned_usfm({
-     parts: ["tmp/aligned/PSA-078-044-aligned.usfm", "tmp/aligned/PSA-078-045-aligned.usfm", ...],
+     parts: ["tmp/aligned/PSA-078-044-ult-aligned.usfm", "tmp/aligned/PSA-078-045-ult-aligned.usfm", ...],
      output: "output/AI-ULT/PSA/PSA-078-v44-v72-aligned.usfm"
    })
    ```
