@@ -3,17 +3,22 @@ name: UST-gen
 
 description: Transform T4T into unfoldingWord Simplified Text (UST), communicating the original meaning in natural English. Use when asked to create UST, generate simplified text, or transform T4T.
 
-allowed-tools: Read, Grep, Glob, mcp__workspace-tools__*
+allowed-tools: Read, Grep, Glob, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__*
 ---
 
-## MCP-First Execution
+## Workspace Tools Execution
 
-In restricted runs, use workspace MCP tools instead of shell/python snippets:
-- `mcp__workspace-tools__fetch_t4t`, `mcp__workspace-tools__fetch_door43`
-- `mcp__workspace-tools__read_usfm_chapter` — read a single chapter from a book file (use this instead of reading full books)
-- `mcp__workspace-tools__build_ust_index`
-- `mcp__workspace-tools__check_ust_passives`
-- `mcp__workspace-tools__curly_quotes`
+Run workspace tools via the blessed CLI wrapper:
+
+    node /app/src/workspace-tools-cli.js <tool_name> '<json-args>'
+
+stdout is the tool result (identical to what the MCP tool returns). If the JSON
+args contain quotes or newlines, pass `-` as the second argument and pipe the
+JSON on stdin via a heredoc. Fallback (if Bash is unavailable): call
+`mcp__workspace-tools__<tool_name>` with the same args.
+
+Anywhere below shows a tool as `mcp__workspace-tools__<tool_name>` with some args —
+invoke it through the CLI wrapper with those args serialized to a JSON object.
 
 ## Pipeline Context
 
@@ -97,9 +102,9 @@ Hebrew poetry often says the same thing twice with different words (synonymous p
 
 ### Step 1: Read T4T Base
 
-Use `mcp__workspace-tools__read_usfm_chapter` to read only the target chapter from the T4T file (e.g., `file: data/t4t/25-LAM.usfm, chapter: 3`). Do NOT read the entire book file — only the chapter you are generating.
+Use `node /app/src/workspace-tools-cli.js read_usfm_chapter '{"file":"data/t4t/25-LAM.usfm","chapter":3}'` to read only the target chapter from the T4T file. Do NOT read the entire book file — only the chapter you are generating.
 
-Use `mcp__workspace-tools__fetch_t4t` when T4T files are missing or stale.
+Use `node /app/src/workspace-tools-cli.js fetch_t4t '<json-args>'` when T4T files are missing or stale.
 
 T4T uses special markers that serve two purposes:
 1. **Guide your UST rendering** - they identify translation issues in the text
@@ -123,8 +128,8 @@ These markers are valuable pre-identified translation issues - use them to infor
 
 Check that T4T accurately represents the Hebrew meaning:
 
-1. **Read Hebrew source** — use `mcp__workspace-tools__read_usfm_chapter` on `data/hebrew_bible/[BOOK].usfm` for the target chapter only
-2. **Read corresponding ULT** — if `--context` was provided, read `sources.ult` from context.json. Otherwise use `mcp__workspace-tools__read_usfm_chapter` on the freshest available local ULT, falling back to a fresh `mcp__workspace-tools__fetch_door43` from `en_ult`
+1. **Read Hebrew source** — use `node /app/src/workspace-tools-cli.js read_usfm_chapter '{"file":"data/hebrew_bible/[BOOK].usfm","chapter":[CHAPTER]}'` for the target chapter only
+2. **Read corresponding ULT** — if `--context` was provided, read `sources.ult` from context.json. Otherwise use `node /app/src/workspace-tools-cli.js read_usfm_chapter '<json-args>'` on the freshest available local ULT, falling back to a fresh `node /app/src/workspace-tools-cli.js fetch_door43 '<json-args>'` from `en_ult`
 3. **Note any discrepancies** where T4T misunderstands Hebrew meaning
 
 Key relationship:
@@ -210,7 +215,7 @@ T4T may use "the LORD" or other renderings. Update to:
 
 #### C. Check Vocabulary Against Issues Resolved
 
-Use `Grep` for issues/glossary checks and `mcp__workspace-tools__build_ust_index` (`lookup`) for published precedent.
+Use `Grep` for issues/glossary checks and `node /app/src/workspace-tools-cli.js build_ust_index '{"lookup":"<STRONGS>"}'` for published precedent.
 
 When a vocabulary decision requires checking published precedent (UST index, glossaries, or issues_resolved), record it in `data/quick-ref/ust_decisions.csv` for future reference. Only record non-trivial decisions -- common words that map obviously don't need tracking.
 
@@ -405,13 +410,13 @@ Rules:
 
 ### Step 8.5: Check for Passive Voice
 
-Run `mcp__workspace-tools__check_ust_passives` on `output/AI-UST/[BOOK]/[BOOK]-[CHAPTER].usfm`.
+Run `node /app/src/workspace-tools-cli.js check_ust_passives '{"file":"output/AI-UST/[BOOK]/[BOOK]-[CHAPTER].usfm"}'`.
 
 If passives are found (exit code 1), fix them before proceeding. The script prints each passive phrase with its verse reference to stderr.
 
 ### Step 8: Convert to Curly Quotes
 
-Run `mcp__workspace-tools__curly_quotes` with `inPlace: true` to normalize quotes.
+Run `node /app/src/workspace-tools-cli.js curly_quotes '{"input":"output/AI-UST/[BOOK]/[BOOK]-[CHAPTER].usfm","inPlace":true}'` to normalize quotes.
 
 This converts:
 - Straight double quotes `"..."` to curly `"..."`
@@ -423,7 +428,7 @@ This converts:
 
 ### Fetch T4T (primary source)
 
-Use `mcp__workspace-tools__fetch_t4t` with `books=["PSA", "1KI"]` (or omit `books` to list available).
+Use `node /app/src/workspace-tools-cli.js fetch_t4t '{"books":["PSA","1KI"]}'` (or omit `books` to list available).
 
 ### Vocabulary lookup
 
@@ -432,16 +437,16 @@ Use `Grep` for quick text lookups in:
 - `data/quick-ref/ust_decisions.csv`
 - `data/glossary/*.csv`
 
-When comparing T4T to ULT, prefer chapter reads from `mcp__workspace-tools__read_usfm_chapter` using the authoritative ULT path from context when available.
+When comparing T4T to ULT, prefer chapter reads from `node /app/src/workspace-tools-cli.js read_usfm_chapter '<json-args>'` using the authoritative ULT path from context when available.
 
-For steps 3 and 4 (UST Strong's index), use `mcp__workspace-tools__build_ust_index` with `lookup="H2617"` or `compare="H2617"`.
+For steps 3 and 4 (UST Strong's index), use `node /app/src/workspace-tools-cli.js build_ust_index '{"lookup":"H2617"}'` or `node /app/src/workspace-tools-cli.js build_ust_index '{"compare":"H2617"}'`.
 
 ### UST Strong's Index
 
-Use `mcp__workspace-tools__build_ust_index` with optional parameters:
-- `lookup="H2617"` — look up published UST renderings for a Strong's number
-- `compare="H2617"` — compare ULT (literal) vs UST (meaning-based) renderings
-- `stats=true` — index statistics
+Use `node /app/src/workspace-tools-cli.js build_ust_index '<json-args>'` with optional parameters:
+- `'{"lookup":"H2617"}'` — look up published UST renderings for a Strong's number
+- `'{"compare":"H2617"}'` — compare ULT (literal) vs UST (meaning-based) renderings
+- `'{"stats":true}'` — index statistics
 - No parameters — build/refresh UST index (daily staleness check)
 
 ### Alignment and Hebrew verification

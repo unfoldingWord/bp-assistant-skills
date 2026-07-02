@@ -3,16 +3,22 @@ name: ULT-gen
 
 description: Transform Hebrew USFM into unfoldingWord Literal Text (ULT), preserving the form and structure of the original Hebrew. Use when asked to translate Hebrew to ULT, generate literal text, or create ULT for a chapter.
 
-allowed-tools: Read, Grep, Glob, mcp__workspace-tools__*
+allowed-tools: Read, Grep, Glob, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__*
 ---
 
-## MCP-First Execution
+## Workspace Tools Execution
 
-Run this skill with workspace MCP tools in restricted environments. Prefer:
-- `mcp__workspace-tools__fetch_hebrew_bible`, `mcp__workspace-tools__fetch_ult`
-- `mcp__workspace-tools__build_strongs_index`
-- `mcp__workspace-tools__curly_quotes`
-Use `Read`/`Grep` for file inspection and avoid shell/python command snippets.
+Run workspace tools via the blessed CLI wrapper:
+
+    node /app/src/workspace-tools-cli.js <tool_name> '<json-args>'
+
+stdout is the tool result (identical to what the MCP tool returns). If the JSON
+args contain quotes or newlines, pass `-` as the second argument and pipe the
+JSON on stdin via a heredoc. Fallback (if Bash is unavailable): call
+`mcp__workspace-tools__<tool_name>` with the same args.
+
+Anywhere below shows a tool as `mcp__workspace-tools__<tool_name>` with some args —
+invoke it through the CLI wrapper with those args serialized to a JSON object.
 
 ## 7-Step Workflow
 
@@ -77,7 +83,7 @@ Apply rules in this order:
 2. **Second**: Check quick-ref decisions using `Grep` on `data/quick-ref/ult_decisions.csv`.
    The file has a `Source` column: `human` entries (editor corrections, issues_resolved) are near-authoritative — treat them like issues_resolved. `AI` entries are precedent — use them unless context clearly warrants deviation.
 
-3. **Third**: Look up the Strong's index for aggregated rendering data with `mcp__workspace-tools__build_strongs_index` (`lookup: "H4869"`).
+3. **Third**: Look up the Strong's index for aggregated rendering data with `node /app/src/workspace-tools-cli.js build_strongs_index '{"lookup":"H4869"}'`.
    This returns all renderings with occurrence counts and sample refs from published ULT, without scanning 43MB of USFM. Use the dominant rendering unless context requires otherwise.
 
 4. **Fourth**: Check project glossary for editorial overrides with `Grep` on `data/glossary/project_glossary.md`.
@@ -90,7 +96,7 @@ Apply rules in this order:
    - `biblical_measurements.csv` - measurements and units
    - `biblical_phrases.csv` - common constructions
 
-6. **After resolving**: For words that required 2+ sources or had multiple possible renderings, record the decision with `mcp__workspace-tools__append_quickref` so future runs resolve faster:
+6. **After resolving**: For words that required 2+ sources or had multiple possible renderings, record the decision with `node /app/src/workspace-tools-cli.js append_quickref '<json-args>'` so future runs resolve faster. Serialize these keys into the JSON args object:
    - `file`: `ult_decisions`
    - `strong`: the Strong's number (e.g. `H4869`)
    - `hebrew`: the Hebrew word
@@ -396,7 +402,7 @@ Use three-letter book codes and two-digit chapter numbers (zero-padded).
 
 ### Step 8: Convert to Curly Quotes
 
-Run `mcp__workspace-tools__curly_quotes` with `inPlace: true` for `output/AI-ULT/[BOOK]/[BOOK]-[CHAPTER].usfm`.
+Run `node /app/src/workspace-tools-cli.js curly_quotes '{"input":"output/AI-ULT/[BOOK]/[BOOK]-[CHAPTER].usfm","inPlace":true}'`.
 
 This converts:
 - Straight double quotes `"..."` to curly `"..."`
@@ -406,23 +412,24 @@ This converts:
 
 ## Tools Reference
 
-All lookups use MCP tools or built-in `Read`/`Grep` (no Bash needed).
+All lookups use workspace tools (via the CLI wrapper) or built-in `Read`/`Grep`.
+Invoke each workspace tool via `node /app/src/workspace-tools-cli.js <tool> '<json-args>'` (see Workspace Tools Execution).
 
 | Task | Tool | Example |
 |------|------|---------|
-| Strong's lookup | `mcp__workspace-tools__build_strongs_index` | `lookup: "H4869"` |
-| Hebrew source | `mcp__workspace-tools__fetch_hebrew_bible` | `books: ["LAM"]` |
-| Published ULT | `mcp__workspace-tools__fetch_ult` | `books: ["LAM"]` |
-| Glossary files | `mcp__workspace-tools__fetch_glossary` | (fetches all 5 CSVs) |
+| Strong's lookup | `build_strongs_index` | `lookup: "H4869"` |
+| Hebrew source | `fetch_hebrew_bible` | `books: ["LAM"]` |
+| Published ULT | `fetch_ult` | `books: ["LAM"]` |
+| Glossary files | `fetch_glossary` | (fetches all 5 CSVs) |
 | Authoritative decisions | `Grep` on `data/issues_resolved.txt` | pattern: `"H4869"` |
 | Prior ULT decisions | `Grep` on `data/quick-ref/ult_decisions.csv` | pattern: `"H4869"` |
 | Project glossary | `Grep` on `data/glossary/project_glossary.md` | pattern: `"term"` |
 | Standard glossaries | `Grep` on `data/glossary/*.csv` | pattern: `"term"` |
 | Published ULT text | `Grep` on `data/published_ult_english/*.usfm` | pattern: `"stronghold"` |
-| Aligned USFM parse | `mcp__workspace-tools__create_aligned_usfm` | (for alignment data) |
-| Plain USFM extract | `mcp__workspace-tools__extract_ult_english` | (strips alignment markup) |
-| Curly quotes | `mcp__workspace-tools__curly_quotes` | (post-processing) |
-| Record decision | `mcp__workspace-tools__append_quickref` | `file: "ult_decisions", strong: "H4869"` |
+| Aligned USFM parse | `create_aligned_usfm` | (for alignment data) |
+| Plain USFM extract | `extract_ult_english` | (strips alignment markup) |
+| Curly quotes | `curly_quotes` | (post-processing) |
+| Record decision | `append_quickref` | `file: "ult_decisions", strong: "H4869"` |
 
 ### Verify consistency before output
 For key terms appearing multiple times, use `Grep` on `data/published_ult/*.usfm` with the Strong's number pattern (e.g. `strong="H2617"`) to check 3-5 published occurrences.

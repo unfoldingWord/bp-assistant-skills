@@ -46,7 +46,7 @@ Use this path convention for intermediate files:
 
 `tmp/pipeline-<BOOK>-<CHAPTER>`
 
-Do not rely on shell commands in restricted environments. When a tool needs to write a file under `tmp/`, pass that target path and let the tool create parent directories.
+Run workspace tools via the CLI wrapper: `node /app/src/workspace-tools-cli.js <tool_name> '<json-args>'` (stdout is the result; MCP `mcp__workspace-tools__<tool_name>` remains a fallback). When a tool needs to write a file under `tmp/`, pass that target path and let the tool create parent directories.
 
 ## Critical Orchestrator Rule
 
@@ -67,12 +67,17 @@ The task is only complete after all required Wave 1-6 outputs exist on disk:
 
 Run the data preflight before launching any agents. Generation quietly degrades when `issues_resolved.txt`, the glossaries, or the Strong's index are missing — this makes the absence loud instead.
 
-Option A — MCP tool (preferred, works without Bash):
+Primary — CLI wrapper:
+```
+node /app/src/workspace-tools-cli.js preflight_data_check '{"book":"<BOOK>","stage":"all"}'
+```
+
+Fallback A — MCP tool (works without Bash):
 ```
 mcp__workspace-tools__preflight_data_check({ book: "<BOOK>", stage: "all" })
 ```
 
-Option B — Bash (when available):
+Fallback B — Bash `.mjs` script (when available):
 ```bash
 node .claude/skills/utilities/scripts/validation/preflight_data_check.mjs --book <BOOK> --stage all
 ```
@@ -81,18 +86,18 @@ If it exits non-zero, fetch the missing sources first (`fetch_*` workspace tools
 
 ### Fetch T4T for the Book
 
-Use `mcp__workspace-tools__fetch_t4t` with `{"books":["<BOOK>"]}`.
+Run `node /app/src/workspace-tools-cli.js fetch_t4t '{"books":["<BOOK>"]}'`.
 
 T4T is the base source for UST creation (Wave 6). All OT books are pre-fetched in `data/t4t/`, but run this to ensure the book is cached. The fetch tool skips if already cached.
 
 ### Build Published TN Index
 
-Use `mcp__workspace-tools__build_tn_index` with `{}`.
+Run `node /app/src/workspace-tools-cli.js build_tn_index '{}'`.
 
 This builds/refreshes the index (daily cache). Use `lookup` and `issue` arguments for precedent lookups during analysis:
 
-- `mcp__workspace-tools__build_tn_index` with `{"issue":"figs-metaphor"}`
-- `mcp__workspace-tools__build_tn_index` with `{"lookup":"tongue"}`
+- `node /app/src/workspace-tools-cli.js build_tn_index '{"issue":"figs-metaphor"}'`
+- `node /app/src/workspace-tools-cli.js build_tn_index '{"lookup":"tongue"}'`
 
 ## Teammate Lifetimes
 
@@ -136,7 +141,7 @@ Read `.claude/skills/issue-identification/analyst-domains.md` for domain assignm
 
 Each analyst reads:
 - ULT draft from Wave 1 (`output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`)
-- Published TN index (via `mcp__workspace-tools__build_tn_index` with `lookup`/`issue`)
+- Published TN index (via `node /app/src/workspace-tools-cli.js build_tn_index` with `lookup`/`issue` args; MCP `mcp__workspace-tools__build_tn_index` remains a fallback)
 
 Each writes their TSV to `$TMP/wave2_*.tsv`.
 
