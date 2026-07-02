@@ -18,7 +18,7 @@ In restricted runs, use workspace MCP tools instead of direct shell/python comma
 - `mcp__workspace-tools__update_prepared_quote` — set a prepared note's quote fields by id
 - `mcp__workspace-tools__remove_note` — remove a note by id from generated_notes.json and/or the TSV
 
-**Prohibited:** Do NOT write Python, bash, or other scripts to `/tmp/` or anywhere else. Do NOT hand-`Edit` `generated_notes.json` or `prepared_notes.json` — use the structured `update_note_text` / `update_prepared_quote` / `remove_note` tools, which locate items by id and never produce "string to replace not found" errors. If an `Edit` ever returns "string to replace not found", do not retry it: re-Read once or switch to the structured tool; if the target still can't be matched, tag the row unresolved and move on.
+**Prohibited:** Follow the shared structured-edit policy in `.claude/skills/reference/structured-edit-policy.md` — no ad-hoc scripts, no hand-`Edit` of the notes JSON/TSV, no `Edit` retries after "string to replace not found".
 
 ## Pipeline Context
 
@@ -26,7 +26,7 @@ If `--context <path>` is provided, read the context.json file for authoritative 
 
 ## Prerequisites
 
-- Assembled TN TSV (from tn-writer Step 8-9)
+- Assembled TN TSV (from tn-writer Step 5 assembly)
 - prepared-notes JSON (from `runtime.preparedNotes` in context.json, or fallback path if no context)
 - Plain ULT and UST USFM files (from context.json `sources.ult`/`sources.ustPlain` if available — use `ustPlain`, not `ust` which contains raw alignment markers)
 - Book code (for master TN ID collision check)
@@ -153,6 +153,10 @@ Scan for notes that reference or depend on interpretations from nearby verses. S
 
 Flag inconsistencies with the specific note IDs and the conflicting interpretations so the writer can reconcile them.
 
+#### 3l. Selectivity review
+
+Compare the chapter's note count to the published density band for its genre (see `.claude/skills/golden-benchmark/golden/calibration.json` and the Selectivity section in `issue-identification/SKILL.md`; the budget is about 1.5x the published band). If the chapter runs over, identify the weakest notes for removal — `mcp__workspace-tools__remove_note` is the fix path in Step 4. Cut first: grammar-connect-* and writing-* rows beyond a pattern's first occurrence in the chapter, then other notes a competent translator would not need. Never remove figs-activepassive notes (content-team decision: every instance gets a note).
+
 ### Step 4: Fix Issues
 
 For each issue found in Steps 1-3, fix it directly in the source files. Do not just report — fix.
@@ -173,7 +177,7 @@ Guardrails for this step:
 - The SupportReference must be a valid issue type from `data/translation-issues.csv`. Re-select the correct one rather than deleting the note — Hebrew wordplay / sound play (words from the same root) is `writing-poetry`, not a `figs-paronomasia` of its own.
 - Set the corrected slug with `mcp__workspace-tools__update_prepared_quote`, passing the affected `id` and the `sref` field (e.g. `sref: "writing-poetry"`). If the note text was written for the wrong type, also fix it with `update_note_text`.
 
-**For removal** (antithetical parallelism notes, redundant structural notes):
+**For removal** (antithetical parallelism notes, redundant structural notes, over-budget notes from the selectivity review):
 - Use `mcp__workspace-tools__remove_note` with the `id`, `generatedJson` (= `runtime.generatedNotes`), and `tsvFile` (the assembled TSV) — it drops the entry from the JSON and the matching TSV row in one call.
 
 After any changes to the generated-notes JSON or prepared-notes JSON, re-run assembly and post-processing once:
@@ -246,7 +250,7 @@ The script runs these checks:
 
 ## When to Run
 
-- After every tn-writer iteration (Step 7 AT fit cycle, Step 8 assembly)
+- After every tn-writer iteration (Step 5 assembly, Step 7 final review; AT generation happens in the pipeline)
 - Before final delivery (full quality gate)
 - After parallel-batch merge (catch cross-chunk issues)
 

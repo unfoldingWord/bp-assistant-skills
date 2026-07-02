@@ -142,3 +142,16 @@ If a clause beginning with "but" needs commentary for a *different* reason (e.g.
 3. **Check if contrast is clear despite the neutral connector**: Would the translator/reader catch the contrast without help? If yes, no note. If no, write the note.
 
 **Key Test**: Two things are being compared as opposites or one is unexpected, **and** the English wording does not already say "but"/"however"/etc.
+
+---
+
+## Restraint Principle
+
+The hard rule above (no note when the clause already begins with "but"/"however"/"yet"/etc.) does most of the restraint work here. Beyond it, flag only where a neutral connector genuinely hides a contrast a translator could miss.
+
+Do not flag when:
+- The clause already carries an explicit contrastive marker (the hard rule)
+- The contrast is obvious from context despite the neutral connector
+- The relation is really an exception (grammar-connect-exceptions) or parallelism (figs-parallelism)
+
+Target: published narrative averages about 0.4 notes per 100 verses -- roughly one every two or three chapters. Poetry is a little higher (about 1.1), prophecy lower. This is a rare note; zero in a given chapter is normal.

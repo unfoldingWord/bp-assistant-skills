@@ -102,6 +102,18 @@ Is the author pausing the main storyline?
 
 5. **Circumstantial**: "Here the author is providing background information about when this event happened."
 
+## Restraint Principle
+
+Background information is a real but occasional feature. Flag the genuine pause in the storyline, not every descriptive detail or state verb.
+
+Do not flag when:
+- The detail is part of the main action rather than a pause in it
+- An ongoing clause gives the time frame for a main event (use grammar-connect-time-background)
+- It is simply a "was/were" state that the narrative carries naturally
+- The material is itself the main content (genealogies, lists, records)
+
+Target: published narrative averages roughly 4 to 5 writing-background notes per 100 verses (Joshua 3.8, 1 Samuel 4.8), so expect about one per chapter, occasionally two in a setup-heavy chapter. Poetry and prophecy use it rarely. When one background span runs across several verses, write a single note covering the span rather than one per verse.
+
 ## Languages Mark Background Differently
 
 Background information may be marked by:

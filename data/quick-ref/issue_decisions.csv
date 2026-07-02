@@ -1,1 +1,62 @@
 Phrase,IssueType,Book,Context,Notes,Date,Source
+figs-abstractnouns,rc://*/ta/man/translate/figs-abstractnouns,ALL,LAM+HAB overall — drop,Editors deleted 46/121 (38%) of AI figs-abstractnouns notes across LAM+HAB; over-flagged - apply a high selectivity bar.,2026-07-02,editor-history
+figs-metaphor,rc://*/ta/man/translate/figs-metaphor,ALL,LAM+HAB overall — keep,Editors kept 107/119 (90%) of AI figs-metaphor notes across LAM+HAB; well-targeted type - retain when applicable.,2026-07-02,editor-history
+figs-metonymy,rc://*/ta/man/translate/figs-metonymy,ALL,LAM+HAB overall — keep,Editors kept 61/70 (87%) of AI figs-metonymy notes across LAM+HAB; well-targeted type - retain when applicable.,2026-07-02,editor-history
+figs-simile,rc://*/ta/man/translate/figs-simile,ALL,LAM+HAB overall — keep,Editors kept 34/38 (89%) of AI figs-simile notes across LAM+HAB; well-targeted type - retain when applicable.,2026-07-02,editor-history
+figs-rquestion,rc://*/ta/man/translate/figs-rquestion,ALL,LAM+HAB overall — drop,Editors deleted 14/33 (42%) of AI figs-rquestion notes across LAM+HAB; over-flagged - apply a high selectivity bar.,2026-07-02,editor-history
+figs-idiom,rc://*/ta/man/translate/figs-idiom,ALL,LAM+HAB overall — trim,"Editors deleted 7/32 (22%) of AI figs-idiom notes across LAM+HAB; keep the strongest, trim marginal instances.",2026-07-02,editor-history
+figs-activepassive,rc://*/ta/man/translate/figs-activepassive,ALL,LAM+HAB history - mandate overrides,Editors deleted 17/31 (55%) of AI figs-activepassive notes across LAM+HAB. Recorded as history only: the content-team every-instance mandate overrides - never drop script-detected figs-activepassive.,2026-07-02,editor-history
+figs-parallelism,rc://*/ta/man/translate/figs-parallelism,ALL,LAM+HAB overall — drop,Editors deleted 13/31 (42%) of AI figs-parallelism notes across LAM+HAB; over-flagged - apply a high selectivity bar.,2026-07-02,editor-history
+writing-pronouns,rc://*/ta/man/translate/writing-pronouns,ALL,LAM+HAB overall — drop,Editors deleted 13/30 (43%) of AI writing-pronouns notes across LAM+HAB; over-flagged - apply a high selectivity bar.,2026-07-02,editor-history
+figs-personification,rc://*/ta/man/translate/figs-personification,ALL,LAM+HAB overall — trim,"Editors deleted 7/27 (26%) of AI figs-personification notes across LAM+HAB; keep the strongest, trim marginal instances.",2026-07-02,editor-history
+figs-doublet,rc://*/ta/man/translate/figs-doublet,ALL,LAM+HAB overall — trim,"Editors deleted 5/27 (19%) of AI figs-doublet notes across LAM+HAB; keep the strongest, trim marginal instances.",2026-07-02,editor-history
+figs-possession,rc://*/ta/man/translate/figs-possession,ALL,LAM+HAB overall — drop,Editors deleted 11/18 (61%) of AI figs-possession notes across LAM+HAB; over-flagged - apply a high selectivity bar.,2026-07-02,editor-history
+figs-imperative,rc://*/ta/man/translate/figs-imperative,ALL,LAM+HAB overall — trim,"Editors deleted 4/17 (24%) of AI figs-imperative notes across LAM+HAB; keep the strongest, trim marginal instances.",2026-07-02,editor-history
+figs-merism,rc://*/ta/man/translate/figs-merism,ALL,LAM+HAB overall — keep,Editors kept 11/12 (92%) of AI figs-merism notes across LAM+HAB; well-targeted type - retain when applicable.,2026-07-02,editor-history
+grammar-connect-logic-result,rc://*/ta/man/translate/grammar-connect-logic-result,ALL,LAM+HAB overall — trim,"Editors deleted 3/10 (30%) of AI grammar-connect-logic-result notes across LAM+HAB; keep the strongest, trim marginal instances.",2026-07-02,editor-history
+translate-symaction,rc://*/ta/man/translate/translate-symaction,ALL,LAM+HAB overall — trim,"Editors deleted 2/9 (22%) of AI translate-symaction notes across LAM+HAB; keep the strongest, trim marginal instances.",2026-07-02,editor-history
+figs-ellipsis,rc://*/ta/man/translate/figs-ellipsis,ALL,LAM+HAB overall — drop,Editors deleted 7/9 (78%) of AI figs-ellipsis notes across LAM+HAB; over-flagged - apply a high selectivity bar.,2026-07-02,editor-history
+figs-nominaladj,rc://*/ta/man/translate/figs-nominaladj,ALL,LAM+HAB overall — drop,Editors deleted 4/9 (44%) of AI figs-nominaladj notes across LAM+HAB; over-flagged - apply a high selectivity bar.,2026-07-02,editor-history
+figs-exclamations,rc://*/ta/man/translate/figs-exclamations,ALL,LAM+HAB overall — keep,Editors kept 7/8 (88%) of AI figs-exclamations notes across LAM+HAB; well-targeted type - retain when applicable.,2026-07-02,editor-history
+figs-explicit,rc://*/ta/man/translate/figs-explicit,ALL,LAM+HAB overall — drop,Editors deleted 4/8 (50%) of AI figs-explicit notes across LAM+HAB; over-flagged - apply a high selectivity bar.,2026-07-02,editor-history
+figs-metaphor,rc://*/ta/man/translate/figs-metaphor,LAM,LAM — keep,In LAM (lament poetry) editors kept 79/91 (87% kept) of AI figs-metaphor notes.,2026-07-02,editor-history
+figs-abstractnouns,rc://*/ta/man/translate/figs-abstractnouns,LAM,LAM — drop,In LAM (lament poetry) editors deleted 29/73 (40% deleted) of AI figs-abstractnouns notes.,2026-07-02,editor-history
+figs-metonymy,rc://*/ta/man/translate/figs-metonymy,LAM,LAM — keep,In LAM (lament poetry) editors kept 43/49 (88% kept) of AI figs-metonymy notes.,2026-07-02,editor-history
+figs-idiom,rc://*/ta/man/translate/figs-idiom,LAM,LAM — trim,In LAM (lament poetry) editors deleted 7/30 (23% deleted) of AI figs-idiom notes.,2026-07-02,editor-history
+figs-simile,rc://*/ta/man/translate/figs-simile,LAM,LAM — keep,In LAM (lament poetry) editors kept 24/26 (92% kept) of AI figs-simile notes.,2026-07-02,editor-history
+figs-activepassive,rc://*/ta/man/translate/figs-activepassive,LAM,LAM history - mandate overrides,In LAM (lament poetry) editors deleted 17/24 (71%) of AI figs-activepassive notes. History only: the every-instance mandate overrides - do not drop.,2026-07-02,editor-history
+figs-doublet,rc://*/ta/man/translate/figs-doublet,LAM,LAM — keep,In LAM (lament poetry) editors kept 21/24 (88% kept) of AI figs-doublet notes.,2026-07-02,editor-history
+writing-pronouns,rc://*/ta/man/translate/writing-pronouns,LAM,LAM — drop,In LAM (lament poetry) editors deleted 13/21 (62% deleted) of AI writing-pronouns notes.,2026-07-02,editor-history
+figs-rquestion,rc://*/ta/man/translate/figs-rquestion,LAM,LAM — drop,In LAM (lament poetry) editors deleted 12/20 (60% deleted) of AI figs-rquestion notes.,2026-07-02,editor-history
+figs-personification,rc://*/ta/man/translate/figs-personification,LAM,LAM — trim,In LAM (lament poetry) editors deleted 5/15 (33% deleted) of AI figs-personification notes.,2026-07-02,editor-history
+figs-merism,rc://*/ta/man/translate/figs-merism,LAM,LAM — keep,In LAM (lament poetry) editors kept 11/11 (100% kept) of AI figs-merism notes.,2026-07-02,editor-history
+figs-imperative,rc://*/ta/man/translate/figs-imperative,LAM,LAM — trim,In LAM (lament poetry) editors deleted 4/11 (36% deleted) of AI figs-imperative notes.,2026-07-02,editor-history
+translate-symaction,rc://*/ta/man/translate/translate-symaction,LAM,LAM — trim,In LAM (lament poetry) editors deleted 2/9 (22% deleted) of AI translate-symaction notes.,2026-07-02,editor-history
+figs-parallelism,rc://*/ta/man/translate/figs-parallelism,LAM,LAM — keep,In LAM (lament poetry) editors kept 8/8 (100% kept) of AI figs-parallelism notes.,2026-07-02,editor-history
+figs-ellipsis,rc://*/ta/man/translate/figs-ellipsis,LAM,LAM — drop,In LAM (lament poetry) editors deleted 7/8 (88% deleted) of AI figs-ellipsis notes.,2026-07-02,editor-history
+figs-possession,rc://*/ta/man/translate/figs-possession,LAM,LAM — drop,In LAM (lament poetry) editors deleted 6/7 (86% deleted) of AI figs-possession notes.,2026-07-02,editor-history
+figs-explicit,rc://*/ta/man/translate/figs-explicit,LAM,LAM — drop,In LAM (lament poetry) editors deleted 3/7 (43% deleted) of AI figs-explicit notes.,2026-07-02,editor-history
+figs-quotations,rc://*/ta/man/translate/figs-quotations,LAM,LAM — keep,In LAM (lament poetry) editors kept 7/7 (100% kept) of AI figs-quotations notes.,2026-07-02,editor-history
+grammar-connect-logic-result,rc://*/ta/man/translate/grammar-connect-logic-result,LAM,LAM — trim,In LAM (lament poetry) editors deleted 2/7 (29% deleted) of AI grammar-connect-logic-result notes.,2026-07-02,editor-history
+figs-hyperbole,rc://*/ta/man/translate/figs-hyperbole,LAM,LAM — keep,In LAM (lament poetry) editors kept 5/5 (100% kept) of AI figs-hyperbole notes.,2026-07-02,editor-history
+figs-abstractnouns,rc://*/ta/man/translate/figs-abstractnouns,HAB,HAB — trim,In HAB (prophetic poetry) editors deleted 17/48 (35% deleted) of AI figs-abstractnouns notes.,2026-07-02,editor-history
+figs-metaphor,rc://*/ta/man/translate/figs-metaphor,HAB,HAB — keep,In HAB (prophetic poetry) editors kept 28/28 (100% kept) of AI figs-metaphor notes.,2026-07-02,editor-history
+figs-parallelism,rc://*/ta/man/translate/figs-parallelism,HAB,HAB — drop,In HAB (prophetic poetry) editors deleted 13/23 (57% deleted) of AI figs-parallelism notes.,2026-07-02,editor-history
+figs-metonymy,rc://*/ta/man/translate/figs-metonymy,HAB,HAB — keep,In HAB (prophetic poetry) editors kept 18/21 (86% kept) of AI figs-metonymy notes.,2026-07-02,editor-history
+figs-rquestion,rc://*/ta/man/translate/figs-rquestion,HAB,HAB — keep,In HAB (prophetic poetry) editors kept 11/13 (85% kept) of AI figs-rquestion notes.,2026-07-02,editor-history
+figs-simile,rc://*/ta/man/translate/figs-simile,HAB,HAB — keep,In HAB (prophetic poetry) editors kept 10/12 (83% kept) of AI figs-simile notes.,2026-07-02,editor-history
+figs-personification,rc://*/ta/man/translate/figs-personification,HAB,HAB — keep,In HAB (prophetic poetry) editors kept 10/12 (83% kept) of AI figs-personification notes.,2026-07-02,editor-history
+figs-possession,rc://*/ta/man/translate/figs-possession,HAB,HAB — drop,In HAB (prophetic poetry) editors deleted 5/11 (45% deleted) of AI figs-possession notes.,2026-07-02,editor-history
+writing-pronouns,rc://*/ta/man/translate/writing-pronouns,HAB,HAB — keep,In HAB (prophetic poetry) editors kept 9/9 (100% kept) of AI writing-pronouns notes.,2026-07-02,editor-history
+figs-nominaladj,rc://*/ta/man/translate/figs-nominaladj,HAB,HAB — trim,In HAB (prophetic poetry) editors deleted 3/8 (38% deleted) of AI figs-nominaladj notes.,2026-07-02,editor-history
+figs-activepassive,rc://*/ta/man/translate/figs-activepassive,HAB,HAB — keep,In HAB (prophetic poetry) editors kept 7/7 (100% kept) of AI figs-activepassive notes.,2026-07-02,editor-history
+figs-imperative,rc://*/ta/man/translate/figs-imperative,HAB,HAB — keep,In HAB (prophetic poetry) editors kept 6/6 (100% kept) of AI figs-imperative notes.,2026-07-02,editor-history
+figs-exclamations,rc://*/ta/man/translate/figs-exclamations,HAB,HAB — keep,In HAB (prophetic poetry) editors kept 5/5 (100% kept) of AI figs-exclamations notes.,2026-07-02,editor-history
+violence,rc://*/ta/man/translate/figs-abstractnouns,HAB,HAB — drop,"Repeated abstract noun; AI flagged nearly every occurrence and editors deleted the duplicates. Flag a recurring abstract noun once, not per verse.",2026-07-02,editor-history
+salvation,rc://*/ta/man/translate/figs-abstractnouns,HAB,HAB — drop,AI re-flagged this abstract noun on multiple occurrences; editors deleted the repeats. Do not tag the same abstract noun every time it recurs.,2026-07-02,editor-history
+prayer,rc://*/ta/man/translate/figs-abstractnouns,HAB,HAB — drop,Common noun flagged as abstractnouns and deleted; treat ordinary nouns like this as concrete enough to need no note.,2026-07-02,editor-history
+life,rc://*/ta/man/translate/figs-abstractnouns,LAM,LAM — drop,Common noun flagged repeatedly as abstractnouns and deleted by editors; skip for everyday nouns.,2026-07-02,editor-history
+tears,rc://*/ta/man/translate/figs-abstractnouns,LAM,LAM — drop,Concrete-imageable noun flagged as abstractnouns and deleted; reserve abstractnouns notes for genuinely abstract ideas.,2026-07-02,editor-history
+pain,rc://*/ta/man/translate/figs-abstractnouns,LAM,LAM — drop,Common experiential noun flagged as abstractnouns and deleted by editors.,2026-07-02,editor-history
+nakedness,rc://*/ta/man/translate/figs-abstractnouns,LAM,LAM — drop,Deleted by editors; do not write abstractnouns notes for plain concrete-referent nouns.,2026-07-02,editor-history
+anger,rc://*/ta/man/translate/figs-abstractnouns,HAB,HAB — drop,Deleted by editors; recurring emotion noun does not need an abstractnouns note each time.,2026-07-02,editor-history

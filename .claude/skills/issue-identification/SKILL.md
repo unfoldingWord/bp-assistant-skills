@@ -18,6 +18,10 @@ Prefer workspace MCP tools in restricted runs:
 ## Purpose
 Identify translation issues in biblical text that require translation notes. This skill focuses on **recognition and classification** - note writing is handled separately.
 
+## Selectivity
+
+An issue earns its place only if a competent translator would plausibly err on it without a note. Published note density is the calibration target: see `.claude/skills/golden-benchmark/golden/calibration.json` for per-genre bands (roughly 1.5 notes/verse in narrative, 3-4.5 in poetry and prophecy). Aim to stay within about 1.5x the published band for the chapter's genre. The discourse families (grammar-connect-*, writing-*) together account for under 12% of published notes; when the list runs over budget, trim those families first. When a formulaic marker repeats in a chapter, flag its first occurrence only — published notes handle later occurrences with "see how you translated" references.
+
 ## Arguments
 
 When invoked with arguments like `2sam 1` or `psa 58 local`:
@@ -180,35 +184,34 @@ For each paragraph or segment identified in Pass 1:
 
 When uncertain about a construction, use `mcp__workspace-tools__build_tn_index` with `lookup="keyword"` or `issue="figs-metonymy"` for fast precedent lookups. Check prior decisions with `grep "keyword" data/quick-ref/issue_decisions.csv`. Fallback: raw grep `data/published-tns/tn_*.tsv`.
 
-#### Pass 3: Verse-by-Verse Analysis with Task Checklist
+#### Pass 3: Verse-by-Verse Analysis with Category Checklist
 
-For each verse (or small verse group), systematically check all issue types using the TaskCreate tool.
+For each verse (or small verse group), work through the 7 issue categories rather than every individual type. The categories are: Discourse Structure, Grammar, Clause Relations, Figures of Speech, Speech Acts, Information Management, Cultural/Reference (see [reference/issue-types-catalog.md](reference/issue-types-catalog.md)).
 
 **Creating the checklist:**
-Use TaskCreate to generate one task per issue type from `data/translation-issues.csv` (all ~93 types). Example: "Check figs-metaphor in v.3", "Check figs-simile in v.3", etc.
+Use TaskCreate to generate one task per category per verse. Example: "Figures of Speech in v.3", "Clause Relations in v.3", etc.
 
 **Working through the checklist:**
 1. Read the verse carefully
-2. For each task, consider whether that issue type applies
-3. Use TaskUpdate to mark completed with findings: `"figs-metaphor: 'shield' as protection - yes"` or `"figs-metaphor: none"`
+2. For each category, ask whether anything in the verse raises that kind of issue; open the specific type file only when you have a candidate hit to confirm and classify
+3. Use TaskUpdate to mark completed with findings: `"Figures of Speech: 'shield' as protection - figs-metaphor"` or `"Clause Relations: none"`
 4. When uncertain, search published notes before deciding
 
 **Integrating detection script output:**
 - Check abstract noun detection script output first - abstract nouns are pre-identified
 - Identify all passive constructions yourself using the patterns in `figs-activepassive.md`
 - Mark those tasks as completed with the findings
-- For names/unknowns, run `check_tw_headwords.py` before flagging
+- For names/unknowns, check tW headwords (`check_tw_headwords`) before flagging
 
 ### Systematic Review Principles
 
 1. **Detection first** - integrate abstract nouns from scripts and passives from your own analysis
-2. **tW check for names** - run `check_tw_headwords.py` before flagging translate-names/translate-unknown
+2. **tW check for names** - check tW headwords (`check_tw_headwords`) before flagging translate-names/translate-unknown
 3. **Search when uncertain** - check the published TN index first (`build_tn_index.py --lookup`), then `data/published-tns/` for similar phrases
 4. **Consult Issues Resolved and Note Templates** - when classifications conflict, `data/issues_resolved.txt` and `data/templates.csv` have final authority on how issues are classified
 5. **Check implicit info** - would modern readers miss cultural practices, theological concepts, or covenant language?
 6. **Record non-trivial decisions** - after resolving a classification that required checking published precedent or where multiple issue types were plausible, append to `data/quick-ref/issue_decisions.csv`
-
-The goal is coverage: it's easier for reviewers to delete a suggested issue than to identify one from scratch. When in doubt, include it.
+7. **Apply the selectivity bar** - before finalizing, weigh each finding against the Selectivity section above; a borderline issue that a competent translator would handle unaided does not need a note
 
 ### Genre-Specific Checks
 
@@ -309,8 +312,9 @@ After completing all identification, review your output:
    single best fit using the decision hierarchy in "Competing Figurative Analyses" above.
 
 4. **Missing overlap check**: Are there phrases that genuinely need two tags? (e.g., a simile that also contains an abstract noun - both figs-simile AND figs-abstractnouns may apply)
-   Abstract nouns, passives (figs-abstractnouns, figs-activepassive) are script-detected
-   and exist at a different analytical layer than figures of speech. They always coexist --
+   Abstract nouns (script-detected) and passives (figs-abstractnouns,
+   figs-activepassive; passives identified during analysis) exist at a
+   different analytical layer than figures of speech. They always coexist --
    a figurative issue on the same phrase does not replace a grammar issue. Other grammar-level
    issues (figs-possession, figs-ellipsis, figs-nominaladj) should also generally not be
    dropped or merged with figurative issues.
@@ -436,8 +440,8 @@ See `reference/ambiguity_patterns.md` for detailed examples from published notes
 
 - **fetch_door43 fails**: Check network connectivity and that the book/chapter exists on Door43. The tool retries 3 times with backoff. If the resource was recently published, allow a few minutes for CDN propagation.
 - **detect_abstract_nouns returns empty**: The detection tool found no abstract nouns in the passage. This is normal for short or concrete passages. Verify the input USFM has content and is not a header-only file.
-- **Too many issues flagged**: If a passage generates more than ~30 issues, review for duplicates and low-confidence entries. Use the confidence threshold filter (0.7 default) and check that the same verse span is not being flagged by overlapping issue types.
-- **Too few issues flagged**: Ensure all 7 category modules ran. Check the log for skipped categories (usually caused by missing input files). Re-run with `--categories all` to force all categories.
+- **Too many issues flagged**: If a chapter runs well past the genre budget (see Selectivity above), review for duplicates, competing figurative analyses, and repeat occurrences of formulaic markers, and check that the same verse span is not being flagged by overlapping issue types.
+- **Too few issues flagged**: Confirm each of the 7 category passes was completed for every verse and that detector output (abstract nouns, passives) was integrated.
 
 ## Output Format
 

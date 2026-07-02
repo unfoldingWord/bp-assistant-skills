@@ -113,3 +113,16 @@ Languages may mark background clauses through:
 - Subordination markers
 
 Notes should encourage translators to use whatever method is natural for marking background-to-main event relationships in their language.
+
+---
+
+## Restraint Principle
+
+This is one of the rarest connection notes; a background clause usually reads naturally without one. Flag only where the ongoing-then-punctual relationship is genuinely unclear.
+
+Do not flag when:
+- The clause is general explanatory context, not a time frame (use writing-background)
+- Both events carry equal weight (use grammar-connect-time-simultaneous)
+- The "while"/"when" framing is already clear to a reader
+
+Target: this type barely registers in published notes -- it does not appear among the tracked per-type rates for narrative, poetry, or prophecy, so treat it as a handful of notes per book at most. Expect zero in nearly every chapter.

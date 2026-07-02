@@ -127,3 +127,17 @@ Are there two or more events described?
                           +-- No --> No note needed
 ```
 
+---
+
+## Restraint Principle
+
+Sequence is usually clear from the order of events, so this note is rarely needed. Flag only where a connector genuinely leaves the order ambiguous.
+
+Do not flag when:
+- The sequence is already plain from context or ordering
+- Events are told out of order and need reordering (use figs-events)
+- Events are simultaneous (use grammar-connect-time-simultaneous)
+- Every "and"/"then" that moves a narrative forward
+
+Target: published narrative uses this type only about 0.07 times per 100 verses -- roughly one note per book. Expect zero in nearly every chapter, and none at all in prophecy.
+

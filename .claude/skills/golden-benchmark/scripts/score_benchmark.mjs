@@ -52,7 +52,10 @@ export function tokenize(text) {
     .toLowerCase()
     .replace(/[“”‘’"'.,;:!?…—–()\[\]{}]/g, ' ')
     .split(/\s+/)
-    .filter((w) => w.length > 0);
+    // Drop any residual USFM-marker fragments (backslash-bearing tokens such as
+    // the self-closing "\*" left by a milestone like "\ts\*"). Translation prose
+    // never contains a backslash, so this only removes leaked markup, not text.
+    .filter((w) => w.length > 0 && !w.includes('\\'));
 }
 
 export function tokenF1(genTokens, goldTokens) {
@@ -132,12 +135,13 @@ export function parseTnRows(tsv) {
   const lines = tsv.split('\n').filter((l) => l.trim());
   const header = lines[0].split('\t');
   const col = (name) => header.indexOf(name);
-  const iRef = col('Reference'), iId = col('ID'), iSr = col('SupportReference'), iQuote = col('Quote'), iNote = col('Note');
+  const iRef = col('Reference'), iId = col('ID'), iTags = col('Tags'), iSr = col('SupportReference'), iQuote = col('Quote'), iNote = col('Note');
   const rows = [];
   for (let i = 1; i < lines.length; i++) {
     const c = lines[i].split('\t');
     rows.push({
       ref: c[iRef] || '', id: c[iId] || '',
+      tags: iTags >= 0 ? (c[iTags] || '') : '',
       type: ((c[iSr] || '').match(/([a-z-]+)\s*$/) || [])[1] || '',
       quote: c[iQuote] || '', note: c[iNote] || '',
     });
@@ -170,9 +174,39 @@ export function scoreNotes(generatedTsv, goldenTsv, chapter) {
     for (let i = 0; i < c - g; i++) unmatchedGenerated.push(k);
   }
 
+  // Verse-only matching (ignore type): "did we write a note on each verse the
+  // humans noted?". Golden range refs (e.g. "3:3-4") are expanded to their
+  // component verses so a range note can match single-verse generated notes;
+  // without this a range key can never match and verse-recall is understated.
+  const expandRef = (ref) => {
+    const m = ref.match(/^(\d+):(\d+)(?:-(\d+))?$/);
+    if (!m) return [ref];
+    const [, ch, a, b] = m;
+    const lo = parseInt(a, 10), hi = b ? parseInt(b, 10) : lo;
+    const verses = [];
+    for (let v = lo; v <= hi; v++) verses.push(`${ch}:${v}`);
+    return verses;
+  };
+  // Each generated note is a single matchable unit even when its own ref is a
+  // range (it may satisfy any one of its component verses, not one per verse) —
+  // otherwise a generated range note could match twice and push precision > 1.
+  const genUnits = genNotes.map((r) => ({ verses: new Set(expandRef(r.ref)), used: false }));
+  let verseMatched = 0;
+  for (const r of goldNotes) {
+    const goldVerses = expandRef(r.ref);
+    const unit = genUnits.find((u) => !u.used && goldVerses.some((v) => u.verses.has(v)));
+    if (unit) {
+      unit.used = true;
+      verseMatched++;
+    }
+  }
+
   // Convention checks on generated notes
   const conventions = [];
   for (const r of genNotes) {
+    if (r.tags && r.tags.trim()) {
+      conventions.push({ ref: r.ref, id: r.id, problem: `non-empty Tags value "${r.tags.trim()}" (published golden Tags are always empty; internal tags like ISSUE:MATCH_FAIL must not ship)` });
+    }
     if (/Alternate translation:/.test(r.note) && !/Alternate translation:\s*\[/.test(r.note)) {
       conventions.push({ ref: r.ref, id: r.id, problem: 'AT not in [square brackets]' });
     }
@@ -216,6 +250,8 @@ export function scoreNotes(generatedTsv, goldenTsv, chapter) {
     intro: { generated: gen.some(isIntro), golden: gold.some(isIntro) },
     typeRecall: goldNotes.length ? Number((matched / goldNotes.length).toFixed(3)) : null,
     typePrecision: genNotes.length ? Number((matched / genNotes.length).toFixed(3)) : null,
+    verseRecall: goldNotes.length ? Number((verseMatched / goldNotes.length).toFixed(3)) : null,
+    versePrecision: genNotes.length ? Number((verseMatched / genNotes.length).toFixed(3)) : null,
     unmatchedGolden,
     unmatchedGenerated,
     conventionProblems: conventions,
@@ -250,6 +286,8 @@ function renderMarkdown(scorecard) {
     lines.push(`- Notes: ${tn.counts.generated} generated vs ${tn.counts.golden} published (ratio ${tn.counts.ratio})`);
     lines.push(`- Type@verse recall (published notes we also flagged): ${tn.typeRecall === null ? 'n/a' : (tn.typeRecall * 100).toFixed(0) + '%'}`);
     lines.push(`- Type@verse precision (our notes the humans also had): ${tn.typePrecision === null ? 'n/a' : (tn.typePrecision * 100).toFixed(0) + '%'}`);
+    lines.push(`- Verse-only recall (verses the humans noted that we also noted): ${tn.verseRecall === null ? 'n/a' : (tn.verseRecall * 100).toFixed(0) + '%'}`);
+    lines.push(`- Verse-only precision (our noted verses the humans also noted): ${tn.versePrecision === null ? 'n/a' : (tn.versePrecision * 100).toFixed(0) + '%'}`);
     lines.push(`- Chapter intro row: generated ${tn.intro.generated ? 'yes' : 'no'} / published ${tn.intro.golden ? 'yes' : 'no'}`);
     lines.push(`- Convention problems in generated notes: ${tn.conventionProblems.length}`);
     if (tn.conventionProblems.length) {

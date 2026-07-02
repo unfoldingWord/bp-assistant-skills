@@ -10,7 +10,7 @@ Generate translation notes from issue identification output. The preparation sta
 ## MCP-First Execution
 
 When running in restricted mode, use workspace MCP tools instead of direct shell/python calls. Primary tools:
-- `mcp__workspace-tools__prepare_and_validate` — **preferred**: runs prepare + alignment + gl_quote resolution + flagging + AT verification in one call (saves turns)
+- `mcp__workspace-tools__prepare_and_validate` — for standalone runs only: runs prepare + alignment + gl_quote resolution + flagging + AT verification in one call (saves turns). In pipeline mode (a context.json was provided) preparation is already done — do not re-run it (see Step 1).
 - `mcp__workspace-tools__prepare_notes` — prepare only (use when you need to modify the prepared JSON between steps)
 - `mcp__workspace-tools__extract_alignment_data`
 - `mcp__workspace-tools__resolve_gl_quotes`
@@ -24,7 +24,7 @@ When running in restricted mode, use workspace MCP tools instead of direct shell
 - `mcp__workspace-tools__update_prepared_quote` — set a prepared note's quote fields by id (use during Step 7 final review instead of hand-`Edit`)
 - `mcp__workspace-tools__remove_note` — remove a note by id from generated_notes.json and/or the TSV (use during Step 7 final review instead of hand-`Edit`)
 
-**Prohibited:** Do NOT write Python, bash, or other scripts to `/tmp/` or anywhere else. Do NOT hand-`Edit` `generated_notes.json`, `prepared_notes.json`, or the assembled notes TSV to revise a row's text, quote, or to delete it — use the structured `update_note_text` / `update_prepared_quote` / `remove_note` tools, which locate items by id and never produce "string to replace not found" errors. If an `Edit` ever returns "string to replace not found" against any of these files, do not retry it: switch to the structured tool; if the target still can't be matched, leave the row as-is and move on. Repeated `Edit` retries against these files will trip the runner's repeated-tool-error guardrail and fail the whole shard.
+**Prohibited:** Follow the shared structured-edit policy in `.claude/skills/reference/structured-edit-policy.md` — no ad-hoc scripts, no hand-`Edit` of the notes JSON/TSV, no `Edit` retries after "string to replace not found".
 
 ## Prerequisites
 
@@ -226,7 +226,7 @@ This is complementary to tn-quality-check -- Gemini does semantic/judgment revie
 
 ## Troubleshooting
 
-- **Empty orig_quote after Step 2c**: The Hebrew quote extraction found no match. Check that the issue row's Book/Chapter/Verse matches the Hebrew USFM. Re-run with `--verbose` to see candidate matches.
+- **Empty orig_quote in prepared notes**: The Hebrew quote extraction (pipeline mechanical prep, or `prepare_and_validate` in standalone runs) found no match. Check that the issue row's Book/Chapter/Verse matches the Hebrew USFM.
 - **verify_at_fit.py ERRORS**: The alignment token check failed. Common causes: stale ULT (re-fetch with fetch_door43.py), or orig_quote spans a verse boundary. Fix the quote and re-run verification.
 - **assemble_notes.py missing items**: Rows were filtered out during assembly. Check that every row has a non-empty SupportReference and that the issue type matches a known TA article.
 - **QUOTE_NOT_FOUND from lang_convert.js**: The Greek/Hebrew quote could not be located in the source text. Verify the quote is copied exactly from the USFM (including cantillation marks for Hebrew).
