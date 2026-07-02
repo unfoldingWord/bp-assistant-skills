@@ -45,7 +45,7 @@ When abstract ideas need clarification:
 ### tW Article Covers It
 If the term matches a Translation Words headword, the tW article provides the definition. Check with:
 ```bash
-python3 .claude/skills/issue-identification/scripts/check_tw_headwords.py "TermToCheck"
+node /app/src/workspace-tools-cli.js check_tw_headwords '{"terms":["TermToCheck"]}'
 ```
 If match found in "other" or "kt" category: **generally NO translate-unknown note needed**.
 
@@ -98,9 +98,9 @@ For specific historical items described in the text:
 
 After identifying a potential unknown concept:
 
-1. Run the headword check script:
+1. Run the headword check:
    ```bash
-   python3 .claude/skills/issue-identification/scripts/check_tw_headwords.py "term"
+   node /app/src/workspace-tools-cli.js check_tw_headwords '{"terms":["term"]}'
    ```
 
 2. If match found:
