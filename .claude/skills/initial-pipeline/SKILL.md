@@ -108,7 +108,7 @@ This builds/refreshes the index (daily cache). Use `lookup` and `issue` argument
 
 ## Wave 1: ULT Draft
 
-Spawn `ult-gen` as a teammate (`subagent_type: "general-purpose"`, `model: "high"`, with `team_name` set, name: "ult-gen").
+Spawn `ult-gen` as a teammate (`subagent_type: "general-purpose"`, `model: "opus"`, `effort: "high"`, with `team_name` set, name: "ult-gen").
 
 The ULT agent:
 1. Translates Hebrew to literal English for the chapter (following ULT-gen skill)
@@ -132,7 +132,7 @@ UST is NOT generated here. UST needs the issue-id output to know what translatio
 
 ## Wave 2: Issue Identification
 
-Read `.claude/skills/issue-identification/analyst-domains.md` for domain assignments and cross-reading protocol. Spawn both analysts with `subagent_type: "issue-identification"`, `model: "high"`, and `team_name` set.
+Read `.claude/skills/issue-identification/analyst-domains.md` for domain assignments and cross-reading protocol. Spawn both analysts with `subagent_type: "issue-identification"`, `model: "opus"`, `effort: "high"`, and `team_name` set.
 
 Each analyst reads:
 - ULT draft from Wave 1 (`output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`)
@@ -155,7 +155,7 @@ Required before Wave 3:
 
 ## Wave 3: Challenge and Defend
 
-Read `.claude/skills/issue-identification/challenger-protocol.md`. Spawn the challenger (`model: "medium"`, name: "challenger"). The Wave 2 analysts and ULT agent are all still alive.
+Read `.claude/skills/issue-identification/challenger-protocol.md`. Spawn the challenger (`model: "opus"`, `effort: "medium"`, name: "challenger"). The Wave 2 analysts and ULT agent are all still alive.
 
 Pipeline-specific additions:
 - The challenger also DMs `ult-gen` to ask about specific rendering decisions when relevant (e.g., "In v3 you rendered the construct chain as X -- was that a deliberate structural preservation?")
@@ -232,7 +232,7 @@ Before writing to output/issues/, verify ordering within each verse: first-to-la
 
 ## Wave 6: UST Generation
 
-Spawn `ust-gen` as a teammate (`subagent_type: "general-purpose"`, `model: "high"`, with `team_name` set, name: "ust-gen").
+Spawn `ust-gen` as a teammate (`subagent_type: "general-purpose"`, `model: "opus"`, `effort: "high"`, with `team_name` set, name: "ust-gen").
 
 The UST agent reads:
 - The final revised ULT (draft 2) at `output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`
