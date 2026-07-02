@@ -9,7 +9,7 @@ Split a chapter's issue TSV into verse-range chunks, run `/tn-writer` on each ch
 
 ## Model
 
-This orchestrator only splits and merges -- run it as **haiku**. Each tn-writer chunk requires deep reasoning -- spawn with `model: "opus"`.
+This orchestrator splits and merges USFM/TSV, which is structure-sensitive -- run it on **Opus** at **medium** effort. Each tn-writer chunk requires deep reasoning -- spawn with `model: "opus"`, `effort: "high"`.
 
 ## When to Use
 
@@ -48,6 +48,7 @@ Task: "Write notes for <BOOK> <CH>:<START>-<END>"
 Prompt: "/tn-writer <BOOK> <CH>:<START>-<END> --issues output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv"
 subagent_type: "general-purpose"
 model: "opus"
+effort: "high"
 ```
 
 Launch all subagents in parallel (multiple Task calls in a single message). Each subagent:
