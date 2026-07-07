@@ -7,6 +7,18 @@ description: Update translation questions to align with current ULT/UST. Use whe
 
 Update existing Translation Questions (TQs) to align with current ULT/UST texts. A preparation script handles all data extraction, then the AI reviews each chapter's TQs against the source texts and produces updated TSV.
 
+## Workspace Tools Execution
+
+Run workspace tools via the blessed CLI wrapper:
+
+    node /app/src/workspace-tools-cli.js <tool_name> '<json-args>'
+
+stdout is the tool result (identical to what the MCP tool returns). For args that
+contain quotes, markdown, or newlines (e.g. the `note` text in update_note_text),
+pass `-` as the second argument and pipe the JSON object on stdin via a heredoc.
+Fallback (if Bash is unavailable): call `mcp__workspace-tools__<tool_name>` with
+the same args.
+
 ## Prerequisites
 
 ```bash
@@ -31,7 +43,13 @@ cd "$TQ_REPO" && git pull origin master
 
 ### Step 2: Run Preparation Script
 
-Use `mcp__workspace-tools__prepare_tq` with `book="PSA"`, `chapter=150`, `output="/tmp/claude/prepared_tq.json"` for a single chapter. For a whole book, omit `chapter` and pass `wholeBook=true`.
+For a single chapter, run:
+
+    node /app/src/workspace-tools-cli.js prepare_tq '{"book":"PSA","chapter":150,"output":"/tmp/claude/prepared_tq.json"}'
+
+For a whole book, omit `chapter` and add `"wholeBook":true`:
+
+    node /app/src/workspace-tools-cli.js prepare_tq '{"book":"PSA","output":"/tmp/claude/prepared_tq.json","wholeBook":true}'
 
 By default the tool pulls ULT and UST from the current Door43 **master** text (implemented in bp-assistant PR #149): it fetches `en_ult` and `en_ust` for the book, de-aligns them (collapsing each verse and stripping alignment markup), and exposes them as `ult_by_verse` / `ust_by_verse`. It checks each file's git blob sha first and reuses a cached de-alignment when master is unchanged, so repeat runs do not re-download or re-parse. Always feed **de-aligned** text — aligned USFM parses to almost nothing. For the TQ workflow this default is correct: TQs update the *already-published* question set, whose ULT/UST is on master.
 
@@ -75,19 +93,32 @@ Write the result as a TSV file to `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` using 
 
 ### Step 5: Post-Process Quotes
 
-Use `mcp__workspace-tools__curly_quotes` with `input="output/tq/PSA/PSA-006.tsv"`, `inPlace=true`.
+Run:
+
+    node /app/src/workspace-tools-cli.js curly_quotes '{"input":"output/tq/PSA/PSA-006.tsv","inPlace":true}'
 
 ### Step 6: Verify Output
 
-Use `mcp__workspace-tools__verify_tq` with `tsvFile="output/tq/PSA/PSA-006.tsv"`, `inputJson="/tmp/claude/prepared_tq.json"`.
+Run:
+
+    node /app/src/workspace-tools-cli.js verify_tq '{"tsvFile":"output/tq/PSA/PSA-006.tsv","inputJson":"/tmp/claude/prepared_tq.json"}'
 
 ### Step 6.5: Duplicate ID Check
 
-After writing all chapter files, scan the full output for duplicate IDs before proceeding to insertion. Use `mcp__workspace-tools__check_tn_quality` with `tsvFile` pointing to the output TSV and look for any `id_duplicate` findings. For multi-chapter or whole-book runs, check each chapter file in sequence and maintain a cross-chapter seen-ID set.
+After writing all chapter files, scan the full output for duplicate IDs before proceeding to insertion. Run `check_tn_quality` with `tsvPath` pointing to the output TSV and look for any `id_duplicate` findings:
+
+    node /app/src/workspace-tools-cli.js check_tn_quality '{"tsvPath":"<output TSV>"}'
+
+For multi-chapter or whole-book runs, check each chapter file in sequence and maintain a cross-chapter seen-ID set.
 
 If `check_tn_quality` is unavailable for TQ files, run the dedicated checker instead — it validates ID format and finds duplicates within and across files in one pass (pass all chapter files from this session together, and optionally check collisions against the published book TSV):
 
-Option A — MCP tool (preferred, works without Bash):
+Primary — CLI wrapper:
+```
+node /app/src/workspace-tools-cli.js check_duplicate_ids '{"files":["output/tq/{BOOK}/{BOOK}-{CH1}.tsv","output/tq/{BOOK}/{BOOK}-{CH2}.tsv"],"against":["door43-repos/en_tq/tq_{BOOK}.tsv"]}'
+```
+
+Fallback A — MCP tool (when Bash is unavailable):
 ```
 mcp__workspace-tools__check_duplicate_ids({
   files: ["output/tq/{BOOK}/{BOOK}-{CH1}.tsv", "output/tq/{BOOK}/{BOOK}-{CH2}.tsv"],
@@ -95,7 +126,7 @@ mcp__workspace-tools__check_duplicate_ids({
 })
 ```
 
-Option B — Bash (when available):
+Fallback B — dedicated `.mjs` checker via Bash:
 ```bash
 node .claude/skills/utilities/scripts/validation/check_duplicate_ids.mjs \
   output/tq/{BOOK}/{BOOK}-*.tsv --against door43-repos/en_tq/tq_{BOOK}.tsv

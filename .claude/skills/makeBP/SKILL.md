@@ -150,7 +150,7 @@ the issues TSV, the aligned ULT for local quote conversion (avoids empty Quote
 columns from remote API mismatch), and the aligned UST for AT verification.
 Do not wait for tq-writer.
 
-The tn-writer's `prepare_notes.py` accepts `--aligned-usfm` to extract Hebrew
+The tn-writer's `prepare_notes` tool accepts an `alignedUsfm` argument to extract Hebrew
 quotes directly from the aligned ULT instead of roundtripping through
 `lang_convert.js`. This eliminates QUOTE_NOT_FOUND errors caused by differences
 between our AI-generated ULT and the published Door43 master.
