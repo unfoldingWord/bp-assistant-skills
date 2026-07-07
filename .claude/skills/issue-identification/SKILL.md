@@ -187,7 +187,7 @@ For each paragraph or segment identified in Pass 1:
 - **Quotation structure**: Note quote margins, nested quotes, indirect speech
 - **Pronoun chains**: Track who "he/they/you" refer to through the segment
 
-When uncertain about a construction, use `node /app/src/workspace-tools-cli.js build_tn_index '{"lookup":"keyword"}'` or `'{"issue":"figs-metonymy"}'` for fast precedent lookups. Check prior decisions with `grep "keyword" data/quick-ref/issue_decisions.csv`. Fallback: raw grep `data/published-tns/tn_*.tsv`.
+When uncertain about a construction, use `node /app/src/workspace-tools-cli.js build_tn_index '{"lookup":"keyword"}'` or `node /app/src/workspace-tools-cli.js build_tn_index '{"issue":"figs-metonymy"}'` for fast precedent lookups. Check prior decisions with `grep "keyword" data/quick-ref/issue_decisions.csv`. Fallback: raw grep `data/published-tns/tn_*.tsv`.
 
 #### Pass 3: Verse-by-Verse Analysis with Category Checklist
 
@@ -352,7 +352,7 @@ grep -i "heart" data/templates.csv
 ### Published TN Index
 Pre-built index of all published translation notes by issue type and keyword. Use for fast precedent lookups instead of raw grep.
 
-Use `node /app/src/workspace-tools-cli.js build_tn_index '{"lookup":"hand"}'` for keyword lookups or `'{"issue":"figs-metaphor"}'` for issue type examples.
+Use `node /app/src/workspace-tools-cli.js build_tn_index '{"lookup":"hand"}'` for keyword lookups or `node /app/src/workspace-tools-cli.js build_tn_index '{"issue":"figs-metaphor"}'` for issue type examples.
 
 Source: `data/cache/tn_index.json` (built from `data/published-tns/`)
 
