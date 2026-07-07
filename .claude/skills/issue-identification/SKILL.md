@@ -1,17 +1,22 @@
 ---
 name: issue-identification
 description: Find translation issues in ULT/Hebrew/Greek texts. Covers 94 issue types across 7 categories. Use when asked to identify issues, find what needs notes, or analyze a passage for translation concerns.
-allowed-tools: Read, Grep, Glob, mcp__workspace-tools__*
+allowed-tools: Read, Grep, Glob, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__*
 ---
 
-## MCP-First Execution
+## Workspace Tools Execution
 
-Prefer workspace MCP tools in restricted runs:
-- `mcp__workspace-tools__fetch_door43`
-- `mcp__workspace-tools__compare_ult_ust`
-- `mcp__workspace-tools__detect_abstract_nouns`
-- `mcp__workspace-tools__check_tw_headwords`
-- `mcp__workspace-tools__build_tn_index`
+Run workspace tools via the blessed CLI wrapper:
+
+    node /app/src/workspace-tools-cli.js <tool_name> '<json-args>'
+
+stdout is the tool result (identical to what the MCP tool returns). If the JSON
+args contain quotes or newlines, pass `-` as the second argument and pipe the
+JSON on stdin via a heredoc. Fallback (if Bash is unavailable): call
+`mcp__workspace-tools__<tool_name>` with the same args.
+
+Anywhere below shows a tool as `mcp__workspace-tools__<tool_name>` with some args —
+invoke it through the CLI wrapper with those args serialized to a JSON object.
 
 # Issue Identification
 
@@ -57,7 +62,7 @@ There are two ways to use this skill:
 
 #### Step 1: Fetch/Locate USFM Text
 
-**Fetch mode (default)** - Use `mcp__workspace-tools__fetch_door43` for ULT and UST.
+**Fetch mode (default)** - Use `node /app/src/workspace-tools-cli.js fetch_door43 '<json>'` for ULT and UST.
 
 **Local mode** - Use local files:
 ```bash
@@ -103,7 +108,7 @@ Incorporate these observations into your analysis — they should heighten your 
 #### Step 3: Compare ULT/UST (if UST available)
 Where UST diverges from ULT (beyond synonym/clarity changes), there may be a translation issue:
 
-Use `mcp__workspace-tools__compare_ult_ust` with `ultFile`, `ustFile`, and `chapter`.
+Use `node /app/src/workspace-tools-cli.js compare_ult_ust '{"ultFile":"/tmp/ult_plain.usfm","ustFile":"/tmp/ust_plain.usfm","chapter":3}'` (set `ultFile`, `ustFile`, and `chapter` to the chapter you are analyzing).
 
 Output shows verses where UST made significant changes, with suggested issue types:
 | Pattern | Suggested Issue |
@@ -122,7 +127,7 @@ Skip this step if UST file doesn't exist.
 
 **Abstract nouns** -- run the detection script:
 
-Use `mcp__workspace-tools__detect_abstract_nouns` (`alignmentJson`, `format: "tsv"`).
+Use `node /app/src/workspace-tools-cli.js detect_abstract_nouns '{"alignmentJson":"/tmp/alignments.json","format":"tsv"}'` (`alignmentJson`, `format: "tsv"`).
 
 **Passive voice** -- identify ALL passive constructions during your verse-by-verse analysis (no script needed). Read the detection instructions in `figs-activepassive.md` for the passive voice pattern (auxiliary "be" + past participle), stative adjective exclusions, and worked examples. Every passive construction needs a note.
 
@@ -132,7 +137,7 @@ Merge detected issues into final output.
 
 When you just have English text (no USFM, no alignments), use `--text` to run detection directly. This skips source language morphology checks but still finds abstract nouns. Passive voice is identified by Claude during analysis (see `figs-activepassive.md`).
 
-Use `mcp__workspace-tools__detect_abstract_nouns` with `text` and `format: "tsv"` for quick plain-text checks.
+Use `node /app/src/workspace-tools-cli.js detect_abstract_nouns '{"text":"...","format":"tsv"}'` with `text` and `format: "tsv"` for quick plain-text checks.
 
 Output uses "text" as the reference since there's no verse structure. Source language fields (morph, lemma) will be empty.
 
@@ -140,7 +145,7 @@ Output uses "text" as the reference since there's no verse structure. Source lan
 
 **IMPORTANT**: Before flagging any name or unknown concept for translate-names or translate-unknown, check if it has a tW article. If a tW article exists, generally NO note is needed.
 
-Use `mcp__workspace-tools__check_tw_headwords` with a `terms` array (single or multiple terms).
+Use `node /app/src/workspace-tools-cli.js check_tw_headwords '{"terms":["term1","term2"]}'` with a `terms` array (single or multiple terms).
 
 The script returns JSON with `matches` (have tW articles) and `no_match` (may need notes):
 - **matches in "names" category**: NO translate-names note needed (tW covers it)
@@ -172,7 +177,7 @@ Read through the entire chapter to understand the big picture:
 
 For any unusual phrases noticed, check the published TN index first, then fall back to raw grep:
 
-Use `mcp__workspace-tools__build_tn_index` with `lookup="phrase"` for keyword classification precedent. Fallback: raw grep `data/published-tns/tn_*.tsv`.
+Use `node /app/src/workspace-tools-cli.js build_tn_index '{"lookup":"phrase"}'` for keyword classification precedent. Fallback: raw grep `data/published-tns/tn_*.tsv`.
 
 #### Pass 2: Segment-Level Grammar Focus
 For each paragraph or segment identified in Pass 1:
@@ -182,7 +187,7 @@ For each paragraph or segment identified in Pass 1:
 - **Quotation structure**: Note quote margins, nested quotes, indirect speech
 - **Pronoun chains**: Track who "he/they/you" refer to through the segment
 
-When uncertain about a construction, use `mcp__workspace-tools__build_tn_index` with `lookup="keyword"` or `issue="figs-metonymy"` for fast precedent lookups. Check prior decisions with `grep "keyword" data/quick-ref/issue_decisions.csv`. Fallback: raw grep `data/published-tns/tn_*.tsv`.
+When uncertain about a construction, use `node /app/src/workspace-tools-cli.js build_tn_index '{"lookup":"keyword"}'` or `node /app/src/workspace-tools-cli.js build_tn_index '{"issue":"figs-metonymy"}'` for fast precedent lookups. Check prior decisions with `grep "keyword" data/quick-ref/issue_decisions.csv`. Fallback: raw grep `data/published-tns/tn_*.tsv`.
 
 #### Pass 3: Verse-by-Verse Analysis with Category Checklist
 
@@ -347,7 +352,7 @@ grep -i "heart" data/templates.csv
 ### Published TN Index
 Pre-built index of all published translation notes by issue type and keyword. Use for fast precedent lookups instead of raw grep.
 
-Use `mcp__workspace-tools__build_tn_index` with `lookup="hand"` for keyword lookups or `issue="figs-metaphor"` for issue type examples.
+Use `node /app/src/workspace-tools-cli.js build_tn_index '{"lookup":"hand"}'` for keyword lookups or `node /app/src/workspace-tools-cli.js build_tn_index '{"issue":"figs-metaphor"}'` for issue type examples.
 
 Source: `data/cache/tn_index.json` (built from `data/published-tns/`)
 
@@ -373,14 +378,16 @@ grep -i "fallen\|sword" data/published-tns/tn_*.tsv
 
 ## Available Tools
 
+Invoke each via `node /app/src/workspace-tools-cli.js <tool> '<json-args>'` (see Workspace Tools Execution).
+
 | Tool | Purpose |
 |------|---------|
-| `mcp__workspace-tools__fetch_door43` | Fetch USFM from Door43 (supports `type="ust"` for UST) |
+| `fetch_door43` | Fetch USFM from Door43 (supports `type="ust"` for UST) |
 | `parse_usfm.js` (node) | Parse USFM, extract alignments and plain text (usfm-js) |
-| `mcp__workspace-tools__compare_ult_ust` | Compare ULT/UST plain text to identify divergences suggesting issues |
-| `mcp__workspace-tools__detect_abstract_nouns` | Find abstract nouns (591 word list). Use `text="..."` for plain English |
-| `mcp__workspace-tools__check_tw_headwords` | Check names/unknowns against tW headwords - filters translate-names/translate-unknown |
-| `mcp__workspace-tools__build_tn_index` | Published TN index lookup. `lookup="hand"` for keyword, `issue="figs-metaphor"` for issue type |
+| `compare_ult_ust` | Compare ULT/UST plain text to identify divergences suggesting issues |
+| `detect_abstract_nouns` | Find abstract nouns (591 word list). Use `text="..."` for plain English |
+| `check_tw_headwords` | Check names/unknowns against tW headwords - filters translate-names/translate-unknown |
+| `build_tn_index` | Published TN index lookup. `lookup="hand"` for keyword, `issue="figs-metaphor"` for issue type |
 
 ### Ambiguity Detection (Cross-Cutting Check)
 
