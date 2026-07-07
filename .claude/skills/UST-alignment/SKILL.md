@@ -3,7 +3,7 @@ name: UST-alignment
 
 description: Create meaning-based alignments between Hebrew source and English UST text. Handles radical restructuring and implied information. Use when asked to align UST or produce aligned UST USFM.
 
-allowed-tools: Read, Grep, Glob, Write, mcp__workspace-tools__create_aligned_usfm, mcp__workspace-tools__merge_aligned_usfm, mcp__workspace-tools__validate_alignment_json, mcp__workspace-tools__validate_alignment_integrity, mcp__workspace-tools__curly_quotes
+allowed-tools: Read, Grep, Glob, Write, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__create_aligned_usfm, mcp__workspace-tools__merge_aligned_usfm, mcp__workspace-tools__validate_alignment_json, mcp__workspace-tools__validate_alignment_integrity, mcp__workspace-tools__curly_quotes
 ---
 
 ## Overview
@@ -14,20 +14,24 @@ This skill maps English UST phrases to Hebrew source words. The workflow is two-
 
 UST alignment is fundamentally different from ULT alignment. Where ULT aims for word-level precision, UST shows which Hebrew word(s) contribute meaning to each English phrase. The mapping is concept-to-phrase, not word-to-word.
 
-## No shell — use MCP tools, never write or run scripts
+## Workspace Tools Execution
 
-This skill runs **without Bash** — there is no shell. Every `bash`/`node`/`grep`/
-`sed`/`cat` example below is illustrative only; perform the equivalent with the
-`Read`/`Grep`/`Write` tools and the `mcp__workspace-tools__*` tools.
+Run workspace tools via the blessed CLI wrapper:
 
-- **NEVER** write a Node/Python/shell script (e.g. `generate_*.js`) to produce or
-  combine aligned USFM, and never try to run one — it cannot be executed. This is
-  the single most common way this skill fails.
-- Convert each verse with `mcp__workspace-tools__create_aligned_usfm` (`ust: true`,
-  pass `output`), then assemble a range with `mcp__workspace-tools__merge_aligned_usfm`
-  — see "Combining Multiple Verses".
-- If a tool returns an error, fix the mapping JSON and call it again, or report the
-  failure. Never fall back to hand-writing or scripting the USFM.
+    node /app/src/workspace-tools-cli.js <tool_name> '<json-args>'
+
+stdout is the tool result (identical to what the MCP tool returns). If the JSON
+args contain quotes or newlines, pass `-` as the second argument and pipe the
+JSON on stdin via a heredoc. Fallback (if Bash is unavailable): call
+`mcp__workspace-tools__<tool_name>` with the same args.
+
+Anywhere below shows a tool as `mcp__workspace-tools__<tool_name>({ ... })` or
+"use the `<tool_name>` tool" — invoke it through the CLI wrapper with that same
+argument object serialized to JSON. The MCP form remains a valid fallback.
+
+**Do NOT improvise your own alignment scripts** (hand-written `generate_*.js`,
+manual occurrence counting, `cat`-ing verses). Use only the `create_aligned_usfm`
+and `merge_aligned_usfm` tools (via the CLI wrapper or MCP fallback).
 
 ## Input Requirements
 
@@ -292,7 +296,7 @@ Remaining `{bracketed}` English words that don't map to any Hebrew get `hebrew_i
 
 Every English word must appear in exactly one alignment entry. Run validation:
 
-Use `mcp__workspace-tools__validate_alignment_json` with `files` set to the array of alignment JSON paths and `ust=true`.
+Run `node /app/src/workspace-tools-cli.js validate_alignment_json '{"files":["tmp/alignments/PSA-001-001-ust.json"],"ust":true}'` with `files` set to the array of alignment JSON paths and `ust` true.
 
 ### Step 9: Save JSON
 
@@ -315,18 +319,11 @@ After creating the mapping JSON, convert it to aligned USFM using the conversion
 
 > **Critical:** `source` MUST point to the **UST file** (`output/AI-UST/BOOK/...`). Never pass the ULT file here. If you pass the ULT file, the output will silently contain ULT English text and look structurally valid -- the error will not be obvious.
 
-Use the `create_aligned_usfm` MCP tool with `ust: true`. Pass `output` to write a
+Use the `create_aligned_usfm` tool with `ust: true`. Pass `output` to write a
 per-verse file (so you can assemble a range with `merge_aligned_usfm`); omit it to
 get the aligned USFM back as text.
 ```
-mcp__workspace-tools__create_aligned_usfm({
-  hebrew: "data/hebrew_bible/19-PSA.usfm",
-  mapping: "tmp/alignments/PSA-001-001-ust.json",
-  source: "output/AI-UST/PSA/PSA-001.usfm",
-  output: "tmp/aligned/PSA-001-001-ust-aligned.usfm",
-  ust: true,
-  chapter: 1, verse: 1
-})
+node /app/src/workspace-tools-cli.js create_aligned_usfm '{"hebrew":"data/hebrew_bible/19-PSA.usfm","mapping":"tmp/alignments/PSA-001-001-ust.json","source":"output/AI-UST/PSA/PSA-001.usfm","output":"tmp/aligned/PSA-001-001-ust-aligned.usfm","ust":true,"chapter":1,"verse":1}'
 ```
 
 The `ust: true` flag tells the tool to:
@@ -351,27 +348,19 @@ vs ULT mode where brackets go inside `\w` tags:
 
 ### Combining Multiple Verses
 
-Do it entirely with MCP tools — **no shell, no script, no manual concatenation**:
+Do it entirely with the workspace tools — **never hand-write the header, script it,
+or manually concatenate verses**:
 
 1. Convert each verse to its **own** per-verse file with `create_aligned_usfm`
    (`ust: true`, passing `output`):
    ```
-   mcp__workspace-tools__create_aligned_usfm({
-     hebrew: "data/hebrew_bible/19-PSA.usfm",
-     mapping: "tmp/alignments/PSA-001-001-ust.json",
-     source: "output/AI-UST/PSA/PSA-001.usfm",
-     output: "tmp/aligned/PSA-001-001-ust-aligned.usfm",
-     ust: true, chapter: 1, verse: 1
-   })
+   node /app/src/workspace-tools-cli.js create_aligned_usfm '{"hebrew":"data/hebrew_bible/19-PSA.usfm","mapping":"tmp/alignments/PSA-001-001-ust.json","source":"output/AI-UST/PSA/PSA-001.usfm","output":"tmp/aligned/PSA-001-001-ust-aligned.usfm","ust":true,"chapter":1,"verse":1}'
    ```
    Repeat for every verse in the range (zero-pad mapping filenames and keep the `-ust` token).
 
 2. Assemble the per-verse files **in verse order** with `merge_aligned_usfm`:
    ```
-   mcp__workspace-tools__merge_aligned_usfm({
-     parts: ["tmp/aligned/PSA-001-001-ust-aligned.usfm", "tmp/aligned/PSA-001-002-ust-aligned.usfm", ...],
-     output: "output/AI-UST/PSA/PSA-001-aligned.usfm"
-   })
+   node /app/src/workspace-tools-cli.js merge_aligned_usfm '{"parts":["tmp/aligned/PSA-001-001-ust-aligned.usfm","tmp/aligned/PSA-001-002-ust-aligned.usfm"],"output":"output/AI-UST/PSA/PSA-001-aligned.usfm"}'
    ```
    It keeps the first part's header and appends each subsequent part's verse body.
    This replaces the old `cat`/`node`/`sed` loop — never hand-write the header or
@@ -389,10 +378,7 @@ output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-{START}-{END}-aligned.usfm  # partial chap
 After creating the final aligned USFM, normalize quotes:
 
 ```
-mcp__workspace-tools__curly_quotes({
-  input: "output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm",
-  inPlace: true
-})
+node /app/src/workspace-tools-cli.js curly_quotes '{"input":"output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm","inPlace":true}'
 ```
 
 ## Verification
@@ -412,7 +398,7 @@ diff \
 
 ### Step 1: Verify English Text Preservation
 
-Use `mcp__workspace-tools__extract_ult_english` with `inputDir="output/AI-UST"`, `outputDir="/tmp/verify-alignment"`, `force=true`.
+Run `node /app/src/workspace-tools-cli.js extract_ult_english '{"inputDir":"output/AI-UST","outputDir":"/tmp/verify-alignment","force":true}'`.
 
 Then compare extracted text with original unaligned UST: diff `/tmp/verify-alignment/BOOK.usfm` against `output/AI-UST/BOOK/BOOK-unaligned.usfm`.
 
@@ -433,13 +419,9 @@ grep -oE '\\w [^|]+\|' aligned.usfm | sed 's/\\w //;s/|//' | tr '\n' ' '
 
 Check that milestone fields are faithful to the Hebrew source (byte-exact x-content/x-lemma, occurrence numbering). UST mode allows unaligned Hebrew words, which are normal for UST.
 
-Use the `validate_alignment_integrity` MCP tool:
+Use the `validate_alignment_integrity` tool:
 ```
-mcp__workspace-tools__validate_alignment_integrity({
-  aligned: "output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm",
-  hebrew: "data/hebrew_bible/{NN}-{BOOK}.usfm",
-  chapter: {CHAPTER}, ust: true
-})
+node /app/src/workspace-tools-cli.js validate_alignment_integrity '{"aligned":"output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm","hebrew":"data/hebrew_bible/{NN}-{BOOK}.usfm","chapter":{CHAPTER},"ust":true}'
 ```
 
 Its first line starts `OK:` (clean) or `FAIL:` (problems listed per verse). Fix the mapping JSON and re-convert rather than hand-editing the aligned USFM.

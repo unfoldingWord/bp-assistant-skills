@@ -3,27 +3,30 @@ name: align-all-parallel
 
 description: Run ULT-alignment and UST-alignment in parallel for a single chapter. Use when asked to align both ULT and UST or run all alignments for a chapter.
 
-allowed-tools: Task, Read, mcp__workspace-tools__read_usfm_chapter, mcp__workspace-tools__merge_aligned_usfm
+allowed-tools: Task, Read, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__read_usfm_chapter, mcp__workspace-tools__merge_aligned_usfm
 ---
 
 ## Quick Alignment Pipeline
 
 Spawn alignment agents in parallel and wait for them to complete.
 
-## No shell — never write or run scripts
+## Workspace Tools Execution
 
-This skill and its subagents run **without Bash** — there is no shell to execute
-anything. Do every step with the `Task` tool (to spawn alignment subagents),
-`Read`, and the `mcp__workspace-tools__*` tools.
+Run workspace tools via the blessed CLI wrapper:
 
-- **NEVER** write a Node/Python/shell script (e.g. `generate_*.js`) to produce or
-  combine aligned USFM, and never try to run one — it cannot be executed and only
-  wastes the run.
-- Per-verse conversion is done inside the subagents via
-  `mcp__workspace-tools__create_aligned_usfm`; the full-chapter assembly is done
-  here via `mcp__workspace-tools__merge_aligned_usfm` (Step 2f).
+    node /app/src/workspace-tools-cli.js <tool_name> '<json-args>'
+
+stdout is the tool result (same output the MCP tool returns). If args contain
+quotes, pass `-` as the second arg and pipe the JSON on stdin (heredoc).
+Fallback (if Bash is unavailable): call `mcp__workspace-tools__<tool_name>` with
+the same args.
+
+- **Do NOT improvise your own alignment/merge scripts** (e.g. `generate_*.js`).
+  Per-verse conversion happens inside the subagents via the `create_aligned_usfm`
+  tool; the full-chapter assembly is done here via `merge_aligned_usfm` (Step 2f).
+  Use only the CLI wrapper (or the MCP fallback) — never a hand-written script.
 - If a batch subagent fails or a tool returns an error, **re-spawn that batch or
-  report the failure plainly** — do not improvise a script to work around it.
+  report the failure plainly** — do not work around it with ad-hoc code.
 
 ## Pipeline Context
 
@@ -50,7 +53,11 @@ This skill is coordination only, but the merge is USFM-structure-sensitive — r
 
 ## Step 1: Check Verse Count
 
-Before spawning agents, count the verses in the chapter using `mcp__workspace-tools__read_usfm_chapter` on `data/hebrew_bible/XX-BOOK.usfm`. Count the number of `\v` markers in the result.
+Before spawning agents, count the verses in the chapter. Read the chapter with:
+
+    node /app/src/workspace-tools-cli.js read_usfm_chapter '{"file":"data/hebrew_bible/XX-BOOK.usfm","chapter":CH}'
+
+Count the number of `\v` markers in the result. (Fallback: `mcp__workspace-tools__read_usfm_chapter` with the same args.)
 
 - If verse count **≤ 18**: proceed to Step 2a (single batch)
 - If verse count **> 18**: proceed to Step 2b (split into batches of 18)
@@ -141,11 +148,14 @@ Note: The checker does NOT re-align from scratch — it only patches inconsisten
 
 ## Step 2f: Merge
 
-After consistency check completes, use `mcp__workspace-tools__merge_aligned_usfm` to assemble the full chapter:
-- ULT (if applicable): call with `parts` = ordered array of all ULT partial files, `output` = `output/AI-ULT/BOOK/BOOK-CH-aligned.usfm`
-- UST (if applicable): call with `parts` = ordered array of all UST partial files, `output` = `output/AI-UST/BOOK/BOOK-CH-aligned.usfm`
+After consistency check completes, assemble the full chapter with the `merge_aligned_usfm` tool via the CLI wrapper:
 
-Do NOT use Bash, sub-agents, or manual Read+Write for the merge — use the MCP tool.
+    node /app/src/workspace-tools-cli.js merge_aligned_usfm '{"parts":["output/AI-ULT/BOOK/BOOK-CH-vSTART-vEND-aligned.usfm", ...],"output":"output/AI-ULT/BOOK/BOOK-CH-aligned.usfm"}'
+
+- ULT (if applicable): `parts` = ordered array of all ULT partial files, `output` = `output/AI-ULT/BOOK/BOOK-CH-aligned.usfm`
+- UST (if applicable): `parts` = ordered array of all UST partial files, `output` = `output/AI-UST/BOOK/BOOK-CH-aligned.usfm`
+
+Use the `merge_aligned_usfm` tool (CLI wrapper, or `mcp__workspace-tools__merge_aligned_usfm` as fallback) — do NOT assemble the chapter with a hand-written script or manual Read+Write.
 
 ## Output
 
