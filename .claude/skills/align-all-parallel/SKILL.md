@@ -64,12 +64,48 @@ Count the number of `\v` markers in the result. (Fallback: `mcp__workspace-tools
 
 ## Step 2a: Single Batch (≤ 18 verses)
 
-Spawn agents in parallel:
+A single-batch agent aligns the whole chapter and writes the whole-chapter file
+directly (`output/AI-{ULT,UST}/BOOK/BOOK-CH-aligned.usfm`), so there is no merge
+step on this path.
+
+Spawn agents in parallel (single message — do not wait between them):
 
 - If running ULT: spawn `ult-align` subagent (`model: "opus"`, `effort: "medium"`, skill: ULT-alignment)
 - If running UST: spawn `ust-align` subagent (`model: "opus"`, `effort: "medium"`, skill: UST-alignment)
 
-Wait for both to complete. Report results.
+Wait for all spawned agents to complete, then go to Step 2a-verify.
+
+## Step 2a-verify: Confirm full verse coverage before reporting success
+
+**Do not report success until every chapter verse is aligned.** A subagent can
+return a nominal completion signal without writing all its verses (internal
+failure, API throttle, turn-budget cutoff). Skipping this check is the
+single-batch analogue of issue #114 — the pipeline's coverage gate then flags
+`incomplete_coverage`/`missing_output` and files a spurious issue for a gap an
+in-skill re-run would have closed.
+
+For each type being aligned:
+
+1. `Read` the whole-chapter output `output/AI-{ULT,UST}/BOOK/BOOK-CH-aligned.usfm`.
+2. It is **complete** only if every `\v N` for the chapter is present AND each
+   carries `\zaln-s` markers. A file that is stale or covers only some verses is
+   **not** complete — list exactly which verses are missing.
+
+If any type is incomplete:
+
+- Re-spawn **only that type's** align subagent **once**, for the **whole
+  chapter** (same prompt as Step 2a — no `--verses`; the sub-skills take only a
+  single contiguous `--verses START-END` range, so re-aligning the whole chapter
+  is the reliable way to fill scattered gaps and it overwrites the whole-chapter
+  file in one clean pass, no merge needed).
+- Wait for it to complete, then re-verify coverage as above.
+
+If, after the one whole-chapter re-spawn, a type is still incomplete: **report
+failure plainly**, naming the type and the still-missing verses, and return a
+non-success result. Do NOT report success on partial output — the per-verse
+mapping JSON in `tmp/alignments/` remains on disk so the pipeline can
+salvage/resume from it. Only report success once every requested type covers
+every chapter verse with `\zaln-s` markers.
 
 ## Step 2b: Split into Batches (> 18 verses)
 
