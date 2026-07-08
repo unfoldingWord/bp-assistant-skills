@@ -57,12 +57,59 @@ Before spawning agents, count the verses in the chapter using `mcp__workspace-to
 
 ## Step 2a: Single Batch (≤ 18 verses)
 
-Spawn agents in parallel:
+**First, check for already-aligned verses (resume + gap-fill support).** For each
+type being aligned, `Read` its expected whole-chapter output
+(`output/AI-{ULT,UST}/BOOK/BOOK-CH-aligned.usfm`). A verse counts as **already
+aligned** only if the file exists AND that `\v N` is present AND it carries
+`\zaln-s` alignment markers. Compute the set of verses still missing for each
+type. If a type is already complete (every chapter verse present with
+`\zaln-s`), do NOT spawn its agent.
 
-- If running ULT: spawn `ult-align` subagent (`model: "opus"`, `effort: "medium"`, skill: ULT-alignment)
-- If running UST: spawn `ust-align` subagent (`model: "opus"`, `effort: "medium"`, skill: UST-alignment)
+Spawn the still-needed agents in parallel (single message — do not wait between
+them). Give each agent `--verses START-END` covering **only** the missing
+verse range(s) when the file already has some verses; otherwise spawn it for the
+whole chapter:
 
-Wait for both to complete. Report results.
+- If ULT is incomplete: spawn `ult-align` subagent (`model: "opus"`, `effort: "medium"`, skill: ULT-alignment)
+- If UST is incomplete: spawn `ust-align` subagent (`model: "opus"`, `effort: "medium"`, skill: UST-alignment)
+
+Wait for all spawned agents to complete.
+
+## Step 2a-verify: Confirm full verse coverage before reporting success
+
+**Do not report success until every chapter verse is aligned.** A subagent can
+return a nominal completion signal without writing all its verses (internal
+failure, API throttle, turn-budget cutoff). Skipping this check is the
+single-batch analogue of issue #114 — the pipeline's coverage gate then flags
+`incomplete_coverage`/`missing_output` and files a spurious issue for a gap a
+targeted re-run would have closed.
+
+For each type being aligned:
+
+1. `Read` the whole-chapter output `output/AI-{ULT,UST}/BOOK/BOOK-CH-aligned.usfm`.
+2. It is **complete** only if every `\v N` for the chapter is present AND each
+   carries `\zaln-s` markers. A file that is stale or covers only some verses is
+   **not** complete — list exactly which verses are missing.
+
+If any type is incomplete:
+
+- Re-spawn **only that type's** align subagent **once**, with
+  `--verses START-END` covering exactly the missing verse range(s) (comma-join
+  disjoint ranges, e.g. `--verses 3-5,9-15`). This produces a partial file
+  `output/AI-{ULT,UST}/BOOK/BOOK-CH-vSTART-vEND-aligned.usfm`.
+- Then assemble the full chapter with `mcp__workspace-tools__merge_aligned_usfm`,
+  passing `parts` = the existing whole-chapter file followed by the gap-fill
+  partial file(s) **in verse order**, and `output` =
+  `output/AI-{ULT,UST}/BOOK/BOOK-CH-aligned.usfm`. (merge keeps the first part's
+  header and appends each later part's verses.)
+- Re-verify coverage as above.
+
+If, after the one targeted re-spawn, a type is still incomplete: **report failure
+plainly**, naming the type and the still-missing verses, and return a
+non-success result. Do NOT report success on partial output — the per-verse
+mapping JSON in `tmp/alignments/` and any partial files remain on disk so the
+pipeline can salvage/resume from them. Only report success once every requested
+type covers every chapter verse with `\zaln-s` markers.
 
 ## Step 2b: Split into Batches (> 18 verses)
 
