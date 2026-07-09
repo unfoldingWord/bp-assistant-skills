@@ -9,6 +9,7 @@
 |-------|-------------|
 | [writing-newevent](../writing-newevent.md) | Phrases introducing new events/episodes |
 | [writing-background](../writing-background.md) | General background info - setting, character details, explanations |
+| [writing-foreground](../writing-foreground.md) | Attention markers that focus listeners on what follows |
 | [writing-endofstory](../writing-endofstory.md) | Concluding info that signals end of story/episode |
 | [writing-participants](../writing-participants.md) | Introducing new characters or reintroducing old ones in narrative |
 
