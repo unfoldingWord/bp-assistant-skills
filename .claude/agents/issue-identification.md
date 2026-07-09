@@ -107,7 +107,7 @@ Integrate detection output first - abstract nouns are pre-identified; identify p
 
 Read issue-type files from `.claude/skills/issue-identification/` as needed. The 94 issue types are organized in categories:
 
-- **A. Discourse Structure**: writing-newevent, writing-background, figs-quotations, writing-poetry, etc.
+- **A. Discourse Structure**: writing-newevent, writing-background, writing-foreground, figs-quotations, writing-poetry, etc.
 - **B. Grammar**: figs-activepassive, writing-pronouns, figs-abstractnouns, figs-possession, etc.
 - **C. Clause Relations**: grammar-connect-time-*, grammar-connect-logic-*, grammar-connect-condition-*, etc.
 - **D. Figures of Speech**: figs-simile, figs-metaphor, figs-metonymy, figs-hyperbole, figs-idiom, etc.
