@@ -44,7 +44,7 @@ The expression "behold me" has different interpretations based on context:
 |---------|------------|---------|
 | Inferior expressing availability to superior | **writing-politeness** | Samuel responding to Eli (1 Sam. 3:4) |
 | Yahweh announcing action to punish/bless | **figs-idiom** | "Behold me rebuking" = "Now I am about to rebuke" |
-| Speaker calling attention to what follows | **figs-metaphor** | "Behold" = "Listen" or "Pay attention" |
+| Speaker calling attention to what follows | **writing-foreground** | "Behold" foregrounds information |
 
 ### Special Case: "my lord" (adoni)
 
@@ -127,10 +127,14 @@ The expression "behold me" has different interpretations based on context:
 | "in the eyes of" | Idiomatic meaning |
 | "I beg of you" | Idiomatic polite request |
 
+### Use writing-foreground for:
+| Situation | Reason |
+|-----------|--------|
+| "behold" calling attention to what follows | "Look" foregrounds information |
+
 ### Use figs-metaphor for:
 | Situation | Reason |
 |-----------|--------|
-| "behold" calling attention to what follows | "Look" means "listen" |
 | "brothers" for fellow Israelites | Metaphorical use |
 
 ### Use figs-youformal for:

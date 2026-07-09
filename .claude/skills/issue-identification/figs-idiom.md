@@ -48,7 +48,10 @@ These have been explicitly decided by the content team (Issues Resolved):
 | "heart" = thoughts/feelings | Body-to-inner-person comparison |
 | "house" = temple or descendants | Building/dwelling comparison |
 | "fathers" = ancestors | Family comparison |
-| "behold" = listen | When "look" actively = "listen" |
+
+### Use writing-foreground for:
+| Expression | Reason |
+| "behold" = foregrounding information | When "look" foregrounds information |
 
 ### Use figs-metonymy for:
 | Expression | Reason |
@@ -229,5 +232,5 @@ These have been explicitly decided by the content team (Issues Resolved):
 | **Turn/Arise** | "turn/arise" = begin action | "turn" = change life direction = figs-metaphor |
 | **Days/Day** | "day" = occasion | "days" = time period = figs-metonymy |
 | **Hand** | "hand" = power + possession together | "hand" = power alone = figs-metonymy |
-| **Behold** | "behold" = pay attention, "behold me" (Yahweh announcing) | "behold" = look meaning listen = figs-metaphor |
+| **Behold** | "behold" = pay attention, "behold me" (Yahweh announcing) | "behold" = foregrounding information = writing-foreground |
 
