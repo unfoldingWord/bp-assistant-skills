@@ -9,7 +9,7 @@ An exclamation is an utterance that expresses strong emotion:
 - **Exclamation sentences** - "What manner of stones!" "How unsearchable are his judgments!"
 - **Verbless exclamations** - "You worthless person!"
 
-Note: "Behold" is almost always **figs-metaphor** (speaker says "look" but means "listen/pay attention"). See the "Behold" section below and figs-metaphor.md for the correct classification.
+Note: "Behold" is almost always **writing-foreground** (speaker says "look" to foreground information). See the "Behold" section below and writing-foreground.md for the correct classification.
 
 ---
 
@@ -20,7 +20,7 @@ Note: "Behold" is almost always **figs-metaphor** (speaker says "look" but means
 | Amazement/Wonder | "How unsearchable are his judgments!" | Rom 11:33 |
 | Fear/Distress | "Alas, O Lord Yahweh!" | Judges 6:22 |
 | Happiness formula | "The happiness of..." (ashrei) | Per Issues Resolved |
-| Attention-getter | "See!" (rare — most "behold" is figs-metaphor) | Various |
+| Attention-getter | "See!" (rare — most "behold" is writing-foreground) | Various |
 | Urgency | "Hush!" | Zeph 1:7 |
 | Mock surprise | "Aha!" | Mark 15:29 |
 | Address | "O man" | Romans 2:1 |
@@ -49,7 +49,7 @@ Per Issues Resolved: "The happiness of..." is flagged as figs-exclamations when:
 ### "Behold" classifications (per Issues Resolved):
 | Context | Use |
 |---------|-----|
-| "Behold" calling attention to what speaker says | figs-metaphor (look = listen) |
+| "Behold" calling attention to what speaker says | writing-foreground |
 | "Behold me" (inferior to superior) | writing-politeness |
 | "Behold me" (Yahweh announcing) | figs-idiom (= "Now I am about to...") |
 | "Behold" with exclamation emphasis | figs-exclamations |
@@ -77,16 +77,16 @@ Per Issues Resolved: "The happiness of..." is flagged as figs-exclamations when:
 | "Ah, Lord Yahweh!" | Neh 1:5, 1:11 |
 | "Oh, the depth of the riches!" | Rom 11:33 |
 
-### 3. "Behold" — Almost Always figs-metaphor, NOT figs-exclamations
-"Behold" introducing information (the vast majority of cases) is **figs-metaphor** — the speaker says "look" but means "listen/pay attention." Use the figs-metaphor behold template.
+### 3. "Behold" — Almost Always writing-foreground, NOT figs-exclamations
+"Behold" introducing information (the vast majority of cases) is **writing-foreground** — the speaker says "look" to foreground information. Use the writing-foreground behold template.
 
 Only classify "behold" as figs-exclamations when it expresses genuine surprise at something visually seen (very rare in biblical narrative).
 
 | Context | Correct Classification |
 |---------|----------------------|
-| "Behold, I am sending my messenger" | **figs-metaphor** |
-| "behold, Barak was pursuing Sisera" | **figs-metaphor** |
-| "And behold" (introducing info) | **figs-metaphor** |
+| "Behold, I am sending my messenger" | **writing-foreground** |
+| "behold, Barak was pursuing Sisera" | **writing-foreground** |
+| "And behold" (introducing info) | **writing-foreground** |
 | "Behold me" (servant to master) | **writing-politeness** |
 | "Behold!" (genuine visual surprise) | figs-exclamations (rare) |
 
@@ -134,7 +134,7 @@ Only classify "behold" as figs-exclamations when it expresses genuine surprise a
 
 1. **Look for exclamation markers**: Oh, Alas, Ah, Hush, What, How; exclamation marks; verbless sentences with strong emotion
 2. **Identify the emotion**: Fear/distress (Alas), Amazement (How, What), Joy (ashrei), Urgency (Hush), Mockery (Aha)
-3. **"Behold" is figs-metaphor by default**: Only use figs-exclamations for "behold" if it expresses genuine visual surprise (very rare). All other "behold" cases go to figs-metaphor
+3. **"Behold" is writing-foreground by default**: Only use figs-exclamations for "behold" if it expresses genuine visual surprise (very rare). All other "behold" cases go to writing-foreground
 
 ---
 
@@ -144,6 +144,6 @@ Only classify "behold" as figs-exclamations when it expresses genuine surprise a
 |------------|-----|
 | "How unsearchable!" (exclamation) | figs-exclamations |
 | "Who can understand?" (question for emphasis) | figs-rquestion |
-| "Behold" calling attention (look = listen) | figs-metaphor |
+| "Behold" foregrounding information | writing-foreground |
 | "Behold" with genuine surprise/emphasis | figs-exclamations |
 | "Behold me" (servant responding) | writing-politeness |

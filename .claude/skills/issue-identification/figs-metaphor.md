@@ -31,7 +31,6 @@ These have been explicitly decided by the content team (Issues Resolved):
 | "way/path" (= behavior) | figs-metaphor | Especially when paired with "path" |
 | "sons of X" (= descendants/people) | figs-metaphor | "sons of Judah" = people of Judah. But "sons of X" as characteristic = figs-idiom |
 | "turn" (= change life course) | figs-metaphor | But "turn/arise" = take action = figs-idiom |
-| "behold" (calling attention) | figs-metaphor | Speaker says "look" but means "listen/pay attention" |
 | "my brother" (= dear friend) | figs-metaphor | Not literal brother - close companion/friend |
 | "a land flowing with milk and honey" | figs-metaphor | AT: "a very productive land" |
 | "to be high" (Qal of rum) | figs-metaphor | Not "exalted" which implies passive |
@@ -40,17 +39,6 @@ These have been explicitly decided by the content team (Issues Resolved):
 | "fathers" (= ancestors) | figs-metaphor | |
 | "brothers" (= fellow descendants) | figs-metaphor | People from same ancestor |
 | "heart" (= thoughts/feelings/will) | figs-metaphor | Heart represents where thoughts/feelings/motives/intentions/desires exist |
-
-### "Behold" Patterns
-Per Issues Resolved: "behold" when calling attention to what follows is figs-metaphor (speaker says "look" but means "listen").
-
-| Pattern | Classification | Notes |
-|---------|---------------|-------|
-| "behold, a man came" | figs-metaphor | Calling attention to information |
-| "Behold me" (to superior) | writing-politeness | Indicating availability, courteous response |
-| "Behold!" (exclamation at visual) | figs-exclamations | Actually looking at something |
-
-Default in narrative: figs-metaphor for "behold" introducing information.
 
 ### "Sons of" Expressions
 | Pattern | Classification | Notes |
@@ -72,6 +60,11 @@ Comparisons using explicit words "like," "as," or "than":
 - "Sharper **than** any two-edged sword" - uses "than" = simile
 
 **Key test**: Metaphor speaks of X AS IF IT WERE Y (identity). Simile says X is LIKE Y (explicit comparison).
+
+### Use writing-foreground for:
+| Expression | Reason |
+|------------|--------|
+| "behold" | foregrounds information, is not a metaphor |
 
 ### Use figs-idiom for:
 | Expression | Reason |

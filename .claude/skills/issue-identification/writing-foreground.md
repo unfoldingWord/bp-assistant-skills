@@ -46,6 +46,16 @@ The note should remind translators that their language may have a comparable exp
 | writing-background | Providing explanatory or contextual information rather than signaling focus |
 | figs-explicit | Adding information that is not explicitly stated in the text |
 
+## Special Case: "Behold me" (hineni)
+
+The expression "behold me" has different interpretations based on context:
+
+| Context | Issue Type | Example |
+|---------|------------|---------|
+| Inferior expressing availability to superior | **writing-politeness** | Samuel responding to Eli (1 Sam. 3:4) |
+| Yahweh announcing action to punish/bless | **figs-idiom** | "Behold me rebuking" = "Now I am about to rebuke" |
+| Speaker calling attention to what follows | **writing-foreground** | "Behold" foregrounds information |
+
 ## Recognition Process
 
 ```
