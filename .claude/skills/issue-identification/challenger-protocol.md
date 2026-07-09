@@ -27,12 +27,23 @@ The Challenger:
 - Resolves disagreements between Wave 2 agents (e.g., one kept an issue
   another dropped)
 - Identifies duplicates where multiple agents flagged the same issue
+- **Is the issue noteworthy?** Beyond classification, challenge on translator
+  need: would a competent translator plausibly err here without a note? Issues
+  that fail this bar are TRIVIAL and can be challenged for dropping even when
+  correctly classified. Prime candidates: repeat occurrences of a formulaic
+  marker already flagged earlier in the chapter, and discourse-family notes
+  (grammar-connect-*, writing-*) beyond the genre's published base rate (see
+  the Selectivity section in `skills/issue-identification/SKILL.md`).
 - **Grammar issues are independent**: Abstract nouns (figs-abstractnouns) and
-  passives (figs-activepassive) are script-detected and AI-verified. They
+  passives (figs-activepassive) are systematically detected (abstract nouns
+  by script, passives during verse-by-verse analysis) and AI-verified. They
   cannot be subsumed by, merged into, or dropped in favor of figurative issues
-  on the same phrase. Keep both layers. Other grammar-level issues
-  (figs-possession, figs-ellipsis, figs-nominaladj) should also generally not
-  be dropped or merged with figurative issues.
+  on the same phrase — and figs-activepassive issues are never dropped
+  (content-team decision: every instance gets a note). Other
+  grammar-level issues (figs-possession, figs-ellipsis, figs-nominaladj)
+  should not be dropped or merged in favor of figurative issues on the same
+  phrase, though they remain subject to the noteworthiness bar on their own
+  merits.
 
 ## Defend Phase
 
@@ -42,7 +53,9 @@ the Challenger. One round only -- no infinite back-and-forth.
 ## Ruling Phase
 
 The Challenger reads all defenses and makes final rulings for each challenged
-issue: **KEEP**, **DROP**, **RECLASSIFY**, or **MERGE_DUPLICATE**.
+issue: **KEEP**, **DROP**, **RECLASSIFY**, or **MERGE_DUPLICATE**. DROP is a
+valid ruling on translator-need grounds alone — a correctly classified issue
+that a competent translator would handle unaided does not earn a note.
 
 After writing rulings to `$TMP/wave3_challenges.tsv`, the Challenger sends a
 DM to each analyst confirming rulings are complete.

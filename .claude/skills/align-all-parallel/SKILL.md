@@ -3,12 +3,30 @@ name: align-all-parallel
 
 description: Run ULT-alignment and UST-alignment in parallel for a single chapter. Use when asked to align both ULT and UST or run all alignments for a chapter.
 
-allowed-tools: Task, Read, mcp__workspace-tools__read_usfm_chapter, mcp__workspace-tools__merge_aligned_usfm
+allowed-tools: Task, Read, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__read_usfm_chapter, mcp__workspace-tools__merge_aligned_usfm
 ---
 
 ## Quick Alignment Pipeline
 
 Spawn alignment agents in parallel and wait for them to complete.
+
+## Workspace Tools Execution
+
+Run workspace tools via the blessed CLI wrapper:
+
+    node /app/src/workspace-tools-cli.js <tool_name> '<json-args>'
+
+stdout is the tool result (same output the MCP tool returns). If args contain
+quotes, pass `-` as the second arg and pipe the JSON on stdin (heredoc).
+Fallback (if Bash is unavailable): call `mcp__workspace-tools__<tool_name>` with
+the same args.
+
+- **Do NOT improvise your own alignment/merge scripts** (e.g. `generate_*.js`).
+  Per-verse conversion happens inside the subagents via the `create_aligned_usfm`
+  tool; the full-chapter assembly is done here via `merge_aligned_usfm` (Step 2f).
+  Use only the CLI wrapper (or the MCP fallback) — never a hand-written script.
+- If a batch subagent fails or a tool returns an error, **re-spawn that batch or
+  report the failure plainly** — do not work around it with ad-hoc code.
 
 ## Pipeline Context
 
@@ -31,23 +49,63 @@ If neither `--ult` nor `--ust` is given, run both.
 
 ## Model
 
-This skill is coordination only — run it as **haiku**. The alignment subagents require linguistic judgment — spawn each with `model: "sonnet"`.
+This skill is coordination only, but the merge is USFM-structure-sensitive — run it on **Opus** at **medium** effort. The alignment subagents require linguistic judgment — spawn each with `model: "opus"`, `effort: "medium"`.
 
 ## Step 1: Check Verse Count
 
-Before spawning agents, count the verses in the chapter using `mcp__workspace-tools__read_usfm_chapter` on `data/hebrew_bible/XX-BOOK.usfm`. Count the number of `\v` markers in the result.
+Before spawning agents, count the verses in the chapter. Read the chapter with:
+
+    node /app/src/workspace-tools-cli.js read_usfm_chapter '{"file":"data/hebrew_bible/XX-BOOK.usfm","chapter":CH}'
+
+Count the number of `\v` markers in the result. (Fallback: `mcp__workspace-tools__read_usfm_chapter` with the same args.)
 
 - If verse count **≤ 18**: proceed to Step 2a (single batch)
 - If verse count **> 18**: proceed to Step 2b (split into batches of 18)
 
 ## Step 2a: Single Batch (≤ 18 verses)
 
-Spawn agents in parallel:
+A single-batch agent aligns the whole chapter and writes the whole-chapter file
+directly (`output/AI-{ULT,UST}/BOOK/BOOK-CH-aligned.usfm`), so there is no merge
+step on this path.
 
-- If running ULT: spawn `ult-align` subagent (`model: "sonnet"`, skill: ULT-alignment)
-- If running UST: spawn `ust-align` subagent (`model: "sonnet"`, skill: UST-alignment)
+Spawn agents in parallel (single message — do not wait between them):
 
-Wait for both to complete. Report results.
+- If running ULT: spawn `ult-align` subagent (`model: "opus"`, `effort: "medium"`, skill: ULT-alignment)
+- If running UST: spawn `ust-align` subagent (`model: "opus"`, `effort: "medium"`, skill: UST-alignment)
+
+Wait for all spawned agents to complete, then go to Step 2a-verify.
+
+## Step 2a-verify: Confirm full verse coverage before reporting success
+
+**Do not report success until every chapter verse is aligned.** A subagent can
+return a nominal completion signal without writing all its verses (internal
+failure, API throttle, turn-budget cutoff). Skipping this check is the
+single-batch analogue of issue #114 — the pipeline's coverage gate then flags
+`incomplete_coverage`/`missing_output` and files a spurious issue for a gap an
+in-skill re-run would have closed.
+
+For each type being aligned:
+
+1. `Read` the whole-chapter output `output/AI-{ULT,UST}/BOOK/BOOK-CH-aligned.usfm`.
+2. It is **complete** only if every `\v N` for the chapter is present AND each
+   carries `\zaln-s` markers. A file that is stale or covers only some verses is
+   **not** complete — list exactly which verses are missing.
+
+If any type is incomplete:
+
+- Re-spawn **only that type's** align subagent **once**, for the **whole
+  chapter** (same prompt as Step 2a — no `--verses`; the sub-skills take only a
+  single contiguous `--verses START-END` range, so re-aligning the whole chapter
+  is the reliable way to fill scattered gaps and it overwrites the whole-chapter
+  file in one clean pass, no merge needed).
+- Wait for it to complete, then re-verify coverage as above.
+
+If, after the one whole-chapter re-spawn, a type is still incomplete: **report
+failure plainly**, naming the type and the still-missing verses, and return a
+non-success result. Do NOT report success on partial output — the per-verse
+mapping JSON in `tmp/alignments/` remains on disk so the pipeline can
+salvage/resume from it. Only report success once every requested type covers
+every chapter verse with `\zaln-s` markers.
 
 ## Step 2b: Split into Batches (> 18 verses)
 
@@ -64,22 +122,50 @@ Examples:
 
 ## Step 2c: Spawn ALL Batches in Parallel
 
-Launch all batch subagents in a **single message** — do not wait between batches:
+**First, skip batches that are already done (resume support).** For each batch,
+`Read` its expected partial output (`output/AI-{ULT,UST}/BOOK/BOOK-CH-vSTART-vEND-aligned.usfm`).
+If the file already exists and contains every verse in that batch's range (each
+`\v` present, with `\zaln-s` alignment markers), that batch is complete — do NOT
+re-spawn it. Only spawn subagents for the batches still missing or incomplete.
+This lets a resumed run finish a long chapter by filling just the remaining
+batches instead of re-aligning everything (and timing out again).
 
-- For each batch K (1..numBatches):
-  - If running ULT: spawn `ult-align-K` subagent (`model: "sonnet"`, skill: ULT-alignment) for `BOOK CH --verses START-END`
-  - If running UST: spawn `ust-align-K` subagent (`model: "sonnet"`, skill: UST-alignment) for `BOOK CH --verses START-END`
-- All subagents launch at once (e.g., 4 batches × 2 types = 8 parallel subagents)
+Launch the still-needed batch subagents in a **single message** — do not wait between batches:
+
+- For each batch K (1..numBatches) that is NOT already complete:
+  - If running ULT: spawn `ult-align-K` subagent (`model: "opus"`, `effort: "medium"`, skill: ULT-alignment) for `BOOK CH --verses START-END`
+  - If running UST: spawn `ust-align-K` subagent (`model: "opus"`, `effort: "medium"`, skill: UST-alignment) for `BOOK CH --verses START-END`
+- All still-needed subagents launch at once (e.g., 4 batches × 2 types = 8 parallel subagents)
+
+If every batch is already complete, skip straight to Step 2d/2e/2f (verify + consistency check + merge).
 
 **Parallel cap:** If the chapter has more than 5 batches per type (>90 verses), split into waves of 5 batches each. Run wave 1 (batches 1–5), wait for completion, then run wave 2 (batches 6–N). This keeps total parallel agents manageable.
 
 Wait for all subagents to complete before proceeding.
 
-## Step 2d: Consistency Check
+## Step 2d: Verify Batch Files Exist
+
+**Before doing anything else after the subagents return, confirm every expected batch file was actually written.** Subagents can return a nominal completion signal without writing their output (internal failure, API throttle, turn-budget cutoff). If you skip this check, a merge over partial batches will silently succeed and the pipeline's freshness check will later flag a `missing_output` failure — see issue #114.
+
+For each type being aligned (ULT and/or UST) and each batch K in `1..numBatches`:
+
+1. `Read` the expected batch file `output/AI-{ULT,UST}/BOOK/BOOK-CH-vSTART-vEND-aligned.usfm`.
+2. Treat the batch as **written** only if the file exists AND contains every verse in the batch range (each `\v N` present) AND has `\zaln-s` alignment markers.
+3. A file that is stale from a prior run is **not** acceptable proof — if the Read succeeds but the content does not cover the current batch range, treat it as missing.
+
+If any expected batch file is missing or incomplete:
+
+- **Do NOT proceed to Step 2e or 2f.**
+- If **≤2 batches** are missing (per type), re-spawn just those batch subagents (same prompts as Step 2c) and re-verify.
+- If more than 2 batches are missing, or a targeted re-spawn still fails to produce the files, **report failure plainly**. List the missing files and return a non-success result so the pipeline can raise `missing_output` and resume from checkpoint. Do not merge partial output.
+
+Only proceed once every expected batch file for every requested type is present and complete.
+
+## Step 2e: Consistency Check
 
 After all alignment batches complete, spawn a consistency checker to catch cross-batch inconsistencies. The same Hebrew word (same Strong's number) should get the same English alignment across the chapter.
 
-For each type being aligned (ULT and/or UST), spawn a Task subagent (`model: "sonnet"`):
+For each type being aligned (ULT and/or UST), spawn a Task subagent (`model: "opus"`, `effort: "medium"`):
 
 ```
 Task: "Check alignment consistency for BOOK CH (ULT|UST)"
@@ -96,13 +182,16 @@ If running both ULT and UST, spawn both checkers in parallel.
 
 Note: The checker does NOT re-align from scratch — it only patches inconsistencies in the already-generated partial files. Skip this step for chapters with only 2 batches (≤36 verses), where inconsistency risk is low.
 
-## Step 2e: Merge
+## Step 2f: Merge
 
-After consistency check completes, use `mcp__workspace-tools__merge_aligned_usfm` to assemble the full chapter:
-- ULT (if applicable): call with `parts` = ordered array of all ULT partial files, `output` = `output/AI-ULT/BOOK/BOOK-CH-aligned.usfm`
-- UST (if applicable): call with `parts` = ordered array of all UST partial files, `output` = `output/AI-UST/BOOK/BOOK-CH-aligned.usfm`
+After consistency check completes, assemble the full chapter with the `merge_aligned_usfm` tool via the CLI wrapper:
 
-Do NOT use Bash, sub-agents, or manual Read+Write for the merge — use the MCP tool.
+    node /app/src/workspace-tools-cli.js merge_aligned_usfm '{"parts":["output/AI-ULT/BOOK/BOOK-CH-vSTART-vEND-aligned.usfm", ...],"output":"output/AI-ULT/BOOK/BOOK-CH-aligned.usfm"}'
+
+- ULT (if applicable): `parts` = ordered array of all ULT partial files, `output` = `output/AI-ULT/BOOK/BOOK-CH-aligned.usfm`
+- UST (if applicable): `parts` = ordered array of all UST partial files, `output` = `output/AI-UST/BOOK/BOOK-CH-aligned.usfm`
+
+Use the `merge_aligned_usfm` tool (CLI wrapper, or `mcp__workspace-tools__merge_aligned_usfm` as fallback) — do NOT assemble the chapter with a hand-written script or manual Read+Write.
 
 ## Output
 

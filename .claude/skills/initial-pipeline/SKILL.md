@@ -46,7 +46,7 @@ Use this path convention for intermediate files:
 
 `tmp/pipeline-<BOOK>-<CHAPTER>`
 
-Do not rely on shell commands in restricted environments. When a tool needs to write a file under `tmp/`, pass that target path and let the tool create parent directories.
+Run workspace tools via the CLI wrapper: `node /app/src/workspace-tools-cli.js <tool_name> '<json-args>'` (stdout is the result; MCP `mcp__workspace-tools__<tool_name>` remains a fallback). When a tool needs to write a file under `tmp/`, pass that target path and let the tool create parent directories.
 
 ## Critical Orchestrator Rule
 
@@ -67,12 +67,17 @@ The task is only complete after all required Wave 1-6 outputs exist on disk:
 
 Run the data preflight before launching any agents. Generation quietly degrades when `issues_resolved.txt`, the glossaries, or the Strong's index are missing — this makes the absence loud instead.
 
-Option A — MCP tool (preferred, works without Bash):
+Primary — CLI wrapper:
+```
+node /app/src/workspace-tools-cli.js preflight_data_check '{"book":"<BOOK>","stage":"all"}'
+```
+
+Fallback A — MCP tool (works without Bash):
 ```
 mcp__workspace-tools__preflight_data_check({ book: "<BOOK>", stage: "all" })
 ```
 
-Option B — Bash (when available):
+Fallback B — Bash `.mjs` script (when available):
 ```bash
 node .claude/skills/utilities/scripts/validation/preflight_data_check.mjs --book <BOOK> --stage all
 ```
@@ -81,18 +86,18 @@ If it exits non-zero, fetch the missing sources first (`fetch_*` workspace tools
 
 ### Fetch T4T for the Book
 
-Use `mcp__workspace-tools__fetch_t4t` with `{"books":["<BOOK>"]}`.
+Run `node /app/src/workspace-tools-cli.js fetch_t4t '{"books":["<BOOK>"]}'`.
 
 T4T is the base source for UST creation (Wave 6). All OT books are pre-fetched in `data/t4t/`, but run this to ensure the book is cached. The fetch tool skips if already cached.
 
 ### Build Published TN Index
 
-Use `mcp__workspace-tools__build_tn_index` with `{}`.
+Run `node /app/src/workspace-tools-cli.js build_tn_index '{}'`.
 
 This builds/refreshes the index (daily cache). Use `lookup` and `issue` arguments for precedent lookups during analysis:
 
-- `mcp__workspace-tools__build_tn_index` with `{"issue":"figs-metaphor"}`
-- `mcp__workspace-tools__build_tn_index` with `{"lookup":"tongue"}`
+- `node /app/src/workspace-tools-cli.js build_tn_index '{"issue":"figs-metaphor"}'`
+- `node /app/src/workspace-tools-cli.js build_tn_index '{"lookup":"tongue"}'`
 
 ## Teammate Lifetimes
 
@@ -108,7 +113,7 @@ This builds/refreshes the index (daily cache). Use `lookup` and `issue` argument
 
 ## Wave 1: ULT Draft
 
-Spawn `ult-gen` as a teammate (`subagent_type: "general-purpose"`, `model: "opus"`, with `team_name` set, name: "ult-gen").
+Spawn `ult-gen` as a teammate (`subagent_type: "general-purpose"`, `model: "opus"`, `effort: "high"`, with `team_name` set, name: "ult-gen").
 
 The ULT agent:
 1. Translates Hebrew to literal English for the chapter (following ULT-gen skill)
@@ -132,11 +137,11 @@ UST is NOT generated here. UST needs the issue-id output to know what translatio
 
 ## Wave 2: Issue Identification
 
-Read `.claude/skills/issue-identification/analyst-domains.md` for domain assignments and cross-reading protocol. Spawn both analysts with `subagent_type: "issue-identification"`, `model: "opus"`, and `team_name` set.
+Read `.claude/skills/issue-identification/analyst-domains.md` for domain assignments and cross-reading protocol. Spawn both analysts with `subagent_type: "issue-identification"`, `model: "opus"`, `effort: "high"`, and `team_name` set.
 
 Each analyst reads:
 - ULT draft from Wave 1 (`output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`)
-- Published TN index (via `mcp__workspace-tools__build_tn_index` with `lookup`/`issue`)
+- Published TN index (via `node /app/src/workspace-tools-cli.js build_tn_index` with `lookup`/`issue` args; MCP `mcp__workspace-tools__build_tn_index` remains a fallback)
 
 Each writes their TSV to `$TMP/wave2_*.tsv`.
 
@@ -155,7 +160,7 @@ Required before Wave 3:
 
 ## Wave 3: Challenge and Defend
 
-Read `.claude/skills/issue-identification/challenger-protocol.md`. Spawn the challenger (`model: "sonnet"`, name: "challenger"). The Wave 2 analysts and ULT agent are all still alive.
+Read `.claude/skills/issue-identification/challenger-protocol.md`. Spawn the challenger (`model: "opus"`, `effort: "medium"`, name: "challenger"). The Wave 2 analysts and ULT agent are all still alive.
 
 Pipeline-specific additions:
 - The challenger also DMs `ult-gen` to ask about specific rendering decisions when relevant (e.g., "In v3 you rendered the construct chain as X -- was that a deliberate structural preservation?")
@@ -232,7 +237,7 @@ Before writing to output/issues/, verify ordering within each verse: first-to-la
 
 ## Wave 6: UST Generation
 
-Spawn `ust-gen` as a teammate (`subagent_type: "general-purpose"`, `model: "opus"`, with `team_name` set, name: "ust-gen").
+Spawn `ust-gen` as a teammate (`subagent_type: "general-purpose"`, `model: "opus"`, `effort: "high"`, with `team_name` set, name: "ust-gen").
 
 The UST agent reads:
 - The final revised ULT (draft 2) at `output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`

@@ -26,11 +26,12 @@ const DOOR43_RAW = 'https://git.door43.org/unfoldingWord';
 
 const GOLDEN_SET = [
   { book: 'JOS', chapter: 1, fileNum: '06' },
+  { book: 'JOS', chapter: 3, fileNum: '06' },
   { book: 'NAM', chapter: 1, fileNum: '34' },
   { book: 'MAL', chapter: 1, fileNum: '39' },
 ];
 
-function httpGet(url) {
+export function httpGet(url) {
   return new Promise((resolvePromise, reject) => {
     https.get(url, { headers: { 'User-Agent': 'golden-benchmark-fetch/1.0' } }, (res) => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {

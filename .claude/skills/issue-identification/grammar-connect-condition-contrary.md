@@ -201,3 +201,16 @@ Ask yourself:
 3. Does the argument have the form "if A then B; A is false; therefore not B"?
 
 If YES to all three --> grammar-connect-condition-contrary
+
+---
+
+## Restraint Principle
+
+Counterfactual arguments that need a note are uncommon outside dense rhetorical passages. Flag only where the "known-false premise used to prove a point" structure is genuinely present and might be read as a real possibility.
+
+Do not flag when:
+- The condition is a real open possibility (use grammar-connect-condition-hypothetical)
+- The "if" means "since" and is actually true (use grammar-connect-condition-fact)
+- It is an imaginary teaching scenario or wish (use figs-hypo)
+
+Target: this type does not appear among the tracked per-type rates for the published narrative, poetry, or prophecy books, so treat it as a handful per book at most. Expect zero in most chapters.

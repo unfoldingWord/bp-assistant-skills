@@ -54,7 +54,7 @@ If UST identifies something as a town, city, river, etc., no note needed.
 ### tW Article Exists
 If the name matches a Translation Words headword, the tW article provides the definition. Check with:
 ```bash
-python3 .claude/skills/issue-identification/scripts/check_tw_headwords.py "NameToCheck"
+node /app/src/workspace-tools-cli.js check_tw_headwords '{"terms":["NameToCheck"]}'
 ```
 If match found in "names" category: **generally NO translate-names note needed**.
 
@@ -105,9 +105,9 @@ After the first note explaining a name, use "See how you translated this in [X:Y
 
 After identifying a potential name issue:
 
-1. Run the headword check script:
+1. Run the headword check:
    ```bash
-   python3 .claude/skills/issue-identification/scripts/check_tw_headwords.py "Name"
+   node /app/src/workspace-tools-cli.js check_tw_headwords '{"terms":["Name"]}'
    ```
 
 2. If match found:

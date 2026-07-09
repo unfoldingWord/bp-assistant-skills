@@ -181,3 +181,16 @@ When the "cause" cannot think or intend, it's ALWAYS result, not goal:
 - Circumstances that lead to outcomes
 
 Example: "The storm arose **so that** the boat was covered" - The storm cannot intend to cover the boat, so this is result despite "so that."
+
+---
+
+## Restraint Principle
+
+This reinforces the "reason after result" bar above; it does not replace it. Even when that bar is met, flag only where reordering genuinely helps a translator.
+
+Do not flag when:
+- The order is already reason-first (the bar above)
+- An agent intends the outcome (use grammar-connect-logic-goal)
+- Every "for"/"so"/"because" appears -- most read naturally and need no note
+
+Target: reason-result is the most common connection type, but it is still bounded. Published narrative runs about 2 such notes per 20-verse chapter; poetry and prophecy fewer (roughly 1 or none per chapter). The grammar-connect family as a whole is a small share of published notes (narrative 5.7%, poetry 2.3%, prophecy 1.4%), and note-dense Nahum has zero grammar-connect notes across its 47 verses -- a useful ceiling check for prophecy.

@@ -1,22 +1,31 @@
 ---
 name: issue-identification
 description: Find translation issues in ULT/Hebrew/Greek texts. Covers 94 issue types across 7 categories. Use when asked to identify issues, find what needs notes, or analyze a passage for translation concerns.
-allowed-tools: Read, Grep, Glob, mcp__workspace-tools__*
+allowed-tools: Read, Grep, Glob, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__*
 ---
 
-## MCP-First Execution
+## Workspace Tools Execution
 
-Prefer workspace MCP tools in restricted runs:
-- `mcp__workspace-tools__fetch_door43`
-- `mcp__workspace-tools__compare_ult_ust`
-- `mcp__workspace-tools__detect_abstract_nouns`
-- `mcp__workspace-tools__check_tw_headwords`
-- `mcp__workspace-tools__build_tn_index`
+Run workspace tools via the blessed CLI wrapper:
+
+    node /app/src/workspace-tools-cli.js <tool_name> '<json-args>'
+
+stdout is the tool result (identical to what the MCP tool returns). If the JSON
+args contain quotes or newlines, pass `-` as the second argument and pipe the
+JSON on stdin via a heredoc. Fallback (if Bash is unavailable): call
+`mcp__workspace-tools__<tool_name>` with the same args.
+
+Anywhere below shows a tool as `mcp__workspace-tools__<tool_name>` with some args —
+invoke it through the CLI wrapper with those args serialized to a JSON object.
 
 # Issue Identification
 
 ## Purpose
 Identify translation issues in biblical text that require translation notes. This skill focuses on **recognition and classification** - note writing is handled separately.
+
+## Selectivity
+
+An issue earns its place only if a competent translator would plausibly err on it without a note. Published note density is the calibration target: see `.claude/skills/golden-benchmark/golden/calibration.json` for per-genre bands (roughly 1.5 notes/verse in narrative, 3-4.5 in poetry and prophecy). Aim to stay within about 1.5x the published band for the chapter's genre. The discourse families (grammar-connect-*, writing-*) together account for under 12% of published notes; when the list runs over budget, trim those families first. When a formulaic marker repeats in a chapter, flag its first occurrence only — published notes handle later occurrences with "see how you translated" references.
 
 ## Arguments
 
@@ -53,7 +62,7 @@ There are two ways to use this skill:
 
 #### Step 1: Fetch/Locate USFM Text
 
-**Fetch mode (default)** - Use `mcp__workspace-tools__fetch_door43` for ULT and UST.
+**Fetch mode (default)** - Use `node /app/src/workspace-tools-cli.js fetch_door43 '<json>'` for ULT and UST.
 
 **Local mode** - Use local files:
 ```bash
@@ -99,7 +108,7 @@ Incorporate these observations into your analysis — they should heighten your 
 #### Step 3: Compare ULT/UST (if UST available)
 Where UST diverges from ULT (beyond synonym/clarity changes), there may be a translation issue:
 
-Use `mcp__workspace-tools__compare_ult_ust` with `ultFile`, `ustFile`, and `chapter`.
+Use `node /app/src/workspace-tools-cli.js compare_ult_ust '{"ultFile":"/tmp/ult_plain.usfm","ustFile":"/tmp/ust_plain.usfm","chapter":3}'` (set `ultFile`, `ustFile`, and `chapter` to the chapter you are analyzing).
 
 Output shows verses where UST made significant changes, with suggested issue types:
 | Pattern | Suggested Issue |
@@ -118,7 +127,7 @@ Skip this step if UST file doesn't exist.
 
 **Abstract nouns** -- run the detection script:
 
-Use `mcp__workspace-tools__detect_abstract_nouns` (`alignmentJson`, `format: "tsv"`).
+Use `node /app/src/workspace-tools-cli.js detect_abstract_nouns '{"alignmentJson":"/tmp/alignments.json","format":"tsv"}'` (`alignmentJson`, `format: "tsv"`).
 
 **Passive voice** -- identify ALL passive constructions during your verse-by-verse analysis (no script needed). Read the detection instructions in `figs-activepassive.md` for the passive voice pattern (auxiliary "be" + past participle), stative adjective exclusions, and worked examples. Every passive construction needs a note.
 
@@ -128,7 +137,7 @@ Merge detected issues into final output.
 
 When you just have English text (no USFM, no alignments), use `--text` to run detection directly. This skips source language morphology checks but still finds abstract nouns. Passive voice is identified by Claude during analysis (see `figs-activepassive.md`).
 
-Use `mcp__workspace-tools__detect_abstract_nouns` with `text` and `format: "tsv"` for quick plain-text checks.
+Use `node /app/src/workspace-tools-cli.js detect_abstract_nouns '{"text":"...","format":"tsv"}'` with `text` and `format: "tsv"` for quick plain-text checks.
 
 Output uses "text" as the reference since there's no verse structure. Source language fields (morph, lemma) will be empty.
 
@@ -136,7 +145,7 @@ Output uses "text" as the reference since there's no verse structure. Source lan
 
 **IMPORTANT**: Before flagging any name or unknown concept for translate-names or translate-unknown, check if it has a tW article. If a tW article exists, generally NO note is needed.
 
-Use `mcp__workspace-tools__check_tw_headwords` with a `terms` array (single or multiple terms).
+Use `node /app/src/workspace-tools-cli.js check_tw_headwords '{"terms":["term1","term2"]}'` with a `terms` array (single or multiple terms).
 
 The script returns JSON with `matches` (have tW articles) and `no_match` (may need notes):
 - **matches in "names" category**: NO translate-names note needed (tW covers it)
@@ -168,7 +177,7 @@ Read through the entire chapter to understand the big picture:
 
 For any unusual phrases noticed, check the published TN index first, then fall back to raw grep:
 
-Use `mcp__workspace-tools__build_tn_index` with `lookup="phrase"` for keyword classification precedent. Fallback: raw grep `data/published-tns/tn_*.tsv`.
+Use `node /app/src/workspace-tools-cli.js build_tn_index '{"lookup":"phrase"}'` for keyword classification precedent. Fallback: raw grep `data/published-tns/tn_*.tsv`.
 
 #### Pass 2: Segment-Level Grammar Focus
 For each paragraph or segment identified in Pass 1:
@@ -178,37 +187,36 @@ For each paragraph or segment identified in Pass 1:
 - **Quotation structure**: Note quote margins, nested quotes, indirect speech
 - **Pronoun chains**: Track who "he/they/you" refer to through the segment
 
-When uncertain about a construction, use `mcp__workspace-tools__build_tn_index` with `lookup="keyword"` or `issue="figs-metonymy"` for fast precedent lookups. Check prior decisions with `grep "keyword" data/quick-ref/issue_decisions.csv`. Fallback: raw grep `data/published-tns/tn_*.tsv`.
+When uncertain about a construction, use `node /app/src/workspace-tools-cli.js build_tn_index '{"lookup":"keyword"}'` or `node /app/src/workspace-tools-cli.js build_tn_index '{"issue":"figs-metonymy"}'` for fast precedent lookups. Check prior decisions with `grep "keyword" data/quick-ref/issue_decisions.csv`. Fallback: raw grep `data/published-tns/tn_*.tsv`.
 
-#### Pass 3: Verse-by-Verse Analysis with Task Checklist
+#### Pass 3: Verse-by-Verse Analysis with Category Checklist
 
-For each verse (or small verse group), systematically check all issue types using the TaskCreate tool.
+For each verse (or small verse group), work through the 7 issue categories rather than every individual type. The categories are: Discourse Structure, Grammar, Clause Relations, Figures of Speech, Speech Acts, Information Management, Cultural/Reference (see [reference/issue-types-catalog.md](reference/issue-types-catalog.md)).
 
 **Creating the checklist:**
-Use TaskCreate to generate one task per issue type from `data/translation-issues.csv` (all ~93 types). Example: "Check figs-metaphor in v.3", "Check figs-simile in v.3", etc.
+Use TaskCreate to generate one task per category per verse. Example: "Figures of Speech in v.3", "Clause Relations in v.3", etc.
 
 **Working through the checklist:**
 1. Read the verse carefully
-2. For each task, consider whether that issue type applies
-3. Use TaskUpdate to mark completed with findings: `"figs-metaphor: 'shield' as protection - yes"` or `"figs-metaphor: none"`
+2. For each category, ask whether anything in the verse raises that kind of issue; open the specific type file only when you have a candidate hit to confirm and classify
+3. Use TaskUpdate to mark completed with findings: `"Figures of Speech: 'shield' as protection - figs-metaphor"` or `"Clause Relations: none"`
 4. When uncertain, search published notes before deciding
 
 **Integrating detection script output:**
 - Check abstract noun detection script output first - abstract nouns are pre-identified
 - Identify all passive constructions yourself using the patterns in `figs-activepassive.md`
 - Mark those tasks as completed with the findings
-- For names/unknowns, run `check_tw_headwords.py` before flagging
+- For names/unknowns, check tW headwords (`check_tw_headwords`) before flagging
 
 ### Systematic Review Principles
 
 1. **Detection first** - integrate abstract nouns from scripts and passives from your own analysis
-2. **tW check for names** - run `check_tw_headwords.py` before flagging translate-names/translate-unknown
+2. **tW check for names** - check tW headwords (`check_tw_headwords`) before flagging translate-names/translate-unknown
 3. **Search when uncertain** - check the published TN index first (`build_tn_index.py --lookup`), then `data/published-tns/` for similar phrases
 4. **Consult Issues Resolved and Note Templates** - when classifications conflict, `data/issues_resolved.txt` and `data/templates.csv` have final authority on how issues are classified
 5. **Check implicit info** - would modern readers miss cultural practices, theological concepts, or covenant language?
 6. **Record non-trivial decisions** - after resolving a classification that required checking published precedent or where multiple issue types were plausible, append to `data/quick-ref/issue_decisions.csv`
-
-The goal is coverage: it's easier for reviewers to delete a suggested issue than to identify one from scratch. When in doubt, include it.
+7. **Apply the selectivity bar** - before finalizing, weigh each finding against the Selectivity section above; a borderline issue that a competent translator would handle unaided does not need a note
 
 ### Genre-Specific Checks
 
@@ -309,8 +317,9 @@ After completing all identification, review your output:
    single best fit using the decision hierarchy in "Competing Figurative Analyses" above.
 
 4. **Missing overlap check**: Are there phrases that genuinely need two tags? (e.g., a simile that also contains an abstract noun - both figs-simile AND figs-abstractnouns may apply)
-   Abstract nouns, passives (figs-abstractnouns, figs-activepassive) are script-detected
-   and exist at a different analytical layer than figures of speech. They always coexist --
+   Abstract nouns (script-detected) and passives (figs-abstractnouns,
+   figs-activepassive; passives identified during analysis) exist at a
+   different analytical layer than figures of speech. They always coexist --
    a figurative issue on the same phrase does not replace a grammar issue. Other grammar-level
    issues (figs-possession, figs-ellipsis, figs-nominaladj) should also generally not be
    dropped or merged with figurative issues.
@@ -343,7 +352,7 @@ grep -i "heart" data/templates.csv
 ### Published TN Index
 Pre-built index of all published translation notes by issue type and keyword. Use for fast precedent lookups instead of raw grep.
 
-Use `mcp__workspace-tools__build_tn_index` with `lookup="hand"` for keyword lookups or `issue="figs-metaphor"` for issue type examples.
+Use `node /app/src/workspace-tools-cli.js build_tn_index '{"lookup":"hand"}'` for keyword lookups or `node /app/src/workspace-tools-cli.js build_tn_index '{"issue":"figs-metaphor"}'` for issue type examples.
 
 Source: `data/cache/tn_index.json` (built from `data/published-tns/`)
 
@@ -369,14 +378,16 @@ grep -i "fallen\|sword" data/published-tns/tn_*.tsv
 
 ## Available Tools
 
+Invoke each via `node /app/src/workspace-tools-cli.js <tool> '<json-args>'` (see Workspace Tools Execution).
+
 | Tool | Purpose |
 |------|---------|
-| `mcp__workspace-tools__fetch_door43` | Fetch USFM from Door43 (supports `type="ust"` for UST) |
+| `fetch_door43` | Fetch USFM from Door43 (supports `type="ust"` for UST) |
 | `parse_usfm.js` (node) | Parse USFM, extract alignments and plain text (usfm-js) |
-| `mcp__workspace-tools__compare_ult_ust` | Compare ULT/UST plain text to identify divergences suggesting issues |
-| `mcp__workspace-tools__detect_abstract_nouns` | Find abstract nouns (591 word list). Use `text="..."` for plain English |
-| `mcp__workspace-tools__check_tw_headwords` | Check names/unknowns against tW headwords - filters translate-names/translate-unknown |
-| `mcp__workspace-tools__build_tn_index` | Published TN index lookup. `lookup="hand"` for keyword, `issue="figs-metaphor"` for issue type |
+| `compare_ult_ust` | Compare ULT/UST plain text to identify divergences suggesting issues |
+| `detect_abstract_nouns` | Find abstract nouns (591 word list). Use `text="..."` for plain English |
+| `check_tw_headwords` | Check names/unknowns against tW headwords - filters translate-names/translate-unknown |
+| `build_tn_index` | Published TN index lookup. `lookup="hand"` for keyword, `issue="figs-metaphor"` for issue type |
 
 ### Ambiguity Detection (Cross-Cutting Check)
 
@@ -436,8 +447,8 @@ See `reference/ambiguity_patterns.md` for detailed examples from published notes
 
 - **fetch_door43 fails**: Check network connectivity and that the book/chapter exists on Door43. The tool retries 3 times with backoff. If the resource was recently published, allow a few minutes for CDN propagation.
 - **detect_abstract_nouns returns empty**: The detection tool found no abstract nouns in the passage. This is normal for short or concrete passages. Verify the input USFM has content and is not a header-only file.
-- **Too many issues flagged**: If a passage generates more than ~30 issues, review for duplicates and low-confidence entries. Use the confidence threshold filter (0.7 default) and check that the same verse span is not being flagged by overlapping issue types.
-- **Too few issues flagged**: Ensure all 7 category modules ran. Check the log for skipped categories (usually caused by missing input files). Re-run with `--categories all` to force all categories.
+- **Too many issues flagged**: If a chapter runs well past the genre budget (see Selectivity above), review for duplicates, competing figurative analyses, and repeat occurrences of formulaic markers, and check that the same verse span is not being flagged by overlapping issue types.
+- **Too few issues flagged**: Confirm each of the 7 category passes was completed for every verse and that detector output (abstract nouns, passives) was integrated.
 
 ## Output Format
 

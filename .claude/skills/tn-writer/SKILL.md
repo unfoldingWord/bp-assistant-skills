@@ -7,24 +7,25 @@ description: Generate translation notes from issue identification TSV. Uses prom
 
 Generate translation notes from issue identification output. The preparation stage owns deterministic work and note interpretation (template matching, `t:` / `i:` parsing, AT policy, issue-type rules, language conversion, ID generation, prompt assembly). Claude's job is the prose: write the note text for one prepared item, then do at most one bounded rewrite pass if AT-fit fails.
 
-## MCP-First Execution
+## Workspace Tools Execution
 
-When running in restricted mode, use workspace MCP tools instead of direct shell/python calls. Primary tools:
-- `mcp__workspace-tools__prepare_and_validate` — **preferred**: runs prepare + alignment + gl_quote resolution + flagging + AT verification in one call (saves turns)
-- `mcp__workspace-tools__prepare_notes` — prepare only (use when you need to modify the prepared JSON between steps)
-- `mcp__workspace-tools__extract_alignment_data`
-- `mcp__workspace-tools__resolve_gl_quotes`
-- `mcp__workspace-tools__flag_narrow_quotes`
-- `mcp__workspace-tools__verify_at_fit`
-- `mcp__workspace-tools__assemble_notes`
-- `mcp__workspace-tools__curly_quotes`
-- `mcp__workspace-tools__fix_hebrew_quotes` — pass `output` param to write to file instead of returning inline
-- `mcp__workspace-tools__generate_ids` — do not call when running inside the pipeline: IDs are pre-populated by the pipeline runner during mechanical prep. Calling this again risks collisions.
-- `mcp__workspace-tools__update_note_text` — set one generated note's text by id (use during Step 7 final review instead of hand-`Edit`)
-- `mcp__workspace-tools__update_prepared_quote` — set a prepared note's quote fields by id (use during Step 7 final review instead of hand-`Edit`)
-- `mcp__workspace-tools__remove_note` — remove a note by id from generated_notes.json and/or the TSV (use during Step 7 final review instead of hand-`Edit`)
+Run workspace tools via the blessed CLI wrapper:
 
-**Prohibited:** Do NOT write Python, bash, or other scripts to `/tmp/` or anywhere else. Do NOT hand-`Edit` `generated_notes.json`, `prepared_notes.json`, or the assembled notes TSV to revise a row's text, quote, or to delete it — use the structured `update_note_text` / `update_prepared_quote` / `remove_note` tools, which locate items by id and never produce "string to replace not found" errors. If an `Edit` ever returns "string to replace not found" against any of these files, do not retry it: switch to the structured tool; if the target still can't be matched, leave the row as-is and move on. Repeated `Edit` retries against these files will trip the runner's repeated-tool-error guardrail and fail the whole shard.
+    node /app/src/workspace-tools-cli.js <tool_name> '<json-args>'
+
+stdout is the tool result (identical to what the MCP tool returns). For args
+that contain quotes, markdown, or newlines (e.g. the `note` text in
+`update_note_text`), DO NOT inline them — pass `-` as the second argument and
+pipe the JSON object on stdin via a heredoc:
+
+    node /app/src/workspace-tools-cli.js update_note_text - <<'EOF'
+    {"generatedJson":"tmp/claude/generated_notes.json","id":"ab1c","note":"Alternate translation: ..."}
+    EOF
+
+Fallback (if Bash is unavailable): call `mcp__workspace-tools__<tool_name>` with
+the same args.
+
+**Prohibited:** Follow the shared structured-edit policy in `.claude/skills/reference/structured-edit-policy.md` — no ad-hoc scripts, no hand-`Edit` of the notes JSON/TSV, no `Edit` retries after "string to replace not found".
 
 ## Prerequisites
 
@@ -59,10 +60,10 @@ The pipeline runner has already completed all mechanical preparation before invo
 
 Each item's `id` field is already populated. Do not generate or overwrite IDs — doing so risks collisions with upstream or within the chapter.
 
-**Do not use the raw `Read` tool on `runtime.preparedNotes`** — the file can exceed the SDK's 10K-token read limit and cause an error. Instead, use the `mcp__workspace-tools__read_prepared_notes` tool:
+**Do not use the raw `Read` tool on `runtime.preparedNotes`** — the file can exceed the SDK's 10K-token read limit and cause an error. Instead, use the `read_prepared_notes` tool rather than the raw Read tool:
 
-1. `read_prepared_notes({ preparedJson: <path>, summaryOnly: true })` — get total count and item IDs
-2. `read_prepared_notes({ preparedJson: <path>, start: 0, end: 19 })` — fetch items 0–19
+1. `node /app/src/workspace-tools-cli.js read_prepared_notes '{"preparedJson":"<path>","summaryOnly":true}'` — get total count and item IDs
+2. `node /app/src/workspace-tools-cli.js read_prepared_notes '{"preparedJson":"<path>","start":0,"end":19}'` — fetch items 0–19
 3. Continue in batches of ≤20 until all items are loaded (check `hasMore` in the response)
 
 Each item has all fields populated including `writer_packet`, `orig_quote`, `gl_quote`, templates, AT policy, and style rules. Do not re-run preparation MCP tools.
@@ -71,7 +72,7 @@ If any items have empty `orig_quote` (and reference does not end with `:front`),
 
 Items flagged as narrow quotes are correct for focusing the note body on the issue, but may need wider phrase boundaries for AT fit later. Keep this in mind during note generation -- write initial ATs that anticipate the surrounding phrase context.
 
-If no context.json is provided (standalone invocation outside the pipeline), fall back to the MCP tools: `mcp__workspace-tools__prepare_and_validate` runs all four steps in one call.
+If no context.json is provided (standalone invocation outside the pipeline), fall back to the prepare tool: `node /app/src/workspace-tools-cli.js prepare_and_validate '{"inputTsv":"output/issues/<BOOK>/<BOOK>-<CH>.tsv","alignedUsfm":"output/AI-ULT/<BOOK>/<BOOK>-<CH>-aligned.usfm","output":"tmp/claude/prepared_notes.json"}'` runs all four steps in one call.
 
 ### Step 2: Read the Style Guide
 
@@ -106,7 +107,7 @@ If `issues_resolved.txt` contains a decision about how a specific issue type sho
 
 ### Step 3: Generate Notes (write keyed JSON, not TSV)
 
-Use `mcp__workspace-tools__read_prepared_notes` to load all items from the prepared-notes path (see Step 1 above for batching protocol). For each item, generate a note and write it to a JSON object keyed by the item's `id`. Write the result to `runtime.generatedNotes` from context.json when available, otherwise `tmp/claude/generated_notes.json`.
+Use `node /app/src/workspace-tools-cli.js read_prepared_notes '{"preparedJson":"<path>","start":0,"end":19}'` to load all items from the prepared-notes path (see Step 1 above for batching protocol). For each item, generate a note and write it to a JSON object keyed by the item's `id`. Write the result to `runtime.generatedNotes` from context.json when available, otherwise `tmp/claude/generated_notes.json`.
 
 Process one item at a time. Each note addresses exactly one item from the prepared JSON, which corresponds to one issue in one verse. Never create summary notes that combine or reference multiple verse occurrences of the same pattern (e.g., do not write "The author uses synecdoche in verses 2, 5, and 6"). Each verse gets its own self-contained note even when the same figure recurs across the chapter.
 
@@ -169,21 +170,21 @@ Run the assembly script to produce the final TSV. The script reads metadata from
 
 If `--output <path>` was provided in the invocation, use that exact path for `assemble_notes`. Otherwise default to `output/notes/<BOOK>/<BOOK>-<CH>.tsv`.
 
-Use `mcp__workspace-tools__assemble_notes` with `preparedJson`, `generatedJson`, and the determined output path.
+Use `node /app/src/workspace-tools-cli.js assemble_notes '{"preparedJson":"<path>","generatedJson":"<path>","output":"<path>"}'` with `preparedJson`, `generatedJson`, and the determined output path.
 
 ### Step 6: Post-Process
 
 Run curly quote conversion on the output:
 
-Use `mcp__workspace-tools__curly_quotes` with `input` set to the notes TSV and `inPlace: true`.
+Use `node /app/src/workspace-tools-cli.js curly_quotes '{"input":"<notes-tsv>","inPlace":true}'` with `input` set to the notes TSV and `inPlace: true`.
 
 Fix Hebrew quote Unicode to match UHB source byte order (prevents UI highlighting failures):
 
-Use `mcp__workspace-tools__fix_unicode_quotes` with `tsvFile` set to the notes TSV path.
+Use `node /app/src/workspace-tools-cli.js fix_unicode_quotes '{"tsvFile":"<notes-tsv>"}'` with `tsvFile` set to the notes TSV path.
 
 Strip bold from any quoted word that doesn't exactly match the ULT verse text:
 
-Use `mcp__workspace-tools__verify_bold_matches` with `tsvFile` set to the notes TSV path and `ultUsfm` set to the plain ULT USFM path.
+Use `node /app/src/workspace-tools-cli.js verify_bold_matches '{"tsvFile":"<notes-tsv>","ultUsfm":"<plain-ult-usfm>"}'` with `tsvFile` set to the notes TSV path and `ultUsfm` set to the plain ULT USFM path.
 
 ### Step 7: Final Review
 
@@ -203,9 +204,27 @@ For `writing-pronouns` rows, apply three extra checks during final review:
 3. If multiple `writing-pronouns` rows in the same verse explain the same referent, keep only the first necessary note and remove later duplicates.
 
 Fix any issues found via the structured by-id tools — never hand-`Edit` `generated_notes.json`, `prepared_notes.json`, or the assembled TSV:
-- Note text problems → `mcp__workspace-tools__update_note_text` with `generatedJson`, the affected `id`, and the full replacement `note` text.
-- Quote scope / continuity / single-verse violations → `mcp__workspace-tools__update_prepared_quote` with `preparedJson`, the affected `id`, and the changed `glQuote` / `glQuoteRoundtripped` / `origQuote` fields, then re-run assembly (`assemble_notes`) and post-processing (`curly_quotes`, `fix_unicode_quotes`, `verify_bold_matches`) once.
-- Row removal (e.g. low-value pronoun note, duplicate) → `mcp__workspace-tools__remove_note` with the `id`, `generatedJson`, and `tsvFile`.
+- Note text problems → `update_note_text` with `generatedJson`, the affected `id`, and the full replacement `note` text. Because the note text can contain quotes/markdown, use the STDIN heredoc form:
+
+  ```bash
+  node /app/src/workspace-tools-cli.js update_note_text - <<'EOF'
+  {"generatedJson":"<path>","id":"ab1c","note":"<full replacement note text>"}
+  EOF
+  ```
+- Quote scope / continuity / single-verse violations → `update_prepared_quote` with `preparedJson`, the affected `id`, and the changed `glQuote` / `glQuoteRoundtripped` / `origQuote` fields, then re-run assembly (`assemble_notes`) and post-processing (`curly_quotes`, `fix_unicode_quotes`, `verify_bold_matches`) once. Because the quote fields can contain quotes, use the STDIN heredoc form:
+
+  ```bash
+  node /app/src/workspace-tools-cli.js update_prepared_quote - <<'EOF'
+  {"preparedJson":"<path>","id":"ab1c","glQuote":"...","glQuoteRoundtripped":"...","origQuote":"...","sref":"..."}
+  EOF
+  ```
+- Row removal (e.g. low-value pronoun note, duplicate) → `remove_note` with the `id`, `generatedJson`, and `tsvFile`. Use the STDIN heredoc form:
+
+  ```bash
+  node /app/src/workspace-tools-cli.js remove_note - <<'EOF'
+  {"id":"ab1c","generatedJson":"<path>","tsvFile":"<notes-tsv>"}
+  EOF
+  ```
 
 This is a lightweight review pass, not a regeneration -- just catch structural problems the scripts can't judge. If `update_note_text` / `update_prepared_quote` / `remove_note` returns a "not found" or similar error twice for the same id, stop trying to fix that row and move on; do not fall back to hand-`Edit`.
 
@@ -226,7 +245,7 @@ This is complementary to tn-quality-check -- Gemini does semantic/judgment revie
 
 ## Troubleshooting
 
-- **Empty orig_quote after Step 2c**: The Hebrew quote extraction found no match. Check that the issue row's Book/Chapter/Verse matches the Hebrew USFM. Re-run with `--verbose` to see candidate matches.
+- **Empty orig_quote in prepared notes**: The Hebrew quote extraction (pipeline mechanical prep, or `prepare_and_validate` in standalone runs) found no match. Check that the issue row's Book/Chapter/Verse matches the Hebrew USFM.
 - **verify_at_fit.py ERRORS**: The alignment token check failed. Common causes: stale ULT (re-fetch with fetch_door43.py), or orig_quote spans a verse boundary. Fix the quote and re-run verification.
 - **assemble_notes.py missing items**: Rows were filtered out during assembly. Check that every row has a non-empty SupportReference and that the issue type matches a known TA article.
 - **QUOTE_NOT_FOUND from lang_convert.js**: The Greek/Hebrew quote could not be located in the source text. Verify the quote is copied exactly from the USFM (including cantillation marks for Hebrew).

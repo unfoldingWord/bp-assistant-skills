@@ -1,7 +1,7 @@
 ---
 name: editor-compare
 description: Compare editor-edited ULT/UST against AI output to identify systematic preferences. Feeds findings back into glossary and quick-ref. Use when asked to compare editor changes or learn from editing patterns.
-allowed-tools: Read, Grep, Glob, Write, Edit, mcp__workspace-tools__prepare_compare
+allowed-tools: Read, Grep, Glob, Write, Edit, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__prepare_compare
 ---
 
 # Editor Compare
@@ -34,13 +34,13 @@ and present it for escalation -- do not change the canonical file.
 Run once per type. If the user doesn't specify a type, run for both ult and ust (skip if AI output doesn't exist for that type).
 If the user requested verse scope (for example `1:1-6`), pass only the in-chapter verse segment (`1-6`) to the comparison step.
 
-Use `mcp__workspace-tools__prepare_compare` (preferred in restricted environments):
+Run `node /app/src/workspace-tools-cli.js prepare_compare '<json-args>'`:
 - Required: `book`, `chapter`, `type`
 - Optional verse filter: `verses` (for example `"1-6"` or `"1,3,5-7"`)
 - Output path: `output`
 
-Example arguments:
-`{"book":"LAM","chapter":1,"type":"ult","verses":"1-6","output":"/tmp/claude/compare_ult.json"}`
+Example:
+`node /app/src/workspace-tools-cli.js prepare_compare '{"book":"LAM","chapter":1,"type":"ult","verses":"1-6","output":"/tmp/claude/compare_ult.json"}'`
 
 If the user provides an editor-feedback file, pass `editorUsfm` to `prepare_compare`.
 
@@ -232,7 +232,7 @@ Use when comparing multiple chapters at once (e.g., "editor-compare PSA 81-84, 8
 
 Fetch the full-book USFM from Door43 master once per type. The Door43 file is per-book (e.g., `19-PSA.usfm` contains all 150 chapters), so one fetch covers all chapters.
 
-Use `mcp__workspace-tools__prepare_compare` directly per chapter/type. It can read editor USFM from default sources and optional `editorUsfm` input.
+Run `node /app/src/workspace-tools-cli.js prepare_compare '{"book":"<BOOK>","chapter":<CH>,"type":"ult","output":"/tmp/claude/compare_ult_<CH>.json"}'` directly per chapter/type (add `"editorUsfm":"<path>"` to override the default source). It can read editor USFM from default sources and optional `editorUsfm` input.
 
 Do this for each type being compared (ULT, UST, or both).
 
@@ -240,7 +240,7 @@ Do this for each type being compared (ULT, UST, or both).
 
 Parse the chapter spec (e.g., "81-84, 87, 120-130") into a flat list of chapter numbers.
 
-Run `mcp__workspace-tools__prepare_compare` for each chapter in parallel (one tool call per chapter/type), writing output to `/tmp/claude/compare_<type>_<CH>.json`.
+Run `node /app/src/workspace-tools-cli.js prepare_compare '{"book":...,"chapter":<CH>,"type":<type>,"output":"/tmp/claude/compare_<type>_<CH>.json"}'` for each chapter in parallel (one call per chapter/type), writing output to `/tmp/claude/compare_<type>_<CH>.json`.
 
 For each chapter, after reading its comparison JSON:
 - Write a per-chapter report to `output/editor-compare/{BOOK}/{BOOK}-{CH:03d}-{type}.md`

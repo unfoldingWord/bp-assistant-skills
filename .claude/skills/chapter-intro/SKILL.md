@@ -1,7 +1,7 @@
 ---
 name: chapter-intro
 description: Write chapter introductions for biblical text chapters summarizing themes and key content. Use when asked to write a chapter introduction or after pipeline completes.
-allowed-tools: Read, Grep, Glob, Write, Edit
+allowed-tools: Read, Grep, Glob, Write, Edit, Bash(node /app/src/workspace-tools-cli.js:*)
 ---
 
 # Chapter Introduction
@@ -52,7 +52,7 @@ Read the following files. Not all may exist; work with what's available.
 
 **Reference materials (consult as needed):**
 - Published TN intros for style reference: published TN intro rows for the same book when available
-- Translation Words for key terms: use `mcp__workspace-tools__check_tw_headwords` with `terms=["term1", "term2"]` or browse `data/en_tw/`
+- Translation Words for key terms: run `node /app/src/workspace-tools-cli.js check_tw_headwords '{"terms":["term1","term2"]}'` or browse `data/en_tw/`
 - Translation Academy articles relevant to the chapter's literary form or recurring translation issues
 
 ### Step 2: Read the Style Guide

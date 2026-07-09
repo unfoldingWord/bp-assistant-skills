@@ -24,6 +24,28 @@ classification lists in figs-metonymy.md and figs-metaphor.md.
 
 Output: `$TMP/wave2_rhetoric.tsv`
 
+### Figure stacking in dense figurative clauses
+
+In figuratively compressed text -- hymns, theophany, woe-oracles, eschatological
+and other poetry/prophecy -- a single clause routinely carries several
+*independent* figures: a metaphor whose vehicle is itself a metonymy, plus
+implied information the reader must supply, plus a nested "X said..." quotation.
+Benchmarking against published notes shows recognition drops on exactly these
+clauses -- the analyst flags the one most salient figure and moves on, leaving
+the rest unnoted.
+
+On any clause you judge figuratively dense, decompose it and test each figure
+type independently instead of stopping at the first hit. Before leaving such a
+clause, explicitly check at least: metaphor, metonymy, simile, personification,
+quotes-in-quotes / nested speech, and implied-or-explicit information. Each
+genuinely distinct figure a translator could misrender earns its own note, even
+when several land in the same clause.
+
+This is a per-clause thoroughness instruction, not a license to raise density in
+prose. Narrative and disputation clauses rarely stack figures; leave them at
+their usual rate -- the calibration budget in `SKILL.md` (Selectivity) still
+governs the chapter total.
+
 ## Cross-Reading Protocol
 
 As each analyst works, they read the other's TSV file when it appears. If the

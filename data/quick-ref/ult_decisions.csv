@@ -421,5 +421,191 @@ H6352,פֶּחָם,coal,ISA,"ISA 54:16 who fans the coal into flame","Hebrew is 
 H6771,צָמֵא,the thirsty / everyone thirsty,ALL,ISA 55:1 kol-tsame — substantive adjective,Qal adjective used as substantive noun; render as nominal adjective not relative clause. 'everyone thirsty' not 'all who are thirsty'. See literalness_patterns.md §Substantive Adjectives.,2026-04-27,human
 H2896,טוֹב,the good,ALL,ISA 55:2 ha-tov — substantive adjective with article,Nominal adjective; do not expand to relative clause 'what is good'. 'the good' is the correct form. See literalness_patterns.md §Substantive Adjectives.,2026-04-27,human
 H0226,אוֹת,a sign of,ALL,ISA 55:13 construct chain with eternity,In construct chain preserve genitive: 'a sign of eternity' not 'an everlasting sign'. See literalness_patterns.md §Construct Chains §Adjective-noun collapse forbidden.,2026-04-27,human
-H6965,קוּם,rising,ISA,"ISA 54:17 every tongue rising against you (not that rises)","Yiqtol used as relative modifier without explicit Hebrew relative pronoun; render participially (rising), not as English relative clause (that rises). See literalness_patterns.md §Relative Clauses ISA 54:17 ruling.",2026-04-27,human
+H6965,קוּם,rising,ISA,"ISA 54:17 every tongue rising against you (not that rises)","Yiqtol used as relative modifier without explicit Hebrew relative pronoun; render participially (rising), not as English relative clause (that rises). See literalness_patterns.md §Relative Clauses.",2026-04-27,human
 H2063,זֹאת,this,ALL,JER and all books — feminine demonstrative הַזֹּאת / זֹאת,"Align זֹאת (including prefixed-article form הַזֹּאת) to 'this'. The ה prefix is the definite article absorbed into the demonstrative force and must NOT be rendered as a separate 'the'. Do not leave the token unaligned. Reported: Jeremiah BP — Grant Ailie (closes #63).",2026-05-04,human
+H0639,אַף,nose,ALL,body-part idiom for anger (nose/nostrils flare; orig. context PSA 69:24),Preserve body-part idiom. Not 'anger'. Consistent with literal ULT philosophy.,2025-02-10,AI
+H1361,גָּבַהּ,high,ALL,131:1 heart has not been high,Qal 'to be high'; PRO 16:5 'high of heart' same concept. Not 'haughty' (too interpretive).,2026-02-12,AI
+H5769,עוֹלָם,eternities,ALL,145:13 kingdom of all of eternities,Plural עוֹלָמִים = 'eternities'. Singular = 'forever/ages'. Editor PSA 145.,2026-02-23,human
+H7356b,רַחַם,compassions,ALL,145:9 his compassions are over all of his works,Plural = 'compassions'. Not singular 'compassion'. Editor PSA 145.,2026-02-23,human
+H4893a,מִשְׁחָת,disfigured,ALL,ISA 52:14 - disfigured beyond a man; published ULT also uses disfigured,,2026-04-21,AI
+H3126,יוֹנֵק,shoot,ALL,ISA 53:2 - young plant/shoot growing up,Only 3 occ in published ULT; published ISA 53 uses 'shoot',2026-04-21,AI
+H4564,מַסְתֵּר,hiding,ALL,ISA 53:3 - like a hiding of faces from us,Rare word (6 occ); construct chain 'hiding of faces' preserved literally,2026-04-21,AI
+H2310,חָדֵל,rejected,ALL,ISA 53:3 - rejected of men,Only 4 occ; published ISA 53 uses 'rejected',2026-04-21,AI
+H6115,עֹצֶר,coercion,ALL,ISA 53:8 - from coercion and from judgment,Only 8 occ; published ISA 53 uses 'coercion',2026-04-21,AI
+H0817,אָשָׁם,guilt offering,ALL,ISA 53:10 - if his soul places a guilt offering,Index dominant: guilt (29.2%) + offering (25.7%); sacrificial context warrants full term 'guilt offering',2026-04-21,AI
+H6168,עָרָה,exposed,ALL,ISA 53:12 - he exposed his soul to death,Hiphil = laid bare/exposed; published ISA 53 also uses 'exposed',2026-04-21,AI
+H4148,מוּסָר,discipline,ALL,ISA 53:5 - the discipline of our peace was on him,"Index has instruction (22%), correction (14.6%), discipline (7.3%). In ISA 53:5 construct ""discipline of our peace"" preserves the Hebrew noun form literally.",2026-04-22,AI
+H2250,חַבּוּרָה,wounds,ALL,ISA 53:5 - by his wounds it is healed for us,"bruise (16.7%), wounds (11.1%); 'wounds' fits ISA 53 context and matches published master ULT",2026-04-22,AI
+H5999,עָמָל,trouble,ALL,ISA 53:11 - from the trouble of his soul,"Dominant rendering 35.8% of 53 occ. Also 'toil' (3.8%), 'labor' (1.9%); 'trouble' is the clear precedent.",2026-04-22,AI
+H8241,שֶׁצֶף,flood,ALL,"ISA 54:8 ""in a flood of wrath""","hapax; master ULT has ""flood""; outburst/overflow of anger",2026-04-22,AI
+H3539,כַּדְכֹּד,rubies,ALL,"ISA 54:12 ""I will make your battlements of rubies""",hapax; precious red stone; published ULT ISA 54 uses rubies,2026-04-22,AI
+H0688,אֶקְדָּח,beryl,ALL,"ISA 54:12 ""stones of beryl""",hapax; fiery/sparkling stone; published ULT ISA 54 uses beryl,2026-04-22,AI
+H6320,פּוּךְ,turquoise,ALL,"ISA 54:11 ""setting your stones in turquoise""",cosmetic paint (2KI 9:30) or antimony/turquoise stone; turquoise in building context per published ULT,2026-04-22,AI
+H4288,מְחִתָּה,terror,ALL,"ISA 54:14 ""from terror, for it will not come near to you""",ruin (33%) and terror (9.5%) in published; terror fits ISA 54 context of fear/threat,2026-04-22,AI
+H7918,שָׁכַךְ,subside (Qal); cause to subside (Hiphil),ALL,"NUM 17:5 Hiphil causative; Qal ""subsided"" in GEN 8:1, EST 2:1, 7:10","Hiphil preserves causative form matching Qal precedent ""subsided""",2026-04-24,AI
+H8519,תְּלוּנָה,murmurings,ALL,"NUM 17:5,10; matches EXO 16:7-12 published rendering",,2026-04-24,AI
+H4805,מְרִי,rebellion,ALL,"NUM 17:10; dominant rendering 40% of 10 occ across DEU, 1SA, NEH",,2026-04-24,AI
+H1478,גָּוַע,expire,ALL,"NUM 17:12,13; matches GEN 6:17, 7:21, JOB precedent",,2026-04-24,AI
+H4501,מְנוֹרָה,lampstand,ALL,"ZEC 4:2,11 - dominant rendering 44% of 50 occ",Consistent with Exodus/Kings published ULT,2026-04-24,AI
+H1543,גֻּלָּה,bowl,ALL,"ZEC 4:2,3 - bowl on top of lampstand",ZEC context is reservoir bowl; 'springs' used in Joshua; 'bowls' in Kings temple context,2026-04-24,AI
+H4166,מוּצָקָה,tubes,ALL,ZEC 4:2 - only occurrence; tubes/pipes for lamps,Published ULT ZEC 4:2 uses 'tubes'; hapax legomenon,2026-04-24,AI
+H6804,צַנְתָּרָה,pipes,ALL,ZEC 4:12 - gold pipes from olive branches,Only occurrence; published index shows 'pipes',2026-04-24,AI
+H0913,בְּדִיל,tin,ALL,ZEC 4:10 - the stone of tin in Zerubbabel's hand,Literal construct 'stone of tin' preserves Hebrew; ISA 1:25 uses 'impurity' in metallurgy context but ZEC context is building stone,2026-04-24,AI
+H7641b,שִׁבֹּל,branches,ALL,ZEC 4:12 - branches of the olives,Literally 'ears/branches'; olive tree context favors 'branches',2026-04-24,AI
+H3323,יִצְהָר,fresh oil,ALL,ZEC 4:14 - sons of the fresh oil,Distinct from shemen (H8081); yitshar = freshly pressed oil. Preserves construct chain literally per ULT-gen rules,2026-04-24,AI
+H8663,תְּשֻׁאָה,shouts,ALL,ZEC 4:7 - shouts of Grace Grace,Published index shows 'shouts' for ZEC 4:7; JOB uses 'thunder/noise',2026-04-24,AI
+H1957,הָזָה,dreaming,ALL,"ISA 56:10 - Qal participle masculine plural, rare word (2 occ total)",Only other occurrence is ISA 56:10 itself in master ULT. Root means to dream/fantasize. Participle = dreaming.,2026-04-27,AI
+H5024,נָבַח,bark,ALL,"ISA 56:10 - Qal infinitive construct, only 2 occ total",Rare verb meaning to bark (of dogs). Clear context in ISA 56:10 with dogs metaphor.,2026-04-27,AI
+H5433a,סָבָא,drink deeply,ALL,"ISA 56:12 - Qal cohortative 1cp, means to imbibe/drink heavily",Root means to drink deeply/imbibe. Cohortative form = let us drink deeply. Master ULT has imbibe.,2026-04-27,AI
+H3335,יָצַר,potter / forming,ALL,"JER 18 potter metaphor; participle = ""potter"" (agent noun); active verb = ""forming""","Participle as agent noun ""potter"" (7.1% of 112 occ); active ""formed"" (13.4%); ISA and 2SA confirm ""potter"" for substantive participle",2026-04-27,AI
+H8186b,שַׁעֲרוּרָה,horrible thing,ALL,JER 18:13 virgin of Israel has done a horrible thing,Only 3 occ in index; context is moral outrage at Israel's unfaithfulness,2026-04-27,AI
+H8292,שְׁרוּקָה,hissing,ALL,JER 18:16 a hissing of forever,"3 occ total; JDG 5:1 has ""piping""; desolation context = hissing (sound of scorn/horror)",2026-04-27,AI
+H0343,אֵיד,calamity,ALL,JER 18:17 day of their calamity,"Dominant rendering 38.9% of 36 occ; ""disaster"" only 5.6%",2026-04-27,AI
+H3401,יָרִיב,opponents,ALL,JER 18:19 voice of my opponents,"PSA 35 has ""opponents""; ISA 49:25 has ""contender""; opponents fits legal adversary sense",2026-04-27,AI
+H0070,אֹבֶן,wheels,ALL,JER 18:3 potter's wheel (dual form = two-disc wheel),"Only 3 occ total; EXO 1:16 ""birth stool"". In potter context, dual form refers to potter's wheel (two rotating discs).",2026-04-27,AI
+H2976,יָאַשׁ,hopeless,ALL,JER 18:12 Niphal participle - despair/hopelessness declaration,"ISA 57 has ""hopeless"" in published ULT. 1SA 27:1 ""despair"". Niphal participle as exclamation = ""hopeless"".",2026-04-27,AI
+H6098,עֵצָה,counsel,ALL,"JER 18:18,23 dominant rendering 29.5% of 173 occ","Dominant published rendering. ""advice"" only 1.7%. ""plan"" 3.5% used in specific contexts.",2026-04-27,AI
+H2552,חָמַם,inflaming,ALL,"ISA 57:5 - Niphal ptc, reflexive sense of sexual/idolatrous heat","In context of idolatrous worship, ""inflaming yourselves"" captures the Niphal reflexive",2026-04-28,AI
+H6899,קִבּוּץ,collection,ALL,ISA 57:13 - refers to collected idols,"Only 2 occurrences in OT, both in ISA 57. Master ULT uses ""collection""",2026-04-28,AI
+H5585,סָעִיף,clefts,ALL,ISA 57:5 - clefts of rocks where child sacrifice occurred,"Used as ""clefts"" in JDG 15, ""overhangs"" in master ISA 57, ""branches"" in ISA 17/27. ""Clefts"" fits rocky context",2026-04-28,AI
+H7788,שׁוּר,journeyed,ALL,ISA 57:9 - traveling to the king with oil,"Only 3 occurrences total. Master ULT has ""turned"" but primary meaning is ""to journey/travel""",2026-04-28,AI
+H6588,פֶּשַׁע,transgression,ALL,"ISA 58:1 - dominant rendering 18.4% of 136 occ, also ""rebellion"" at 4.4%",transgression is dominant in published ULT; rebellion used in some contexts,2026-04-28,AI
+H4133,מוֹטָה,yoke,ALL,"ISA 58:6,9 - ""yoke"" 37.5% dominant of 8 occ; also ""bars"" in LEV 26:13",yoke is the standard rendering for the oppression metaphor,2026-04-28,AI
+H2784,חַרְצֻבָּה,bonds,ALL,"ISA 58:6 - rare word, 2 occ total; ""bonds"" in ISA 58, ""ropes"" in PSA 73","bonds fits the oppression context; parallel with ""ropes of the yoke""",2026-04-28,AI
+H6710,צַחְצָחָה,scorched places,ALL,"ISA 58:11 - only 3 occ, hapax-like; index shows ""desert"" from master ULT",scorched places is more literal than desert; root tsachach means dryness/glare,2026-04-28,AI
+H4788,מָרוּד,wanderers,ALL,"ISA 58:7 - 8 occ; ""wanderings"" in LAM 1, ""wandering"" in LAM 3, ""homeless"" in ISA 58 master",wanderers is more literal from root marud; describes displaced/homeless poor,2026-04-28,AI
+H7522,רָצוֹן,acceptance,ALL,"ISA 58:5 - ""favor"" 16%, ""acceptance"" 6.4% in published ULT; used with laYahweh",acceptance fits the cultic/fasting context; day of acceptance to Yahweh,2026-04-28,AI
+H6329,פּוּק,provide,ALL,"ISA 58:10 - Hiphil ""provide/furnish""; ""obtains"" in PRO, ""provide"" in ISA 58 master",Hiphil causative - provide/bring forth; with nephesh = provide your soul,2026-04-28,AI
+H0724,אֲרוּכָה,healing,ALL,"ISA 58:8 - 5 occ total; ""healing"" in ISA 58, ""health"" in NEH 4:7",healing fits the restoration imagery; literally new flesh growing over wound,2026-04-28,AI
+H1659,גָּשַׁשׁ,grope,ALL,"ISA 59:10, only 4 occurrences total, all in ISA 59",Consistent with master ULT and published rendering,2026-04-28,AI
+H0820,אַשְׁמָן,the strong,ALL,"ISA 59:10, rare word, meaning debated (strong/vigorous or desolate places)",Master ULT uses 'the strong'; meaning is robust/healthy people contrasted with dead,2026-04-28,AI
+H5229,נְכֹחָה,uprightness,ALL,"ISA 59:14, 5 occurrences total",Master ULT uses 'straightforwardness'; published has 'uprightness' in ISA 26:1. Chose 'uprightness' for concision.,2026-04-28,AI
+H2428,חַיִל,might,ZEC,ZEC 4:6 - Not by might and not by power,Context is contrasting human effort vs divine Spirit; 'might' fits better than 'valor' or 'army' here. Published index shows 'strength' at 7.4% and 'valor' at 17%.,2026-04-28,AI
+H7222,רֹאשָׁה,top,ZEC,ZEC 4:7 - the top stone,Hapax legomenon; 'top' as adjective for the capstone/final stone of the temple,2026-04-28,AI
+H1214,בָּצַע,complete,ZEC,ZEC 4:9 - his hands will complete it (Piel),Piel in building context = finish/complete; distinct from Qal 'cut off' or 'gain unjustly',2026-04-28,AI
+H8229,שִׁפְעָה,multitude,ALL,ISA 60:6 - multitude of camels,"Rare word; published ULT ISA 60 has ""Caravans"" but ""multitude"" or ""abundance"" are more literal based on index data",2026-04-29,AI
+H1070,בֶּכֶר,young camels,ALL,ISA 60:6 - young camels of Midian,Only 3 occurrences; consistent with published ULT,2026-04-29,AI
+H4039,מְגִלָּה,scroll,ALL,ZEC 5:1-2 flying scroll vision,"50% of 6 occ in published ULT; T4T confirms ""scroll""",2026-04-29,AI
+H3603,כִּכָּר,disk,ALL,ZEC 5:7 round lead lid of ephah,Root means round thing; context is flat lead cover. Published ULT uses plain/talent/loaf in other contexts. Disk captures shape for this specific usage.,2026-04-29,AI
+H4369,מְכֻנָה,base,ALL,ZEC 5:11 pedestal/base for the ephah,"Only 2 occ, both ZEC 5:11. Published ULT uses base.",2026-04-29,AI
+H4726,מָקוֹר,fountain,ALL,ZEC 13:1 metaphorical cleansing fountain,"Dominant rendering 23.3% of 43 occ; consistent with PSA, PRO, HOS published ULT. Published ZEC used 'spring' but fountain is the dominant ULT standard.",2026-04-30,AI
+H5997,עָמִית,companion,ALL,"ZEC 13:7 the man, my companion",Revised from 'fellow citizen'. Hebrew amiti (from amat 'to be together with') means associate/companion with no civic or political connotation. 'Fellow citizen' imported a political relationship not in the Hebrew. 'Companion' is more literal.,2026-04-30,AI
+H6819,צָעַר,little ones,ALL,ZEC 13:7 the little ones (ha-tso'arim),Qal participle; rare word (6 occ). Published ZEC used 'lowly ones'. JOB 14 used 'insignificant'. 'Little ones' captures the literal sense of the root tsaar = be small/insignificant.,2026-04-30,AI
+H1228,בַּקְבֻּק,jar,ALL,"JER 19:1,10 potter's earthenware jar; 1KI 14:3 published as ""jar""","Only 4 occ total; ""jar"" confirmed in 1KI 14:3 published ULT",2026-04-30,AI
+H8612,תֹּפֶת,Topheth,ALL,"JER 19:6,11,12,13,14 proper noun; 2KI 23:10 published as ""Topheth""","Proper noun, consistent with 2KI 23:10 published ULT",2026-04-30,AI
+H2028,הֲרֵגָה,Slaughter,ALL,"JER 19:6 Valley of Slaughter; ZEC 11:4,7 100% ""slaughter""","Only 2 published occ, both ""slaughter"" in ZEC 11",2026-04-30,AI
+H2932,טֻמְאָה,uncleanness,ALL,ZEC 13:2 spirit of uncleanness,"Dominant rendering 32.4% of 68 occ; standard in Leviticus, paired with ruach in ZEC 13:2",2026-04-30,AI
+H0155,אַדֶּרֶת,cloak,ALL,ZEC 13:4 cloak of hair,Dominant rendering 22.2% of 27 occ; construct chain adderet se'ar = cloak of hair,2026-04-30,AI
+H8267,שֶׁקֶר,falsehood,ALL,ZEC 13:3 spoken falsehood in the name of Yahweh,"Dominant rendering 35.4% of 96 occ; consistent across LEV, 1KI, PSA, PRO published ULT",2026-04-30,AI
+H6495,פְּקַח־קוֹחַ,liberation,ALL,ISA 61:1 - opening of eyes/prison; hapax,100% in published ISA 61; follows published ULT,2026-05-04,AI
+H1865,דְּרוֹר,freedom,ALL,ISA 61:1 - liberty/release; LEV 25:10 liberty,Published ISA 61 uses freedom; LEV 25:10 uses liberty,2026-05-04,AI
+H4594,מַעֲטֶה,mantle,ALL,ISA 61:3 - only 1 occ; covering/mantle,Published ISA 61 uses mantle,2026-05-04,AI
+H5344a,נָקַב,designate,ALL,ISA 62:2 - mouth of Yahweh will designate it,Qal imperfect - to designate/specify a name. Master ULT uses 'choose' but designate is more precise for naqab.,2026-05-04,AI
+H1824,דְּמִי,rest,ALL,"ISA 62:6-7 - no rest for watchmen, no rest for Yahweh",Noun meaning silence/rest/cessation. 'Rest' fits the watchmen context; parallels the verb חשׁה (be silent) in v6.,2026-05-04,AI
+H4885,מָשׂוֹשׂ,joy,ALL,ISA 62:5 - the joy of a bridegroom over a bride,Dominant rendering 24% of 38 occ in published ULT,2026-05-04,AI
+H5332,נֵצַח,blood,ALL,"ISA 63:3,6 - lifeblood/juice of grapes metaphor",Master ULT and index both use 'blood' for this rare word in ISA 63. Not 'victory' (different sense).,2026-05-04,AI
+H2551,חֶמְלָה,mercy,ALL,ISA 63:9 - in his love and in his mercy,Index shows 'mercy' as dominant (33% of 6 occ). Also GEN 19:16.,2026-05-04,AI
+H8280,שָׂרָה,struggled,ALL,HOS 12:3 struggled with God; matches GEN 32:28 published,40% dominant in published (2 of 5 occ),2026-05-04,AI
+H7786,שׂוּר,struggled,ALL,HOS 12:4 struggled with an angel,Rare word (3 occ); published HOS 12 has 'struggled'; contextual parallel with H8280,2026-05-04,AI
+H0202,אוֹן,manhood (v3) / wealth (v8),ALL,HOS 12:3 in his manhood; HOS 12:8 found wealth,Context-dependent: strength/manhood in Gen parallel; wealth in commercial context. Published HOS 12 uses both.,2026-05-04,AI
+H4115,מַהְפֶּכֶת,stocks,ALL,JER 20:2-3 physical restraint/torture device,"Rare word, traditional rendering; a device that twisted/contorted the body",2026-05-04,AI
+H4036,מָגוֹר מִסָּבִיב,Magor-Missabib,ALL,JER 20:3 symbolic name meaning terror on every side,Transliterated as compound proper name with hyphen; meaning explained in translation notes,2026-05-04,AI
+H6496,פָּקִיד,overseer,ALL,JER 20:1 temple official title,Dominant published rendering at 25%,2026-05-04,AI
+H2633,חֹסֶן,wealth,ALL,JER 20:5 city's possessions/riches,treasure 33% in published but wealth fits material possession context better,2026-05-04,AI
+H2151a,זָלַל,quaked,ALL,"ISA 64:1,3 - Niphal 'mountains quaked'; master ULT uses 'shaken/trembled'",Niphal of zalal = quake/shake; 'quaked' for mountains in theophany context,2026-05-05,AI
+H2003,הָמָס,brushwood,ALL,ISA 64:2 - fire kindles brushwood,Only 2 occurrences; published ISA ULT uses 'brushwood',2026-05-05,AI
+H4127,מוּג,melted,ALL,ISA 64:7 - melted us in the hand of our iniquities,Dominant rendering 'melted' (15.6%); 'melt away' also common,2026-05-05,AI
+H1408,גַּד,Fortune,ALL,ISA 65:11 - proper name of pagan deity,Matches master ULT and Strong's index rendering,2026-05-05,AI
+H4507,מְנִי,Destiny,ALL,ISA 65:11 - proper name of pagan deity,Matches master ULT and Strong's index rendering,2026-05-05,AI
+H6292,פִּגּוּל,unclean things,ALL,ISA 65:4 - defiled/unclean meat in vessels,Published ULT uses both defiled and unclean; unclean things captures the plural,2026-05-05,AI
+H0543,אָמֵן,truth,ALL,ISA 65:16 - God of Amen/truth; divine title,Matches ISA 65 master ULT rendering; when used as divine attribute rather than liturgical response,2026-05-05,AI
+H1860,דְּרָאוֹן,abhorrence,ALL,"ISA 66:24 - rare word (only 2 OT occurrences: ISA 66:24, DAN 12:2)",Strong's index shows 'abhorrence' as attested rendering; matches master ULT,2026-05-05,AI
+H8586,תַּעֲלוּל,punishments,ALL,ISA 66:4 - their punishments/caprice,Strong's index shows 'punishment' from ISA 66; also means 'wanton acts/dealings',2026-05-05,AI
+H4035,מְגוּרָה,fears,ALL,ISA 66:4 - their fears/dreads,Strong's index shows 'fears' from ISA 66; HAG 2:19 has 'storehouse' (different sense),2026-05-05,AI
+H7578,רְתֵת,trembling,ALL,HOS 13:1 When Ephraim spoke there was trembling,Hapax-like (only in HOS 13:1); published master ULT uses trembling,2026-05-05,AI
+H5458,סְגוֹר,enclosure,ALL,HOS 13:8 tear open the enclosure of their heart,Only other occurrence in JOB 28 rendered 'Gold' (different sense). Here means enclosure/covering of the chest/heart.,2026-05-05,AI
+H8514,תַּלְאוּבָה,drought,ALL,HOS 13:5 in the land of drought,Hapax legomenon; only in HOS 13:5; 100% drought in published index,2026-05-05,AI
+H0165,אֱהִי,Where,ALL,HOS 13:10 Where is your king; HOS 13:14 Where are your plagues,Interrogative particle; 100% Where in published (3 occ all in HOS 13),2026-05-05,AI
+H6987,קֹטֶב,destruction,ALL,HOS 13:14 Where is your destruction O Sheol,Rare word (3 occ); published uses destruction; can also mean sting/plague,2026-05-05,AI
+H6500,פָּרָא,bears fruit,ALL,HOS 13:15 he among brothers bears fruit,Hapax; only in HOS 13:15; published master uses 'flourishes' but Hiphil of para = make fruitful; etymological wordplay on Ephraim,2026-05-05,AI
+H4878,מְשׁוּבָה,apostasy,ALL,HOS 14:4 I will heal their apostasy,Master ULT uses apostasy; also occurs in HOS 11:7; turning away is more literal but apostasy is established,2026-05-06,AI
+H1935,הוֹד,splendor,ALL,HOS 14:6 his splendor will be like the olive tree,Dominant published rendering 26.7% (8 of 30 occ); master HOS 14 has beauty but splendor is dominant,2026-05-06,AI
+H2143,זֵכֶר,remembrance,ALL,HOS 14:7 His remembrance like the wine of Lebanon,Dominant published rendering 19.4% (12 of 62 occ); also memorial 3.2%; master HOS 14 has fame but remembrance is dominant,2026-05-06,AI
+H7110a,קֶצֶף,fury,ALL,JER 21:5 anger triad with nose + wrath,Follows DEU 29:28 published pattern: in nose and in wrath and in great fury. Also ISA uses fury.,2026-05-06,AI
+H4585,מְעוֹנָה,dwellings,ALL,JER 21:13 city context,"Published: dens (animal), dwelling (PSA 76, ZEP 3). City context = dwellings.",2026-05-06,AI
+H6696a,צוּר,besieging,ALL,"JER 21:4,9 participle describing Chaldeans","Published pattern: besieging against (1KI 15:27, 2KI 6:24-25). Participle = besieging.",2026-05-06,AI
+H7998,שָׁלָל,spoil,ALL,JER 21:9 life as spoil idiom,"Published: spoil (19.7%), plunder (18.9%). Both well-attested; spoil slightly more frequent.",2026-05-06,AI
+H6953,קֹהֶלֶת,the Teacher,ALL,ECC 1:1 - standard rendering per task vocabulary notes,"Not in published ULT index (ECC unpublished). Task specifies ""the Teacher"" for Qoheleth.",2026-05-08,AI
+H1892,הֶבֶל,futility,ALL,ECC 1:2 - key thematic term in Ecclesiastes,"Published ULT uses ""vapor"" (21.3% of 61 occ) but task specifies ""futility"" for Ecclesiastes context. Published precedent is from non-ECC books.",2026-05-08,AI
+H3504,יִתְרוֹן,profit,ALL,ECC 1:3 - Ecclesiastes-unique term (not in published index),"Task specifies ""profit"" or ""advantage"". Used ""profit"" as more literal.",2026-05-08,AI
+H7469,רְעוּת,pursuit of,ALL,ECC 1:14 - in construct with wind,"Task specifies ""pursuit of"" (in construct with wind). Not in published index.",2026-05-08,AI
+H7475,רַעְיוֹן,pursuit of,ALL,"ECC 1:17 - variant of H7469, in construct with wind","Task specifies ""pursuit of"" (variant of H7469). Not in published index.",2026-05-08,AI
+H6045,עִנְיָן,task,ALL,ECC 1:13 - evil task given by God,"Not in published index. Master ULT uses ""business"". Chose ""task"" as more literal for the concept of occupation/business.",2026-05-08,AI
+H8350,שָׁשַׁר,vermilion,ALL,JER 22:14 paint color for paneled house,"Only 2 occ (JER 22:14, EZK 23:14); traditional rendering is vermilion (red pigment)",2026-05-11,AI
+H8474,תַּחָרָה,competing,ALL,JER 22:15 competing in cedar (Hitpael participle),Hapax legomenon; root related to rivalry/competition; context is striving to outdo in cedar construction,2026-05-11,AI
+H4835,מְרֻצָה,extortion,ALL,JER 22:17 paired with oppression,Rare word (only 3 occ); from root meaning to crush/oppress; rendered extortion in context of unjust gain,2026-05-11,AI
+H3016,יָגוֹר,fear,ALL,JER 22:25 those whom you fear,Adj from root meaning to dread/be afraid; used as attributive describing those before whom one is afraid,2026-05-11,AI
+H5079,נִדָּה,impurity,ALL,NUM 19 - water of impurity (corpse contamination context),menstruation in LEV bodily-context; impurity in EZR 9:11 and non-menstrual contexts. NUM 19 is ritual corpse defilement.,2026-05-13,AI
+H6781b,צָמִיד,fastening,ALL,NUM 19:15 - fastening of cord (vessel lid),Different from H6781a bracelets. This sense is a lid/covering tied with cord. Only occurs in NUM 19:15.,2026-05-13,AI
+H4931,מִשְׁמֶרֶת,preservation,ALL,NUM 19:9 - for preservation (keeping ashes),"Published EXO 16:23,32,33,34 consistently uses preservation for this sense of safekeeping.",2026-05-13,AI
+H4809,מְרִיבָה,Meribah,ALL,"NUM 20:13,24; proper noun transliteration, 75% in published ULT",,2026-05-18,AI
+H8513,תְּלָאָה,hardship,ALL,NUM 20:14; dominant rendering 50% of 6 occurrences,,2026-05-18,AI
+H4377,מֶכֶר,price,ALL,"NUM 20:19; rare word (3 occ), commercial context of paying for water",,2026-05-18,AI
+H4546,מְסִלָּה,highway,ALL,NUM 20:19; dominant rendering 12.3% in published ULT,,2026-05-18,AI
+H1731,דּוּד,basket,ALL,JER 24:1-3 baskets of figs; matches 2KI 10:7 and PSA 81:6 published ULT,Context-dependent: basket (container) vs kettle (1SA 2:14),2026-05-20,AI
+H3204,יְכׇנְיָה,Jeconiah,ALL,JER 24:1; published ULT EST 2:6 has Jeconiah for H3204,"Different from H3078 (Jehoiachin) used in 2KI; same person, different Hebrew spelling",2026-05-20,AI
+H2113,זְוָעָה,horror,ALL,JER 24:9; ISA 28:19 published ULT has terror; horror fits Jeremiah context,Rare word (only 2 occ); terror also acceptable,2026-05-20,AI
+H5197,נָטַף,drip (Hiphil: prophesy metaphor kept literal),ALL,"MIC 2:6,11 Hiphil stem used for prophesying; Qal = drip in published ULT",ULT keeps literal 'drip' for Hiphil prophetic speech metaphor. Published Qal = drip (100%). No published Hiphil examples found.,2026-05-21,AI
+H1223,בׇּצְרָה,Bozrah,ALL,MIC 2:12 like sheep of Bozrah,"UHB Strong H1223 = proper noun Bozrah. Published GEN 36:33, ISA 34:6, ISA 63:1 all use Bozrah. Kept as place name per literal mandate.",2026-05-21,AI
+H8322,שְׁרֵקָה,hissing,ALL,"JER 25:9,18 desolation context",Already recorded for JER 18:16 (H8292 variant). Consistent rendering for scorn/horror sound.,2026-05-21,AI
+H8347,שֵׁשַׁךְ,Sheshach,ALL,JER 25:26 cryptogram for Babylon,Proper noun; atbash cipher for Babylon. Transliterated as-is per ULT literal policy.,2026-05-21,AI
+H7006,קָיָה,vomit,ALL,JER 25:27 cup of wrath passage,Rare verb (only here and ISA 19:14). Imperative = vomit.,2026-05-21,AI
+H8600,תְּפוֹצָה,scatterings,ALL,JER 25:34 your scatterings (hapax legomenon),Hapax; from root פוץ (scatter/disperse). Noun form = scatterings/dispersions.,2026-05-21,AI
+H6476,פָּצַח,broken (Piel: break bones); break out (Qal: in song),ALL,MIC 3:3 Piel = break bones; ISA contexts = break out in song,Context-dependent: Piel with bones = break apart; Qal in Isaiah = break out (in song/singing),2026-05-26,AI
+H7037,קַלַּחַת,cauldron,ALL,MIC 3:3 cauldron; 1SA 2:14 also cauldron,Published 1SA 2:14 uses cauldron. Distinct from H5518a (pot/cooking pot).,2026-05-26,AI
+H8222,שָׂפָם,mustache,ALL,"MIC 3:7 cover over mustache (sign of mourning); LEV 13:45, 2SA 19:24 same",Published LEV 13:45 and 2SA 19:24 both use mustache. 50% dominant rendering.,2026-05-26,AI
+H5856,עִי,heaps,ALL,"MIC 3:12, PSA 79:1 - ruins/rubble heaps",Published PSA 79:1 uses heaps. Only 2 occurrences total.,2026-05-26,AI
+H1413,גָּדַד,gather yourselves in troops,ALL,MIC 5:1 Hithpolel 2fs - wordplay with בַת גְּדוּד,Hithpolel can mean cut or gather in troops. Military context with daughter-of-troop wordplay favors gather in troops.,2026-05-29,AI
+H4163,מוֹצָאָה,goings out,ALL,MIC 5:2 his goings out are from of old,Plural noun from יצא. Literal rendering preserves origin/emergence sense.,2026-05-29,AI
+H5257b,נְסִיךְ,princes,ALL,MIC 5:5 eight princes of man; PSA 83:11 matches,Published ULT PSA 83:11 and JOS 13:21 use princes for H5257b.,2026-05-29,AI
+H2617a,חֶסֶד,covenant faithfulness,MIC,MIC 6:8 love covenant faithfulness,Per hebrew_ot_glossary.csv: ULT translates as covenant faithfulness. Glossary entry row 45-46.,2026-06-01,AI
+H8454,תּוּשִׁיָּה,sound wisdom,MIC,MIC 6:9 sound wisdom fears your name,"Published pattern: ""sound wisdom"" at 13% (PRO 2, 8, 18). Combined with ""wisdom"" at 17.4%. ""sound wisdom"" is more distinctive and literal.",2026-06-01,AI
+H6666,צְדָקָה,righteous acts,MIC,MIC 6:5 plural tsidqot = righteous acts of Yahweh,"Plural form. Published dominant is ""righteousness"" (41.5%) but plural form warrants ""righteous acts."" JDG 5 uses ""righteous"" for plural form too.",2026-06-01,AI
+H8047,שַׁמָּה,desolation,MIC,MIC 6:16 make you a desolation,"Published dominant is ""desolation"" at 15.4%. ""horror"" at 7.7%, ""ruin"" at 3.8%. Desolation is the standard rendering.",2026-06-01,AI
+H3445,יֶשַׁח,emptiness,MIC,MIC 6:14 your emptiness in your midst,Hapax legomenon. Meaning uncertain - likely hunger/emptiness. No published ULT data. Context of eating but not being satisfied supports emptiness.,2026-06-01,AI
+H6293,פָּגַע,intercede,ALL,"JER 27:18 - plea context with Yahweh; published ULT uses ""met"" for physical encounters, ""attack"" for violent ones","In prayer/petition context (Jussive + nah particle + b- prefix on divine name), ""intercede"" fits the supplication sense. ISA 53:12 uses similar paga + prayer context.",2026-06-02,AI
+H2715,חֹר,nobles,ALL,JER 27:20 - nobles of Judah and Jerusalem exiled with Jeconiah,"Dominant rendering 40% of 25 occ in published ULT (1KI 21, NEH 2, 6, 13)",2026-06-02,AI
+H4912,מָשָׁל,discourse,ALL,"NUM 23:7,18 - ""lifted up his discourse"" matching JOB 27:1, 29:1 published ULT","In the construction nasa mashal (lift up discourse/oracle), published ULT uses ""discourse"" in JOB",2026-06-05,AI
+H2194,זָעַם,denounce,ALL,"NUM 23:7,8 - parallel with curse (H0779/H6895)","Distinguishes from the two curse verbs (H0779 arar, H6895 qabab) used in same passage",2026-06-05,AI
+H8443,תּוֹעָפָה,horns,ALL,NUM 23:22 - like the horns of a wild ox,In wild ox metaphor context; published ULT uses heights in PSA/JOB landscape contexts,2026-06-05,AI
+H5173,נַחַשׁ,omen,ALL,NUM 23:23 - no omen against Jacob,Noun form meaning divination/omen; paired with qesem (divination),2026-06-05,AI
+H0554,אָמֹץ,strong,ALL,"ZEC 6:3,7 - spotted strong horses",Only 2 occ both in ZEC 6; root means to be strong/mighty; not a color term despite some traditional renderings as gray,2026-06-06,AI
+H4818,מֶרְכָּבָה,chariot/chariots,ALL,ZEC 6:1-3 four chariots vision,Dominant rendering 29.6% of 71 occ; standard in narrative contexts,2026-06-06,AI
+H2470b,חָלָה,entreat the face of,ALL,ZEC 7:2 to entreat the face of Yahweh,"Piel of chalah + panim = ""entreat the face of."" Confirmed by PRO 19:6 and MAL 1:9 published patterns ""entreat the face of.""",2026-06-09,AI
+H8219,שְׁפֵלָה,Shephelah,ALL,ZEC 7:7 the Negev and the Shephelah,"Proper geographic name; Shephelah used in JDG 1:9, OBA 1:19, 1KI 10:27. ZEC master uses foothills but JDG and OBA published precedent prefer proper name Shephelah.",2026-06-09,AI
+H0480,אַלְלַי,Woe,ALL,MIC 7:1 only occurrence in published = JOB 10:15,100% in Strong's index (1 occ),2026-06-17,AI
+H1942,הַוָּה,desire (in MIC 7:3 context of what powerful want),ALL,MIC 7:3 desire of his soul; can also mean destruction/calamity,"Context-dependent: desire in MIC 7:3 (what the great one speaks), calamity/destruction elsewhere",2026-06-17,AI
+H2312,חֵדֶק,brier,ALL,MIC 7:4 the best of them is like a brier,100% in Strong's index (1 occ: PRO 15),2026-06-17,AI
+H3998,מְבוּכָה,confusion,ALL,MIC 7:4 now their confusion will be,50% in Strong's index (2 occ: ISA 22). Only other option is unattested.,2026-06-17,AI
+H2197,זַעַף,rage,ALL,MIC 7:9 rage of Yahweh I will bear,"Published: raging (25%, ISA 30/JON 1), rage (12.5%, PRO 19). Noun form = rage.",2026-06-17,AI
+H2731,חֲרָדָה,trembling,ALL,JER 30:5 - voice of trembling,trembling is the dominant published rendering (1SA 14:15); also in ISA 21:1 as terror,2026-06-17,AI
+H0605,אָנַשׁ,incurable,ALL,"JER 30:12,15 - incurable wound/pain",JOB 34:6 uses incurable; ISA 17:9 uses grievous; incurable fits wound/breaking context,2026-06-17,AI
+H4205,מָזוֹר,wound,ALL,JER 30:13 - for a wound,HOS 5:13 uses wound in published ULT; 4 occ total,2026-06-17,AI
+H1100,בְּלִיַּעַל,worthlessness / the worthless one,ALL,NAM 1:11 counselor of worthlessness; 1:15 the worthless one,"Beliyyaal: noun rendered abstractly 'worthlessness' in construct (1:11), and as substantive 'the worthless one' for the personified subject (1:15).",2026-06-20,AI
+H5349,נֹקֵד,sheepbreeders,ALL,AMO 1:1 plural noqedim,"Same term as Mesha in 2KI 3:4 (""sheep breeder""); kept literal rather than generic ""shepherds""",2026-06-25,AI
+H7725,אֲשִׁיבֶנּוּ,I will not turn it back,ALL,"AMO 1 refrain, Hiphil yiqtol + 3ms suffix","Literal Hiphil causative with masc suffix; avoid interpretive ""turn away punishment""",2026-06-25,AI
+H7875,שִׂיד,lime,ALL,AMO 2:1 burning bones to lime,"calcining bones; ISA 33 attestation also ""lime""",2026-06-25,AI
+H5781,עוּק,press down,ALL,"AMO 2:13 Hiphil ptcp + Hiphil yiqtol, cart imagery",means press/weigh down; kept same verb in both parallel clauses,2026-06-25,AI
+H5414,נָתֹן תִּתֵּן,Giving you shall give,ALL,NUM 27:7 infinitive absolute + imperfect (Vqa + Vqi2ms),"Inf abs preserved as reduplication per ULT rule E; master ULT had ""certainly give"" which obscures the form",2026-06-26,AI
+H3045,יָדַעְתִּי,have known,ALL,"AMO 3:2 - ""Only you have I known""","Literal ""know""; do not interpret as ""chosen"" (master ULT gloss). Dominant rendering of H3045 is know/known.",2026-06-29,AI
+H4464,מַמְזֵר,a mixed people,ALL,"ZEC 9:6; collective sense ""mongrel/people of mixed descent""",,2026-06-29,AI
+H0120,אָדָם,mankind,ALL,ZEC 9:1 עֵין אָדָם — generic collective humanity,"Generic adam rendered ""mankind""; master ULT had ""humanity""",2026-06-29,AI
+H2038,הַרְמוֹן,Harmon,ALL,AMO 4:3 proper noun + directional he,Transliterate as place name; not in published index,2026-06-30,AI
+H1729,דּוּגָה,fishhooks,ALL,AMO 4:2 parallel with H6793 hooks (sirot dugah),,2026-06-30,AI
+H7993,וְהִשְׁלַכְתֶּנָה,you will throw yourselves out,AMO,Amos 4:3,"Form is Hiphil 2fp (He,C:Vhq2fp), active/causative — NOT Hophal passive. Per ULT-gen voice policy, render active. Master ULT's passive ""you will be thrown out"" is the error the skill corrects. Reflexive sense (""throw yourselves out"") supplies implied object while preserving Hiphil active voice.",2026-06-30,AI
+H5550,סֹלְלָה,siege mounds,JER,JER 32:24 — siege mounds have come to the city,"Plural feminine; ""mound"" dominant in index, plural here",2026-06-30,AI
+H5201,נָטַר,maintain,ALL,NAM 1:2 he maintains {wrath} against his enemies,natar of God keeping anger; object {wrath} supplied in brackets (parallel to master of wrath). Matches PSA 103 'maintain'.,2026-07-01,AI
+H4414b,מָלַח,will be dissipated,ISA,ISA 51:6 heavens like smoke — Niphal imperfect,Niphal passive must carry English passive voice: 'will be dissipated like smoke' not active 'will vanish like smoke'. Active rendering misrepresents the stem and strips divine agency. See literalness_patterns.md §Niphal Passive Voice.,2026-07-02,human
+H7654,שְׂבָעָה,sufficiency,ISA,ISA 55:2 for {what is} not to sufficiency,Prepositional-nominal with negation stays nominal: do not verbalize the noun ('for what does not satisfy') and do not rewrite the existential negation as a possession verb. See literalness_patterns.md §Prepositional Nominals with Negation.,2026-07-02,human
+H7911,שָׁכַח,{people} forgot,LAM,LAM 2:6 Qal active with no explicit subject,Active Hebrew verb: supply implied subject in brackets to preserve active voice - '{people} forgot' not 'is forgotten'. See ULT-gen SKILL.md bracket rules.,2026-07-02,human
+H7646,שָׂבַע,let {people} fill him,LAM,LAM 3:30 active verb with no explicit subject,Supply implied subject in brackets: 'let {people} fill him' not 'let him be filled'.,2026-07-02,human
