@@ -17,6 +17,7 @@ The note should remind translators that their language may have a comparable exp
 
 ### Hebrew Markers
 - **hinneh** ("behold/look") - common attention marker
+- **we'attah** ("and now") - common attention marker
 - Expressions of sudden notice or emphasis
 
 ### Greek Markers
@@ -27,6 +28,7 @@ The note should remind translators that their language may have a comparable exp
 - "Look"
 - "See"
 - "Listen"
+- "And now"
 
 ## Examples from Published Notes
 

@@ -145,7 +145,7 @@ Integrate detection script output first - passives and abstract nouns are pre-id
 
 ## Issue Type Reference
 
-Read issue-type files from `.claude/skills/issue-identification/` as needed. The 93 issue types are organized in categories:
+Read issue-type files from `.claude/skills/issue-identification/` as needed. The 94 issue types are organized in categories:
 
 - **A. Discourse Structure**: writing-newevent, writing-background, writing-foreground, figs-quotations, writing-poetry, etc.
 - **B. Grammar**: figs-activepassive, writing-pronouns, figs-abstractnouns, figs-possession, etc.
