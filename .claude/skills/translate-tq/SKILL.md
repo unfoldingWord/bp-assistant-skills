@@ -37,8 +37,9 @@ Steps:
 1. **Read the task JSON** at the given path. Note `translateColumns` and
    `passThroughColumns` — they tell you exactly which columns to touch.
 2. **Read `packFile`** — the translation context: brief, standing
-   instructions, quality standards, terminology constraints, and validated
-   example translations. Follow it. Approved terminology renderings are HARD
+   instructions, terminology constraints (`preferred` = HARD; honor
+   `forbidden`/`do_not_translate`/`admitted`), and validated example
+   translations. Follow it. Preferred terminology renderings are HARD
    constraints.
 3. **Read `batchFile`** — a 7-column tQ TSV
    (`Reference	ID	Tags	Quote	Occurrence	Question	Response`).
@@ -70,7 +71,7 @@ Steps:
   the brief specifies. The Question asks about the passage; the Response is
   the expected answer — keep the question/answer relationship intact and
   natural in the target language.
-- Use the pack's approved terminology; absent an entry, use the conventional
+- Use the pack's preferred terminology; absent an entry, use the conventional
   target-language Bible spelling for names and terms.
 - Imitate the **validated examples** — they are human-approved style ground
   truth.

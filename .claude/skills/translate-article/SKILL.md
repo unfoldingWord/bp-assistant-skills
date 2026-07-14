@@ -39,9 +39,10 @@ The invocation argument is the path to a **task JSON** file:
 Steps:
 
 1. **Read the task JSON** at the given path.
-2. **Read `packFile`** — brief, standing instructions, quality standards,
-   terminology constraints, and validated examples. Approved terminology
-   renderings are HARD constraints.
+2. **Read `packFile`** — brief, standing instructions, terminology
+   constraints (`preferred` = HARD; honor `forbidden`/`do_not_translate`/
+   `admitted`), and validated examples. Preferred terminology renderings
+   are HARD constraints.
 3. **Read `sourceFile`** — the {sourceLangName} markdown body.
 4. **Write `outputFile`** — the same document translated into
    {targetLangName}, structure and links preserved (see iron rules).
@@ -73,7 +74,7 @@ Steps:
 - Translate the **meaning naturally** into {targetLangName} at the register
   the brief specifies — these articles are read by translators and church
   leaders, not scholars.
-- Use the pack's approved terminology for biblical terms and names; absent an
+- Use the pack's preferred terminology for biblical terms and names; absent an
   entry, use the conventional target-language Bible spelling.
 - Imitate the **validated examples** — they are human-approved style ground
   truth. Where the pack gives a phrasing template for this article, follow it.

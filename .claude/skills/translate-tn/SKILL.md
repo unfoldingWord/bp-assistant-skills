@@ -32,9 +32,11 @@ Steps:
 
 1. **Read the task JSON** at the given path.
 2. **Read `packFile`** — the translation context: brief, standing
-   instructions, quality standards, terminology constraints, note templates
-   for this batch's note types, and validated example translations. Follow
-   it. Approved terminology renderings are HARD constraints.
+   instructions, optional quality standards, terminology constraints
+   (`preferred` = HARD; honor `forbidden`/`do_not_translate`/`admitted`),
+   note templates for this batch's note types, and validated example
+   translations. Follow it. Preferred terminology renderings are HARD
+   constraints.
 3. **Read `batchFile`** — a 7-column tN TSV
    (`Reference	ID	Tags	SupportReference	Quote	Occurrence	Note`).
 4. **Write `outputFile`** — the same TSV, same header, same rows in the
@@ -75,8 +77,8 @@ Steps:
   template exists, mirror the English note's structure.
 - Imitate the **validated examples** — they are human-approved style ground
   truth.
-- English technical terms of the unfoldingWord ecosystem that have an
-  approved terminology entry use it; otherwise translate descriptively.
+- English technical terms of the unfoldingWord ecosystem that have a
+  preferred terminology entry use it; otherwise translate descriptively.
 - Bible names and terms: use the pack's terminology; absent that, use the
   conventional target-language Bible spelling (e.g. for Arabic, Van Dyke
   conventions).
