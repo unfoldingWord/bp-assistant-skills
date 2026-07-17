@@ -1,6 +1,7 @@
 ---
 name: initial-pipeline
 description: Orchestrate ULT-gen, issue-id, and UST-gen as a multi-agent pipeline for a single chapter. Use when asked to run the pipeline, generate content for a chapter, or start a new chapter.
+allowed-tools: Read, Grep, Glob, Write, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__*, TeamCreate, Task, TaskGet, TaskList
 ---
 
 # Initial Pipeline Orchestrator
