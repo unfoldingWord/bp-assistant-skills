@@ -50,14 +50,72 @@ Run workspace tools via the CLI wrapper: `node /app/src/workspace-tools-cli.js <
 
 ## Critical Orchestrator Rule
 
-This pipeline uses async teammates. Narrative waiting is not enough.
+This pipeline uses async teammates. Narrative waiting is not enough, and a mental
+model of "the agents said they finished" is not enough. File existence on disk
+is the only truth.
 
 Between waves, the orchestrator must explicitly:
 1. Poll agent state with `TaskGet` or `TaskList`
-2. Verify the expected files exist
+2. Verify the expected files exist with a real filesystem check (see below)
 3. Only then continue to the next wave
 
 Do not return success after launching agents or after seeing partial progress.
+
+### Mechanical Completion Checklist (mandatory)
+
+Before emitting any completion, summary, or final response, run this exact Bash
+check and paste its output into your final message. If it prints anything other
+than three `OK` lines, you are NOT done -- continue orchestrating, do not
+return success.
+
+```bash
+for f in output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm \
+         output/issues/<BOOK>/<BOOK>-<CH>.tsv \
+         output/AI-UST/<BOOK>/<BOOK>-<CH>.usfm; do
+  if [ -s "$f" ]; then echo "OK   $f"; else echo "MISS $f"; fi
+done
+```
+
+Rules:
+- The check must be your last Bash call before ending the turn. A narrative "all
+  outputs written" without this Bash output immediately preceding it is a
+  protocol violation.
+- Any `MISS` line means the wave that produces that file has not actually run
+  to completion. Return to the appropriate wave -- do not paper over it in the
+  summary.
+- Use the same three-line check between waves for each intermediate file
+  (`$TMP/wave2_structure.tsv`, `$TMP/wave2_rhetoric.tsv`,
+  `$TMP/wave3_challenges.tsv`, `$TMP/merged_issues.tsv`) before advancing.
+  "The teammate said it wrote the file" is not a substitute for `test -s`.
+
+### Zero-Progress Guard (team-spawn failure detection)
+
+After `TeamCreate` and the Wave 1 `ult-gen` spawn, run this check within a few
+tool calls to confirm the team is actually alive and producing artifacts:
+
+```bash
+ls -la tmp/pipeline-<BOOK>-<CHAPTER>/ 2>&1 | head -20
+```
+
+If the directory does not exist, and no Wave 1 output file has appeared, and
+`TaskList` shows no live teammate for `ult-gen`, the team-spawn or subagent
+launch has silently failed. Do NOT continue narrating waves that cannot be
+running. Instead:
+1. Re-issue `TeamCreate` (or verify the existing team via `TeamList`)
+2. Re-spawn `ult-gen` explicitly
+3. If a second attempt also produces zero artifacts, stop and report the
+   spawn failure -- do not return `subtype: success`.
+
+### Resumed-Session Preflight
+
+If this session was resumed by the runtime (you will see an appended completion
+guardrail in the system prompt), your first action is the Mechanical Completion
+Checklist above, followed by `ls tmp/pipeline-<BOOK>-<CHAPTER>/` and `TaskList`.
+State explicitly which Wave you are resuming from based on what exists on disk.
+If nothing exists (no tmp dir, no ULT, no issues, no UST), treat this as a
+cold start and re-run the Zero-Progress Guard steps -- do not assume prior
+progress that the filesystem does not corroborate.
+
 The task is only complete after all required Wave 1-6 outputs exist on disk:
 - `output/AI-ULT/<BOOK>/<BOOK>-<CH>.usfm`
 - `output/issues/<BOOK>/<BOOK>-<CH>.tsv`
