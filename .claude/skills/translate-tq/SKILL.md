@@ -75,6 +75,10 @@ Steps:
   target-language Bible spelling for names and terms.
 - Imitate the **validated examples** — they are human-approved style ground
   truth.
+- When the pack includes a "Scripture for these verses" section, use the
+  Target literal/simplified verse wording (when provided) so any quoted
+  phrases in the Question/Response match what the target-language Bible
+  actually says, rather than a fresh translation of the English.
 
 ## Repair mode
 
