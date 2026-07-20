@@ -36,7 +36,10 @@ Steps:
    (`preferred` = HARD; honor `forbidden`/`do_not_translate`/`admitted`),
    note templates for this batch's note types, and validated example
    translations. Follow it. Preferred terminology renderings are HARD
-   constraints.
+   constraints. The pack may also include a "Scripture for these verses"
+   section giving the source (ULT/UST) and, when available, the
+   target-language literal/simplified verse text for each verse in the
+   batch — use it per the bold/alternate-translation guidance below.
 3. **Read `batchFile`** — a 7-column tN TSV
    (`Reference	ID	Tags	SupportReference	Quote	Occurrence	Note`).
 4. **Write `outputFile`** — the same TSV, same header, same rows in the
@@ -57,11 +60,17 @@ Steps:
    + n) — copy that convention; never emit a real line break inside a row.
    Never emit a real tab inside any field.
 5. Markdown structure carries meaning — preserve it:
-   - `**bold**` marks quoted ULT words: keep the bold markers around the
-     corresponding translated words.
+   - `**bold**` marks words quoted from the literal Bible. In the
+     translation, keep the bold markers, and make the bold words **match
+     the wording of the Target literal (GLT/AVD/etc.) verse text** shown in
+     the pack's "Scripture for these verses" section for that verse, when
+     it is provided. Only when no target literal text is available,
+     translate the source bold words naturally.
    - `[bracketed]` segments after "Alternate translation:" are alternate
      renderings: translate their contents, keep the bracket structure and
-     count.
+     count, and phrase them so they read naturally in the target language
+     and are **consistent with the Target simplified (GST/NAV/etc.) verse
+     text** in the scripture section when provided.
    - Verse links like `[1:5](../01/05.md)` keep their targets untouched;
      translate only display text where it is prose.
 6. Numbers (verse/chapter references) in the source Note appear in the
@@ -82,6 +91,12 @@ Steps:
 - Bible names and terms: use the pack's terminology; absent that, use the
   conventional target-language Bible spelling (e.g. for Arabic, Van Dyke
   conventions).
+- When the pack's "Scripture for these verses" section provides target
+  literal/simplified verse text, prefer that actual wording for bold quotes
+  and alternate translations over a fresh word-for-word translation of the
+  English — the whole point is that translators recognize their own
+  Bible's wording. This never applies to the `Quote` column (iron rule 2
+  stands: it is Hebrew/Greek/Aramaic and is never touched).
 
 ## Repair mode
 
