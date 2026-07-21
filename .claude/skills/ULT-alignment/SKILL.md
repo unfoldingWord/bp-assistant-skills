@@ -14,18 +14,29 @@ This skill maps English ULT words to Hebrew source words. The workflow is two-st
 
 ## Workspace Tools Execution
 
-Run workspace tools via the blessed CLI wrapper:
+The workspace tools are the path for every step here. Run them via the blessed
+CLI wrapper as the primary form:
 
     node /app/src/workspace-tools-cli.js <tool_name> '<json-args>'
 
 stdout is the tool result (identical to what the MCP tool returns). If the JSON
 args contain quotes or newlines, pass `-` as the second argument and pipe the
-JSON on stdin via a heredoc. Fallback (if Bash is unavailable): call
-`mcp__workspace-tools__<tool_name>` with the same args.
+JSON on stdin via a heredoc. The CLI wrapper is preferred because it is the one
+Bash prefix on this skill's allow-list — it reaches every workspace tool — and
+has no MCP transport that can drop mid-run. Ergonomic alternate, available only
+for the `mcp__workspace-tools__*` tools named in this skill's `allowed-tools`:
+call `mcp__workspace-tools__<tool_name>` with the same args.
 
 Anywhere below shows a tool as `mcp__workspace-tools__<tool_name>({ ... })` or
 "use the `<tool_name>` tool" — invoke it through the CLI wrapper with that same
-argument object serialized to JSON. The MCP form remains a valid fallback.
+argument object serialized to JSON (the MCP form is the alternate when that tool
+is on the allow-list).
+
+Raw freeform shell (`ls`, `mkdir`, `grep`, `sed`, `cat`, pipelines) is off this
+mandated path — the allow-list does not cover it, so in a headless run those
+calls are auto-denied. Reach for raw shell only for read-only exploration, and
+if any call is denied, do not stop and wait: switch to the workspace-tools
+equivalent (CLI wrapper first, `mcp__workspace-tools__*` alternate) and continue.
 
 **Do NOT improvise your own alignment scripts** (hand-written `generate_*.js`,
 manual occurrence counting, `cat`-ing verses). Use only the `create_aligned_usfm`
@@ -286,10 +297,11 @@ Hebrew: בָּרָ֣א אֱלֹהִ֑ים (created God = God created)
 
 ### Step 1: Extract Hebrew Words
 
-Read the Hebrew USFM for the verse:
+Read the Hebrew USFM for the verse with the `read_usfm_chapter` tool (pass a
+`verseStart`/`verseEnd` to scope it to the verse you are aligning):
 
-```bash
-grep -A 20 "\\\\v 1$" data/hebrew_bible/01-GEN.usfm | head -20
+```
+node /app/src/workspace-tools-cli.js read_usfm_chapter '{"file":"data/hebrew_bible/01-GEN.usfm","chapter":1,"verseStart":1,"verseEnd":1}'
 ```
 
 Parse each `\w` tag to extract:
@@ -353,20 +365,20 @@ The extracted text should match exactly - same words, same order, same punctuati
 
 **Part B: Verify USFM marker placement**
 
-Since the extraction script removes USFM markers (\q1, \q2, \v, etc.), verify marker placement separately:
+Since the extraction script removes USFM markers (\q1, \q2, \v, etc.), verify the
+aligned output's structure with the `validate_usfm_structure` tool rather than
+diffing markers by hand. Pass the original unaligned ULT as `source` so the tool
+compares markers between the aligned output and the source:
 
-```bash
-# Extract USFM markers from aligned output
-grep -oE '\\(q[12]|v [0-9]+|p|s[0-9]?)' aligned.usfm | sort > /tmp/aligned_markers.txt
-
-# Extract markers from original unaligned ULT
-grep -oE '\\(q[12]|v [0-9]+|p|s[0-9]?)' original.usfm | sort > /tmp/original_markers.txt
-
-# Compare - should be identical
-diff /tmp/aligned_markers.txt /tmp/original_markers.txt
+```
+node /app/src/workspace-tools-cli.js validate_usfm_structure '{"usfm":"output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm","source":"output/AI-ULT/{BOOK}/{BOOK}-unaligned.usfm","chapter":{CHAPTER}}'
 ```
 
-Both comparisons should show no differences. If there are differences, the alignment process has altered the text and must be corrected.
+A clean result means the verse/paragraph/poetry markers are well-formed and match
+the source. The
+field-level faithfulness check in Step 7.5 (`validate_alignment_integrity`) then
+confirms every Hebrew word is aligned. If either reports a problem, the alignment
+process altered the text and must be corrected.
 
 ## Conversion to Aligned USFM
 
@@ -516,17 +528,17 @@ Before finalizing alignment JSON:
 
 Use Step 7's two-part verification to ensure the aligned output perfectly preserves the original text:
 
-1. **Text verification** - Extract English from aligned USFM using `mcp__workspace-tools__extract_ult_english` and diff against original unaligned ULT
-2. **USFM marker verification** - Compare USFM markers (\q1, \q2, \v, etc.) between aligned and original
+1. **Text verification** - Extract English from aligned USFM using `extract_ult_english` (CLI wrapper first, `mcp__workspace-tools__extract_ult_english` alternate) and diff against original unaligned ULT
+2. **USFM marker verification** - Validate the aligned structure with `validate_usfm_structure` (Step 7 Part B)
 
-Both must match exactly. Any differences indicate the alignment process altered the text and must be corrected before finalizing.
+Both must pass. Any problem indicates the alignment process altered the text and must be corrected before finalizing.
 
-Quick single-verse check:
-```bash
-# Extract words from aligned output
-grep -oE '\\w [^|]+\|' aligned.usfm | sed 's/\\w //;s/|//' | tr '\n' ' '
+For a quick single-verse spot-check, read the aligned verse back with the
+`read_usfm_chapter` tool (`plain: true` strips the alignment milestones so you
+see just the words) and confirm it matches the original ULT text word-for-word:
 
-# Should match original ULT text word-for-word
+```
+node /app/src/workspace-tools-cli.js read_usfm_chapter '{"file":"output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm","chapter":{CHAPTER},"verseStart":1,"verseEnd":1,"plain":true}'
 ```
 
 ## Step 7.5: Verify Alignment Field Integrity
