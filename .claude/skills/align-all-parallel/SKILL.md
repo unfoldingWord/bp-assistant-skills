@@ -3,7 +3,7 @@ name: align-all-parallel
 
 description: Run ULT-alignment and UST-alignment in parallel for a single chapter. Use when asked to align both ULT and UST or run all alignments for a chapter.
 
-allowed-tools: Task, Read, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__read_usfm_chapter, mcp__workspace-tools__merge_aligned_usfm
+allowed-tools: Task, Read, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__read_usfm_chapter, mcp__workspace-tools__plan_alignment_batches, mcp__workspace-tools__merge_aligned_usfm
 ---
 
 ## Quick Alignment Pipeline
@@ -109,16 +109,32 @@ every chapter verse with `\zaln-s` markers.
 
 ## Step 2b: Split into Batches (> 18 verses)
 
-Determine the number of batches, then split evenly:
-- Number of batches = ceil(N / 18)
-- Batch size = ceil(N / numBatches) — distributes verses evenly
-- Batch 1: verses 1–batchSize, Batch 2: verses (batchSize+1)–(2×batchSize), etc.
-- Last batch gets the remainder
+Get the batch ranges from the deterministic planner rather than computing them by
+hand — hand arithmetic on long chapters has dropped the chapter tail (EZK 16, 63
+verses, was mis-split into 1–16 / 16–30 / 31–45 / 46–60, leaving 61–63 unaligned;
+see #233). Run:
+
+    node /app/src/workspace-tools-cli.js plan_alignment_batches '{"book":"BOOK","chapter":CH,"verseCount":N}'
+
+(Fallback: `mcp__workspace-tools__plan_alignment_batches` with the same args.) It
+returns `batches` (each with `start`/`end`/`verses`) plus `coversChapter`. Use
+those ranges verbatim.
+
+The planner implements: number of batches = ceil(N / 18); batch size =
+ceil(N / numBatches), distributed evenly with the last batch taking the
+remainder. The batches are contiguous, non-overlapping, and the **last batch
+always ends at the final verse N**.
 
 Examples:
 - 22 verses → 2 batches → 11 each (v1–11, v12–22)
 - 56 verses → 4 batches → 14 each (v1–14, v15–28, v29–42, v43–56)
-- 176 verses → 10 batches → 18 each (v1–18, v19–36, ... v163–176)
+- 63 verses → 4 batches (v1–16, v17–32, v33–48, v49–63)
+- 176 verses → 10 batches (v1–18, v19–36, ... v163–176)
+
+Before spawning, sanity-check the ranges: batch 1 starts at v1, each batch starts
+one verse after the previous batch ends (no gaps, no overlaps), and the last batch
+ends at verse N. If `coversChapter` is false or the ranges fail this check, re-run
+the planner — do not spawn subagents over an incomplete plan.
 
 ## Step 2c: Spawn ALL Batches in Parallel
 
