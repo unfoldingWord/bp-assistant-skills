@@ -85,11 +85,17 @@ cannot use (the call is auto-denied and the denial locks the subagent out of
 all further tools — bp-assistant#242):
 
     Read the file /data/workspace/.claude/skills/{ULT,UST}-alignment/SKILL.md
-    and follow its process for BOOK CH --verses START-END --{ult,ust} <path>.
+    and follow its process for BOOK CH --{ult,ust} <path>.
     Do NOT invoke the Skill tool. Headless run — use Read and the
     workspace-tools CLI wrapper (node /app/src/workspace-tools-cli.js), not raw
     shell, for any file checks; if a tool call is denied, switch to an allowed
     tool and continue — never stop to wait for a user.
+
+Here in Step 2a the subagent aligns the whole chapter, so the command line has
+no `--verses` (that is what makes the sub-skill write the whole-chapter
+`BOOK-CH-aligned.usfm`). Batch subagents in Step 2c add `--verses START-END`
+to the command line, which routes the sub-skill to the partial
+`BOOK-CH-vSTART-vEND-aligned.usfm` output.
 
 Wait for all spawned agents to complete, then go to Step 2a-verify.
 
