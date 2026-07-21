@@ -76,14 +76,20 @@ step on this path.
 
 Spawn agents in parallel (single message — do not wait between them):
 
-- If running ULT: spawn `ult-align` subagent (`model: "opus"`, `effort: "medium"`, skill: ULT-alignment)
-- If running UST: spawn `ust-align` subagent (`model: "opus"`, `effort: "medium"`, skill: UST-alignment)
+- If running ULT: spawn `ult-align` subagent (`model: "opus"`, `effort: "medium"`) with the ULT-alignment prompt template above
+- If running UST: spawn `ust-align` subagent (`model: "opus"`, `effort: "medium"`) with the UST-alignment prompt template above
 
-Include this line in every subagent prompt (here and in Step 2c), so it reaches
-the agent before it reads its skill: "Headless run — use Read and the
-workspace-tools CLI wrapper (node /app/src/workspace-tools-cli.js), not raw
-shell, for any file checks; if a tool call is denied, switch to an allowed tool
-and continue — never stop to wait for a user."
+Compose each subagent prompt from this template (here and in Step 2c) — the
+Skill-file Read replaces any Skill tool invocation, which headless sub-agents
+cannot use (the call is auto-denied and the denial locks the subagent out of
+all further tools — bp-assistant#242):
+
+    Read the file /data/workspace/.claude/skills/{ULT,UST}-alignment/SKILL.md
+    and follow its process for BOOK CH --verses START-END --{ult,ust} <path>.
+    Do NOT invoke the Skill tool. Headless run — use Read and the
+    workspace-tools CLI wrapper (node /app/src/workspace-tools-cli.js), not raw
+    shell, for any file checks; if a tool call is denied, switch to an allowed
+    tool and continue — never stop to wait for a user.
 
 Wait for all spawned agents to complete, then go to Step 2a-verify.
 
@@ -161,9 +167,9 @@ batches instead of re-aligning everything (and timing out again).
 Launch the still-needed batch subagents in a **single message** — do not wait between batches:
 
 - For each batch K (1..numBatches) that is NOT already complete:
-  - If running ULT: spawn `ult-align-K` subagent (`model: "opus"`, `effort: "medium"`, skill: ULT-alignment) for `BOOK CH --verses START-END`
-  - If running UST: spawn `ust-align-K` subagent (`model: "opus"`, `effort: "medium"`, skill: UST-alignment) for `BOOK CH --verses START-END`
-- Include the headless-run line from Step 2a in every batch subagent prompt
+  - If running ULT: spawn `ult-align-K` subagent (`model: "opus"`, `effort: "medium"`) with the Step 2a ULT prompt template for `BOOK CH --verses START-END`
+  - If running UST: spawn `ust-align-K` subagent (`model: "opus"`, `effort: "medium"`) with the Step 2a UST prompt template for `BOOK CH --verses START-END`
+- Every batch subagent prompt uses the Step 2a template (Read the skill file; never the Skill tool)
 - All still-needed subagents launch at once (e.g., 4 batches × 2 types = 8 parallel subagents)
 
 If every batch is already complete, skip straight to Step 2d/2e/2f (verify + consistency check + merge).
