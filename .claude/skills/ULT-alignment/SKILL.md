@@ -34,9 +34,10 @@ is on the allow-list).
 
 Raw freeform shell (`ls`, `mkdir`, `grep`, `sed`, `cat`, pipelines) is off this
 mandated path — the allow-list does not cover it, so in a headless run those
-calls are auto-denied. Reach for raw shell only for read-only exploration, and
-if any call is denied, do not stop and wait: switch to the workspace-tools
-equivalent (CLI wrapper first, `mcp__workspace-tools__*` alternate) and continue.
+calls are auto-denied. That includes existence probes: to check whether a file
+is present, just try `Read` on it (a failed Read means it is absent). If any
+call is denied, do not stop and wait: switch to the tool equivalent (`Read`, or
+the CLI wrapper first, `mcp__workspace-tools__*` alternate) and continue.
 
 **Do NOT improvise your own alignment scripts** (hand-written `generate_*.js`,
 manual occurrence counting, `cat`-ing verses). Use only the `create_aligned_usfm`
