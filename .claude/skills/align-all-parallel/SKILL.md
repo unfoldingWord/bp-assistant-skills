@@ -21,6 +21,12 @@ quotes, pass `-` as the second arg and pipe the JSON on stdin (heredoc).
 Fallback (if Bash is unavailable): call `mcp__workspace-tools__<tool_name>` with
 the same args.
 
+This skill runs headless — no user is present, and raw freeform shell (`ls`,
+`mkdir`, `cat`, compound one-liners) is auto-denied. To check whether a file
+exists, just try `Read` on it (a failed Read means it is absent). If any tool
+call is denied, do not stop and wait: switch to the tool equivalent (`Read`, or
+the CLI wrapper) and continue.
+
 - **Do NOT improvise your own alignment/merge scripts** (e.g. `generate_*.js`).
   Per-verse conversion happens inside the subagents via the `create_aligned_usfm`
   tool; the full-chapter assembly is done here via `merge_aligned_usfm` (Step 2f).
@@ -72,6 +78,12 @@ Spawn agents in parallel (single message — do not wait between them):
 
 - If running ULT: spawn `ult-align` subagent (`model: "opus"`, `effort: "medium"`, skill: ULT-alignment)
 - If running UST: spawn `ust-align` subagent (`model: "opus"`, `effort: "medium"`, skill: UST-alignment)
+
+Include this line in every subagent prompt (here and in Step 2c), so it reaches
+the agent before it reads its skill: "Headless run — use Read and the
+workspace-tools CLI wrapper (node /app/src/workspace-tools-cli.js), not raw
+shell, for any file checks; if a tool call is denied, switch to an allowed tool
+and continue — never stop to wait for a user."
 
 Wait for all spawned agents to complete, then go to Step 2a-verify.
 
@@ -151,6 +163,7 @@ Launch the still-needed batch subagents in a **single message** — do not wait 
 - For each batch K (1..numBatches) that is NOT already complete:
   - If running ULT: spawn `ult-align-K` subagent (`model: "opus"`, `effort: "medium"`, skill: ULT-alignment) for `BOOK CH --verses START-END`
   - If running UST: spawn `ust-align-K` subagent (`model: "opus"`, `effort: "medium"`, skill: UST-alignment) for `BOOK CH --verses START-END`
+- Include the headless-run line from Step 2a in every batch subagent prompt
 - All still-needed subagents launch at once (e.g., 4 batches × 2 types = 8 parallel subagents)
 
 If every batch is already complete, skip straight to Step 2d/2e/2f (verify + consistency check + merge).

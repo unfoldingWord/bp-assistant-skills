@@ -36,9 +36,10 @@ is on the allow-list).
 
 Raw freeform shell (`ls`, `mkdir`, `grep`, `sed`, `cat`, pipelines) is off this
 mandated path — the allow-list does not cover it, so in a headless run those
-calls are auto-denied. Reach for raw shell only for read-only exploration, and
-if any call is denied, do not stop and wait: switch to the workspace-tools
-equivalent (CLI wrapper first, `mcp__workspace-tools__*` alternate) and continue.
+calls are auto-denied. That includes existence probes: to check whether a file
+is present, just try `Read` on it (a failed Read means it is absent). If any
+call is denied, do not stop and wait: switch to the tool equivalent (`Read`, or
+the CLI wrapper first, `mcp__workspace-tools__*` alternate) and continue.
 
 **Do NOT improvise your own alignment scripts** (hand-written `generate_*.js`,
 manual occurrence counting, `cat`-ing verses). Use only the `create_aligned_usfm`
@@ -56,7 +57,7 @@ You need:
 
 ## Using Alignment Hints
 
-If `output/AI-UST/hints/<BOOK>-<CH>.json` exists, read it first. These hints are a rough mapping from the UST generator showing which Hebrew words contributed to each English phrase. The generator wrote them while the translation decisions were fresh, so they capture the "why" behind each phrase.
+Try `Read` on `output/AI-UST/hints/<BOOK>-<CH>.json` first — a failed Read just means there are no hints for this chapter; move on without them (don't probe for the file with `ls`). These hints are a rough mapping from the UST generator showing which Hebrew words contributed to each English phrase. The generator wrote them while the translation decisions were fresh, so they capture the "why" behind each phrase.
 
 Use hints as your starting point:
 - Refine phrase boundaries (split large groups where meaning can be divided)
