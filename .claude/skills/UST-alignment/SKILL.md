@@ -16,18 +16,29 @@ UST alignment is fundamentally different from ULT alignment. Where ULT aims for 
 
 ## Workspace Tools Execution
 
-Run workspace tools via the blessed CLI wrapper:
+The workspace tools are the path for every step here. Run them via the blessed
+CLI wrapper as the primary form:
 
     node /app/src/workspace-tools-cli.js <tool_name> '<json-args>'
 
 stdout is the tool result (identical to what the MCP tool returns). If the JSON
 args contain quotes or newlines, pass `-` as the second argument and pipe the
-JSON on stdin via a heredoc. Fallback (if Bash is unavailable): call
-`mcp__workspace-tools__<tool_name>` with the same args.
+JSON on stdin via a heredoc. The CLI wrapper is preferred because it is the one
+Bash prefix on this skill's allow-list — it reaches every workspace tool — and
+has no MCP transport that can drop mid-run. Ergonomic alternate, available only
+for the `mcp__workspace-tools__*` tools named in this skill's `allowed-tools`:
+call `mcp__workspace-tools__<tool_name>` with the same args.
 
 Anywhere below shows a tool as `mcp__workspace-tools__<tool_name>({ ... })` or
 "use the `<tool_name>` tool" — invoke it through the CLI wrapper with that same
-argument object serialized to JSON. The MCP form remains a valid fallback.
+argument object serialized to JSON (the MCP form is the alternate when that tool
+is on the allow-list).
+
+Raw freeform shell (`ls`, `mkdir`, `grep`, `sed`, `cat`, pipelines) is off this
+mandated path — the allow-list does not cover it, so in a headless run those
+calls are auto-denied. Reach for raw shell only for read-only exploration, and
+if any call is denied, do not stop and wait: switch to the workspace-tools
+equivalent (CLI wrapper first, `mcp__workspace-tools__*` alternate) and continue.
 
 **Do NOT improvise your own alignment scripts** (hand-written `generate_*.js`,
 manual occurrence counting, `cat`-ing verses). Use only the `create_aligned_usfm`
@@ -260,9 +271,10 @@ The validation script in `--ust` mode allows unaligned Hebrew indices.
 
 ### Step 1: Extract Hebrew Words
 
-Read the Hebrew USFM for the verse:
-```bash
-grep -A 20 "\\\\v 1$" data/hebrew_bible/19-PSA.usfm | head -20
+Read the Hebrew USFM for the verse with the `read_usfm_chapter` tool (scope it to
+the verse with `verseStart`/`verseEnd`):
+```
+node /app/src/workspace-tools-cli.js read_usfm_chapter '{"file":"data/hebrew_bible/19-PSA.usfm","chapter":1,"verseStart":1,"verseEnd":1}'
 ```
 
 Parse each `\w` tag to extract word form, Strong's number, lemma, and morphology.
@@ -387,14 +399,16 @@ node /app/src/workspace-tools-cli.js curly_quotes '{"input":"output/AI-UST/{BOOK
 
 Before anything else, confirm the aligned UST contains different English than the aligned ULT. If these are the same, the alignment was run against the ULT source — discard and redo.
 
-```bash
-# Extract English words from both aligned files and compare
-BOOK=HOS; CH=01
-diff \
-  <(grep -oE '\\w [^|]+\|' output/AI-UST/$BOOK/$BOOK-$CH-aligned.usfm | sed 's/\\w //;s/|//') \
-  <(grep -oE '\\w [^|]+\|' output/AI-ULT/$BOOK/$BOOK-$CH-aligned.usfm | sed 's/\\w //;s/|//') \
-  > /dev/null && echo "ERROR: UST and ULT aligned text are identical — wrong --source file was used" || echo "OK: UST and ULT text differ as expected"
+Read the plain (milestone-stripped) English of each aligned file with the
+`read_usfm_chapter` tool and confirm the UST text differs from the ULT text:
+
 ```
+node /app/src/workspace-tools-cli.js read_usfm_chapter '{"file":"output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm","chapter":{CHAPTER},"plain":true}'
+node /app/src/workspace-tools-cli.js read_usfm_chapter '{"file":"output/AI-ULT/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm","chapter":{CHAPTER},"plain":true}'
+```
+
+If the two outputs are identical, the wrong `--source` file was used — discard
+and redo. They should read as clearly different English (UST is meaning-based).
 
 ### Step 1: Verify English Text Preservation
 
@@ -410,9 +424,11 @@ In UST mode, brackets should appear OUTSIDE milestones:
 \zaln-s ...\*{word}\zaln-e\*             # wrong (ULT style)
 ```
 
-Quick check:
-```bash
-grep -oE '\\w [^|]+\|' aligned.usfm | sed 's/\\w //;s/|//' | tr '\n' ' '
+Quick check — read the aligned USFM back (without `plain`, so the milestones and
+brackets are visible) and confirm the `{` brackets sit outside the `\zaln-s`/`\w`
+milestones:
+```
+node /app/src/workspace-tools-cli.js read_usfm_chapter '{"file":"output/AI-UST/{BOOK}/{BOOK}-{CHAPTER}-aligned.usfm","chapter":{CHAPTER},"verseStart":1,"verseEnd":1}'
 ```
 
 ### Step 3: Verify Alignment Field Integrity
