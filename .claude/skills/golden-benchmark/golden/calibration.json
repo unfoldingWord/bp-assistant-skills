@@ -1,9 +1,9 @@
 {
   "generatedBy": "golden-benchmark/scripts/build_calibration.mjs",
-  "fetchedAt": "2026-07-02T14:29:27.015Z",
+  "fetchedAt": "2026-07-23T20:19:57.223Z",
   "sources": {
     "tn": "en_tn branch/master",
-    "ult": "en_ult tag/v88"
+    "ult": "en_ult tag/v89"
   },
   "countingRules": "verse-anchored notes only; front:intro and chapter :intro rows excluded; chapter verse count = highest verse number in published ULT",
   "goldTrio": {

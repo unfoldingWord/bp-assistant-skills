@@ -29,7 +29,7 @@ All paths relative to project root:
 - `data/cache/` - Generated indexes (Strong's index JSON, ~4MB)
 - `data/quick-ref/` - Accumulated decisions from ULT-gen runs (CSV)
 
-**published_* vs master_***: `published_*` contains only the 25 v88 officially released OT books, fetched from the pinned release tag — these are authoritative for vocabulary precedent and Strong's index. `master_*` is for pipeline work on non-published books; always fetch fresh before use, values are not to be considered authoritative.
+**published_* vs master_***: `published_*` contains only the 27 v89 officially released OT books, fetched from the pinned release tag — these are authoritative for vocabulary precedent and Strong's index. `master_*` is for pipeline work on non-published books; always fetch fresh before use, values are not to be considered authoritative.
 - `translation-issues.csv` - All 94 translation issues (complete)
 
 ## Output

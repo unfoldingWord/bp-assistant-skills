@@ -6,7 +6,7 @@ allowed-tools: Read, Grep, Glob, Bash, Task
 
 ## Purpose
 
-Turn "does the output feel polished?" into numbers that can be compared before and after a skill change. The benchmark compares freshly generated ULT/UST/TN for a golden chapter against the published human-polished version (v88 release era), and re-tests every previously fixed quality bug.
+Turn "does the output feel polished?" into numbers that can be compared before and after a skill change. The benchmark compares freshly generated ULT/UST/TN for a golden chapter against the published human-polished version (v89 release era), and re-tests every previously fixed quality bug.
 
 The golden set spans three genres from the team's best published books:
 

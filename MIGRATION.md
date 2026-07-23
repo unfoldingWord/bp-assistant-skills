@@ -159,7 +159,7 @@ setup data
 ```
 
 This runs the curation tool (`step: "setup"`, force mode) which:
-1. Discovers published OT books from Door43 releases API (currently 25 books, v88)
+1. Discovers published OT books from Door43 releases API (currently 27 books, v89)
 2. Fetches aligned ULT, UST, TN, Hebrew Bible, T4T for each book
 3. Fetches glossary, templates, and issues_resolved from Google Sheets/Docs
 4. Extracts unaligned English ULT & UST (via usfm-js proper USFM parser)

@@ -30,7 +30,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const GOLDEN_DIR = resolve(__dirname, '../golden');
 
 const DOOR43_RAW = 'https://git.door43.org/unfoldingWord';
-const ULT_REF = 'tag/v88';
+const ULT_REF = 'tag/v89';
 
 const CORPUS = [
   { book: 'JOS', fileNum: '06', genre: 'narrative' },
