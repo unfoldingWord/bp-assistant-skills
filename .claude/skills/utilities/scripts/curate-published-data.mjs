@@ -187,12 +187,12 @@ async function discoverPublishedBooks() {
 
   const release = releases[0];
   const tag = release.tag_name;
-  // target_commitish is the branch the release was cut from (e.g. "release_v88").
+  // target_commitish is the branch the release was cut from (e.g. "release_v89").
   // This is what we use to fetch USFM — it resolves correctly via raw/branch/ URLs.
   const releaseBranch = release.target_commitish || 'master';
   log('Latest release: ' + tag + ' (branch: ' + releaseBranch + ', ' + release.published_at + ')');
 
-  // Extract book codes from asset names: en_ult_01-GEN_v88_A4.html
+  // Extract book codes from asset names: en_ult_01-GEN_v89_A4.html
   // Only OT books (num <= MAX_OT_NUMBER). Do not hardcode additional books —
   // if a book is not in the release assets it is not published.
   const bookSet = new Set();
