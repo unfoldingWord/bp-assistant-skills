@@ -3,7 +3,7 @@ name: align-all-parallel
 
 description: Run ULT-alignment and UST-alignment in parallel for a single chapter. Use when asked to align both ULT and UST or run all alignments for a chapter.
 
-allowed-tools: Read, Grep, Glob, Write, Edit, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__*, Task, Agent, SendMessage, TaskOutput, TaskCreate, TaskUpdate, TaskGet, TaskList, TeamCreate, TeamList, TeamDelete
+allowed-tools: Read, Glob, Write, Edit, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__*, Task, Agent, SendMessage, TaskOutput
 ---
 
 ## Quick Alignment Pipeline
