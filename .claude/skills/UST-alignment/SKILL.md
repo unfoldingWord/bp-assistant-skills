@@ -3,7 +3,7 @@ name: UST-alignment
 
 description: Create meaning-based alignments between Hebrew source and English UST text. Handles radical restructuring and implied information. Use when asked to align UST or produce aligned UST USFM.
 
-allowed-tools: Read, Grep, Glob, Write, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__create_aligned_usfm, mcp__workspace-tools__merge_aligned_usfm, mcp__workspace-tools__validate_alignment_json, mcp__workspace-tools__validate_alignment_integrity, mcp__workspace-tools__curly_quotes
+allowed-tools: Read, Grep, Glob, Write, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__*
 ---
 
 ## Overview

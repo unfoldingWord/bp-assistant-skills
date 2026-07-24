@@ -3,7 +3,7 @@ name: ULT-alignment
 
 description: Create word-level alignments between Hebrew source and English ULT text. AI produces index-based mapping JSON that a script converts to aligned USFM. Use when asked to align ULT or produce aligned ULT USFM.
 
-allowed-tools: Read, Grep, Glob, Write, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__create_aligned_usfm, mcp__workspace-tools__merge_aligned_usfm, mcp__workspace-tools__validate_alignment_json, mcp__workspace-tools__validate_alignment_integrity, mcp__workspace-tools__extract_ult_english, mcp__workspace-tools__check_ult_voice_mismatch, mcp__workspace-tools__curly_quotes
+allowed-tools: Read, Grep, Glob, Write, Bash(node /app/src/workspace-tools-cli.js:*), mcp__workspace-tools__*
 ---
 
 ## Overview
