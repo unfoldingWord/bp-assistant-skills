@@ -150,6 +150,52 @@ your merged result. A success summary over an empty or short file silently
 breaks the downstream pipeline: it generates only a chapter intro (or nothing)
 and still reports success.
 
+### Mechanical Completion Checklist (mandatory, last tool call)
+
+`Read`-verify above catches an empty write. It does not catch a session that
+ends after Wave 3 without ever executing Wave 4a merge/write — the orchestrator
+polls `TaskGet`, sees the sub-agents finished, writes a plain-text summary, and
+the SDK returns `success` with no output file on disk. That is the failure mode
+that closed this skill in incident #148 (DAN 2, 542s success, `output/issues/DAN/DAN-02.tsv` never written).
+
+To prevent it, the **last Bash call before ending the turn** must be this
+existence check on the single output path this run is responsible for
+(full-chapter form without `--verses`, shard form with `--verses`):
+
+```bash
+# Without verse range:
+for f in output/issues/<BOOK>/<BOOK>-<CH>.tsv; do
+  if [ -s "$f" ]; then echo "OK   $f"; else echo "MISS $f"; fi
+done
+
+# With verse range:
+for f in output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv; do
+  if [ -s "$f" ]; then echo "OK   $f"; else echo "MISS $f"; fi
+done
+```
+
+Rules:
+- This Bash check must be the last tool call of the run, with an `OK` line, and
+  its output pasted into your final message. A narrative "merge complete /
+  N issues written" without this Bash output immediately preceding it is a
+  protocol violation — the runtime treats a `success` return over a missing
+  file as a pipeline failure (`errorKind: missing_output`).
+- Never end the session on a plain-text summary. Wave 4a is not "the merge
+  I described"; it is the `Write` tool call that persists the merged TSV plus
+  the `Read` back and this `test -s` check. If you have not made those tool
+  calls in this session, you are not done, regardless of what Wave 2/3
+  sub-agents reported.
+- `MISS` means Wave 4a never wrote the file (or wrote it empty). Re-run the
+  merge from `$TMP/wave2_structure.tsv`, `$TMP/wave2_rhetoric.tsv`, and
+  `$TMP/wave3_challenges.tsv` and `Write` the output — do not paper over it
+  in the summary.
+- Before advancing from Wave 2 to Wave 3, and from Wave 3 to Wave 4a, apply
+  the same `test -s` check to each required intermediate file
+  (`$TMP/wave2_structure.tsv`, `$TMP/wave2_rhetoric.tsv`,
+  `$TMP/wave3_challenges.tsv`). Re-check every dispatched sub-agent's
+  `TaskGet` status at the wave boundary — a stale "in_progress → completed"
+  read from earlier in the session is not evidence the file exists now.
+
 ## Gemini Review (optional, activation only)
 
 Only run if `--gemini` is explicitly passed. Skip by default. If running: read
