@@ -87,7 +87,7 @@ Rules for AI updates:
 - Only modify Reference (if the ULT/UST content has genuinely moved to a different verse), Question, and Response
 - **Multi-verse reference spans**: if the source row carries a range reference (e.g., `18:9-10`, `24:1-2`), copy it exactly into the output — do NOT collapse it to only the first verse
 - Follow tq-guidelines.md for content rules (third person, present tense, ESL level, etc.)
-- If a row already matches the current ULT/UST, leave it unchanged
+- If a row already matches the current ULT/UST, leave its content unchanged — but still proofread its Question and Response for spelling, grammar, and punctuation errors and fix any found (see "Spelling, grammar, and punctuation" in tq-guidelines.md). No row is exempt from that pass
 
 Write the result as a TSV file to `output/tq/{BOOK}/{BOOK}-{CHAPTER}.tsv` using exactly 3-digit chapter padding (e.g., `PSA/PSA-007.tsv`, `PSA/PSA-023.tsv`, `PSA/PSA-150.tsv`), or `output/tq/{BOOK}/{BOOK}.tsv` for whole-book processing.
 

@@ -77,7 +77,7 @@ TQ answers should capture the *idea* of the content so that any translation deri
 
 ### Minimize Unnecessary Edits
 - Only change what needs to change to align with the updated ULT/UST
-- If the existing TQ already matches the current ULT/UST, leave it unchanged
+- If the existing TQ already matches the current ULT/UST, leave its *content* unchanged. This rule governs meaning and wording choices only; it never exempts a row from the spelling, grammar, and punctuation pass below
 - Preserve existing IDs -- do not regenerate IDs for unchanged or lightly edited rows
 - **Edit wording in place; do not re-author.** Keep each existing question's subject and scope, and reword only the parts that the updated ULT/UST changed. Replacing a question with a different question on the same row is not an update — it discards a vetted comprehension check
 - **Preserve the verse Reference; do not renumber.** A row's Reference moves only if the *specific content that question asks about* genuinely relocated to a different verse in the updated text. Do not re-sequence or compress a chapter's references to fit a fresh question order
@@ -92,6 +92,7 @@ TQ answers should capture the *idea* of the content so that any translation deri
 - **Verse content**: If verse text changed substantially, update Q&A to reflect new content
 - **Verse references**: If content moved between verses, update the Reference column
 - **Factual accuracy**: If the Q&A no longer matches what the verse says, correct it
+- **Spelling, grammar, and punctuation**: Proofread every row's Question and Response on every pass, including rows whose content needs no change. Correct misspellings, subject-verb and pronoun agreement errors, wrong or inconsistent tense, missing or doubled words, and punctuation, per `../../reference/gl_guidelines.md`. A row can be content-correct and still carry a typo; mechanical error correction is not a style preference and is never optional
 
 ### Coverage: Aim for One Question Per Verse
 - After the existing rows are updated in place, fill the gaps: **for each verse that has no question, add one wherever you can write a plain, answerable what/who/where/when/how comprehension question** from the ULT/UST. The target is roughly one question per verse the chapter can support.
