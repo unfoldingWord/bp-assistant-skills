@@ -59,6 +59,10 @@ When a note offers a plain-meaning AT, the AT must not reuse the same figure it 
 
 Do not include the curly brace characters `{` or `}` in AT text. The words inside them are implied English words and may appear in the AT as plain text when needed. For example, if the ULT has `{am} poor and needy`, the AT may use "am" but must write it without braces: [am very poor].
 
+## No Markdown in ATs
+
+AT bracket content is plain text. Do not use Markdown bold (`**`) or any other Markdown emphasis inside the brackets, even where the AT keeps ULT wording verbatim. Bold marks quoted ULT words in the note's explanatory prose only: write `Alternate translation: [the vast sea]`, never `[**the vast sea**]`.
+
 ## Punctuation in ATs
 
 Do not include punctuation at the start or end of the AT brackets unless the note is specifically proposing a change to the ULT's punctuation. If the gl_quote does not start with a comma or other punctuation, the AT should not either. Similarly, do not add ending punctuation (period, comma, question mark) even if the ULT text being replaced ends with one. The AT replaces the *words*, not the surrounding punctuation.
