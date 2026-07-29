@@ -45,13 +45,33 @@ If `--notes <path>` is provided, use that path directly.
 
 Otherwise, look for the notes TSV in order:
 1. `output/notes/<BOOK>/<BOOK>-<CH>.tsv` (standard full-chapter)
-2. `output/notes/<BOOK>/<BOOK>-<CH>-v*.tsv` (verse-range variant, e.g. `HAB-03-v1-2.tsv`)
+2. `output/notes/<BOOK>/<BOOK>-<CH>-vv*.tsv` (verse-range shard, e.g. `ZEC-13-vv3-9.tsv`)
 
 If neither exists, report an error and exit.
 
+Call the resolved path `<NOTES_TSV>`.
+
+## Naming the Report (`<REPORT>`)
+
+Derive the report path from `<NOTES_TSV>`'s **own basename** — never from the
+chapter alone. Take the notes basename, drop the `.tsv` extension, append
+`-quality.md`, and place it under `output/quality/<BOOK>/`:
+
+| `<NOTES_TSV>`                       | `<REPORT>`                                        |
+| ----------------------------------- | ------------------------------------------------- |
+| `output/notes/ZEC/ZEC-13.tsv`       | `output/quality/ZEC/ZEC-13-quality.md`            |
+| `output/notes/ZEC/ZEC-13-vv3-9.tsv` | `output/quality/ZEC/ZEC-13-vv3-9-quality.md`      |
+
+A partial-chapter run reviews only its own shard, so its report **must** keep the
+shard's verse-range suffix. Writing a verse-range review to the chapter-level
+name (`ZEC-13-quality.md`) fails the pipeline's expected-output check and
+discards the whole run's work, even though the report itself is correct (issue
+#150). This mirrors `deep-issue-id`: a shard run produces the shard artifact and
+nothing else — never a chapter-level file.
+
 ## Workflow
 
-**Required final output:** Every run of this skill MUST end by (over)writing `output/quality/<BOOK>/<BOOK>-<CH>-quality.md` in Step 5. The pipeline checks that file's mtime against chapter start and fails the chapter as `stale_output` if it was not written in the current run. This holds even when there are no issues to fix, when Step 4 exits early, or when a report already exists from a prior run.
+**Required final output:** Every run of this skill MUST end by (over)writing `<REPORT>` (see "Naming the Report" above) in Step 5. The pipeline checks that file's mtime against chapter start and fails the chapter as `stale_output` if it was not written in the current run, and fails it as `missing_output` if it was written under any other name. This holds even when there are no issues to fix, when Step 4 exits early, or when a report already exists from a prior run.
 
 ### Step 0: Fix Trailing Newlines
 
@@ -215,10 +235,10 @@ After fixing, you may re-run `check_tn_quality` **at most once** to verify the f
 
 **This step is unconditional.** Every invocation of tn-quality-check MUST end by writing (overwriting) the report file below in the current run. Skipping Step 5 — because "nothing needed fixing," because you already wrote it earlier in the run, because you thought you were done after Step 4, or because a report already exists on disk — causes the pipeline's post-run freshness check to raise `stale_output` and fail the chapter (see issue #115). A pre-existing file at this path from a prior run is **not** proof that this step ran; the pipeline compares the file's mtime against chapter start.
 
-Write the final quality report to `output/quality/<BOOK>/<BOOK>-<CH>-quality.md` as the final action of this skill (after any fixes, re-checks, or early exits):
+Write the final quality report to `<REPORT>` — the path derived from `<NOTES_TSV>`'s basename in "Naming the Report" above — as the final action of this skill (after any fixes, re-checks, or early exits). For a verse-range shard this filename carries the `-vv<START>-<END>` suffix; do not shorten it to the chapter name.
 
 ```markdown
-# TN Quality Report: <BOOK> <CHAPTER>
+# TN Quality Report: <BOOK> <CHAPTER>          <!-- add " (verses <START>-<END>)" for a shard run -->
 
 ## Summary
 - Notes checked: N
