@@ -289,7 +289,17 @@ The script runs these checks:
 23  single_quotes                   error       Single quotes must not be used as quotation marks (use double curly quotes; single apostrophe only for possessives)
 24  here_rule                       warning     Note starts with "Here" — next content must be a bolded lowercase quote (not "Here David is saying...")
 25  template_phrase_missing         warning     figs-abstractnouns/rquestion/metaphor notes include expected fixed template phrase
+25c self_talk_leak                  warning     Note may contain model deliberation instead of note text ("wait, actually...", first person, template sub-type names)
+25c preamble_paragraph              warning     Multi-paragraph note whose first paragraph lacks the template phrase — possible preamble before the real note
 ```
+
+**Note on `self_talk_leak` / `preamble_paragraph`**: these catch the model reasoning out loud inside the Note column (MIC 5:7, 2026-08-03). They are warnings by design — an editor rewriting one leaked note is far cheaper than a blocked push losing a chapter of notes. The pattern set was tuned to zero false positives across 368 published notes (JOS 1/3, MAL 1, NAM 1, and tn_OBA).
+
+Two candidate patterns were tried and deliberately removed, because they match canonical published note wording: a bare "actually", and "This is a/an <figure>" — the latter flagged 3.3% of Obadiah, whose standard phrasing is exactly "This is an idiom that means...". If you are tempted to widen these patterns, measure against published notes first; the repair pass deletes what the detector flags, so a false positive here costs real note content.
+
+These two findings are the only ones with an **automatic repair pass**. `repairSelfTalkNotes` in `notes-pipeline.js` runs right after the mechanical check: each flagged note goes back to the model alone with its template, asking for the note text only. A rewrite is accepted only if it is no longer than the original, reads clean, and — when a template could be resolved for that note — still contains the template's fixed phrase. Otherwise the original is kept and the row is tagged `ISSUE:SELF_TALK` in the Tags column. Rows with no generated text (chapter intros, failed generations) are tagged rather than repaired, and anything past the 25-note-per-chapter repair cap is tagged too. The check then re-runs, so the findings you read reflect the repaired text.
+
+So by the time you see one of these warnings in Step 1, repair has already been attempted and failed the gate — treat a surviving `self_talk_leak` (or an `ISSUE:SELF_TALK` tag) as needing a hand-written fix, not another automated attempt.
 
 **Note on orphaned preposition/conjunction warnings after gl_quote expansion**: When a gl_quote has been expanded to include a leading preposition or conjunction (the correct fix for orphaned words at the AT boundary), the script may still report `orphaned_conjunction` or `orphaned_prep` warnings. These are false positives -- the word now appears both in the expanded gl_quote and at the start of the AT, which is the intended behavior. During the deep semantic review (Step 3c), verify the actual substitution reads naturally rather than trusting these warnings at face value.
 
