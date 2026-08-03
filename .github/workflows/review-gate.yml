@@ -15,6 +15,10 @@ concurrency:
 permissions:
   contents: read
   pull-requests: write
+  # `actions: write` lets the timeout path cancel its own run so an unread
+  # verdict surfaces as a grey "cancelled" check rather than a red "failure"
+  # that reads as a review rejection. See "Read review result from logs".
+  actions: write
 
 jobs:
   review:
@@ -258,25 +262,154 @@ jobs:
           FLY_APP_NAME: ${{ secrets.FLY_APP_NAME }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ github.run_id }}
+          REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
-          # Pull recent logs and extract the latest PR_REVIEW_RESULT marker line.
-          # run-pr-review.js emits a single-line marker so we don't need to
-          # reassemble multi-line pretty JSON across log entries.
-          # The success-path JSON serializes as `{"request":...,"decision":...,...}`
-          # because executePrReview returns `{ request, ...aggregate, summary }`,
-          # so anchoring on `{"decision":` would only match the catch-block
-          # failure object and silently drop every PASS result.
-          # Scope to this run via the prNumber and headSha downstream filters
-          # (those substrings are emitted in the request block).
-          flyctl logs --app "$FLY_APP_NAME" --no-tail > all-logs.txt 2>&1 || true
-          marker_line="$(grep -E 'PR_REVIEW_RESULT:[[:space:]]*\{' all-logs.txt \
-            | grep "\"prNumber\":${PR_NUMBER}" \
-            | grep "\"headSha\":\"${HEAD_SHA}\"" \
-            | tail -1 || true)"
+          # Extract the PR_REVIEW_RESULT marker for THIS PR head SHA from the
+          # Fly logs. run-pr-review.js emits a single-line marker so we don't
+          # need to reassemble multi-line pretty JSON across log entries.
+          #
+          # Fly's log pipeline is eventually-consistent: a single fetch right
+          # after the machine stops often returns a stale snapshot that predates
+          # this run's marker (the machine is shared, so other PRs' markers may
+          # be all that has propagated yet — which is exactly how this step used
+          # to fail the run with no verdict). Poll, re-fetching, until this head
+          # SHA's marker appears or we time out.
+          #
+          # Scope solely on headSha: a git SHA is globally unique, present in
+          # both the success marker (executePrReview's request block) and the
+          # failure/fallback markers, and correctly distinguishes re-pushes of
+          # the same PR number.
+          #
+          # The window is 10 minutes, not the original 3: back-to-back reviews on
+          # the shared machine were timing out at 180s and failing green PRs with
+          # a red gate (#282). A longer wait costs nothing when the marker lands
+          # early (we break immediately) and each spurious failure costs a full
+          # reviewer pass off the weekly Claude allowance on re-trigger.
+          #
+          # The window also ADAPTS. The reviewer shares one Fly machine with the
+          # live notes/generate pipelines, so "no marker yet" is very often
+          # "the host is busy", not "the review failed" (#324: a 600s timeout
+          # while `/health/pipelines` reported active=1 for a NUM 26 run, while
+          # two sibling PRs opened minutes earlier both passed in 4-7m). Before
+          # giving up we ask the bot whether it is still working; if it is, we
+          # keep waiting up to a hard cap instead of declaring a timeout.
+          poll_window=600
+          max_window=1800
+          started=$SECONDS
+          deadline=$((SECONDS + poll_window))
+          marker_line=""
+          attempt=0
+          fetch_failures=0
+          busy_extensions=0
+          last_active=""
+          # Same host the reviewer runs on; the health endpoint reports how many
+          # pipelines are currently checkpointed as running.
+          health_url="https://${FLY_APP_NAME}.fly.dev/health/pipelines"
+          get_active() {
+            curl -sf --max-time 15 "$health_url" 2>/dev/null \
+              | node -e "let s='';process.stdin.on('data',c=>s+=c);process.stdin.on('end',()=>{try{const j=JSON.parse(s);if(typeof j.active==='number')process.stdout.write(String(j.active));}catch{}});" \
+              || echo ""
+          }
+          while [ "$SECONDS" -lt "$deadline" ]; do
+            attempt=$((attempt + 1))
+            # Don't swallow the fetch status: a run of failed `flyctl logs` calls
+            # (rate limiting, expired token, Fly API outage) is a different
+            # diagnosis from "the marker has not propagated yet", and the old
+            # `|| true` made the two indistinguishable in the timeout report.
+            if ! flyctl logs --app "$FLY_APP_NAME" --no-tail > all-logs.txt 2>&1; then
+              fetch_failures=$((fetch_failures + 1))
+              echo "flyctl logs fetch failed (attempt ${attempt}); retrying in 10s..."
+              sleep 10
+              continue
+            fi
+            marker_line="$(grep -E 'PR_REVIEW_RESULT:[[:space:]]*\{' all-logs.txt \
+              | grep "\"headSha\":\"${HEAD_SHA}\"" \
+              | tail -1 || true)"
+            if [ -n "$marker_line" ]; then
+              echo "Found PR_REVIEW_RESULT marker for SHA ${HEAD_SHA} on attempt ${attempt}."
+              break
+            fi
+            echo "No marker yet for SHA ${HEAD_SHA} (attempt ${attempt}); waiting 10s for Fly log propagation..."
+            sleep 10
+            # About to give up? Ask whether the shared host is still busy first.
+            if [ "$SECONDS" -ge "$deadline" ] && [ $((SECONDS - started)) -lt "$max_window" ]; then
+              last_active="$(get_active)"
+              if [ -n "$last_active" ] && [ "$last_active" != "0" ]; then
+                deadline=$((SECONDS + 120))
+                busy_extensions=$((busy_extensions + 1))
+                echo "Reviewer host reports ${last_active} active pipeline(s); extending the wait by 120s (extension #${busy_extensions}, hard cap ${max_window}s)."
+              fi
+            fi
+          done
           if [ -z "$marker_line" ]; then
-            echo "No PR_REVIEW_RESULT marker found in logs for PR #${PR_NUMBER} SHA ${HEAD_SHA} (run may have crashed before emitting)." >&2
-            tail -100 all-logs.txt >&2 || true
+            # This is a retrieval timeout, NOT a review verdict. Say so plainly:
+            # the previous wording ("the reviewer machine likely never emitted a
+            # result") plus a 100-line dump of whatever was in the shared log
+            # snapshot -- often another PR's review text -- read as though the
+            # gate had reviewed the wrong PR and failed it. It had not, and it
+            # cannot: the match above is scoped on this PR's head SHA.
+            waited=$((SECONDS - started))
+            {
+              echo "TIMEOUT reading the review result: no PR_REVIEW_RESULT marker for SHA ${HEAD_SHA} appeared in the Fly log snapshot within ~${waited}s (${attempt} attempts, ${fetch_failures} failed log fetches, ${busy_extensions} busy-host extensions; last reported active pipelines: ${last_active:-<unknown>})."
+              echo
+              echo "This is NOT a review verdict. The reviewer did not report FAIL --"
+              echo "no verdict for this commit could be read at all. Re-run this workflow"
+              echo "to retry; the diff itself has not been judged by this run."
+              echo
+              if [ "$fetch_failures" = "$attempt" ]; then
+                echo "Every log fetch failed, so the Fly API (not log propagation) is the"
+                echo "likely cause. Last flyctl output:"
+                tail -20 all-logs.txt >&2 || true
+              else
+                echo "Head SHAs of the review markers that HAD propagated into the snapshot"
+                echo "(listed as propagation evidence only -- these belong to other runs and"
+                echo "have no bearing on this PR's verdict):"
+                grep -E 'PR_REVIEW_RESULT:[[:space:]]*\{' all-logs.txt \
+                  | grep -oE '"headSha":"[0-9a-f]{7,40}"' \
+                  | sort -u \
+                  | sed 's/^/  /' || echo "  (none)"
+              fi
+            } >&2
+
+            # Leave the explanation where a human will actually see it. The
+            # careful paragraph above only exists inside the job log, which is
+            # why a busy-host timeout kept reading as "your code was rejected".
+            {
+              echo "<!-- bp-review-gate -->"
+              echo "## Remote Review Gate -- no verdict available"
+              echo
+              echo "- Decision: **UNKNOWN (not a rejection)**"
+              echo "- Commit: ${HEAD_SHA}"
+              echo
+              echo "The reviewer's result marker for this commit could not be read within"
+              echo "~${waited}s (${attempt} polls, ${busy_extensions} extensions while the shared"
+              echo "reviewer host reported active pipelines; last reported active: ${last_active:-unknown})."
+              echo
+              echo "**This is not a review verdict.** The reviewer did not report FAIL -- this"
+              echo "diff was not judged by this run. Re-run the Review Gate workflow to retry."
+              echo
+              echo "This run is being cancelled rather than failed so the checks list shows it"
+              echo "as \`cancelled\` (incomplete), not \`failure\` (rejected). It is still not a pass."
+            } > timeout-comment.md
+            gh pr comment "$PR_NUMBER" --repo "$REPO" --body-file timeout-comment.md \
+              || echo "::warning::Could not post the no-verdict comment to PR #${PR_NUMBER}."
+
+            # Cancel our own run so the check concludes `cancelled` (grey, and
+            # treated as failing wherever required-status-check rules apply)
+            # instead of `failure` (red, indistinguishable from a FAIL verdict).
+            if gh api -X POST "repos/${REPO}/actions/runs/${RUN_ID}/cancel"; then
+              echo "Cancellation requested; waiting for GitHub to terminate this run."
+              # If cancellation lands, the runner kills us here. The sleep is the
+              # grace period; falling through means it did NOT land, so we still
+              # exit non-zero -- an unread verdict must never look like a pass.
+              sleep 60
+              echo "::warning::Cancellation did not take effect; failing this run instead." >&2
+            else
+              echo "::warning::Could not cancel this run (actions: write may be unavailable); failing instead." >&2
+            fi
             exit 1
           fi
           review_json="$(printf '%s\n' "$marker_line" | sed -E 's/^.*PR_REVIEW_RESULT:[[:space:]]*//')"
