@@ -289,7 +289,15 @@ The script runs these checks:
 23  single_quotes                   error       Single quotes must not be used as quotation marks (use double curly quotes; single apostrophe only for possessives)
 24  here_rule                       warning     Note starts with "Here" — next content must be a bolded lowercase quote (not "Here David is saying...")
 25  template_phrase_missing         warning     figs-abstractnouns/rquestion/metaphor notes include expected fixed template phrase
+25c self_talk_leak                  warning     Note may contain model deliberation instead of note text ("wait, actually...", first person, template sub-type names)
+25c preamble_paragraph              warning     Multi-paragraph note whose first paragraph lacks the template phrase — possible preamble before the real note
 ```
+
+**Note on `self_talk_leak` / `preamble_paragraph`**: these catch the model reasoning out loud inside the Note column (MIC 5:7, 2026-08-03). They are warnings by design — an editor rewriting one leaked note is far cheaper than a blocked push losing a chapter of notes. Expect roughly one false positive per few hundred notes, usually a legitimate "actually" in prose.
+
+These two findings are the only ones with an **automatic repair pass**. `repairSelfTalkNotes` in `notes-pipeline.js` runs right after the mechanical check: each flagged note goes back to the model alone with its template, asking for the note text only. A rewrite is accepted only if it still contains the template's fixed phrase, is no longer than the original, and reads clean; otherwise the original is kept and the row is tagged `ISSUE:SELF_TALK` in the Tags column. The check then re-runs, so the findings you read reflect the repaired text.
+
+So by the time you see one of these warnings in Step 1, repair has already been attempted and failed the gate — treat a surviving `self_talk_leak` (or an `ISSUE:SELF_TALK` tag) as needing a hand-written fix, not another automated attempt.
 
 **Note on orphaned preposition/conjunction warnings after gl_quote expansion**: When a gl_quote has been expanded to include a leading preposition or conjunction (the correct fix for orphaned words at the AT boundary), the script may still report `orphaned_conjunction` or `orphaned_prep` warnings. These are false positives -- the word now appears both in the expanded gl_quote and at the start of the AT, which is the intended behavior. During the deep semantic review (Step 3c), verify the actual substitution reads naturally rather than trusting these warnings at face value.
 
