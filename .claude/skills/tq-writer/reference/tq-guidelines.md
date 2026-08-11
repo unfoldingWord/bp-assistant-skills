@@ -100,7 +100,7 @@ TQ answers should capture the *idea* of the content so that any translation deri
 - Do not add a second question to a verse that already has one just to be thorough — coverage means reaching uncovered verses, not stacking questions.
 - Skip a verse only when no straightforward comprehension question can be written for it — e.g. a bare superscription, a formulaic refrain already answered by a nearby row, or a fragment whose content is fully carried by an adjacent range row.
 - Added questions follow every content rule above, especially the question-word discipline: prefer what/who/where/when/how and do not introduce new "why" questions.
-- Each added row carries the correct verse Reference and a fresh, globally-unique 4-char ID (`[a-z][a-z0-9]{3}`) — verify the ID against all rows already written before finalising it.
+- Each added row carries the correct verse Reference and a fresh ID obtained from the `generate_ids` tool (see SKILL.md) — never an invented or verse-derived value.
 
 ### What Not to Change
 - Do not rewrite well-functioning questions just for style preference
@@ -126,7 +126,7 @@ Reference	ID	Tags	Quote	Occurrence	Question	Response
 ```
 
 - **Reference**: chapter:verse (e.g., "150:1" or "150:3-5")
-- **ID**: 4-character alphanumeric identifier (`[a-z][a-z0-9]{3}`); preserve existing IDs on unchanged or lightly edited rows. IDs **must be globally unique within the entire book's TSV** — no two rows may share the same ID, even if they cover different verse references (e.g., `53:2` and `53:2-3` are separate rows and must have distinct IDs). When generating a new ID for a new row, verify it does not already appear in any other row in the current output before finalising it.
+- **ID**: 4-character alphanumeric identifier (`[a-z][a-z0-9]{3}`); preserve existing IDs on unchanged or lightly edited rows. IDs **must be unique within the entire book**, not just the chapter being generated — no two rows may share the same ID, even across chapters or when they cover different verse references (e.g., `53:2` and `53:2-3` are separate rows and must have distinct IDs). New IDs come from `generate_ids`; check them against this session's output *and* the published `tq_{BOOK}.tsv`, since the consumer keys rows per book and its deletes are soft (a retired row keeps its ID forever).
 - **Tags**: Usually empty for TQs
 - **Quote**: Usually empty for TQs
 - **Occurrence**: Usually empty for TQs

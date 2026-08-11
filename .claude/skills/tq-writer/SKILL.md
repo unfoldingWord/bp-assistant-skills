@@ -67,7 +67,7 @@ Read `/tmp/claude/prepared_tq.json`. For each chapter:
 2. Read the ULT text from `ult_by_verse` and UST text from `ust_by_verse`
 3. Compare each TQ row's question and response against the current ULT and UST; **default to ULT language** for questions and responses; **fall back to UST language only when the ULT rendering is metaphorical, uses Hebrew idioms, or is otherwise not plain/accessible English** — use the UST's non-figurative wording for those cases
 4. Update rows where needed following the guidelines
-5. **Fill coverage gaps.** After the existing rows are updated, look at which verses in the chapter still have no question, and **aim for at least one question per verse**: for each uncovered verse where you can write a plain, answerable what/who/where/when/how comprehension question from the ULT/UST, add one. New rows carry the correct verse Reference and a fresh unique ID; they do not renumber or displace existing rows. Only skip a verse when no straightforward comprehension question can be written for it (e.g. a bare superscription or a fragment whose content is fully carried by an adjacent range row)
+5. **Fill coverage gaps.** After the existing rows are updated, look at which verses in the chapter still have no question, and **aim for at least one question per verse**: for each uncovered verse where you can write a plain, answerable what/who/where/when/how comprehension question from the ULT/UST, add one. New rows carry the correct verse Reference and a fresh ID from `generate_ids` (see "Rules for AI updates" below — never invent one); they do not renumber or displace existing rows. Only skip a verse when no straightforward comprehension question can be written for it (e.g. a bare superscription or a fragment whose content is fully carried by an adjacent range row)
 
 **Output format:** Write updated TSV rows to the output file, one chapter at a time. Include the header row. Use the same 7-column format:
 
@@ -82,7 +82,12 @@ Rules for AI updates:
 - Fail safe: if an existing row cannot be confidently matched to a verse in the prepared data, keep it unchanged rather than regenerating it
 - Return the full set of rows for the chapter (not just changed ones)
 - Preserve existing IDs -- do not change the ID column
-- **ID uniqueness is mandatory**: Before emitting each row, check its ID against every ID already written in the current output (across all chapters processed so far in this session). If a collision is detected — including between a single-verse row and a multi-verse range row that covers the same verse — assign a new unique 4-char ID (`[a-z][a-z0-9]{3}`) to the colliding row and confirm the replacement ID is not already in use. Never emit two rows with the same ID.
+- **Never invent an ID yourself.** Mint new IDs only with `generate_ids`, which draws from a real random source and re-seeds every run:
+
+      node /app/src/workspace-tools-cli.js generate_ids '{"book":"1CH","count":<number of new rows>}'
+
+  Ask for one ID per new row in a single call and assign them in order. Do not tweak, re-letter, or pattern-fill a returned ID. Hand-invented IDs are not random: they repeat across runs in the same relative order, and shortcuts like `tq01`/`tq02` are chapter-agnostic by construction — note both failure modes *pass* the `[a-z][a-z0-9]{3}` format check, so the format rule will not catch them.
+- **ID uniqueness is book-wide, not chapter-wide.** The downstream editor keys rows `PRIMARY KEY (book, id)` with soft deletes, so a retired row owns its ID for that book permanently. A new ID must be unused across the entire book — every chapter in this session's output *and* the published `tq_{BOOK}.tsv` on master — not merely within the chapter being generated. Keep existing IDs on rows being revised (that reuse is what keeps generator and master aligned) and mint fresh IDs only for genuinely new rows. If two emitted rows still collide — including a single-verse row against a range row covering the same verse — replace the later one with another `generate_ids` value. Never emit two rows with the same ID.
 - Preserve Tags, Quote, and Occurrence columns as-is (usually empty)
 - Only modify Reference (if the ULT/UST content has genuinely moved to a different verse), Question, and Response
 - **Multi-verse reference spans**: if the source row carries a range reference (e.g., `18:9-10`, `24:1-2`), copy it exactly into the output — do NOT collapse it to only the first verse
@@ -111,7 +116,7 @@ After writing all chapter files, scan the full output for duplicate IDs before p
 
 For multi-chapter or whole-book runs, check each chapter file in sequence and maintain a cross-chapter seen-ID set.
 
-If `check_tn_quality` is unavailable for TQ files, run the dedicated checker instead — it validates ID format and finds duplicates within and across files in one pass (pass all chapter files from this session together, and optionally check collisions against the published book TSV):
+If `check_tn_quality` is unavailable for TQ files, run the dedicated checker instead — it validates ID format and finds duplicates within and across files in one pass. Pass all chapter files from this session together, and **always** pass `against` the published book TSV — because the consumer keys rows per book, a new ID that is merely chapter-unique is not safe:
 
 Primary — CLI wrapper:
 ```
@@ -132,9 +137,9 @@ node .claude/skills/utilities/scripts/validation/check_duplicate_ids.mjs \
   output/tq/{BOOK}/{BOOK}-*.tsv --against door43-repos/en_tq/tq_{BOOK}.tsv
 ```
 
-Exit code 1 means duplicates or malformed IDs were found; fix each by replacing the later-occurring ID with a freshly generated unique value, re-run until clean, and only then proceed to insertion.
+Exit code 1 means duplicates or malformed IDs were found; fix each by replacing the later-occurring ID with a fresh `generate_ids` value, re-run until clean, and only then proceed to insertion.
 
-> **Why this step exists**: `verify_tq` (Step 6) does not detect duplicate IDs. Duplicates break downstream processing software (merge/delete matching fails). This explicit check is the safety net against AI sessions that generate the same random ID for two different verse rows (e.g., one for verse 53:2 and one for the range 53:2-3).
+> **Why this step exists**: `verify_tq` (Step 6) does not detect duplicate IDs. Duplicates break downstream processing software (merge/delete matching fails). This explicit check is the safety net against two failure modes: the same ID assigned to two rows in one session (e.g. verse 53:2 and the range 53:2-3), and an ID reissued to a new chapter that another chapter of the same book already owns on master (issue #158, where six 1CH 23 IDs landed on rows minted for 1CH 5).
 
 ### Step 7: Insertion (when ready)
 
