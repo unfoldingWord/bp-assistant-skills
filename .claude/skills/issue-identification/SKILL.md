@@ -433,12 +433,6 @@ job	9:3	writing-pronouns	he wished to contend			TCM i:(1) God (2) a person who w
 
 The `TCM` trigger tells the note writer to format using "This could mean (1)... or (2)..." structure while still using the issue type's template for context.
 
-**Web search as fallback:**
-When internal resources (Issues Resolved, published TNs, Translation Academy) don't clarify a potentially ambiguous passage:
-1. Search: `"[book] [chapter]:[verse] interpretation"` or `"[Greek/Hebrew term] meaning"`
-2. Look for scholarly disagreement as confirmation of genuine ambiguity
-3. If sources differ, include a "this could mean" note with options found
-
 **Fallback tag:** When ambiguity doesn't fit existing categories, use `figs-explicit` with note explaining the interpretive options.
 
 See `reference/ambiguity_patterns.md` for detailed examples from published notes.
