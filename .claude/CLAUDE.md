@@ -52,6 +52,12 @@ This file is for interactive Claude Code sessions only. Skills at runtime get th
 - `hebrew-reference/` - Hebrew language reference (placeholder)
 
 ## Git Discipline
+- **Open every PR as a draft**, and only mark it ready once verification and
+  review are finished. An auto-merge bot watches non-draft PRs and merges them
+  almost immediately: in bp-assistant, PR #338 was merged while review fixes for
+  that same branch were still being written, so the follow-up commits needed a
+  second PR and the incomplete version reached `main` first. Use `--draft` on
+  create and a separate ready-for-review step afterwards.
 - Remote is `origin` (`unfoldingWord/bp-assistant-skills`). Standard `git push` works.
 - ALWAYS `git add` and `git commit` new files immediately after creating them (not in output, data, tmp folders)
 - Run `git status` before any branch operation (checkout, reset, merge, rebase)
