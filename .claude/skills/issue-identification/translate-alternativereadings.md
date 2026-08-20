@@ -39,6 +39,8 @@ Use **translate-textvariants** when:
 ### 1. Qere/Ketiv (Marginal Corrections)
 The Masoretes (Hebrew scribes) preserved the written text (Ketiv) but recommended speaking a different word (Qere) in the margin.
 
+**Which reading is in the UHB main text:** since 2026-08-14 (`hbo_uhb` `aad8ce31`) the main `\w` text carries the **Ketiv**, unpointed, and the pointed Qere sits in a `\f + \ft Q ... \f*` footnote. Before that date it was the reverse. So the reading in the main text — the one ULT/UST render and align to — is the Ketiv, and the *marginal* reading described below is what you will find in the footnote. Do not assume the main text is the Qere when checking whether a translation followed the marginal reading.
+
 **Reasons for Qere readings:**
 - **Updating archaic spelling**: Older forms modernized for pronunciation
 - **Euphemism**: Replacing vulgar or offensive words for public reading

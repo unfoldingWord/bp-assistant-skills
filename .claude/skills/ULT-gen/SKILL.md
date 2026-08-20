@@ -26,6 +26,8 @@ invoke it through the CLI wrapper with those args serialized to a JSON object.
 
 Read Hebrew USFM from `data/hebrew_bible/*.usfm`. Extract verse text from `\w` tags with morphology (lemma, strong, x-morph).
 
+At Ketiv/Qere spots the main `\w` text is the unpointed Ketiv and the pointed Qere is in a `\ft Q` footnote; render the main text and read Strong's/morph from it. See `reference/literalness_patterns.md`.
+
 For complex passages, use MCP workspace tools to fetch and inspect prior published renderings, then read the relevant USFM/alignment artifacts with `Read`.
 
 Output shows Hebrew->English mappings:
