@@ -132,6 +132,8 @@ Check that T4T accurately represents the Hebrew meaning:
 2. **Read corresponding ULT** — if `--context` was provided, read `sources.ult` from context.json. Otherwise use `node /app/src/workspace-tools-cli.js read_usfm_chapter '<json-args>'` on the freshest available local ULT, falling back to a fresh `node /app/src/workspace-tools-cli.js fetch_door43 '<json-args>'` from `en_ult`
 3. **Note any discrepancies** where T4T misunderstands Hebrew meaning
 
+At Ketiv/Qere spots the main `\w` text is the unpointed Ketiv and the pointed Qere is in a `\ft Q` footnote. Take the meaning from the main text, and read Strong's/morph from it - they can differ from the footnote reading's.
+
 Key relationship:
 - Hebrew = **final authority** on meaning
 - ULT = **what the Hebrew says** (form)

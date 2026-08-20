@@ -221,6 +221,15 @@ Note: The same Hebrew index can appear in multiple alignments when the Hebrew wo
 
 In poetry, the same concept may be expressed twice. Align each Hebrew word to its corresponding English word in that line, even if the meaning is parallel.
 
+### Ketiv/Qere
+
+Align to the main-text `\w` words. Since 2026-08-14 (`hbo_uhb` `aad8ce31`) the UHB main text carries the unpointed **Ketiv**, and the pointed Qere sits in a `\f + \ft Q ... \f*` footnote; before that date it was the reverse, with the Ketiv footnoted as `\ft K`.
+
+- `x-content` must match the unpointed main-text form, not the pointed footnote form.
+- Take `strong` and `x-morph` from the main-text word. They can differ from the footnote reading's — in Ruth one such word is `H3045`/`He,VPsmsa` in the main text but `H4129`/`He,VNcmsa` in the footnote.
+- Word counts can differ. One Qere may correspond to **two** main-text words (e.g. `כי` + `אם` where the footnote Qere is a single `כִּ֥י`). Align each main-text word separately rather than collapsing them to match the footnote.
+- Never pull Strong's or morphology from the footnote's `\+w` elements; they are not part of the text being aligned.
+
 ## Verification Checklist
 
 1. **Coverage**: Every Hebrew word index appears somewhere

@@ -2,6 +2,20 @@
 
 Patterns for maximum Hebrew-to-English literalness.
 
+## Ketiv/Qere in the Source Text
+
+Since 2026-08-14 (`hbo_uhb` `aad8ce31`) the UHB main `\w` text carries the unpointed **Ketiv**; the pointed Qere is in a `\f + \ft Q ... \f*` footnote. Before that date the main text carried the pointed Qere and the Ketiv was footnoted as `\ft K`.
+
+When parsing:
+
+- The main text is **unpointed** at these spots. Missing vocalization here is the expected shape of the data, not corruption — do not reconstruct it from the footnote.
+- `strong` and `x-morph` on the main-text word can differ from the footnote reading's. Run vocabulary lookups on the **main-text** values.
+- One footnote Qere may correspond to two main-text words, so the main text can have two `\w` elements where the footnote reading has one.
+
+**Which reading to render: follow the main text (the Ketiv).** Upstream realigned `en_ult` and `en_ust` to the Ketiv on the same day (`en_ult` #6709, `en_ust` #4525), so rendering the main text keeps generated output consistent with published ULT/UST alignment.
+
+> Provisional — this rendering choice is recorded from the upstream realignment and has **not** been confirmed by the editors (bp-assistant-skills#160). The source-format facts above are settled; only the choice of reading is open. If the editors rule for the Qere, update this section and the Ketiv/Qere notes in `ULT-alignment` / `UST-alignment` together.
+
 ## Word Order Preservation
 
 Preserve Hebrew word order when it reflects emphasis and remains natural in English:

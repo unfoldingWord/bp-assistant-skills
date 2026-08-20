@@ -41,6 +41,12 @@ Apply this decision ladder in order — stop at the first level that fits:
 | Empty hebrew_indices | Not used | For purely implied content |
 | Restructuring | Minimal | Radical |
 
+## Ketiv/Qere
+
+Align to the main-text `\w` words. Since 2026-08-14 (`hbo_uhb` `aad8ce31`) the UHB main text carries the unpointed **Ketiv**, with the pointed Qere in a `\f + \ft Q ... \f*` footnote (previously reversed, Ketiv footnoted as `\ft K`).
+
+`x-content` must match the unpointed main-text form; take `strong`/`x-morph` from the main-text word, since they can differ from the footnote reading's. One Qere can correspond to two main-text words, so a Ketiv spot may add a Hebrew index that the footnote reading does not have. Never source Strong's or morphology from the footnote's `\+w` elements.
+
 ## Pattern Catalog
 
 ### Preposition Expansion
