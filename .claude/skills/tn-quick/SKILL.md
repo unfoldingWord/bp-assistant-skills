@@ -43,6 +43,9 @@ Use a placeholder ID (abc1, abc2, etc., incrementing from what's already in the 
 - Minimal change to ULT wording -- only change what the issue requires
 - No punctuation at start/end of brackets unless the note is about punctuation
 - Match capitalization to sentence position of the quoted phrase
+- Match the conjunction/preposition boundary of the quoted phrase. If the phrase includes a leading "And" or a preposition, the AT keeps it (`And he went` -> [And he traveled]); if the phrase starts after it, the AT starts after it too
+- Resolve the figure: state the plain meaning without reusing the figure the note explains. For personification, prefer a stative description over another action verb ("the deep waters were loud", not "the deep waters roared")
+- Before finalizing, mentally substitute the AT for the quoted phrase in the full ULT verse and confirm the sentence reads naturally
 
 ### Bold and Quoting
 - Bold words/phrases quoted from the verse: `**quoted words**`
@@ -55,12 +58,14 @@ Use a placeholder ID (abc1, abc2, etc., incrementing from what's already in the 
 - Alternate translation brackets `[]` are unaffected
 
 ### Author References
-- Always use the author's name, never "the author." Replace the SPEAKER placeholder in templates with the name (e.g., Habakkuk, Isaiah, Moses)
+- Work out which book the note is for from the reference, then replace the SPEAKER placeholder in templates with that book's traditional author or speaker. Always use a name, never "the author."
+- The name must belong to the book in the reference -- do not carry over a name from another book
 - For Psalms, check the superscription: use David, Asaph, etc. if named; use "the psalmist" if anonymous
+- Fall back to "the author" only when the author is genuinely unknown. Never use "the writer."
 
 ### "Here" Rule
 - Only start with "Here, " if immediately followed by a **bolded lowercase quote**: `Here, **admonish** means...`
-- Never: `Here the author is speaking...` or `Here Habakkuk is saying...`
+- Never: `Here the author is speaking...` or `Here the speaker is saying...`
 
 ### Restrictions
 - No source language names (Hebrew, Greek, Aramaic) in note text
