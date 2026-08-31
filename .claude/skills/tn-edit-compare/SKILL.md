@@ -1,16 +1,23 @@
 ---
 name: tn-edit-compare
-description: Compare editor-edited Translation Notes (TN TSV) against the prior version to learn note-level preferences. Proposes findings for tn_decisions.csv (read by tn-writer) and issue_decisions.csv (read by issue-identification); recording confirmed findings is tn-edit-record's job. Use when reviewing the -be- branch TN edits surfaced by the overnight Sensor.
-allowed-tools: Read, Grep, Glob, Bash
+description: Compare editor-edited Translation Notes (TN TSV) against the prior version to learn note-level preferences, and propose rows for tn_decisions.csv (read by tn-writer) and issue_decisions.csv (read by issue-identification). Read-only PROPOSER — it never writes; use tn-edit-record to record confirmed rows. Use when reviewing the -be- branch TN edits surfaced by the overnight Sensor.
+allowed-tools: Read, Grep, Glob
 ---
 
-# TN Edit Compare
+# TN Edit Compare (proposer)
 
 The TN counterpart to `editor-compare`. TN is row-keyed TSV, not USFM, so it has
 its own comparator. Given a book where a human editor changed Translation Notes
-on a `-be-` branch, identify the systematic note-level preferences and feed them
-back into the decision stores — so the next `tn-writer` run drafts notes the way
-the editors actually want them.
+on a `-be-` branch, identify the systematic note-level preferences and **propose**
+them — so the next `tn-writer` run drafts notes the way the editors actually want
+them.
+
+**This skill is read-only.** It has no `Write`/`Edit`, no `Bash`, and no
+write-capable MCP tool, so it cannot append to a decision store even when the
+runner grants blanket permission (`permissionMode: bypassPermissions`) or when
+cwd is a live git worktree. That is deliberate: the automated overnight path must
+be a proposer only, and the guard is the tool list rather than prose an agent can
+read past. Recording is a separate, interactive skill: **`tn-edit-record`**.
 
 This skill compares and proposes only; it never writes memory (Write/Edit are
 deliberately absent from its allowed-tools). The recording half lives in the
@@ -20,8 +27,9 @@ deliberately absent from its allowed-tools). The recording half lives in the
 
 - A review task from the overnight Sensor: `{ repo: en_tn, book, editor, chapters }`.
 - The mechanical row-keyed diff. The Sensor already wrote it to
-  `data/overnight-review/<date>/proposals.jsonl` (filter to this book), OR
-  compute it directly:
+  `data/overnight-review/<date>/proposals.jsonl` (filter to this book). If you
+  need to compute it manually (outside the overnight path), run this in a
+  terminal where Bash is available:
   ```bash
   node -e "const {prepareCompareTn}=require(process.env.BP_APP_REPO+'/src/workspace-tools/tsv-tools.js'); \
     const fs=require('fs'); \
@@ -49,13 +57,13 @@ Before proposing anything, grep what's already captured:
 grep -i "<SupportReference or phrase>" data/quick-ref/tn_decisions.csv
 grep -i "<phrase>" data/quick-ref/issue_decisions.csv
 ```
-If a row already covers it, propose **strengthening** that row rather than a
-duplicate.
+If a row already covers it, propose **strengthening** that row (quote the existing
+row in your proposal) rather than proposing a duplicate.
 
 ## Step 3 — Phase B: canonical-conflict check
 
 TN classification has canonical authorities. Grep them; if they contradict the
-editor's change, **do not record** it — surface it for human escalation instead:
+editor's change, **do not propose** it — surface it for human escalation instead:
 - `data/issues_resolved.txt` (highest authority on how issues are classified)
 - `data/templates.csv` (note-template authority)
 - the protected rendering glossaries, when a preference touches a Hebrew term or
@@ -72,28 +80,38 @@ If no canonical source addresses it, proceed.
 - **context-specific** — confined to one chapter/verse. Scope `Book` to the book
   code and note the context; never generalize a single occurrence.
 
-## Step 5 — Hand off; never write (mirror editor-compare's Turn-3)
+## Step 5 — Emit proposals (never write)
 
-Like `editor-compare`, do not write memory before the finding is confirmed —
-and this skill does not write memory at all:
-- **Interactive use** — confirm the finding with the editor first (the editor's
-  approval is the gate). To record the confirmed decisions, invoke the
-  `tn-edit-record` skill and hand it the confirmed findings; it owns the exact
-  CSV row formats and the append.
-- **Automated / overnight use** — run as a PROPOSER only: emit the findings as
-  your result (JSON) and write nothing. The overnight runner / a human-merged PR
-  materializes them, so the canonical-conflict and PR-review gates still apply.
-  Never invoke `tn-edit-record` from an unattended run.
+Emit the surviving findings as your result. Write nothing — no decision store, no
+`SKILL.md` body, no `data/issues_resolved.txt`, no protected glossary. The
+downstream consumer materializes the rows, so the canonical-conflict and
+PR-review gates still apply:
 
-Target stores, for orientation only (the write instructions live in
-`tn-edit-record`): note-phrasing / quote-selection preferences go to
-`data/quick-ref/tn_decisions.csv` (read by `tn-writer`); keep/drop
-(over-/under-flagging) signals go to `data/quick-ref/issue_decisions.csv`
-(read by `issue-identification`).
+- **Automated / overnight use** — your emitted JSON *is* the deliverable. The
+  overnight runner collects it into the proposal feed, and a human-merged PR
+  applies it.
+- **Interactive use** — show the proposals to the editor. Once the editor
+  approves (their approval is the gate), hand the approved subset to
+  **`tn-edit-record`**, which owns the write.
+
+Emit one object per proposal:
+```json
+{"store":"tn_decisions","reference":"<Reference>","supportReference":"<SupportReference>",
+ "note":"<concise note preference>","book":"<BOOK or ALL>","context":"<CH:VS context>",
+ "scope":"general|context-specific","evidence":"<editor + book/chapter the change came from>"}
+```
+```json
+{"store":"issue_decisions","phrase":"<phrase or anchor>","issueType":"<SupportReference issue type>",
+ "book":"<BOOK or ALL>","context":"<CH:VS context>","verdict":"keep|drop","notes":"<why>",
+ "scope":"general|context-specific","evidence":"<editor + book/chapter the change came from>"}
+```
+For a proposal that strengthens an existing row, add
+`"strengthens":"<the existing CSV row verbatim>"`. `tn-edit-record` translates
+these objects into CSV rows; the column order and quoting rules live there.
 
 ## Step 6 — Results-first summary
 
 Per `CLAUDE.md`: lead with what changed. List each preference proposed (with
-tier + the editor + book/chapter evidence), each item skipped as a duplicate,
+scope + the editor + book/chapter evidence), each item skipped as a duplicate,
 and each canonical conflict held for escalation. No preamble, no trailing
 questions.
