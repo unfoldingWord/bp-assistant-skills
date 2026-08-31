@@ -96,9 +96,10 @@ Canonical vocabulary references (read-only -- never modify these):
 - `data/glossary/biblical_phrases.csv` -- grammatical and prophetic phrases
 - `data/quick-ref/ult_decisions.csv` / `ust_decisions.csv` -- prior rendering decisions
 - `data/quick-ref/tn_decisions.csv` -- accumulated TN note-phrasing / quote-selection
-  preferences learned from editor reviews (via `tn-edit-compare`). When a row's
-  `SupportReference` matches an issue you're noting (and its `Book` is `ALL` or this
-  book), prefer that note wording and quote span:
+  preferences learned from editor reviews (proposed by `tn-edit-compare`,
+  recorded by `tn-edit-record`). When a row's `SupportReference` matches an
+  issue you're noting (and its `Book` is `ALL` or this book), prefer that note
+  wording and quote span:
   ```bash
   grep -i "<SupportReference>" data/quick-ref/tn_decisions.csv 2>/dev/null
   ```

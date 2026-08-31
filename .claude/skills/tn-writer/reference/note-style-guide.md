@@ -89,7 +89,11 @@ For figs-metaphor, multiple templates may be available (generic, poetry, and spe
 
 - **Default to `generic`**: "Your language may have a comparable expression... or you could state the meaning plainly." This is correct for most metaphors, even in Psalms.
 - **Use `poetry` only when**: The metaphor involves a sustained, vivid image where preserving the imagery is the preferred translation strategy (e.g., God as a rock, a fortress, a shield, a shepherd). The poetry template says "If this image communicates well... If not, you could express this as a comparison" -- this is appropriate only when the image itself is the point.
-- **Use specialized templates**: When a specific template matches (heart, turn, way/path, fathers, brothers, house, sons, behold), prefer it over both generic and poetry.
+- **Use specialized templates**: When a specific template matches (heart, turn, way/path, fathers, brothers, house, sons), prefer it over both generic and poetry.
+
+### Foregrounding Template ("behold")
+
+"Behold" and other attention markers are writing-foreground, not figs-metaphor. Use the writing-foreground template in `prompt-templates.md`: "SPEAKER is using the term **behold** to focus his readers' attention on what he is about to say. Your language may have a comparable expression that you can use in your translation."
 
 ### Possession Template Selection
 

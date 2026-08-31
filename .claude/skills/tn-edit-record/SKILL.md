@@ -62,7 +62,8 @@ Use `Source: editor` for human-attributed rulings.
 **Never** write any `SKILL.md` body, `data/issues_resolved.txt`, or a protected
 glossary (`hebrew_ot_glossary.csv`, `psalms_reference.csv`,
 `sacrifice_terminology.csv`, `biblical_phrases.csv`, `biblical_measurements.csv`)
-from this skill. Those two CSVs are the only files it may modify.
+from this skill. Only `data/quick-ref/tn_decisions.csv` and
+`data/quick-ref/issue_decisions.csv` may be modified.
 
 ## Step 4 — Results-first summary
 

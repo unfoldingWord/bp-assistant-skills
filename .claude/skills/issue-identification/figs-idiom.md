@@ -30,7 +30,6 @@ These have been explicitly decided by the content team (Issues Resolved):
 | "a man to his tent" | figs-idiom | Soldiers ending campaign, going home |
 | "face" = "surface" | figs-idiom | NOT personification |
 | "behold me" (Yahweh announcing) | figs-idiom | = "Now I am about to..." |
-| "behold" (attention-calling) | figs-idiom | = "pay attention" or "listen" (also can be figs-metaphor when "look" = "listen") |
 | "day" (= occasion) | figs-idiom | e.g., "day of uncleanness" = on the occasion of |
 | Round numbers (10,000) | figs-idiom | When meaning "a large number" (context dependent) |
 | "hand" (power + possession) | figs-idiom | When suggesting both power and possession together |
@@ -51,7 +50,8 @@ These have been explicitly decided by the content team (Issues Resolved):
 
 ### Use writing-foreground for:
 | Expression | Reason |
-| "behold" = foregrounding information | When "look" foregrounds information |
+|------------|--------|
+| "behold" (attention-calling) | The marker foregrounds what the speaker is about to say |
 
 ### Use figs-metonymy for:
 | Expression | Reason |
@@ -232,5 +232,5 @@ These have been explicitly decided by the content team (Issues Resolved):
 | **Turn/Arise** | "turn/arise" = begin action | "turn" = change life direction = figs-metaphor |
 | **Days/Day** | "day" = occasion | "days" = time period = figs-metonymy |
 | **Hand** | "hand" = power + possession together | "hand" = power alone = figs-metonymy |
-| **Behold** | "behold" = pay attention, "behold me" (Yahweh announcing) | "behold" = foregrounding information = writing-foreground |
+| **Behold** | "behold me" (Yahweh announcing) = "Now I am about to..." | "behold" calling attention to what follows = writing-foreground |
 

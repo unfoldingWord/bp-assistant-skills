@@ -25,7 +25,7 @@ Identify translation issues in biblical text that require translation notes. Thi
 
 ## Selectivity
 
-An issue earns its place only if a competent translator would plausibly err on it without a note. Published note density is the calibration target: see `.claude/skills/golden-benchmark/golden/calibration.json` for per-genre bands (roughly 1.5 notes/verse in narrative, 3-4.5 in poetry and prophecy). Aim to stay within about 1.5x the published band for the chapter's genre. The discourse families (grammar-connect-*, writing-*) together account for under 12% of published notes; when the list runs over budget, trim those families first. When a formulaic marker repeats in a chapter, flag its first occurrence only — published notes handle later occurrences with "see how you translated" references.
+An issue earns its place only if a competent translator would plausibly err on it without a note. Published note density is the calibration target: see `.claude/skills/golden-benchmark/golden/calibration.json` for per-genre bands (roughly 1.5 notes/verse in narrative, 3-4.5 in poetry and prophecy). Aim to stay within about 1.5x the published band for the chapter's genre. The discourse families (grammar-connect-*, writing-*) together account for under 12% of published notes; when the list runs over budget, trim those families first. When a formulaic marker repeats in a chapter, flag its first occurrence only — published notes handle later occurrences with "see how you translated" references. Foregrounding notes on "behold" (hinneh) are the exception on both counts: published notes carry one at each occurrence, so flag every occurrence and keep them when the discourse families are trimmed.
 
 ## Arguments
 
@@ -266,6 +266,7 @@ When you encounter these words, ALWAYS check the specific issue listed:
 | all, every, never, always | figs-hyperbole (exaggeration for emphasis?) |
 | the righteous, the wicked, the poor | figs-nominaladj (adjective as noun?) |
 | wordplay, sound play, paronomasia, two words from the same Hebrew root | writing-poetry (there is no figs-paronomasia type — see writing-poetry.md "Similar Sounds") |
+| behold, and behold (hinneh, wehinneh) | writing-foreground for the attention marker; see writing-foreground.md for "behold me" and for wehinneh introducing a new scene (writing-newevent) |
 
 ### Commonly Confused Issue Pairs
 

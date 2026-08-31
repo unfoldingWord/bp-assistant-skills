@@ -1,7 +1,7 @@
 ---
 name: tn-edit-compare
 description: Compare editor-edited Translation Notes (TN TSV) against the prior version to learn note-level preferences, and propose rows for tn_decisions.csv (read by tn-writer) and issue_decisions.csv (read by issue-identification). Read-only PROPOSER — it never writes; use tn-edit-record to record confirmed rows. Use when reviewing the -be- branch TN edits surfaced by the overnight Sensor.
-allowed-tools: Read, Grep, Glob, Bash(node -e:*)
+allowed-tools: Read, Grep, Glob
 ---
 
 # TN Edit Compare (proposer)
@@ -12,19 +12,24 @@ on a `-be-` branch, identify the systematic note-level preferences and **propose
 them — so the next `tn-writer` run drafts notes the way the editors actually want
 them.
 
-**This skill is read-only.** It has no `Write`/`Edit` and no write-capable MCP
-tool, so it cannot append to a decision store even when the runner grants blanket
-permission (`permissionMode: bypassPermissions`) or when cwd is a live git
-worktree. That is deliberate: the automated overnight path must be a proposer
-only, and the guard is the tool list rather than prose an agent can read past.
-Recording is a separate, interactive skill: **`tn-edit-record`**.
+**This skill is read-only.** It has no `Write`/`Edit`, no `Bash`, and no
+write-capable MCP tool, so it cannot append to a decision store even when the
+runner grants blanket permission (`permissionMode: bypassPermissions`) or when
+cwd is a live git worktree. That is deliberate: the automated overnight path must
+be a proposer only, and the guard is the tool list rather than prose an agent can
+read past. Recording is a separate, interactive skill: **`tn-edit-record`**.
+
+This skill compares and proposes only; it never writes memory (Write/Edit are
+deliberately absent from its allowed-tools). The recording half lives in the
+`tn-edit-record` skill.
 
 ## Prerequisites
 
 - A review task from the overnight Sensor: `{ repo: en_tn, book, editor, chapters }`.
 - The mechanical row-keyed diff. The Sensor already wrote it to
-  `data/overnight-review/<date>/proposals.jsonl` (filter to this book), OR
-  compute it directly:
+  `data/overnight-review/<date>/proposals.jsonl` (filter to this book). If you
+  need to compute it manually (outside the overnight path), run this in a
+  terminal where Bash is available:
   ```bash
   node -e "const {prepareCompareTn}=require(process.env.BP_APP_REPO+'/src/workspace-tools/tsv-tools.js'); \
     const fs=require('fs'); \
