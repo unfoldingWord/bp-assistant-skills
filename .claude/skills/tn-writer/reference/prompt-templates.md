@@ -86,6 +86,18 @@ Do not include final punctuation in the alternate translation. Do not end the AT
 Return only the text of the generated alternate translation.
 ```
 
+## writing-foreground ("behold")
+
+`data/templates.csv` is fetched from the TN Templates sheet and may not carry a `writing-foreground` row. When the packet arrives with no template for `writing-foreground`, use this one. It follows published phrasing for hinneh / "behold" (MAL 1:13, NAM 1:15) and matches `.claude/skills/issue-identification/writing-foreground.md`:
+
+```
+SPEAKER is using the term **MARKER** to focus his readers' attention on what he is about to say. Your language may have a comparable expression that you can use in your translation. Alternate translation: [Listen] or [See]
+```
+
+- Replace SPEAKER with the author or the speaker in the verse (see "Author References" in `note-style-guide.md`), and MARKER with the ULT's wording (**Behold**, **behold**, **and behold**). Use "listeners' attention" when the speaker is addressing people within the narrative.
+- Each occurrence gets its own note; published notes do not consolidate repeated "behold" markers.
+- When the marker could also be an invitation to look at something actually in view, present both readings in TCM form, as the published NAM 1:15 note does.
+
 ## TCM Instruction
 
 Prepended to the templates section when TCM (This Could Mean) mode is detected:
