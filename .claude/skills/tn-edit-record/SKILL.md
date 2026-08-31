@@ -36,28 +36,52 @@ grep -i "<phrase>" data/quick-ref/issue_decisions.csv
 grep -i "<phrase>" data/issues_resolved.txt
 ```
 - A row already covers it → **strengthen** that row (edit it in place) rather
-  than appending a duplicate.
+  than appending a duplicate. If the proposal carries a `strengthens` field, use
+  that verbatim CSV row as the exact locator to find the row to edit; otherwise
+  grep to find it.
 - `data/issues_resolved.txt`, `data/templates.csv`, or a protected glossary
   contradicts it → **do not write**; surface it for human escalation.
 
 ## Step 3 — Write the rows
 
-Note-phrasing / quote-selection preferences go to `data/quick-ref/tn_decisions.csv`
+Translate proposal fields to CSV columns as follows:
+
+**Note-phrasing / quote-selection preferences** go to `data/quick-ref/tn_decisions.csv`
 (read by `tn-writer`). Columns:
 `Reference,SupportReference,Note,Book,Context,Date,Source`:
 ```
 <Reference>,<SupportReference>,<concise note preference>,<BOOK or ALL>,<CH:VS context>,<YYYY-MM-DD>,editor
 ```
-Keep/drop (over-/under-flagging) signal goes to `data/quick-ref/issue_decisions.csv`
+Field mapping from proposal object:
+- `reference` → Reference
+- `supportReference` → SupportReference
+- `note` → Note
+- `book` → Book (`ALL` when scope=general; book code such as `PSA` when
+  scope=context-specific — the proposal's `book` field already carries the right
+  value, `scope` is just an explicit label for the same distinction)
+- `context` → Context
+- today's date → Date
+- `editor` → Source (hardcoded; the `evidence` field is captured in the Step 4
+  summary for provenance but is not written to a CSV column)
+
+**Keep/drop (over-/under-flagging) signal** goes to `data/quick-ref/issue_decisions.csv`
 (read by `issue-identification`). Columns:
 `Phrase,IssueType,Book,Context,Notes,Date,Source` — put the `keep` or `drop`
 verdict in `Context`:
 ```
 <phrase or anchor>,<SupportReference issue type>,<BOOK or ALL>,<CH:VS context — keep|drop>,<why>,<YYYY-MM-DD>,editor
 ```
+Field mapping from proposal object:
+- `phrase` → Phrase
+- `issueType` → IssueType
+- `book` → Book (same scope rule as above)
+- `context` + `verdict` → Context (format: `<CH:VS context> — keep|drop`)
+- `notes` → Notes
+- today's date → Date
+- `editor` → Source (the `evidence` field goes to the Step 4 summary, not here)
+
 Quote any field that contains a comma, double-quote, or newline (wrap in double
 quotes, doubling internal quotes — RFC 4180) so the row stays well-formed.
-Use `Source: editor` for human-attributed rulings.
 
 **Never** write any `SKILL.md` body, `data/issues_resolved.txt`, or a protected
 glossary (`hebrew_ot_glossary.csv`, `psalms_reference.csv`,
@@ -67,7 +91,7 @@ from this skill. Only `data/quick-ref/tn_decisions.csv` and
 
 ## Step 4 — Results-first summary
 
-Per `CLAUDE.md`: lead with what changed. List each row written (with scope + the
-editor + book/chapter evidence), each item skipped as a duplicate or strengthened
-in place, and each canonical conflict held for escalation. No preamble, no
-trailing questions.
+Per `CLAUDE.md`: lead with what changed. List each row written (with scope +
+evidence + book/chapter), each item skipped as a duplicate or strengthened in
+place, and each canonical conflict held for escalation. No preamble, no trailing
+questions.
