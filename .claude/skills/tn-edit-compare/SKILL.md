@@ -1,7 +1,7 @@
 ---
 name: tn-edit-compare
-description: Compare editor-edited Translation Notes (TN TSV) against the prior version to learn note-level preferences. Feeds findings into tn_decisions.csv (read by tn-writer) and issue_decisions.csv (read by issue-identification). Use when reviewing the -be- branch TN edits surfaced by the overnight Sensor.
-allowed-tools: Read, Grep, Glob, Write, Edit, Bash
+description: Compare editor-edited Translation Notes (TN TSV) against the prior version to learn note-level preferences. Proposes findings for tn_decisions.csv (read by tn-writer) and issue_decisions.csv (read by issue-identification); recording confirmed findings is tn-edit-record's job. Use when reviewing the -be- branch TN edits surfaced by the overnight Sensor.
+allowed-tools: Read, Grep, Glob, Bash
 ---
 
 # TN Edit Compare
@@ -11,6 +11,10 @@ its own comparator. Given a book where a human editor changed Translation Notes
 on a `-be-` branch, identify the systematic note-level preferences and feed them
 back into the decision stores — so the next `tn-writer` run drafts notes the way
 the editors actually want them.
+
+This skill compares and proposes only; it never writes memory (Write/Edit are
+deliberately absent from its allowed-tools). The recording half lives in the
+`tn-edit-record` skill.
 
 ## Prerequisites
 
@@ -40,12 +44,13 @@ For every change, ask *why* the editor made it and whether it generalizes:
 
 ## Step 2 — Phase A: dedup against existing memory
 
-Before recording anything, grep what's already captured:
+Before proposing anything, grep what's already captured:
 ```bash
 grep -i "<SupportReference or phrase>" data/quick-ref/tn_decisions.csv
 grep -i "<phrase>" data/quick-ref/issue_decisions.csv
 ```
-If a row already covers it, **strengthen** that row rather than appending a duplicate.
+If a row already covers it, propose **strengthening** that row rather than a
+duplicate.
 
 ## Step 3 — Phase B: canonical-conflict check
 
@@ -67,38 +72,28 @@ If no canonical source addresses it, proceed.
 - **context-specific** — confined to one chapter/verse. Scope `Book` to the book
   code and note the context; never generalize a single occurrence.
 
-## Step 5 — Write discipline (mirror editor-compare's Turn-3)
+## Step 5 — Hand off; never write (mirror editor-compare's Turn-3)
 
-Like `editor-compare`, do not write memory before the finding is confirmed:
+Like `editor-compare`, do not write memory before the finding is confirmed —
+and this skill does not write memory at all:
 - **Interactive use** — confirm the finding with the editor first (the editor's
-  approval is the gate), then append the rows below.
-- **Automated / overnight use** — run as a PROPOSER only: emit the rows as your
-  result and write nothing. The overnight runner / a human-merged PR materializes
-  them, so the canonical-conflict and PR-review gates still apply.
+  approval is the gate). To record the confirmed decisions, invoke the
+  `tn-edit-record` skill and hand it the confirmed findings; it owns the exact
+  CSV row formats and the append.
+- **Automated / overnight use** — run as a PROPOSER only: emit the findings as
+  your result (JSON) and write nothing. The overnight runner / a human-merged PR
+  materializes them, so the canonical-conflict and PR-review gates still apply.
+  Never invoke `tn-edit-record` from an unattended run.
 
-Write note-phrasing / quote-selection preferences to
-`data/quick-ref/tn_decisions.csv` (read by `tn-writer`). Columns:
-`Reference,SupportReference,Note,Book,Context,Date,Source`:
-```
-<Reference>,<SupportReference>,<concise note preference>,<BOOK or ALL>,<CH:VS context>,<YYYY-MM-DD>,editor
-```
-Write keep/drop (over-/under-flagging) signal to
-`data/quick-ref/issue_decisions.csv` (read by `issue-identification`). Columns:
-`Phrase,IssueType,Book,Context,Notes,Date,Source` — put the `keep` or `drop`
-verdict in `Context`:
-```
-<phrase or anchor>,<SupportReference issue type>,<BOOK or ALL>,<CH:VS context — keep|drop>,<why>,<YYYY-MM-DD>,editor
-```
-Quote any field that contains a comma, double-quote, or newline (wrap in double
-quotes, doubling internal quotes — RFC 4180) so the row stays well-formed.
-Use `Source: editor` for human-attributed rulings. Never write any `SKILL.md`
-body, `data/issues_resolved.txt`, or a protected glossary
-(`hebrew_ot_glossary.csv`, `psalms_reference.csv`, `sacrifice_terminology.csv`,
-`biblical_phrases.csv`, `biblical_measurements.csv`) from this skill.
+Target stores, for orientation only (the write instructions live in
+`tn-edit-record`): note-phrasing / quote-selection preferences go to
+`data/quick-ref/tn_decisions.csv` (read by `tn-writer`); keep/drop
+(over-/under-flagging) signals go to `data/quick-ref/issue_decisions.csv`
+(read by `issue-identification`).
 
 ## Step 6 — Results-first summary
 
-Per `CLAUDE.md`: lead with what changed. List each preference recorded (with
+Per `CLAUDE.md`: lead with what changed. List each preference proposed (with
 tier + the editor + book/chapter evidence), each item skipped as a duplicate,
 and each canonical conflict held for escalation. No preamble, no trailing
 questions.
