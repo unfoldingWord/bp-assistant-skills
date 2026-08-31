@@ -43,9 +43,10 @@ Use a placeholder ID (abc1, abc2, etc., incrementing from what's already in the 
 - Minimal change to ULT wording -- only change what the issue requires
 - No punctuation at start/end of brackets unless the note is about punctuation
 - Match capitalization to sentence position of the quoted phrase
-- Match the conjunction/preposition boundary of the quoted phrase. If the phrase includes a leading "And" or a preposition, the AT keeps it (`And he went` -> [And he traveled]); if the phrase starts after it, the AT starts after it too
-- Resolve the figure: state the plain meaning without reusing the figure the note explains. For personification, prefer a stative description over another action verb ("the deep waters were loud", not "the deep waters roared")
-- Before finalizing, mentally substitute the AT for the quoted phrase in the full ULT verse and confirm the sentence reads naturally
+- Conjunctions and prepositions at the quote boundary: keep whatever the quoted phrase itself includes. If the quote starts with “And” / “in” / “to” / “from”, the AT starts with it too (quote “And he went” → [And he traveled], not [he traveled]); if the quote starts after such a word, do not add one.
+- Discontinuous quotes (the quote contains …): use one pair of brackets with … between the parts — never join the parts with “and.”
+- Resolve the figure: a plain-meaning AT must not reuse the figure the note explains. A personification note's AT should not give the non-living thing an action verb (“the deep waters were loud,” not “the deep waters roared”).
+- If the passage is so obscure that any plain-meaning AT would just restate the UST, omit the bracket entirely and end the sentence with “as the UST does.”
 
 ### Bold and Quoting
 - Bold words/phrases quoted from the verse: `**quoted words**`
