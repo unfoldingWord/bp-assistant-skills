@@ -301,6 +301,12 @@ This hierarchy reflects content team decisions in `data/issues_resolved.txt`. Gr
 
 When classifying body parts, nature imagery, or cultural concepts as metonymy vs metaphor, consult the authoritative lists in `figs-metonymy.md` and `figs-metaphor.md` (under "Authoritative Biblical Imagery" sections).
 
+### Divine Action Is Literal
+
+Yahweh is omnipotent and our materials assume it. When the text says Yahweh heard, saw, remembered, came down, or acted, he literally did that thing. Do not tag the action itself as a figure of speech - labeling "Yahweh heard" figs-idiom, figs-metaphor, figs-metonymy, or figs-personification implies he could not actually hear.
+
+Tag only when the figure is in the *wording*, not in God's capacity: body-part-for-attribute phrases such as "in the eyes of Yahweh" (= his judgment), "the hand of Yahweh" (= his power), or "the mouth of Yahweh" (= Yahweh himself) keep their existing classifications, because the note explains the Hebrew expression rather than denying the action.
+
 ### Final Review Pass
 
 After completing all identification, review your output:
