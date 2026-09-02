@@ -50,6 +50,7 @@ function main() {
   const header = lines[0].split('\t');
   const refIdx = header.indexOf('Reference');
   const srIdx = header.indexOf('SupportReference');
+  const noteIdx = header.indexOf('Note');
   const hasHeader = refIdx !== -1;
 
   const notes = [];
@@ -58,7 +59,8 @@ function main() {
     const ref = hasHeader ? cols[refIdx] : cols[0];
     if (!ref || /:intro\b/.test(ref) || ref.startsWith('front:')) continue;
     const sr = (hasHeader ? cols[srIdx] : cols[3]) || '';
-    notes.push({ ref, type: sr.split('/').pop() });
+    const note = (hasHeader && noteIdx !== -1 ? cols[noteIdx] : cols[6]) || '';
+    notes.push({ ref, type: sr.split('/').pop(), note });
   }
 
   const perVerse = notes.length / verses;
@@ -80,6 +82,16 @@ function main() {
   console.log('');
   console.log(`Discourse families (grammar-connect-* + writing-*): ${gc + wr} notes = ${discoursePct}% of output`);
   console.log(`Published ${genre} share: ${round(publishedShare, 1)}%`);
+  console.log('');
+
+  // REPORTED-ONLY, not a pass/fail gate (see calibration.json "seeHowSharePct":
+  // the see-how rule is the spec, not a calibration band — this is drift visibility).
+  const seeHowCount = notes.filter((n) => /see how you translated/i.test(n.note)).length;
+  const alsoOccursCount = notes.filter((n) => /this also occurs? in verses?/i.test(n.note)).length;
+  const seeHowSharePct = notes.length ? round((seeHowCount / notes.length) * 100, 1) : 0;
+  const ref = cal.seeHowSharePct?.corpusReference;
+  console.log(`See-how share (REPORTED, not gated): ${seeHowSharePct}% of ${notes.length} notes; also-occurs sentences: ${alsoOccursCount}`);
+  if (ref) console.log(`Corpus reference values: ${Object.entries(ref).map(([k, v]) => `${k} ${v}`).join(', ')}`);
   console.log('');
   console.log('Type mix (generated vs published per 100 verses):');
   const rates = band.typeRatesPer100Verses;

@@ -134,7 +134,7 @@ Is the author marking a transition to a new event/episode?
 
 4. **After these things**: "This phrase introduces a new event that happened some time after the events the story has just related. The story does not say how long after those events this new event happened. Use the natural form in your language for introducing a new event."
 
-5. **Cross-reference style**: "See how you translated this phrase in [1:12](../01/12.md)."
+5. **Repeated phrasing**: Flag only the first occurrence in the chapter. Do not write a "see how you translated" cross-reference yourself — the pipeline generates that pointer deterministically for repeats.
 
 ## Languages Mark New Events Differently
 

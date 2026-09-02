@@ -63,7 +63,7 @@ Exception: If the name is used in a figurative expression, use the appropriate f
 To verify what the tW article covers, read: `data/en_tw/names/[twarticle].md`
 
 ### First Occurrence Only
-After the first note explaining a name, use "See how you translated this in [X:Y]" for subsequent occurrences.
+Flag the first occurrence of a name only. Do not flag or emit rows for later occurrences of the same name — the pipeline generates the "see how you translated" pointer deterministically after issue identification.
 
 ## NOT This Issue
 
@@ -134,4 +134,4 @@ After identifying a potential name issue:
 "If you include the meaning of **[Name]**'s name in your translation or in a footnote, make sure it is similar to the word in the following clause that has the same meaning."
 
 ### Cross-reference
-"See how you translated this name in [X:Y]."
+Do not write this pattern yourself — the pipeline generates the "See how you translated this name in [X:Y]" pointer deterministically for repeated names after issue identification.

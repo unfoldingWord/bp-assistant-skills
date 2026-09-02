@@ -77,7 +77,7 @@ The pronoun doesn't point to specific people:
 
 ### Independent Pronoun
 > "You, you know" (Hebrew adds separate pronoun)
-- Note: "See how you translated the similar expression 'you, you swore' in [1:17]. Alternate translation: [You know quite well]"
+- Flag only the first occurrence of the repeated construction in the chapter; do not write a "see how you translated" cross-reference yourself — the pipeline generates that pointer deterministically for repeats.
 
 ### Indefinite They
 > "And they declared to the king"

@@ -112,7 +112,7 @@ Use `node /app/src/workspace-tools-cli.js read_prepared_notes '{"preparedJson":"
 
 Process one item at a time. Each note addresses exactly one item from the prepared JSON, which corresponds to one issue in one verse. Never create summary notes that combine or reference multiple verse occurrences of the same pattern (e.g., do not write "The author uses synecdoche in verses 2, 5, and 6"). Each verse gets its own self-contained note even when the same figure recurs across the chapter.
 
-As you work through items, keep a mental map of interpretive commitments you have made (e.g., "in v9 I said inheritance = people"). This mental map is for consistency, not for creating cross-verse summaries. When a note references or depends on a concept from a nearby verse, check that the interpretation is consistent with notes you already wrote. If you spot a conflict, resolve it before continuing -- adjust the current note or go back and revise the earlier one.
+As you work through items, keep a mental map of interpretive commitments you have made (e.g., "in v9 I said inheritance = people"). This mental map is for consistency, not for creating cross-verse summaries. When a note references or depends on a concept from a nearby verse, check that the interpretation is consistent with notes you already wrote. If you spot a conflict, resolve it before continuing -- adjust the current note or go back and revise the earlier one. Never invent your own "see how you translated" pointer or "this also occurs in verses …" sentence here — those are produced deterministically by the pipeline (see Note Types below).
 
 1. Read the `system_prompt_key` field to know which persona to use:
    - `ai_writes_at_agent` -- Generate the note AND an alternate translation
@@ -278,6 +278,8 @@ Reference	ID	Tags	SupportReference	Quote	Occurrence	Note
 | `see_how_at` | Explanation starts with "see how", no AT | Generate AT only |
 | `see_how` | Explanation starts with "see how", has AT | Prefer the programmatic note in `writer_packet.programmatic_note` |
 | `hint` | Editor-marked TN row hint (carries `seed`, `hintRowId`, `fromHint: true`) | Expand `seed` into a complete note; keep the pre-assigned `id` so the editor can UPDATE in place |
+
+For `see_how` / `see_how_at` items, the pointer sentence and any "This also occurs in verses …" list come from `writer_packet.programmatic_note` / `also_occurs_verses` in `prepared_notes.json` — use them verbatim and never write your own cross-verse reference.
 
 ## Special Modes
 

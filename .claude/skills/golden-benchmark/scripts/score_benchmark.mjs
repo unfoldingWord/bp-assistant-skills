@@ -132,7 +132,12 @@ export function scoreText(generatedUsfm, goldenUsfm) {
 }
 
 export function parseTnRows(tsv) {
-  const lines = tsv.split('\n').filter((l) => l.trim());
+  // Split on \r?\n, not just \n: a CRLF-terminated TSV otherwise leaves a
+  // stray \r on the last field of every line ("Note\r" in the header), which
+  // breaks col('Note')'s exact-match lookup and silently makes every row's
+  // `note` empty. Discovered while adding the seeHowSharePct metric — the
+  // bundled golden fixtures are CRLF.
+  const lines = tsv.split(/\r?\n/).filter((l) => l.trim());
   const header = lines[0].split('\t');
   const col = (name) => header.indexOf(name);
   const iRef = col('Reference'), iId = col('ID'), iTags = col('Tags'), iSr = col('SupportReference'), iQuote = col('Quote'), iNote = col('Note');
@@ -245,6 +250,14 @@ export function scoreNotes(generatedTsv, goldenTsv, chapter) {
     density.get(v).generated++;
   }
 
+  // REPORTED-ONLY metric: see-how coverage. See calibration.json `seeHowSharePct`.
+  // see-how share and also-occurs count, generated vs golden. Not a pass/fail gate —
+  // the see-how rule is the spec, not a calibration band — just visibility over time.
+  const SEE_HOW_RE = /see how you translated/i;
+  const ALSO_OCCURS_RE = /this also occurs? in verses?/i;
+  const seeHowSharePct = (rows) => (rows.length ? Number(((100 * rows.filter((r) => SEE_HOW_RE.test(r.note)).length) / rows.length).toFixed(1)) : 0);
+  const alsoOccursCount = (rows) => rows.filter((r) => ALSO_OCCURS_RE.test(r.note)).length;
+
   return {
     counts: { generated: genNotes.length, golden: goldNotes.length, ratio: goldNotes.length ? Number((genNotes.length / goldNotes.length).toFixed(2)) : null },
     intro: { generated: gen.some(isIntro), golden: gold.some(isIntro) },
@@ -256,6 +269,10 @@ export function scoreNotes(generatedTsv, goldenTsv, chapter) {
     unmatchedGenerated,
     conventionProblems: conventions,
     density: Object.fromEntries([...density.entries()].sort((a, b) => Number(a[0]) - Number(b[0]))),
+    seeHow: {
+      seeHowSharePct: { generated: seeHowSharePct(genNotes), golden: seeHowSharePct(goldNotes) },
+      alsoOccursCount: { generated: alsoOccursCount(genNotes), golden: alsoOccursCount(goldNotes) },
+    },
   };
 }
 
@@ -289,6 +306,7 @@ function renderMarkdown(scorecard) {
     lines.push(`- Verse-only recall (verses the humans noted that we also noted): ${tn.verseRecall === null ? 'n/a' : (tn.verseRecall * 100).toFixed(0) + '%'}`);
     lines.push(`- Verse-only precision (our noted verses the humans also noted): ${tn.versePrecision === null ? 'n/a' : (tn.versePrecision * 100).toFixed(0) + '%'}`);
     lines.push(`- Chapter intro row: generated ${tn.intro.generated ? 'yes' : 'no'} / published ${tn.intro.golden ? 'yes' : 'no'}`);
+    lines.push(`- See-how share (REPORTED, not gated): ${tn.seeHow.seeHowSharePct.generated}% generated vs ${tn.seeHow.seeHowSharePct.golden}% published; also-occurs sentences: ${tn.seeHow.alsoOccursCount.generated} generated vs ${tn.seeHow.alsoOccursCount.golden} published`);
     lines.push(`- Convention problems in generated notes: ${tn.conventionProblems.length}`);
     if (tn.conventionProblems.length) {
       for (const c of tn.conventionProblems.slice(0, 15)) lines.push(`  - ${c.ref} ${c.id}: ${c.problem}`);

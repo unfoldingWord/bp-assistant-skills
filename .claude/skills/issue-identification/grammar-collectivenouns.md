@@ -139,4 +139,4 @@ Standard form:
 "In this verse, the word **[term]** is singular in form, but it refers to [all X / multiple X / a group of X]. If it would be helpful in your language, you could use the plural form of '[term].' Alternate translation: [plural form]"
 
 Continuity reference:
-"See how you translated the similar expression in [verse](../##/##.md)."
+Do not flag repeated occurrences and do not write this sentence yourself — the pipeline generates the "see how you translated" pointer deterministically after issue identification.

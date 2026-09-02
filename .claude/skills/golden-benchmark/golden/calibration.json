@@ -6,6 +6,16 @@
     "ult": "en_ult tag/v89"
   },
   "countingRules": "verse-anchored notes only; front:intro and chapter :intro rows excluded; chapter verse count = highest verse number in published ULT",
+  "seeHowSharePct": {
+    "description": "REPORTED metric only — no pass/fail gate, since the see-how rule is deterministic (pointers to the first occurrence in the book; same-chapter repeats folded into 'This also occurs in verses …'), not a calibration band. Share = 100 * (notes whose Note matches /see how you translated/i) / (non-intro notes) for a chapter; alsoOccursCount = notes matching /This also occurs in verses?/. Emitted by scripts/score_benchmark.mjs (scoreNotes().seeHow) and scripts/calibration_scorecard.mjs. Track for drift, do not gate on it.",
+    "gate": false,
+    "corpusReference": {
+      "narrative_JOS": 13.0,
+      "narrative_GEN": 16.4,
+      "history_2KI": 25.1,
+      "wisdom_PRO": 25.4
+    }
+  },
   "goldTrio": {
     "books": [
       "JOS",

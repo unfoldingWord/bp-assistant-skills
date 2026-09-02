@@ -17,7 +17,7 @@ This issue addresses cases where translators may need to **ADD** information tha
 
 ### IS figs-explicit:
 1. **"struck" meaning "defeated" or "killed"** - explaining the implied outcome
-2. **Musical instructions** (e.g., "On Sheminith") - explaining what these mean with "see how" notes
+2. **Musical instructions** (e.g., "On Sheminith") - explain what these mean on first occurrence only; later occurrences get no note of their own (the pipeline adds the "see how" pointer)
 3. **Clarifying referents** - when pronouns or descriptions refer to someone/something not named
    - "the one having called you" -> "God who called you"
    - "the one judging justly" -> "God, who judges justly"
@@ -61,12 +61,8 @@ Something is implied that readers should understand:
 
 **Pattern**: "The implication is that IMPLIED. You could include this information if that would be helpful to your readers."
 
-### 4. "See How" Notes
-Referring back to earlier occurrences for consistency:
-- Musical instructions in Psalms
-- Repeated phrases with established meanings
-
-**Pattern**: "See how you translated the similar expression in [reference]."
+### 4. Repeated Occurrences — Do Not Write "See How" Notes
+Musical instructions in Psalms and repeated phrases with established meanings should be flagged only at their first occurrence in the chapter. Do not flag later occurrences and do not write a "see how you translated" sentence yourself — the pipeline generates that pointer, and the "this also occurs in verses …" list, deterministically after issue identification.
 
 ## Recognition Process
 

@@ -71,7 +71,7 @@ Does the text contain an image that represents something else?
 | Animals representing kingdoms | "a fourth animal, terrifying" | empires or powers |
 | Objects with prophetic meaning | "seven golden lampstands" | seven churches |
 | Places with symbolic meaning | "Babylon" | Rome or worldly opposition |
-| Cross-references | "See how you translated this in [X]" | consistency with similar symbols |
+| Repeated symbols | flag first occurrence only; do not write a cross-reference | pipeline generates the "see how" pointer deterministically for repeats |
 
 ## Key Distinction Summary
 
