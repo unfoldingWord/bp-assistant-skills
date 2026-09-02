@@ -94,6 +94,29 @@ test('TN AT final punctuation caught, but figs-rquestion rows exempt', () => {
   assert.ok(results.filter((r) => r.issue === 80).every((r) => r.status !== 'fail'), 'rquestion AT punctuation must be exempt');
 });
 
+test('TN TCM note with pooled ATs is caught; per-option ATs and AT-free TCM pass', () => {
+  const head = 'Reference\tID\tTags\tSupportReference\tQuote\tOccurrence\tNote\n';
+  const sref = 'rc://*/ta/man/translate/figs-idiom';
+
+  const pooled = head
+    + `1:2\tab12\t\t${sref}\tq\t1\tThis could mean: (1) he is guilty or (2) he is afraid. Alternate translation: [he is guilty]\n`;
+  let results = runChecks({ stage: 'TN', text: pooled, book: 'NAM', chapter: 1, checksData: CHECKS });
+  assert.ok(results.some((r) => r.issue === 173 && r.status === 'fail'),
+    `pooled AT should fail: ${JSON.stringify(results.filter((r) => r.issue === 173), null, 2)}`);
+
+  const perOption = head
+    + `1:2\tcd34\t\t${sref}\tq\t1\tThis could mean: (1) he is guilty. Alternate translation: [he is guilty] or (2) he is afraid. Alternate translation: [he is terrified]\n`;
+  results = runChecks({ stage: 'TN', text: perOption, book: 'NAM', chapter: 1, checksData: CHECKS });
+  assert.ok(results.filter((r) => r.issue === 173).every((r) => r.status !== 'fail'),
+    `one AT per option must pass: ${JSON.stringify(results.filter((r) => r.issue === 173), null, 2)}`);
+
+  const noAts = head
+    + `1:2\tef56\t\t${sref}\tq\t1\tThe phrase **from God** could mean (1) sent by God or (2) having God as its source.\n`;
+  results = runChecks({ stage: 'TN', text: noAts, book: 'NAM', chapter: 1, checksData: CHECKS });
+  assert.ok(results.filter((r) => r.issue === 173).every((r) => r.status !== 'fail'),
+    'AT-free TCM notes must not be flagged by the AT-placement check');
+});
+
 test('golden published TN chapters pass all enforced global TN checks', () => {
   // Checks flagged generatedOnly encode rules stricter than the published
   // corpus (set by closed issues for new output); they are excluded here.

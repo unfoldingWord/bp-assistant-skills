@@ -130,9 +130,10 @@ As you work through items, keep a mental map of interpretive commitments you hav
 
 5. Do not generate alternate translations. The pipeline handles AT generation as a separate step after note writing. For all items with `at_policy: required`, write only the explanatory note text. The pipeline will programmatically append `Alternate translation: [text]` after generating ATs with a focused, validated process.
 
-6. For items with `tcm_mode: true`:
+6. For items with `tcm_mode: true` — the one exception to rules 3 and 5, because TCM ATs are interleaved with the options and so cannot be appended by the later AT stage:
    - Present multiple interpretations using the "This could mean:" format
-   - Each interpretation gets its own AT in square brackets
+   - Put the preferred interpretation first, as option (1), keeping the `i:` field's order
+   - Write one AT per option in square brackets, tuned to that option, at the end of its own option before the next option begins — never pooled at the end of the note
 
 7. For items with `note_type: "hint"` (editor-marked TN row hints):
    - Read the `seed` field for authorial guidance from a human translator.

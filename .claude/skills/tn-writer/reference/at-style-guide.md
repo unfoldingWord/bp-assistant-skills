@@ -6,7 +6,9 @@ need it. Note-writing rules live in `note-style-guide.md`.
 
 ## When to Generate
 
-Generate an alternate translation when the matched templates contain "Alternate translation:" sections. Place AT(s) at the end of the note, as modeled in the template. Enclose each in square brackets. When providing two options, separate with `or`.
+Generate an alternate translation when the matched templates contain "Alternate translation:" sections. Place AT(s) at the end of the note, as modeled in the template. Enclose each in square brackets. When one meaning has two equally good renderings, separate them with `or`.
+
+Exception — TCM (This Could Mean) notes carry one AT per interpretation, and each AT sits at the end of its own option rather than with the others at the end of the note. See "TCM Instruction" in `prompt-templates.md`.
 
 ## Seamless Replacement
 

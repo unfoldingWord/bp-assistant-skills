@@ -23,6 +23,29 @@
     "notes": "Pattern check guards the specific closed bug (figs-paronomasia). The general list-membership invariant is enforced by tn-quality-check check 17 (unknown_sref, error)."
   },
   {
+    "issue": 173,
+    "title": "TN: TCM notes put the preferred option first and give each option its own AT",
+    "classification": "global",
+    "stage": "TN",
+    "book": null,
+    "chapter": null,
+    "verse": null,
+    "checks": [
+      {
+        "type": "must_not_match",
+        "pattern": "could mean[^\\t]*?\\(1\\)(?:(?!Alternate translation)[^\\t])*\\(2\\)[^\\t]*Alternate translation",
+        "flags": "i",
+        "explain": "In a TCM note that has alternate translations, option (1) reached option (2) without an 'Alternate translation:' of its own. Each option carries its own AT, tuned to that option, at the end of that option — ATs are never pooled at the end of the note."
+      },
+      {
+        "type": "invariant",
+        "name": "tcm_preferred_option_first",
+        "explain": "In a TCM note, option (1) must be the preferred interpretation, and the order must match the identification row's i: field. Needs the identification row to verify."
+      }
+    ],
+    "notes": "Pattern is row-level and confined to one cell via [^\\t]. It only fires when the note has at least one AT, so genuinely AT-free TCM notes (published corpus has several) are not false-flagged. Option ordering is editorial judgment, so it is advisory."
+  },
+  {
     "issue": 82,
     "title": "Bold-format GLQuote words when directly quoted in Note field",
     "classification": "global",

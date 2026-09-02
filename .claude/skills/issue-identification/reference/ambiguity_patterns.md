@@ -119,7 +119,7 @@ When genuine ambiguity is identified, notes should:
 
 2. **Keep options concise** - usually one phrase each
 
-3. **Order options** - put the more likely interpretation first when there is scholarly consensus
+3. **Order options by preference** - option (1) is always the reading you judge most likely. The note writer preserves this order, so a wrong order here becomes a wrong order in the published note.
 
 4. **Avoid false precision** - don't claim certainty where none exists
 
@@ -145,7 +145,7 @@ When identifying ambiguity in issue-identification output, use the `TCM` trigger
 TCM i:(1) [interpretation A] (2) [interpretation B]
 ```
 
-The `TCM` keyword goes at the start of the explanation field, followed by `i:` with numbered options.
+The `TCM` keyword goes at the start of the explanation field, followed by `i:` with numbered options. List the preferred reading as (1); the note writer keeps this order and gives each option its own alternate translation.
 
 ### Examples from Published Notes
 
@@ -180,7 +180,7 @@ Use TCM when:
 - Multiple interpretations are equally valid
 
 Do NOT use TCM when:
-- There's a clear preferred interpretation
+- The evidence settles the meaning and the other readings are not live options (having a preferred reading is normal in TCM — it becomes option (1) — so preference alone is not a reason to skip TCM)
 - The issue is translation difficulty, not semantic ambiguity
 - The "options" are really just rephrasing the same meaning
 

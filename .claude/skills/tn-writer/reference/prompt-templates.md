@@ -104,7 +104,12 @@ Prepended to the templates section when TCM (This Could Mean) mode is detected:
 
 ```
 IMPORTANT: This note should present multiple interpretations.
-Format as: "This could mean: (1) [first interpretation]. Alternate translation: [AT for option 1] or (2) [second interpretation]. Alternate translation: [AT for option 2]"
+
+- Order the options by preference: the reading you judge most likely is option (1). Keep the order the identification row's `i:` field gives; do not reorder by source order or by length.
+- Write as many ATs as there are options — one per option, tuned to that option's meaning. Two options means two ATs.
+- Each AT closes its own option, immediately before the next option begins. Never pool the ATs at the end of the note.
+
+Format as: "This could mean: (1) [first interpretation]. Alternate translation: [AT for option 1] or (2) [second interpretation]. Alternate translation: [AT for option 2]" — extend the same shape for a third or further option.
 
 Use the template below for context on what aspect needs explanation, but structure the note as a "this could mean" with numbered options.
 ```
