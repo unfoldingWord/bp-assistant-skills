@@ -26,7 +26,7 @@ session log — what you just did belongs in the commit message and PR body.
   verses …" lists are generated deterministically by bp-assistant
   (`recurrence-index.js`, `runSeeHowDetection`) from `prepared_notes.json`
   fields `programmatic_note` and `also_occurs_verses`. issue-identification
-  flags the first occurrence of a repeated phrase only; tn-writer uses the
+  flags the first occurrence of a repeated Hebrew/Greek wording only (a recurrence with different words is a separate issue); tn-writer uses the
   programmatic sentence verbatim. Any skill text that asks the model to write
   its own pointer is a regression.
 - **`seeHowSharePct` in the golden benchmark is reported, not gated.** The
