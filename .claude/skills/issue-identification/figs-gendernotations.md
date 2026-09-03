@@ -112,7 +112,7 @@ Is there a masculine term?
 "Although the term **him** is masculine, [SPEAKER] is using the word in a generic sense that includes both men and women. Alternate translation: [him or her]"
 
 ### For Repeated Usage
-Do not flag repeated occurrences of the same phrase, and do not write a "see how you translated" sentence yourself — the pipeline generates that pointer deterministically after issue identification.
+Do not flag a later occurrence of the same masculine term (same Hebrew/Greek wording); the pipeline links those automatically. A different masculine term used generically (e.g., "man" after "brothers") is a separate occurrence and follows normal selectivity. Either way, do not write a "see how you translated" sentence yourself.
 
 ## Alternate Translation Options
 

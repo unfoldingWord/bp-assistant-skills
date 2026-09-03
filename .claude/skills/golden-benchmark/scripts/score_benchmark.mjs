@@ -254,7 +254,7 @@ export function scoreNotes(generatedTsv, goldenTsv, chapter) {
   // see-how share and also-occurs count, generated vs golden. Not a pass/fail gate —
   // the see-how rule is the spec, not a calibration band — just visibility over time.
   const SEE_HOW_RE = /see how you translated/i;
-  const ALSO_OCCURS_RE = /this also occurs? in verses?/i;
+  const ALSO_OCCURS_RE = /this also occurs in verses?/i;
   const seeHowSharePct = (rows) => (rows.length ? Number(((100 * rows.filter((r) => SEE_HOW_RE.test(r.note)).length) / rows.length).toFixed(1)) : 0);
   const alsoOccursCount = (rows) => rows.filter((r) => ALSO_OCCURS_RE.test(r.note)).length;
 

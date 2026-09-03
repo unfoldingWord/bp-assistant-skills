@@ -139,4 +139,4 @@ Standard form:
 "In this verse, the word **[term]** is singular in form, but it refers to [all X / multiple X / a group of X]. If it would be helpful in your language, you could use the plural form of '[term].' Alternate translation: [plural form]"
 
 Continuity reference:
-Do not flag repeated occurrences and do not write this sentence yourself — the pipeline generates the "see how you translated" pointer deterministically after issue identification.
+Do not flag a later occurrence of the same collective noun (same Hebrew/Greek wording); the pipeline links those automatically. A different collective noun is a separate occurrence and follows normal selectivity. Either way, do not write this sentence yourself.

@@ -276,7 +276,7 @@ Reference	ID	Tags	SupportReference	Quote	Occurrence	Note
 | `writes_at` | `at_policy` is `required` | Generate note + AT |
 | `given_at` | `at_policy` is `provided`, `forbidden`, or `not_needed` | Generate note only |
 | `see_how_at` | Explanation starts with "see how", no AT | Generate AT only |
-| `see_how` | Explanation starts with "see how", has AT | Prefer the programmatic note in `writer_packet.programmatic_note` |
+| `see_how` | Explanation starts with "see how", has AT | Use the programmatic note in `writer_packet.programmatic_note` verbatim |
 | `hint` | Editor-marked TN row hint (carries `seed`, `hintRowId`, `fromHint: true`) | Expand `seed` into a complete note; keep the pre-assigned `id` so the editor can UPDATE in place |
 
 For `see_how` / `see_how_at` items, the pointer sentence and any "This also occurs in verses …" list come from `writer_packet.programmatic_note` / `also_occurs_verses` in `prepared_notes.json` — use them verbatim and never write your own cross-verse reference.

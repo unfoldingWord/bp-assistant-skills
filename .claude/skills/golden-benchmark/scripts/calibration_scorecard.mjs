@@ -46,7 +46,7 @@ function main() {
     process.exit(2);
   }
 
-  const lines = readFileSync(tsv, 'utf8').split('\n').filter((l) => l.trim());
+  const lines = readFileSync(tsv, 'utf8').split(/\r?\n/).filter((l) => l.trim());
   const header = lines[0].split('\t');
   const refIdx = header.indexOf('Reference');
   const srIdx = header.indexOf('SupportReference');
@@ -87,7 +87,7 @@ function main() {
   // REPORTED-ONLY, not a pass/fail gate (see calibration.json "seeHowSharePct":
   // the see-how rule is the spec, not a calibration band — this is drift visibility).
   const seeHowCount = notes.filter((n) => /see how you translated/i.test(n.note)).length;
-  const alsoOccursCount = notes.filter((n) => /this also occurs? in verses?/i.test(n.note)).length;
+  const alsoOccursCount = notes.filter((n) => /this also occurs in verses?/i.test(n.note)).length;
   const seeHowSharePct = notes.length ? round((seeHowCount / notes.length) * 100, 1) : 0;
   const ref = cal.seeHowSharePct?.corpusReference;
   console.log(`See-how share (REPORTED, not gated): ${seeHowSharePct}% of ${notes.length} notes; also-occurs sentences: ${alsoOccursCount}`);

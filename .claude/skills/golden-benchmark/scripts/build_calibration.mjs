@@ -21,10 +21,39 @@
  * calibration is about verse-anchored translator notes.
  */
 
-import { writeFileSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { httpGet } from './fetch_golden.mjs';
+
+// REPORTED-only metric block (see docs plan "we-feel-like-the-rustling-emerson.md"
+// Phase 4, and .claude/skills/golden-benchmark/scripts/score_benchmark.mjs's
+// scoreNotes().seeHow / calibration_scorecard.mjs). This script has no way to
+// recompute it from the CORPUS fetch below (that would need per-note text, not
+// just counts), so a regeneration must carry the existing file's block forward
+// rather than silently dropping it. Falls back to this hardcoded default (the
+// values recorded when the metric was added) only when calibration.json does
+// not exist yet or has no seeHowSharePct of its own.
+export const DEFAULT_SEE_HOW_SHARE_PCT = {
+  description: "REPORTED metric only — no pass/fail gate, since the see-how rule is deterministic (pointers to the first occurrence in the book; same-chapter repeats folded into 'This also occurs in verses …'), not a calibration band. Share = 100 * (notes whose Note matches /see how you translated/i) / (non-intro notes) for a chapter; alsoOccursCount = notes matching /This also occurs in verses?/. Emitted by scripts/score_benchmark.mjs (scoreNotes().seeHow) and scripts/calibration_scorecard.mjs. Track for drift, do not gate on it.",
+  gate: false,
+  corpusReference: {
+    narrative_JOS: 13.0,
+    narrative_GEN: 16.4,
+    history_2KI: 25.1,
+    wisdom_PRO: 25.4,
+  },
+};
+
+export function loadSeeHowSharePct(dest) {
+  if (existsSync(dest)) {
+    try {
+      const existing = JSON.parse(readFileSync(dest, 'utf8'));
+      if (existing.seeHowSharePct) return existing.seeHowSharePct;
+    } catch { /* fall through to default */ }
+  }
+  return DEFAULT_SEE_HOW_SHARE_PCT;
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const GOLDEN_DIR = resolve(__dirname, '../golden');
@@ -192,11 +221,13 @@ async function main() {
       .filter(([t]) => t.startsWith(prefix))
       .reduce((s, [, c]) => s + c, 0), 0) / trioNotes * 100, 1);
 
+  const dest = join(GOLDEN_DIR, 'calibration.json');
   const calibration = {
     generatedBy: 'golden-benchmark/scripts/build_calibration.mjs',
     fetchedAt: new Date().toISOString(),
     sources: { tn: 'en_tn branch/master', ult: `en_ult ${ULT_REF}` },
     countingRules: 'verse-anchored notes only; front:intro and chapter :intro rows excluded; chapter verse count = highest verse number in published ULT',
+    seeHowSharePct: loadSeeHowSharePct(dest),
     goldTrio: {
       books: [...GOLD_TRIO],
       notes: trioNotes,
@@ -209,7 +240,6 @@ async function main() {
     books: Object.fromEntries(bookResults.map((b) => [b.book, b])),
   };
 
-  const dest = join(GOLDEN_DIR, 'calibration.json');
   writeFileSync(dest, JSON.stringify(calibration, null, 2) + '\n');
   console.error(`wrote ${dest}`);
 

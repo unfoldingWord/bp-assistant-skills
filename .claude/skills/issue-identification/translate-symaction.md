@@ -134,5 +134,5 @@ Does the text describe a person performing an action?
 - This is one of the most frequently used issue types (491 instances)
 - Found across all genres: narrative, poetry, prophecy, epistles
 - Most common in Leviticus (60), 1 Samuel (58), 1 Kings (47), Job (40)
-- Flag only the first occurrence of a repeated symbolic action; the pipeline generates any "see how you translated" cross-reference deterministically for repeats, so do not write one yourself
+- Do not flag a later occurrence of the same symbolic action described with the same Hebrew/Greek wording; the pipeline links those automatically. A different symbolic action, or the same action described with different wording, is a separate occurrence and follows normal selectivity. Either way, do not write a "see how you translated" cross-reference yourself
 - When the action could seem accidental, notes clarify it was intentional

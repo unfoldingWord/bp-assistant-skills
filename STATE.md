@@ -14,6 +14,11 @@ session log — what you just did belongs in the commit message and PR body.
   `figs-gendernotations.md`). Editor tools normalize untouched lines and produce
   large phantom diffs. Check `git diff --ignore-cr-at-eol` against `git diff`
   before committing and rewrite byte-for-byte if they differ.
+- **`score_benchmark.mjs` convention-problem counts from before 2026-09-02 are
+  not comparable with later runs.** The CRLF bug above had emptied every note
+  field, so the template-phrase convention checks (e.g. "figs-abstractnouns
+  note missing template phrase") were guaranteed false positives, not real
+  findings.
 
 ## Lessons learned
 
