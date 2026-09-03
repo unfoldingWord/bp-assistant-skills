@@ -25,7 +25,7 @@ Identify translation issues in biblical text that require translation notes. Thi
 
 ## Selectivity
 
-An issue earns its place only if a competent translator would plausibly err on it without a note. Published note density is the calibration target: see `.claude/skills/golden-benchmark/golden/calibration.json` for per-genre bands (roughly 1.5 notes/verse in narrative, 3-4.5 in poetry and prophecy). Aim to stay within about 1.5x the published band for the chapter's genre. The discourse families (grammar-connect-*, writing-*) together account for under 12% of published notes; when the list runs over budget, trim those families first. When a formulaic marker repeats in a chapter, flag its first occurrence only — published notes handle later occurrences with "see how you translated" references. Foregrounding notes on "behold" (hinneh) are the exception on both counts: published notes carry one at each occurrence, so flag every occurrence and keep them when the discourse families are trimmed.
+An issue earns its place only if a competent translator would plausibly err on it without a note. Published note density is the calibration target: see `.claude/skills/golden-benchmark/golden/calibration.json` for per-genre bands (roughly 1.5 notes/verse in narrative, 3-4.5 in poetry and prophecy). Aim to stay within about 1.5x the published band for the chapter's genre. The discourse families (grammar-connect-*, writing-*) together account for under 12% of published notes; when the list runs over budget, trim those families first. When a formulaic marker repeats in a chapter, flag its first occurrence only. Do not flag later occurrences of the same Hebrew/Greek wording and do not count them against the budget — the pipeline adds "see how you translated" pointers and "this also occurs in verses …" lists deterministically after issue identification, so repeats are handled downstream, not by you. Foregrounding notes on "behold" (hinneh) are the exception on both counts: published notes carry one at each occurrence, so flag every occurrence and keep them when the discourse families are trimmed.
 
 ## Arguments
 
@@ -448,7 +448,7 @@ See `reference/ambiguity_patterns.md` for detailed examples from published notes
 
 - **fetch_door43 fails**: Check network connectivity and that the book/chapter exists on Door43. The tool retries 3 times with backoff. If the resource was recently published, allow a few minutes for CDN propagation.
 - **detect_abstract_nouns returns empty**: The detection tool found no abstract nouns in the passage. This is normal for short or concrete passages. Verify the input USFM has content and is not a header-only file.
-- **Too many issues flagged**: If a chapter runs well past the genre budget (see Selectivity above), review for duplicates, competing figurative analyses, and repeat occurrences of formulaic markers, and check that the same verse span is not being flagged by overlapping issue types.
+- **Too many issues flagged**: If a chapter runs well past the genre budget (see Selectivity above), review for duplicates, competing figurative analyses, and repeat occurrences of formulaic markers already flagged earlier in the chapter (these should not have been flagged again — the pipeline adds "see how"/"also occurs" pointers deterministically), and check that the same verse span is not being flagged by overlapping issue types.
 - **Too few issues flagged**: Confirm each of the 7 category passes was completed for every verse and that detector output (abstract nouns, passives) was integrated.
 
 ## Output Format

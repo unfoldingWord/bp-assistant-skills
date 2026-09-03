@@ -60,7 +60,7 @@ The Hebrew calendar has twelve months beginning in spring (March-April). Months 
 
 **For named months**:
 - "**Nisan** is the name of the first month of the Hebrew calendar."
-- "**Adar** is the name of the twelfth and last month of the Hebrew calendar. See how you translated this in [previous verse]."
+- "**Adar** is the name of the twelfth and last month of the Hebrew calendar." (Flag only the first occurrence in the chapter; do not add a "see how" sentence yourself — the pipeline generates it deterministically for repeats.)
 - "**Kislev** is the ninth month of the Hebrew calendar."
 
 **For ordinal months**:
@@ -68,11 +68,11 @@ The Hebrew calendar has twelve months beginning in spring (March-April). Months 
 - "This refers to the first month of the Hebrew calendar, which occurs in March-April on modern calendars."
 - "You could convert the Hebrew **month** into an equivalent on the calendar that your culture uses. However, the Jews used a lunar calendar, so if you use a solar calendar, the equivalency will be different every year."
 
-**For repeated references**: Link back to first occurrence ("See how you decided to represent a Hebrew month in [verse]")
+**For repeated references**: Do not flag them and do not write a cross-reference yourself. The pipeline generates the "See how you translated" pointer to the first occurrence deterministically after issue identification.
 
 ## Key Considerations
 
 1. **Lunar vs Solar calendars**: Hebrew calendar is lunar; direct conversion to solar calendars gives different dates each year
 2. **Season is often more important than exact date**: Knowing "spring harvest" or "autumn rains" may help more than "late March"
-3. **Consistency within book**: Use "See how you translated" pattern for repeated month names
+3. **Consistency within book**: Flag a repeated month name once (first occurrence only); the pipeline applies the "See how you translated" pattern for later occurrences, so do not write it yourself
 4. **Pre/Post-exile names**: Aviv = Nisan (same month, different name periods)

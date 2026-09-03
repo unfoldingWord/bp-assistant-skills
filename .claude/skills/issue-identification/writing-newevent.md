@@ -134,7 +134,7 @@ Is the author marking a transition to a new event/episode?
 
 4. **After these things**: "This phrase introduces a new event that happened some time after the events the story has just related. The story does not say how long after those events this new event happened. Use the natural form in your language for introducing a new event."
 
-5. **Cross-reference style**: "See how you translated this phrase in [1:12](../01/12.md)."
+5. **Repeated phrasing**: Do not flag a later occurrence of the same Hebrew/Greek wording (e.g., the same wayyehi construction); the pipeline links those automatically. A different new-event marker (e.g., Greek de/kai after a Hebrew wayyehi) is a separate occurrence and follows normal selectivity. Either way, do not write a "see how you translated" cross-reference yourself.
 
 ## Languages Mark New Events Differently
 

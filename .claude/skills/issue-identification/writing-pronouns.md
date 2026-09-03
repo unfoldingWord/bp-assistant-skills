@@ -77,7 +77,7 @@ The pronoun doesn't point to specific people:
 
 ### Independent Pronoun
 > "You, you know" (Hebrew adds separate pronoun)
-- Note: "See how you translated the similar expression 'you, you swore' in [1:17]. Alternate translation: [You know quite well]"
+- Do not flag a later occurrence of the exact same doubled-pronoun wording (e.g., repeated "you, you..."); the pipeline links those automatically. A different doubled-pronoun construction (e.g., "I, I have sinned") is a separate occurrence and follows normal selectivity. Either way, do not write a "see how you translated" cross-reference yourself.
 
 ### Indefinite They
 > "And they declared to the king"

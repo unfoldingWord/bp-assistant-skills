@@ -160,7 +160,7 @@ Adjectives used as titles:
 "SPEAKER is using the adjectives **WORD** and **WORD** as nouns to mean certain kinds of people. Your language may use adjectives in the same way. If not, you can translate these adjectives with equivalent phrases. Alternate translation: [text]"
 
 ### Cross-Reference Pattern
-"See how you translated **a wicked {one}** in [9:7](../09/07.md)."
+Do not write this pattern yourself. Do not flag a later occurrence of the same nominal adjective (same Hebrew/Greek wording); the pipeline links those automatically. A different nominal adjective (e.g., "the righteous" after "the wicked") is a separate occurrence and follows normal selectivity.
 
 ---
 
