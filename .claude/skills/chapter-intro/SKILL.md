@@ -6,7 +6,7 @@ allowed-tools: Read, Grep, Glob, Write, Edit, Bash(node /app/src/workspace-tools
 
 # Chapter Introduction
 
-Generate a brief chapter introduction that orients translators to the chapter's overall movement, key concepts, and any distinctive translation challenges. Target length: 300-600 characters. Run this after the pipeline has completed for a chapter.
+Generate a chapter introduction that orients translators to the chapter's overall movement, key concepts, and any distinctive translation challenges. Typical length is 500-2000 characters, but the chapter's structure sets the length: a chapter with many sections may run longer, and a short one may run shorter. Run this after the pipeline has completed for a chapter.
 
 ## Arguments
 
@@ -67,11 +67,11 @@ Identify the chapter's role in the book and its dominant literary movement. Look
 - repeated themes or key images
 - distinctive translation challenges that affect the whole chapter rather than one verse
 
-This feeds the 1-2 sentence overview in the Structure and Formatting section.
+This feeds the structural outline in the Structure and Formatting section. Identify the chapter's main sections (normally 3-5) and the verse range each one covers, plus any sub-sections worth breaking out.
 
 ### Step 4: Draft the Introduction
 
-Write a short intro using the template below. The entire intro should be 300-600 characters. Each section is 1-2 sentences. Only include the Translation Issues section when there is a genuinely distinctive challenge (speaker ambiguity, extended metaphor spanning multiple verses, abrupt shifts in audience, repeated legal or ritual terms, etc.).
+Write the intro using the template below. Let the chapter's structure set the length; never drop or truncate outline sections to hit a character count. Outside the Structure and Formatting outline, each section is 1-2 sentences. Only include the Translation Issues section when there is a genuinely distinctive challenge (speaker ambiguity, extended metaphor spanning multiple verses, abrupt shifts in audience, repeated legal or ritual terms, etc.).
 
 When a high parallelism hint is present, keep the note brief (one short sentence) and chapter-level (for example, recurring synonymous parallel lines), without listing individual verses.
 
@@ -84,7 +84,14 @@ Use `[[rc://*/tw/dict/bible/kt/<term>]]` or `[[rc://*/tw/dict/bible/other/<term>
 
 ## Structure and Formatting
 
-[1-2 sentences: chapter function, literary movement, and brief characterization. Include a tW or tA link when it materially helps translators.]
+[A numbered outline of the chapter's sections with verse ranges, normally 3-5 top-level entries. Indent sub-sections under their parent. A one-sentence characterization of the chapter's function or literary movement may precede or follow the outline, but never replaces it. Include a tW or tA link when it materially helps translators.]
+
+  1. [What happens in this section] (1–6)
+  2. [What happens in this section] (7–12)
+    1. [Optional sub-section] (7–9)
+  3. [What happens in this section] (13–28)
+
+[If the chapter contains poetry that the ULT sets off by indenting, note it here in the established form, linking the reference: “Some translations set each line of poetry farther to the right than the rest of the text to make it easier to read. The ULT does this with the poetry in [7:9–10](../07/09.md).”]
 
 ## Religious and Cultural Concepts in This Chapter
 
@@ -106,10 +113,12 @@ Use `[[rc://*/tw/dict/bible/kt/<term>]]` or `[[rc://*/tw/dict/bible/other/<term>
 #### Quality Checks
 
 - Introduction matches the chapter's actual content and literary function
+- Structure and Formatting contains a numbered outline whose verse ranges cover the chapter without gaps or overlaps, and stop at the chapter's last verse
 - tW links use correct `[[rc://...]]` format
 - Content is translator-oriented, not devotional
 - No verse-level detail that belongs in translation notes
-- Total length stays in the 300-600 character range
+- Cultural and theological background sits under its own heading after the outline, not inside it
+- Length is proportionate to the chapter: typically 500-2000 characters, longer only when the chapter genuinely has more sections
 
 ### Step 5: Format and Insert into Issue File
 
