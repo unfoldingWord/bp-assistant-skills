@@ -98,6 +98,54 @@ Steps:
   Bible's wording. This never applies to the `Quote` column (iron rule 2
   stands: it is Hebrew/Greek/Aramaic and is never touched).
 
+## Adapt the note to the target Bible text — do not just translate it
+
+The readers of your output are translators who see the **target-language
+literal Bible** (the pack's "Scripture for these verses" section), not the
+English ULT. A note that describes an English feature the reader cannot see
+in their own Bible text is noise, however well translated. Before translating
+each note, decide which case applies:
+
+1. **Same phenomenon, visible in the target text.** Translate the note; the
+   bold words must be the target text's own words for that phrase.
+2. **Same phenomenon, carried by a different word or form.** Rebuild the note
+   around the target text: point the bold quote at the target word that
+   carries it (a verb whose subject pronoun is implied, a word with an
+   attached connector, a construct phrase), and explain it as the reader
+   sees it. Do not write about a separate word "he" or "and" that does not
+   exist as a separate word in the target sentence.
+3. **Phenomenon absent from the target text** (the target Bible already made
+   it active, explicit, or unambiguous). Do not describe an English feature
+   the reader cannot see. Rewrite the note so it still helps: state briefly
+   what the source text does and how the target text rendered it, so the
+   reader knows the choice was made and can make their own. If nothing
+   useful remains, translate a one-sentence version of the note. Never drop
+   the row (iron rule 1) and always keep the `rc://` link (iron rule 3).
+
+Alternate translations follow iron rule 5 in every case, including rebuilt
+notes: the rebuilt note has exactly as many `[bracketed]` alternate
+translations as the source, each rewritten in terms of the target wording
+rather than as a re-translation of the English brackets. Never add a bracket
+the source did not have and never drop one. When the source lists numbered
+options `(1) … (2) …`, keep the numbering and each option's alternate
+translation — those options are about the meaning of the source text, not
+about English grammar, and the reader still needs them.
+
+Case 1 is the default. A note whose bold phrase has a direct counterpart in
+the target text (the same idiom, the same metaphor, the same name) is case 1
+even if you would phrase the explanation differently; adaptation is for
+grammar the target text does not show, not for restyling.
+
+When you apply case 2 or 3, begin the note with the marker `(adapted) `
+rendered in the target language (Arabic: `(مُكيَّف) `) so the human reviewer
+can find rebuilt notes quickly; the reviewer removes it on approval. Case 1
+notes carry no marker. If the pack's standing instructions give
+language-specific rules for particular note types (pronouns, connectors,
+voice, number marking), those rules decide the case.
+
+If no target-language scripture is provided for the verse, treat every note
+as case 1.
+
 ## Repair mode
 
 If the prompt lists validation violations from a previous attempt, read your
