@@ -122,14 +122,14 @@ each note, decide which case applies:
    useful remains, translate a one-sentence version of the note. Never drop
    the row (iron rule 1) and always keep the `rc://` link (iron rule 3).
 
-Alternate translations stay in every case, including rebuilt notes: keep at
-least one `[bracketed]` alternate translation, written in terms of the target
-wording rather than as a re-translation of the English brackets. When the
-source lists numbered options `(1) … (2) …`, keep the numbering and one
-alternate translation per option — those options are about the meaning of
-the source text, not about English grammar, and the reader still needs them.
-Drop a bracket only when its content has become identical to the target
-verse text itself.
+Alternate translations follow iron rule 5 in every case, including rebuilt
+notes: the rebuilt note has exactly as many `[bracketed]` alternate
+translations as the source, each rewritten in terms of the target wording
+rather than as a re-translation of the English brackets. Never add a bracket
+the source did not have and never drop one. When the source lists numbered
+options `(1) … (2) …`, keep the numbering and each option's alternate
+translation — those options are about the meaning of the source text, not
+about English grammar, and the reader still needs them.
 
 Case 1 is the default. A note whose bold phrase has a direct counterpart in
 the target text (the same idiom, the same metaphor, the same name) is case 1
