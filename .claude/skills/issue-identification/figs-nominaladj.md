@@ -30,6 +30,7 @@ A nominal adjective is an adjective used as a noun to refer to a class of people
 | "days of old" | figs-metonymy | Noun "days" representing a time period |
 | "a foolish person" | No note needed | Adjective modifying explicit noun |
 | "he is wise" | No note needed | Adjective as predicate, not noun |
+| "doers," "the ones keeping" | No note needed | This is a participle already marked as a noun by ULT's "-er" form or "the one(s)/those —ing" form; not an adjective. See Mar 11, 2026 decision below |
 
 ---
 
@@ -112,9 +113,10 @@ Participles used adjectivally that function as nouns:
 
 | Pattern | Example | Treatment |
 |---------|---------|-----------|
-| Participle as adjective | "the wise" (sapiential) | Use base adjective, no "one(s)" |
-| Participle as noun | "the ones honoring me" | Use "one(s)" form |
-| Passive participle | "the slain" | [people who were killed] |
+| Participle as adjective | "the wise" (sapiential) | Write figs-nominaladj note, no "one(s)" |
+| Participle as noun ("-er" form) | "doers" (Ps 94:4) | No figs-nominaladj note — this participle is already marked as a noun |
+| Participle as noun ("the one(s)/those —ing" form) | "the ones keeping" (Ps 103:18) | No figs-nominaladj note — this participle is already marked as a noun |
+| Passive participle | "the slain" | Write figs-nominaladj note; AT: [people who were killed] |
 
 ### 6. Religious/Political Titles
 Adjectives used as titles:
@@ -135,6 +137,7 @@ Adjectives used as titles:
 1. **Identify the article + adjective pattern**: Look for "the [adjective]" without an explicit noun
    - "the righteous" (no noun) -> LIKELY figs-nominaladj
    - "the righteous man" (has noun) -> NOT figs-nominaladj
+   - "doers," "the ones keeping" (ULT already marks this participle as a noun, via "-er" or "the one(s)/those —ing") -> NOT figs-nominaladj
 
 2. **Check if it represents a class**: Does the adjective refer to ALL people/things with that quality?
    - "The righteous will inherit the land" (= all righteous people) -> figs-nominaladj
