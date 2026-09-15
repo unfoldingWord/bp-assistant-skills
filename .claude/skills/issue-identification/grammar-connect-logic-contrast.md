@@ -91,6 +91,7 @@ but, yet, however, instead, rather, on the contrary, by contrast, nevertheless, 
 - The English ULT clause already begins with **"but"** — "but" is itself an explicit contrast marker, so the relationship is already clear and no `grammar-connect-logic-contrast` note is needed
 - The clause begins with any other explicit contrast marker that already makes the relationship plain (e.g., "however", "yet", "nevertheless", "instead", "rather", "on the contrary")
 - The contrast is already EXPLICIT and CLEAR
+- The only hook is ordinary grammatical negation ("not" / לא + verb: "will not prevail", "I was not able"). Negation alone is not a contrast issue; do not quote לא-phrases just because they contain "not"
 
 ### Hard rule: do not write a `grammar-connect-logic-contrast` note for a clause that starts with "but"
 
