@@ -146,7 +146,10 @@ Based on comprehensive analysis of 200+ examples across OT narrative (Genesis, E
 Contrast with actual euphemisms for death:
 - "lies down with his fathers" = euphemism (polite way to say died)
 - "fallen asleep" = euphemism (polite way to say died)
+- "they are no more" / "they were not" (= they had died) = euphemism — softens death
 - "fallen" (in battle) = metonymy (association with how soldiers die)
+
+Ordinary grammatical negation is not a euphemism and needs no note: "will not prevail", "I was not able", "they have not succeeded". Do not generalize from the "they were not" (= died) case to every "not" / לא.
 
 ### Use figs-idiom for:
 | Expression | Reason |
