@@ -30,6 +30,7 @@ A nominal adjective is an adjective used as a noun to refer to a class of people
 | "days of old" | figs-metonymy | Noun "days" representing a time period |
 | "a foolish person" | No note needed | Adjective modifying explicit noun |
 | "he is wise" | No note needed | Adjective as predicate, not noun |
+| "the wise ones," "the ones keeping" | No note needed | ULT already added "one(s)" — the participle is functioning as a noun, not an adjective; see Mar 11, 2026 decision below |
 
 ---
 
@@ -112,8 +113,8 @@ Participles used adjectivally that function as nouns:
 
 | Pattern | Example | Treatment |
 |---------|---------|-----------|
-| Participle as adjective | "the wise" (sapiential) | Use base adjective, no "one(s)" |
-| Participle as noun | "the ones honoring me" | Use "one(s)" form |
+| Participle as adjective | "the wise" (sapiential) | Write figs-nominaladj note, no "one(s)" |
+| Participle as noun | "the ones honoring me" | No figs-nominaladj note — ULT already added "one(s)" |
 | Passive participle | "the slain" | [people who were killed] |
 
 ### 6. Religious/Political Titles
@@ -135,6 +136,7 @@ Adjectives used as titles:
 1. **Identify the article + adjective pattern**: Look for "the [adjective]" without an explicit noun
    - "the righteous" (no noun) -> LIKELY figs-nominaladj
    - "the righteous man" (has noun) -> NOT figs-nominaladj
+   - "the wise ones," "the ones honoring me" (ULT already added "one(s)") -> NOT figs-nominaladj; the participle is already functioning as a noun
 
 2. **Check if it represents a class**: Does the adjective refer to ALL people/things with that quality?
    - "The righteous will inherit the land" (= all righteous people) -> figs-nominaladj
