@@ -169,6 +169,8 @@ jobs:
         run: |
           set -euo pipefail
           flyctl machine start "$FLY_MACHINE_ID" --app "$FLY_APP_NAME"
+          # Baseline for the fast-exit guard at the end of this step.
+          run_started=$SECONDS
 
           # Poll until the machine leaves stopped — confirms the Fly control plane
           # accepted the start. A fixed sleep is unreliable when the plane is under
@@ -238,16 +240,67 @@ jobs:
             exit 1
           fi
 
+          # Fast-exit guard. A real review pass takes minutes, so a machine that
+          # is back in a terminal state within a minute did not run one: the
+          # entrypoint woke with nothing to review and exited (#205: a sibling
+          # run's restore blanked PR_REVIEW_* underneath our claim). Without this
+          # check the run would poll the full marker window for a marker that
+          # was never written and report `review-verdict-unavailable`.
+          min_review_seconds=60
+          lifetime=$((SECONDS - run_started))
+          if [ "$lifetime" -lt "$min_review_seconds" ]; then
+            final_owner="$(get_owner)"
+            echo "::error::Reviewer exited without running: machine was back in '${state}' after only ${lifetime}s, so no PR_REVIEW_RESULT marker will be written for ${REVIEW_HEAD}."
+            {
+              echo "Reviewer exited without running (machine '${state}' ${lifetime}s after start)."
+              echo "Lease held by the machine at exit: '${final_owner:-<none>}'"
+              echo "Lease this run claimed:            '${REVIEW_HEAD}'"
+              echo "If those differ (including an empty lease), a sibling run's restore step"
+              echo "cleared PR_REVIEW_* underneath this claim."
+              echo "This is not a review verdict; the diff was not judged. Re-run the gate to retry."
+            } >&2
+            exit 1
+          fi
+
       - name: Restore machine to default mode
         if: always() && steps.resolve.outputs.machine_id != ''
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           FLY_APP_NAME: ${{ secrets.FLY_APP_NAME }}
           FLY_MACHINE_ID: ${{ steps.resolve.outputs.machine_id }}
+          REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
           # Clear pr-review env vars so the next hourly cron triggers an hourly run,
           # not another pr-review against this PR.
+          #
+          # This releases the lease, so it is scoped to the lease we hold (the same
+          # ownership check the start step makes). The machine is shared by both
+          # repos' gates; by now another run may have claimed it, and restoring
+          # unconditionally would blank PR_REVIEW_* under that live claim so its
+          # reviewer wakes with nothing to do (#205). An unreadable lease still
+          # restores: we cannot prove the lease moved, and skipping would strand
+          # the machine in pr-review mode for the next hourly cron.
+          read_owner() {
+            local json=""
+            for _ in 1 2 3; do
+              if json="$(flyctl machines list --app "$FLY_APP_NAME" --json 2>/dev/null)"; then
+                printf '%s' "$json" | node -e "let s='';process.stdin.on('data',c=>s+=c);process.stdin.on('end',()=>{try{const j=JSON.parse(s);const m=Array.isArray(j)?j.find(x=>x&&x.id===process.argv[1]):null;if(!m){process.stdout.write('<unreadable>');return;}const e=m.config?m.config.env:null;process.stdout.write(String((e&&e.PR_REVIEW_HEAD_SHA)||''));}catch{process.stdout.write('<unreadable>')}});" \
+                  "$FLY_MACHINE_ID"
+                return 0
+              fi
+              sleep 5
+            done
+            printf '%s' '<unreadable>'
+          }
+          owner="$(read_owner)"
+          if [ -n "$owner" ] && [ "$owner" != "<unreadable>" ] && [ "$owner" != "$REVIEW_HEAD" ]; then
+            echo "Reviewer machine is now leased to '${owner}' (this run claimed '${REVIEW_HEAD}'); another run owns it. Skipping restore so we do not clobber that run's config."
+            exit 0
+          fi
+          if [ "$owner" = "<unreadable>" ]; then
+            echo "::warning::Could not read the reviewer machine's current lease; restoring to default mode anyway."
+          fi
           # Don't swallow restore failures. If this update fails the machine is
           # left configured for pr-review mode and will misbehave on the next
           # hourly run; surfacing the error gives an explicit signal to fix it.
