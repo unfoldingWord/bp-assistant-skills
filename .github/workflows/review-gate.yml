@@ -241,6 +241,22 @@ jobs:
             exit 1
           fi
 
+          # Recheck once more now that the machine is running: nothing can claim a
+          # running machine, so this read is the config it actually booted with.
+          # It catches a write that landed between the pre-start read and the
+          # start itself, and fails fast instead of polling for a marker that
+          # will never appear.
+          owner="$(get_owner)"
+          if [ -n "$owner" ] && [ "$owner" != "$REVIEW_HEAD" ]; then
+            echo "Reviewer machine was re-leased to '${owner}' between our recheck and start; it is running a different PR's review and this run will not produce a result. Re-run the gate for this PR." >&2
+            exit 1
+          fi
+          mode="$(get_mode)"
+          if [ -n "$mode" ] && [ "$mode" != "pr-review" ]; then
+            echo "Reviewer machine booted with RUN_MODE='${mode}' (expected pr-review); another workflow rewrote its config between our recheck and start, so this run will not produce a result. Re-run the gate for this PR." >&2
+            exit 1
+          fi
+
           # Poll until the machine returns to a stopped state (entrypoint exited).
           # Cap at ~15 minutes; review runs typically finish in a few minutes.
           # `replacing` is a *transient* Fly state during a config update (e.g. a
