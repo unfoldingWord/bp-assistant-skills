@@ -180,11 +180,6 @@ jobs:
           REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
-          flyctl machine start "$FLY_MACHINE_ID" --app "$FLY_APP_NAME"
-
-          # Poll until the machine leaves stopped — confirms the Fly control plane
-          # accepted the start. A fixed sleep is unreliable when the plane is under
-          # load; require an actual state transition before watching for completion.
           get_state() {
             flyctl machines list --app "$FLY_APP_NAME" --json 2>/dev/null \
               | node -e "let s=''; process.stdin.on('data',c=>s+=c); process.stdin.on('end',()=>{ try { const j=JSON.parse(s); const m=Array.isArray(j)?j.find(x=>x&&x.id===process.argv[1]):null; if (m) process.stdout.write(String(m.state||'')); } catch {} });" \
@@ -204,6 +199,31 @@ jobs:
               || echo ""
           }
 
+          # Ownership recheck right before start: if another writer touched the
+          # machine in the window between our claim-verify and here, starting it
+          # would run something other than our review and our marker would never
+          # appear. No writer can claim a running machine, so this is the last
+          # point the config can change under us. Empty reads are treated as a
+          # transient Fly API error, not as evidence.
+          owner="$(get_owner)"
+          if [ -n "$owner" ] && [ "$owner" != "$REVIEW_HEAD" ]; then
+            echo "Reviewer machine was re-leased to '${owner}' after our claim; this run lost the race and will not produce a result. Re-run the gate for this PR." >&2
+            exit 1
+          fi
+          # Same window, different writer: a sibling workflow's restore step can
+          # reset RUN_MODE while leaving our lease token in place (#205). The
+          # machine would then run an hourly pass, not our review.
+          mode="$(get_mode)"
+          if [ -n "$mode" ] && [ "$mode" != "pr-review" ]; then
+            echo "Reviewer machine's RUN_MODE is '${mode}' (expected pr-review): another workflow rewrote the machine config after our claim, so starting it would not run our review. Re-run the gate for this PR." >&2
+            exit 1
+          fi
+
+          flyctl machine start "$FLY_MACHINE_ID" --app "$FLY_APP_NAME"
+
+          # Poll until the machine leaves stopped — confirms the Fly control plane
+          # accepted the start. A fixed sleep is unreliable when the plane is under
+          # load; require an actual state transition before watching for completion.
           launch_deadline=$((SECONDS + 60))
           state=""
           while [ "$SECONDS" -lt "$launch_deadline" ]; do
@@ -218,25 +238,6 @@ jobs:
           done
           if [ -z "$state" ] || [ "$state" = "stopped" ]; then
             echo "Machine did not leave stopped state within 60s (last state: ${state:-<unknown>}); Fly control plane may be unresponsive." >&2
-            exit 1
-          fi
-
-          # Ownership recheck: if another run re-leased the machine in the brief
-          # window between our claim-verify and this start, it is now running a
-          # different PR's review and our marker will never appear. Fail fast
-          # with an actionable message instead of polling the full 15 minutes.
-          owner="$(get_owner)"
-          if [ -n "$owner" ] && [ "$owner" != "$REVIEW_HEAD" ]; then
-            echo "Reviewer machine was re-leased to '${owner}' after our claim; this run lost the race and will not produce a result. Re-run the gate for this PR." >&2
-            exit 1
-          fi
-          # Same window, different writer: a sibling workflow's restore step can
-          # reset RUN_MODE while leaving our lease token in place (#205). The
-          # machine then runs an hourly pass, not our review. Empty is treated
-          # as a transient read failure, as with the owner check above.
-          mode="$(get_mode)"
-          if [ -n "$mode" ] && [ "$mode" != "pr-review" ]; then
-            echo "Reviewer machine's RUN_MODE is '${mode}' (expected pr-review): another workflow rewrote the machine config after our claim, so this boot will not run our review. Re-run the gate for this PR." >&2
             exit 1
           fi
 
@@ -277,34 +278,43 @@ jobs:
           # Clear pr-review env vars so the next hourly cron triggers an hourly run,
           # not another pr-review against this PR.
           #
-          # This releases the lease, so it is scoped to the lease we hold (the same
-          # ownership check the start step makes). The machine is shared by both
-          # repos' gates; by now another run may have claimed it, and restoring
-          # unconditionally would blank PR_REVIEW_* under that live claim so its
-          # reviewer wakes with nothing to do (#205). The read and the update are
-          # separate calls, so a claim landing between them can still be hit;
-          # the claimer's readback sees that and retries. An unreadable lease
-          # still restores: we cannot prove the lease moved, and skipping would
-          # strand the machine in pr-review mode for the next hourly cron.
-          read_owner() {
+          # This releases the lease, so it only runs while the machine's config is
+          # still ours: our SHA in PR_REVIEW_HEAD_SHA (or none) and RUN_MODE at
+          # pr-review (or already hourly). The machine is shared with the other
+          # repo's gate and its automerge workflow; by now one of them may have
+          # claimed it, and restoring unconditionally would rewrite the config
+          # under that live claim so its run boots into the wrong mode (#205).
+          # Another SHA means another gate holds it; any other RUN_MODE means
+          # another workflow configured it. The read and the update are separate
+          # calls, so a claim landing between them can still be hit; the
+          # claimer's readback sees that and retries. An unreadable config still
+          # restores: we cannot prove it moved, and skipping would strand the
+          # machine in pr-review mode for the next hourly cron.
+          read_config() {
             local json=""
             for _ in 1 2 3; do
               if json="$(flyctl machines list --app "$FLY_APP_NAME" --json 2>/dev/null)"; then
-                printf '%s' "$json" | node -e "let s='';process.stdin.on('data',c=>s+=c);process.stdin.on('end',()=>{try{const j=JSON.parse(s);const m=Array.isArray(j)?j.find(x=>x&&x.id===process.argv[1]):null;if(!m){process.stdout.write('<unreadable>');return;}const e=m.config?m.config.env:null;process.stdout.write(String((e&&e.PR_REVIEW_HEAD_SHA)||''));}catch{process.stdout.write('<unreadable>')}});" \
-                  "$FLY_MACHINE_ID"
+                printf '%s' "$json" | node -e "let s='';process.stdin.on('data',c=>s+=c);process.stdin.on('end',()=>{try{const j=JSON.parse(s);const m=Array.isArray(j)?j.find(x=>x&&x.id===process.argv[1]):null;if(!m){process.stdout.write('<unreadable>');return;}const e=(m.config&&m.config.env)||{};process.stdout.write(String(e.RUN_MODE||'')+' '+String(e.PR_REVIEW_HEAD_SHA||''));}catch{process.stdout.write('<unreadable>')}});"                   "$FLY_MACHINE_ID" || printf '%s' '<unreadable>'
                 return 0
               fi
               sleep 5
             done
             printf '%s' '<unreadable>'
           }
-          owner="$(read_owner)"
-          if [ -n "$owner" ] && [ "$owner" != "<unreadable>" ] && [ "$owner" != "$REVIEW_HEAD" ]; then
-            echo "Reviewer machine is now leased to '${owner}' (this run claimed '${REVIEW_HEAD}'); another run owns it. Skipping restore so we do not clobber that run's config."
-            exit 0
-          fi
-          if [ "$owner" = "<unreadable>" ]; then
-            echo "::warning::Could not read the reviewer machine's current lease; restoring to default mode anyway."
+          config="$(read_config)"
+          if [ "$config" = "<unreadable>" ]; then
+            echo "::warning::Could not read the reviewer machine's current config; restoring to default mode anyway."
+          else
+            mode="${config%% *}"
+            owner="${config#* }"
+            if [ -n "$owner" ] && [ "$owner" != "$REVIEW_HEAD" ]; then
+              echo "Reviewer machine is now leased to '${owner}' (this run claimed '${REVIEW_HEAD}'); another run owns it. Skipping restore so we do not clobber that run's config."
+              exit 0
+            fi
+            if [ -n "$mode" ] && [ "$mode" != "pr-review" ] && [ "$mode" != "hourly" ]; then
+              echo "Reviewer machine's RUN_MODE is now '${mode}'; another workflow configured it. Skipping restore so we do not clobber that run's config."
+              exit 0
+            fi
           fi
           # Don't swallow restore failures. If this update fails the machine is
           # left configured for pr-review mode and will misbehave on the next
