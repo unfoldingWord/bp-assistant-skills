@@ -116,6 +116,17 @@ jobs:
                 "$FLY_MACHINE_ID" \
               || echo ""
           }
+          # RUN_MODE is checked alongside the lease token because other
+          # workflows on this machine (review-gate-automerge in bp-assistant)
+          # rewrite RUN_MODE without touching PR_REVIEW_*. A claim whose SHA
+          # reads back intact but whose mode is no longer pr-review boots the
+          # machine into an hourly pass that never writes our marker (#205).
+          get_mode() {
+            flyctl machines list --app "$FLY_APP_NAME" --json 2>/dev/null \
+              | node -e "let s=''; process.stdin.on('data',c=>s+=c); process.stdin.on('end',()=>{ try { const j=JSON.parse(s); const m=Array.isArray(j)?j.find(x=>x&&x.id===process.argv[1]):null; const e=m&&m.config?m.config.env:null; if (e) process.stdout.write(String(e.RUN_MODE||'')); } catch {} });" \
+                "$FLY_MACHINE_ID" \
+              || echo ""
+          }
           # --restart no keeps the machine from auto-looping on non-zero exits,
           # so the completion poll observes a clean terminal state.
           claim() {
@@ -147,12 +158,13 @@ jobs:
             # scoping in "Read review result" is the actual correctness backstop.
             sleep 8
             owner="$(get_owner)"
-            if [ "$owner" = "$REVIEW_HEAD" ]; then
+            mode="$(get_mode)"
+            if [ "$owner" = "$REVIEW_HEAD" ] && [ "$mode" = "pr-review" ]; then
               echo "Acquired reviewer machine for PR #${REVIEW_PR} (${REVIEW_HEAD})."
               acquired=1
               break
             fi
-            echo "Lost claim race (machine now leased to '${owner:-<none>}'); backing off and retrying."
+            echo "Lost claim race (machine now leased to '${owner:-<none>}', RUN_MODE='${mode:-<unknown>}'); backing off and retrying."
             sleep 15
           done
           if [ "$acquired" != "1" ]; then
@@ -169,8 +181,6 @@ jobs:
         run: |
           set -euo pipefail
           flyctl machine start "$FLY_MACHINE_ID" --app "$FLY_APP_NAME"
-          # Baseline for the fast-exit guard at the end of this step.
-          run_started=$SECONDS
 
           # Poll until the machine leaves stopped — confirms the Fly control plane
           # accepted the start. A fixed sleep is unreliable when the plane is under
@@ -184,6 +194,12 @@ jobs:
           get_owner() {
             flyctl machines list --app "$FLY_APP_NAME" --json 2>/dev/null \
               | node -e "let s=''; process.stdin.on('data',c=>s+=c); process.stdin.on('end',()=>{ try { const j=JSON.parse(s); const m=Array.isArray(j)?j.find(x=>x&&x.id===process.argv[1]):null; const e=m&&m.config?m.config.env:null; if (e) process.stdout.write(String(e.PR_REVIEW_HEAD_SHA||'')); } catch {} });" \
+                "$FLY_MACHINE_ID" \
+              || echo ""
+          }
+          get_mode() {
+            flyctl machines list --app "$FLY_APP_NAME" --json 2>/dev/null \
+              | node -e "let s=''; process.stdin.on('data',c=>s+=c); process.stdin.on('end',()=>{ try { const j=JSON.parse(s); const m=Array.isArray(j)?j.find(x=>x&&x.id===process.argv[1]):null; const e=m&&m.config?m.config.env:null; if (e) process.stdout.write(String(e.RUN_MODE||'')); } catch {} });" \
                 "$FLY_MACHINE_ID" \
               || echo ""
           }
@@ -214,6 +230,15 @@ jobs:
             echo "Reviewer machine was re-leased to '${owner}' after our claim; this run lost the race and will not produce a result. Re-run the gate for this PR." >&2
             exit 1
           fi
+          # Same window, different writer: a sibling workflow's restore step can
+          # reset RUN_MODE while leaving our lease token in place (#205). The
+          # machine then runs an hourly pass, not our review. Empty is treated
+          # as a transient read failure, as with the owner check above.
+          mode="$(get_mode)"
+          if [ -n "$mode" ] && [ "$mode" != "pr-review" ]; then
+            echo "Reviewer machine's RUN_MODE is '${mode}' (expected pr-review): another workflow rewrote the machine config after our claim, so this boot will not run our review. Re-run the gate for this PR." >&2
+            exit 1
+          fi
 
           # Poll until the machine returns to a stopped state (entrypoint exited).
           # Cap at ~15 minutes; review runs typically finish in a few minutes.
@@ -240,28 +265,6 @@ jobs:
             exit 1
           fi
 
-          # Fast-exit guard. A real review pass takes minutes, so a machine that
-          # is back in a terminal state within a minute did not run one: the
-          # entrypoint woke with nothing to review and exited (#205: a sibling
-          # run's restore blanked PR_REVIEW_* underneath our claim). Without this
-          # check the run would poll the full marker window for a marker that
-          # was never written and report `review-verdict-unavailable`.
-          min_review_seconds=60
-          lifetime=$((SECONDS - run_started))
-          if [ "$lifetime" -lt "$min_review_seconds" ]; then
-            final_owner="$(get_owner)"
-            echo "::error::Reviewer exited without running: machine was back in '${state}' after only ${lifetime}s, so no PR_REVIEW_RESULT marker will be written for ${REVIEW_HEAD}."
-            {
-              echo "Reviewer exited without running (machine '${state}' ${lifetime}s after start)."
-              echo "Lease held by the machine at exit: '${final_owner:-<none>}'"
-              echo "Lease this run claimed:            '${REVIEW_HEAD}'"
-              echo "If those differ (including an empty lease), a sibling run's restore step"
-              echo "cleared PR_REVIEW_* underneath this claim."
-              echo "This is not a review verdict; the diff was not judged. Re-run the gate to retry."
-            } >&2
-            exit 1
-          fi
-
       - name: Restore machine to default mode
         if: always() && steps.resolve.outputs.machine_id != ''
         env:
@@ -278,9 +281,11 @@ jobs:
           # ownership check the start step makes). The machine is shared by both
           # repos' gates; by now another run may have claimed it, and restoring
           # unconditionally would blank PR_REVIEW_* under that live claim so its
-          # reviewer wakes with nothing to do (#205). An unreadable lease still
-          # restores: we cannot prove the lease moved, and skipping would strand
-          # the machine in pr-review mode for the next hourly cron.
+          # reviewer wakes with nothing to do (#205). The read and the update are
+          # separate calls, so a claim landing between them can still be hit;
+          # the claimer's readback sees that and retries. An unreadable lease
+          # still restores: we cannot prove the lease moved, and skipping would
+          # strand the machine in pr-review mode for the next hourly cron.
           read_owner() {
             local json=""
             for _ in 1 2 3; do
