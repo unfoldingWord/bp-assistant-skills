@@ -119,8 +119,11 @@ each note, decide which case applies:
    the reader cannot see. Rewrite the note so it still helps: state briefly
    what the source text does and how the target text rendered it, so the
    reader knows the choice was made and can make their own. If nothing
-   useful remains, translate a one-sentence version of the note. Never drop
-   the row (iron rule 1) and always keep the `rc://` link (iron rule 3).
+   useful remains, shorten the explanation to one sentence and keep the
+   source's `[bracketed]` alternate translation(s) after it, in target
+   wording.
+   Never drop the row (iron rule 1) and always keep the `rc://` link (iron
+   rule 3).
 
 Alternate translations follow iron rule 5 in every case, including rebuilt
 notes: the rebuilt note has exactly as many `[bracketed]` alternate
@@ -139,7 +142,10 @@ grammar the target text does not show, not for restyling.
 When you apply case 2 or 3, begin the note with the marker `(adapted) `
 rendered in the target language (Arabic: `(مُكيَّف) `) so the human reviewer
 can find rebuilt notes quickly; the reviewer removes it on approval. Case 1
-notes carry no marker. If the pack's standing instructions give
+notes carry no marker. The deterministic checks never test for the marker
+or any other prefix (the text checks are about rc:// links, control
+characters, bold and bracket balance, digits, and whitespace), so repair
+mode must not remove it. If the pack's standing instructions give
 language-specific rules for particular note types (pronouns, connectors,
 voice, number marking), those rules decide the case.
 
