@@ -12,6 +12,11 @@ After humans edit the ULT/UST, adapt existing issues to match their changes.
 If `--context <path>` is provided, read the context.json file. It contains:
 - `sources.ultMasterPlain` — the current human-edited ULT chapter, fetched fresh from Door43 master and stripped of alignment markers by the pipeline runner. Use this as the authoritative human-edited text.
 - `sources.ust` — the current human-edited UST from Door43 master
+- `postEditReview.staleIssueQuotes` — optional list of `{ ref, glQuote, row }` (row = 1-based line in the
+  issues TSV). Each is an existing issue whose GLQuote the pipeline could not find in the current master ULT
+  verse, usually because the issues were written against older ULT wording. These rows must be reconciled even
+  when the AI-ULT and master agree for that verse (see Stale GLQuotes below). `postEditReview.reason` says why
+  this review was triggered.
 
 ## Inputs
 
@@ -60,7 +65,8 @@ Lighter-weight than the initial pipeline -- this is review, not full generation.
   - **Structural change** (changed voice, reordered, construct handling) -> check if issue still applies
   - **Content change** (different translation choice) -> may need new or revised issue
   - **Cosmetic** (punctuation, capitalization) -> usually safe to ignore
-- Unchanged verses can be skipped entirely.
+- Unchanged verses can be skipped entirely, except verses that have a row in
+  `postEditReview.staleIssueQuotes` (those go to Agent 2 regardless).
 
 ### Agent 2: Issue Reconciler
 - Before writing any output file, read the current file contents first (sub-agents have their own
@@ -69,8 +75,19 @@ Lighter-weight than the initial pipeline -- this is review, not full generation.
   - Does the gl_quote still appear in the human-edited ULT? If not, flag for update or removal.
   - Does the issue still exist? If not, mark for removal.
   - If the quote changed but the issue persists, update gl_quote.
+- For each row in `postEditReview.staleIssueQuotes` (even if its verse is otherwise unchanged):
+  - Update that row's GLQuote to the exact master ULT wording for the same phrase.
+  - Drop the row only if the issue no longer exists in the master text.
 - For each structural change found by Agent 1:
   - Does this create a new translation issue? If so, add it.
+
+### Stale GLQuotes
+
+When the context has a non-empty `postEditReview.staleIssueQuotes`, the orchestrator must pass the full list
+(ref, glQuote, row) to Agent 2 in its prompt, along with the master ULT text for those verses. A review
+triggered only by stale quotes can have no changed verses at all; Agent 2 still has to fix every listed row.
+Record each update or drop in the change log. The pipeline re-checks these rows afterwards and logs any that
+still do not match the master ULT.
 
 ## Flow
 
