@@ -27,7 +27,7 @@ Analysts receive `.claude/agents/issue-identification.md` when spawned.
 ## Verse Range
 
 If `--verses <start>-<end>` is specified:
-- Pass `--verse <start>-<end>` to both `parse_usfm.js` calls (filters alignment JSON and plain text)
+- Pass `"verseStart":<start>,"verseEnd":<end>` to every `read_usfm_chapter` call in Setup (filters the Hebrew, alignment JSON, and plain text)
 - Downstream scripts (compare, detect) automatically operate on the filtered data
 - Use verse-range suffix in tmp directory: `TMP=tmp/deep-issue-id/<BOOK>-<CH>-v<START>-<END>`
 - Output file uses verse range: `output/issues/<BOOK>/<BOOK>-<CH>-v<START>-<END>.tsv`
@@ -68,9 +68,24 @@ With verse range: `TMP=tmp/deep-issue-id/<BOOK>-<CH>-v<START>-<END>`
 
 **With context** (`--context <path>` was provided): Use `sources.ultFull` and `sources.ustFull` directly as the full-book paths — no copy needed.
 
-In both cases, extract chapter plain text using MCP tools:
-- `mcp__workspace-tools__read_usfm_chapter` with `file=<fullBookUltPath>`, `chapter=<N>`, `verseStart`/`verseEnd` if verse range applies, `plain=true`, `output="$TMP/ult_plain.usfm"`
-- `mcp__workspace-tools__read_usfm_chapter` with `file=<fullBookUstPath>`, `chapter=<N>`, same verse range, `plain=true`, `output="$TMP/ust_plain.usfm"`
+The Hebrew path is `sources.hebrew` with context, otherwise `data/hebrew_bible/<NN>-<BOOK>.usfm`.
+
+In both cases, write the chapter inputs with the workspace-tools CLI. `read_usfm_chapter` has no `output` parameter, so redirect stdout. Add `"verseStart":<S>,"verseEnd":<E>` to each `read_usfm_chapter` call if a verse range applies.
+
+```bash
+mkdir -p $TMP
+CLI="node /app/src/workspace-tools-cli.js"
+$CLI read_usfm_chapter '{"file":"<fullBookUltPath>","chapter":<N>,"plain":true}' > $TMP/ult_plain.usfm
+$CLI read_usfm_chapter '{"file":"<fullBookUstPath>","chapter":<N>,"plain":true}' > $TMP/ust_plain.usfm
+$CLI read_usfm_chapter '{"file":"<hebrewPath>","chapter":<N>,"plain":true}' > $TMP/hebrew_plain.txt
+$CLI read_usfm_chapter '{"file":"<fullBookUltPath>","chapter":<N>}' > $TMP/ult_aligned.usfm
+$CLI extract_alignment_data '{"alignedUsfm":"'$TMP'/ult_aligned.usfm","output":"'$TMP'/alignments.json"}'
+for f in ult_plain.usfm ust_plain.usfm hebrew_plain.txt alignments.json; do
+  if [ -s "$TMP/$f" ] && ! head -c 6 "$TMP/$f" | grep -q '^Error'; then echo "OK   $f"; else echo "MISS $f"; fi
+done
+```
+
+`MISS` on `ult_plain.usfm`, `hebrew_plain.txt`, or `alignments.json` is a setup failure; stop and report it. A missing UST is allowed; pass no UST to the analysts.
 
 ### Editor Notes
 
@@ -111,7 +126,8 @@ assignments. Spawn both analysts in parallel. Each analyst receives:
 - Paths to all input files:
   - Human ULT (`$TMP/ult_plain.usfm`)
   - Human UST (`$TMP/ust_plain.usfm`) if available
-  - Alignment JSON (`$TMP/alignments.json`)
+  - Hebrew source text (`$TMP/hebrew_plain.txt`). Judge each construction from the Hebrew, not from the English alone.
+  - ULT-to-Hebrew alignment JSON (`$TMP/alignments.json`)
   - ULT/UST divergence patterns (`$TMP/ult_ust_diff.tsv`)
   - Automated detections (`$TMP/detected_issues.tsv`)
   - Editor notes (`data/editor-notes/<BOOK>.md`) if available
@@ -227,7 +243,8 @@ Same format as base issue-identification (see that skill for full rules — key 
 
 ```
 Setup:    Fetch human ULT/UST from Door43 master (or use pipeline context)
-          read_usfm_chapter -> plain text (chapter-filtered)
+          read_usfm_chapter -> ULT/UST/Hebrew plain text (chapter-filtered)
+          extract_alignment_data -> alignments.json
           compare_ult_ust -> divergence patterns
           detect_abstract_nouns -> detected_issues.tsv
           build_tn_index
