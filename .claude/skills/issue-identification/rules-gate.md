@@ -102,8 +102,9 @@ files were written. Apply them within the scope stated below.
   (`figs-abstractnouns`, `figs-activepassive`, `figs-possession`) are independent
   and can coexist with a figurative tag on the same words.
 - **G9 activepassive is protected.** `figs-activepassive` rows arrive
-  `[protected]`; the content team has not yet decided whether to change the
-  every-instance rule.
+  `[protected]`. The every-instance rule stays: each passive in the ULT gets
+  a note (confirmed by Benjamin, 2026-10-01). JER/EZK/ISA editors keep
+  84-93% of passive verses noted.
 
 Rules G10-G18 apply to Old Testament prophetic books only (ISA through MAL,
 including LAM); their evidence comes from JER, EZK and ISA.
