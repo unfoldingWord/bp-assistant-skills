@@ -118,7 +118,7 @@ Participles used adjectivally that function as nouns:
 | Participle as noun ("the one(s)/those —ing" form) | "the ones keeping" (Ps 103:18) | No figs-nominaladj note — this participle is already marked as a noun |
 | Passive participle | "the slain" | Write figs-nominaladj note; AT: [people who were killed] |
 
-This includes headless passive participles that the ULT renders without "be" or "ones" ("your slain", ISA 22:2; "the banished", ISA 27:13; "honored ones", ISA 23:8; "devastated one", JER 4:30; "the married", ISA 54:1; "the bound", ISA 61:1; "the abandoned", ISA 17:9). Editors added 4 figs-nominaladj rows of this kind and deleted 7 figs-activepassive rows on the same forms in the reviewed books (2026).
+This includes headless passive participles that the ULT renders without "be" or "ones" ("your slain", ISA 22:2; "the banished", ISA 27:13; "the married", ISA 54:1; "the bound", ISA 61:1; "the abandoned", ISA 17:9). Editors added 4 figs-nominaladj rows of this kind and deleted 7 figs-activepassive rows on the same forms in the reviewed books (2026).
 
 ### 6. Religious/Political Titles
 Adjectives used as titles:

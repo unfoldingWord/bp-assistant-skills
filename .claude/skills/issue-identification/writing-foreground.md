@@ -55,8 +55,9 @@ The expression "behold me" has different interpretations based on context:
 | Context | Issue Type | Example |
 |---------|------------|---------|
 | Inferior expressing availability to superior | **writing-politeness** | Samuel responding to Eli (1 Sam. 3:4) |
-| Yahweh announcing action to punish/bless | **figs-idiom** | "Behold me rebuking" = "Now I am about to rebuke" |
+| Yahweh announcing action to punish/bless, with a following participle | **figs-idiom** | "Behold me rebuking" = "Now I am about to rebuke" |
 | Speaker calling attention to what follows | **writing-foreground** | "Behold" foregrounds information |
+| "Behold me against you" (hinneni-'alekha) | **writing-foreground** | The opposition formula draws attention to the announcement |
 
 ## Recognition Process
 

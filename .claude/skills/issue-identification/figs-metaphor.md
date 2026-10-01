@@ -50,7 +50,7 @@ These have been explicitly decided by the content team (Issues Resolved):
 **Test**: Does "sons of" mean descendants/people? Use figs-metaphor.
 Does "sons of" describe a characteristic? Use figs-idiom.
 
-When a people or a city's inhabitants are called "sons", "daughter", or "house" of a place or ancestor, editors use figs-metaphor rather than figs-metonymy or figs-possession (4 added in JER/ISA/EZK, 2026): "the sons of Judah" (JER 7:30), "your sons hurry" (Jerusalem's returning inhabitants, ISA 49:17), "the house of Israel" (EZK 4:4), "the house of Judah" (ISA 22:21). This follows Issues Resolved 2025-04-16. A city itself addressed as a woman ("daughter of Zion") follows figs-personification.md. One row per chapter at the first occurrence is enough, since the pipeline links repeats.
+When a people or a city's inhabitants are called "sons", "daughter", or "house" of a place or ancestor, editors use figs-metaphor rather than figs-metonymy (4 added in JER/ISA/EZK, 2026): "the sons of Judah" (JER 7:30), "your sons hurry" (Jerusalem's returning inhabitants, ISA 49:17), "the house of Israel" (EZK 4:4), "the house of Judah" (ISA 22:21). This follows Issues Resolved 2025-04-16. A city itself addressed as a woman ("daughter of Zion") follows figs-personification.md. One row per chapter at the first occurrence is enough, since the pipeline links repeats.
 
 ---
 

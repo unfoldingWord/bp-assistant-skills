@@ -29,7 +29,7 @@ These have been explicitly decided by the content team (Issues Resolved):
 | "the word of Yahweh was to X" | figs-idiom | = "Yahweh spoke a message to X" |
 | "a man to his tent" | figs-idiom | Soldiers ending campaign, going home |
 | "face" = "surface" | figs-idiom | NOT personification |
-| "behold me" (Yahweh announcing) | figs-idiom | = "Now I am about to..." |
+| "behold me" followed by a participle (Yahweh announcing) | figs-idiom | = "Now I am about to..." |
 | "day" (= occasion) | figs-idiom | e.g., "day of uncleanness" = on the occasion of |
 | Round numbers (10,000) | figs-idiom | When meaning "a large number" (context dependent) |
 | "hand" (power + possession) | figs-idiom | When suggesting both power and possession together |
@@ -62,7 +62,6 @@ These have been explicitly decided by the content team (Issues Resolved):
 | "days" (= time period) | Associated concept (time made of days) |
 | "hand" (= power alone) | Associated concept |
 | "word" (= message) | Associated concept |
-| "struck" = "defeated/killed" | Result by association with action |
 
 ### NOT requiring notes:
 | Expression | Reason |
@@ -156,7 +155,6 @@ These have been explicitly decided by the content team (Issues Resolved):
 | Expression | Meaning |
 |------------|---------|
 | "incline your ear" | listen carefully |
-| "listen to the voice of" | obey |
 | "give/lift your voice" | speak loudly |
 | "incline your heart" | fully commit oneself |
 | "enter into your heart" | fully understand/know |

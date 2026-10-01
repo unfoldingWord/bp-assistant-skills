@@ -29,7 +29,7 @@ Items from ancient culture:
 - Fishing nets, agricultural tools
 - Specific fabrics (linen, sackcloth)
 
-When the ULT lists specific garments, ornaments, tools, or measures ("the anklets and the headbands and the crescents ... the signet rings ... the mirrors and the linen garments and the turbans", ISA 3:18-23; "a triple" as a dry measure, ISA 40:12), editors write one row per item whose form or use a reader cannot tell from its English name, rather than one row for the whole list (17 added in ISA/JER, 2026; published prophets carry 0.066 translate-unknown notes per verse against the first pass's 0.039). The Issues Resolved 2025-06-12 limit still applies: for specific historical items the note uses the template without "use the name of a similar thing".
+When the ULT lists specific garments, ornaments, tools, or measures ("the anklets and the headbands and the crescents ... the signet rings ... the mirrors and the linen garments and the turbans", ISA 3:18-23; "a triple" as a dry measure, ISA 40:12), editors write notes for items whose form or use a reader cannot tell from their English names (17 added in ISA/JER, 2026; published prophets carry 0.066 translate-unknown notes per verse against the first pass's 0.039). The Issues Resolved 2025-06-12 limit still applies: for specific historical items the note uses the template without "use the name of a similar thing".
 
 ### 4. Cultural Practices and Roles
 Practices or positions readers may not understand:

@@ -63,8 +63,6 @@ well, whole, wicked, wise, worthy, wrong, young
 
 **Linking verbs**: "was a man", "is the message" (identity, not action)
 
-A passive participle that stands for people or things with no head noun ("your slain", ISA 22:2; "the banished", ISA 27:13; "honored ones", ISA 23:8; "the married", ISA 54:1; "the bound", ISA 61:1; "the abandoned", ISA 17:9) has no "be" plus participle, so Method 1 does not apply. Per Issues Resolved 2026-03-11 these get figs-nominaladj, not figs-activepassive. Editors deleted 7 figs-activepassive rows on such forms and added 4 figs-nominaladj rows in JER/ISA (2026).
-
 ### Tricky Cases: Past Participles as Adjectives
 
 A past participle may appear without a helping verb, functioning as an adjective.

@@ -20,7 +20,6 @@ When readers might not know what category a name belongs to:
 
 ### 2. Gender Clarification
 When the gender of a person is not clear from context:
-- "**Abdon** is the name of a man" (even though context says "Abdon son of Hillel")
 - "**Zeruiah** is the name of a woman" (when used as mother/ancestor of men)
 
 ### 3. Multiple Names
@@ -29,7 +28,7 @@ When person or place has two different names:
 - Original and modern names for places
 - Note at first occurrence explaining the relationship
 
-Editors also add notes (14 in JER/ISA/EZK, 2026) when the ULT uses the customary English name where the Hebrew has a different name translators will meet in other versions ("Memphis" for Noph, ISA 19:13; "Chaldeans" beside "Babylonians", JER 21:4, 25:12; the variant spelling "Tophteh" for Topheth, ISA 30:33), or when a symbolic Hebrew name is kept untranslated and its meaning matters ("Hephzibah", "Beulah", ISA 62:4). The note gives the other name or the meaning and asks the team for a consistent policy (Issues Resolved 2026-09-02, 2026-06-03). A name that appears with "son of", "king", or a people-group label is already identified by the text and does not need one (Issues Resolved 2024-11-13, 2025-03-12).
+Editors also add notes (14 in JER/ISA/EZK, 2026) when the ULT uses the customary English name where the Hebrew has a different name translators will meet in other versions ("Memphis" for Noph, ISA 19:13; "Chaldeans" beside "Babylonians", JER 21:4, 25:12; the variant spelling "Tophteh" for Topheth, ISA 30:33), or when a symbolic Hebrew name is kept untranslated and its meaning matters ("Hephzibah", "Beulah", ISA 62:4). The note gives the other name or the meaning and asks the team for a consistent policy (Issues Resolved 2026-09-02, 2026-06-03). An identification note is not needed when the text already identifies what the name refers to (Issues Resolved 2024-11-13, 2025-03-12). In "son of" expressions, this applies to the first name; the second may need a note, as with Zeruiah in "Joab son of Zeruiah" (Issues Resolved 2024-11-13).
 
 ### 4. Transliterate vs Express Meaning
 When translators may choose to express the name's meaning:
