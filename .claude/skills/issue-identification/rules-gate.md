@@ -108,11 +108,39 @@ benchmark before this file leaves draft.
   (Evidence: 17 supporting samples, 29 editor drops of this type, 34 kept.)
 - **G12 figs-quotesinquotes, drop.** Drop a figs-quotesinquotes row when the verse's ULT shows one quotation layer only: narration or a speech formula ('he says', 'says Yahweh', 'thus says Yahweh', 'when they say to you') introduces a double-quoted speech, and neither the verse nor the context verses shown contain a single quotation mark (‘ ’) or a ’” that closes two layers. Keep the row whenever an inner quotation opens, continues, or closes in the verse, or when its explanation says it continues the treatment of a long nested quotation.
   (Evidence: 14 supporting samples, 30 editor drops of this type, 75 kept.)
-- **G13 writing-pronouns, drop.** Drop a writing-pronouns row whose only content is 'the pronoun X refers to Y' when Y is named earlier in the same verse (or in the verse just before it, per D67) as the only grammatically possible referent, with matching number and gender ('the strong will become tow, and his work' = the strong one; 'the gods of Sepharvaim ... did they deliver'). Keep doubled pronouns ('I, I'), indefinite 'they', number or gender shifts, and any row where the referent is not named in the verse or the identification is contestable.
-  (Evidence: 5 supporting samples, 53 editor drops of this type, 421 kept.)
+- **G13 writing-pronouns (on hold).** Do not drop `writing-pronouns` rows. In the
+  2026-10-01 benchmark, drops under an earlier version of this rule removed 12
+  pronoun notes that JER editors kept, and caught only 2 they deleted.
 - **G14 figs-distinguish, drop.** Drop a figs-distinguish row when the phrase is a title or description of Yahweh or God set off by commas or dashes as an appositive ('Yahweh, the one giving the sun for light by day'; 'I, Yahweh, your Savior and your Redeemer, the Mighty One of Jacob'; 'Yahweh your maker, the one having stretched out the heavens'); no reader takes these as distinguishing one Yahweh from another, and editors deleted every such row sampled (9 of 9) and kept 2 of 16 figs-distinguish rows overall. Leave other figs-distinguish rows (a named man's role, a relative clause about a group) to the default keep.
   (Evidence: 7 supporting samples, 11 editor drops of this type, 1 kept.)
 
+
+## Rules for adding issues (used only when the request says additions are enabled)
+
+Add a row only when one of these rules clearly applies and no existing row
+already covers the same words with the same type. Copy the quote exactly from
+the verse's ULT text. Put the rule id in `rule`. Add at most a few rows per
+chunk, and leave `adds` empty when nothing clearly fits.
+
+- **G15 figs-doublenegatives, add.** לֹא or אַל negates a word that is itself
+  negative or undesirable, so the clause states a positive idea a translator
+  may want to say directly ("they will not thirst" = they will have plenty to
+  drink; "do not keep silent" = speak). Quote the negation and the word it
+  negates. Editors added 64 of these in JER, EZK and ISA; the first pass wrote 1.
+- **G16 figs-yousingular, add.** The Hebrew second-person form is clearly
+  singular (masculine or feminine), the addressee is a group, city or nation
+  addressed as one, and the ULT "you" or command does not show that. Quote the
+  first such "you" (or the command) in the verse. Editors added 39, and
+  relabeled 17 rows from figs-you.
+- **G17 writing-foreground, add.** "behold" or "and behold" (hinneh) draws
+  attention to what follows and has no row. Quote "behold" (with "and" if the
+  ULT has it). Every behold gets a note. Exception: G18.
+- **G18 figs-idiom, add.** "behold me" (hinneni) followed by an action Yahweh
+  announces he is about to do ("behold me sending", "behold me bringing") has
+  no row. Quote "behold me" and the participle.
+- **G19 figs-nominaladj, add.** A passive participle stands for people or
+  things with no head noun ("the slain", "the abandoned", "the bound"), and the
+  ULT renders it that way. Quote the phrase.
 
 ## Output
 
