@@ -117,7 +117,10 @@ benchmark before this file leaves draft.
 
 ## Rules for adding issues (used only when the request says additions are enabled)
 
-Add a row only when one of these rules clearly applies and no existing row
+These are experimental: in the 2026-10-01 benchmark (Opus 5.5, 10 EZK/JER
+chapters), 10 of 31 adds under G15, G17 and G18 matched notes editors had
+added. Two other add rules (singular you, headless participles) matched none
+and were removed. Add a row only when one of these rules clearly applies and no existing row
 already covers the same words with the same type. Copy the quote exactly from
 the verse's ULT text. Put the rule id in `rule`. Add at most a few rows per
 chunk, and leave `adds` empty when nothing clearly fits.
@@ -127,20 +130,12 @@ chunk, and leave `adds` empty when nothing clearly fits.
   may want to say directly ("they will not thirst" = they will have plenty to
   drink; "do not keep silent" = speak). Quote the negation and the word it
   negates. Editors added 64 of these in JER, EZK and ISA; the first pass wrote 1.
-- **G16 figs-yousingular, add.** The Hebrew second-person form is clearly
-  singular (masculine or feminine), the addressee is a group, city or nation
-  addressed as one, and the ULT "you" or command does not show that. Quote the
-  first such "you" (or the command) in the verse. Editors added 39, and
-  relabeled 17 rows from figs-you.
 - **G17 writing-foreground, add.** "behold" or "and behold" (hinneh) draws
   attention to what follows and has no row. Quote "behold" (with "and" if the
   ULT has it). Every behold gets a note. Exception: G18.
 - **G18 figs-idiom, add.** "behold me" (hinneni) followed by an action Yahweh
   announces he is about to do ("behold me sending", "behold me bringing") has
   no row. Quote "behold me" and the participle.
-- **G19 figs-nominaladj, add.** A passive participle stands for people or
-  things with no head noun ("the slain", "the abandoned", "the bound"), and the
-  ULT renders it that way. Quote the phrase.
 
 ## Output
 
