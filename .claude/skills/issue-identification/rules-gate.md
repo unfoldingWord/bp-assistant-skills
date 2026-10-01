@@ -71,12 +71,11 @@ files were written. Apply them to every row.
   "I was not able", "they have not succeeded", לא + verb) is neither
   `figs-euphemism` nor `grammar-connect-logic-contrast`: drop. "They are no
   more" / "they were not" meaning "they died" stays `figs-euphemism`.
-- **G4 contrast already explicit.** `grammar-connect-logic-contrast` belongs
-  only on clauses the ULT joins with "and", with no connector, or with a
-  neutral "now". If the clause begins with "but", "however", "yet",
-  "nevertheless", "instead", "rather" or "on the contrary", drop the row. If
-  that "but" is not contrastive, relabel to `grammar-connect-words-phrases`;
-  if it means "except", relabel to `grammar-connect-exceptions`.
+- **G4 contrast on "but" (on hold).** Do not drop or relabel
+  `grammar-connect-logic-contrast` rows on clauses that start with "but",
+  "yet", "though" or "however". The June rule said such clauses need no note,
+  but JER/EZK/ISA editors added 14 of their 18 contrast notes on exactly
+  these clauses. This waits for a content-team ruling.
 - **G5 expected person.** First person for the speaker (including Yahweh's
   "my name", "my hand", "my people") and second person for the addressee are
   the expected persons: drop `figs-123person` rows for them. Keep only an
@@ -99,7 +98,21 @@ files were written. Apply them to every row.
   `[protected]`; the content team has not yet decided whether to change the
   every-instance rule.
 
-<!-- G10+ : evidence rules from the 2026-09-30 editor-edit ledger go here. -->
+Rules G10 onward come from the 2026-09-30 editor-edit ledger (JER, EZK, ISA), checked
+against Issues Resolved by a separate adjudication pass. They still need the gate
+benchmark before this file leaves draft.
+
+- **G10 figs-ellipsis, drop.** Drop a figs-ellipsis row when nothing is actually omitted: the word the row would supply is already in the quoted ULT clause (as plain text, in {braces}, or as a pronoun such as 'it' or 'them'), or the clause already has its verb and the arguments that verb needs and the row only adds an understood referent or a generic noun ('all these' + 'things'; 'none fluttering a wing' + 'bird'). Keep a second line or clause that lacks a verb carried over from the first ('and your fingers, with iniquity') and keep a transitive verb left without its object ('I myself will reduce').
+  (Evidence: 8 supporting samples, 35 editor drops of this type, 141 kept.)
+- **G11 figs-imperative, drop.** Drop a figs-imperative row when the imperative is a plain command, summons, or prohibition the hearer is simply expected to obey ('Hear', 'Listen', 'Lift up your eyes and see', 'Go out from Babylon', 'Wail, you shepherds', 'Speak to the heart of Jerusalem', 'Prepare the way', 'Do not listen to them', a sarcastic 'Stand with your spells') and the row's claim that it 'communicates a condition', 'urgency', or 'a polite request' has no support in the verse. Keep the functions the type defines: a request or plea to God or a superior ('Discipline me, Yahweh'), 'do X and Y will follow' ('serve him and his people, and live'; 'Call to me, and I will answer you'), a divine performative, reassurance ('do not fear' spoken to comfort), and an invitation ('sing about it').
+  (Evidence: 17 supporting samples, 29 editor drops of this type, 34 kept.)
+- **G12 figs-quotesinquotes, drop.** Drop a figs-quotesinquotes row when the verse's ULT shows one quotation layer only: narration or a speech formula ('he says', 'says Yahweh', 'thus says Yahweh', 'when they say to you') introduces a double-quoted speech, and neither the verse nor the context verses shown contain a single quotation mark (‘ ’) or a ’” that closes two layers. Keep the row whenever an inner quotation opens, continues, or closes in the verse, or when its explanation says it continues the treatment of a long nested quotation.
+  (Evidence: 14 supporting samples, 30 editor drops of this type, 75 kept.)
+- **G13 writing-pronouns, drop.** Drop a writing-pronouns row whose only content is 'the pronoun X refers to Y' when Y is named earlier in the same verse (or in the verse just before it, per D67) as the only grammatically possible referent, with matching number and gender ('the strong will become tow, and his work' = the strong one; 'the gods of Sepharvaim ... did they deliver'). Keep doubled pronouns ('I, I'), indefinite 'they', number or gender shifts, and any row where the referent is not named in the verse or the identification is contestable.
+  (Evidence: 5 supporting samples, 53 editor drops of this type, 421 kept.)
+- **G14 figs-distinguish, drop.** Drop a figs-distinguish row when the phrase is a title or description of Yahweh or God set off by commas or dashes as an appositive ('Yahweh, the one giving the sun for light by day'; 'I, Yahweh, your Savior and your Redeemer, the Mighty One of Jacob'; 'Yahweh your maker, the one having stretched out the heavens'); no reader takes these as distinguishing one Yahweh from another, and editors deleted every such row sampled (9 of 9) and kept 2 of 16 figs-distinguish rows overall. Leave other figs-distinguish rows (a named man's role, a relative clause about a group) to the default keep.
+  (Evidence: 7 supporting samples, 11 editor drops of this type, 1 kept.)
+
 
 ## Output
 
