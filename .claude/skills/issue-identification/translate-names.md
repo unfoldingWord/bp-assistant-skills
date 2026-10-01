@@ -29,6 +29,8 @@ When person or place has two different names:
 - Original and modern names for places
 - Note at first occurrence explaining the relationship
 
+Editors also add notes (14 in JER/ISA/EZK, 2026) when the ULT uses the customary English name where the Hebrew has a different name translators will meet in other versions ("Memphis" for Noph, ISA 19:13; "Chaldeans" beside "Babylonians", JER 21:4, 25:12; the variant spelling "Tophteh" for Topheth, ISA 30:33), or when a symbolic Hebrew name is kept untranslated and its meaning matters ("Hephzibah", "Beulah", ISA 62:4). The note gives the other name or the meaning and asks the team for a consistent policy (Issues Resolved 2026-09-02, 2026-06-03). A name that appears with "son of", "king", or a people-group label is already identified by the text and does not need one (Issues Resolved 2024-11-13, 2025-03-12).
+
 ### 4. Transliterate vs Express Meaning
 When translators may choose to express the name's meaning:
 - Names whose meaning is significant in context (Beer Lahai Roi = "Well of the Living One who sees me")

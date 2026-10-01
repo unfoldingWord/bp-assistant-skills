@@ -18,6 +18,8 @@ Some languages have a **singular** form of "you" for when the word refers to jus
 | Number switches within a passage | Track who is being addressed | "The first **you** is plural, but the second is singular" |
 | Commands with implicit "you" | Plural/singular verb forms | "The commands **search** and **report** are plural" |
 
+Hebrew second-person forms also carry gender, which English "you" cannot show (editors added 36 of these in ISA, 2026, against 40 first-pass rows in the reviewed books). Consider a note whenever the number or gender of the addressee is something a translator needs and English does not show: plural addressees ("You will conceive chaff" to Judah's enemies, ISA 33:11; "your flocks" to the Israelites, ISA 61:5), feminine singular to a city or nation spoken of as a woman ("Sing joyfully, barren one", ISA 54:1; "the merchant of Sidon ... filled you", ISA 23:2), masculine singular to one person ("Call out in the throat" to Isaiah, ISA 58:1; "this trust that you trust" to Hezekiah, ISA 36:4), and especially a switch of number or gender inside a verse or passage (feminine singular "hide" after masculine "enter your rooms", ISA 26:20; singular "you" to an official and then plural "yourselves", ISA 36:7). Editors usually write one note at the first occurrence in a passage and name the verses it covers ("here and in verses 2-7"). They use figs-yousingular for these, and relabeled 17 of 20 figs-you rows to it.
+
 ## NOT This Issue (Use Instead)
 
 | Situation | Use Instead |

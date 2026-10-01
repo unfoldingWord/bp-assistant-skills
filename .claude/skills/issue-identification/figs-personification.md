@@ -149,6 +149,8 @@ Collective entities treated as single persons:
 
 4. **Agency test**: The distinguishing feature is that the non-human thing is the **agent** performing an action. If the thing is merely being compared to something or standing for something, it's likely metaphor or metonymy instead. If the action is something a physical object could do just as naturally (cover, fill, flow, burn), ask whether the underlying image is a non-person thing — in that case, prefer figs-metaphor (e.g., splendor covering like a blanket, praise filling like liquid).
 
+An abstract quality or state treated as a physical object or substance is figs-metaphor rather than figs-personification: iniquity that is "heavy" (ISA 1:4), fear "put in their heart" (JER 32:40), haughtiness that "bows down" (ISA 2:11), "stones of emptiness" under a measuring line (ISA 34:11). This extends the agency test above. Editors relabeled 12 figs-personification rows to figs-metaphor and added 4 figs-metaphor rows of this kind in ISA/JER (2026). Personification is for a non-human thing that acts with a person's intention (speaks, rules, seizes, enters a covenant).
+
 ---
 
 ## Common Patterns

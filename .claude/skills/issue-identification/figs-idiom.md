@@ -150,6 +150,8 @@ These have been explicitly decided by the content team (Issues Resolved):
 | "set his face to" | determined to, resolved to |
 | "put words into ears" | listen carefully and remember |
 
+"Behold me" (הִנְנִי or הִנֵּנִי) followed by a participle, when Yahweh announces what he is about to do, is figs-idiom rather than writing-foreground: "behold me sending" (JER 25:9, 16:16), "behold me visiting punishment" (JER 29:32), "behold me bringing to this city" (JER 19:15), "behold me giving them into the hand" (JER 29:21), "behold me restoring" (JER 30:18), "behold me judging you" (JER 2:35), "Behold me, making return the shadow" (ISA 38:8). The expression means "I am about to ..." (Issues Resolved 2026-07-01, confirmed 2025-05-07). Editors added 9 of these and relabeled 9 writing-foreground rows to figs-idiom in JER/ISA/EZK (2026).
+
 ### Attention/Hearing Expressions
 | Expression | Meaning |
 |------------|---------|

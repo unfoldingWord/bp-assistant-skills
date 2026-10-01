@@ -81,6 +81,8 @@ Different names or locations:
 
 4. **Scholarly notes indicate variant**: Textual apparatus in critical editions marks the variation
 
+5. **ULT footnote marker**: When a ULT verse ends with the footnote marker \* (or the UHB carries a footnote at the word), read the footnote. A footnote citing manuscripts or ancient versions with different text ("Some ancient manuscripts read X. The ULT follows that reading. Other ancient manuscripts read Y") is translate-textvariants: "City of Destruction / City of the Sun" (ISA 19:18), "pitied / groan" (JER 22:23), "my people / his people" (ISA 53:8). A footnote offering a different reading of the same consonants (Qere, vowels, word division, homonym) is translate-alternativereadings (Issues Resolved 2026-06-24). Issues Resolved 2026-06-10 moved ULT footnote content into translation notes, and editors added 20 textvariants rows in ISA/JER/EZK (2026) against 3 from the first pass.
+
 ---
 
 ## Examples from Published Notes

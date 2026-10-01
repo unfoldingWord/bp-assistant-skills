@@ -86,6 +86,8 @@ The Septuagint (Greek translation from ~250 BC) sometimes preserves readings tha
 
 5. **Compare translations**: Some translations follow Qere, others Ketiv
 
+6. **Where editors add these**: Editors added 15 alternative-readings rows in ISA/JER (2026) against 6 from the first pass. They tend to appear when (a) the UHB marks a Qere at the word (the main text is the Ketiv and the Qere sits in the footnote; JER 17:13 "from me / from you", ISA 63:9), (b) a ULT footnote or the ULT rendering follows a reading of the same consonants with different vowels or word division ("in burnt offering / with injustice", ISA 61:8; "foundations / weavers", ISA 19:10; "will not look away / will not be blinded", ISA 32:3), or (c) the ULT departs from the Masoretic consonants following an emendation adopted by major English versions. The note records readings that exist; it is not the place to propose consonantal emendations from parallelism alone (Issues Resolved 2026-06-24 limits this type to Qere/Ketiv, vowels, and homonyms).
+
 ---
 
 ## Examples by Category

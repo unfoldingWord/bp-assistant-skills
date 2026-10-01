@@ -19,6 +19,8 @@ In Hebrew poetry, ellipsis and parallelism frequently co-occur. The second line 
 
 When identifying parallelism, also check whether the second line omits words the reader must supply.
 
+In prophetic poetry, editors added 80 figs-ellipsis rows in JER/ISA/EZK (2026) against 293 first-pass rows, and published prophets run at about twice the first pass's rate (0.18 vs 0.09 per verse). It helps to check the second half of each parallel pair for a verb or predicate carried over from the first, and to consider a note when the ULT does not supply it: "thorns will come up in her palaces, the nettle and the thornbush, in her fortifications" (ISA 34:13); "the glaring land will become a pool, and the thirsty place, springs of water" (ISA 35:7); "my salvation is near to coming, and my righteousness, to being revealed" (ISA 56:1); "Woe to the ones rising early ... the ones lingering into the twilight" (ISA 5:11); "to you belongs the right of possession, and to you the redemption" (JER 32:8). A comma in the ULT where the verb would stand often marks the gap. A verbless phrase whose subject or predicate comes from a nearby clause also qualifies ("among the strong, like ones having died", ISA 59:10; "An outcry in the streets about the wine!", ISA 24:11). The brace rule below still holds: a word the ULT supplies in {braces} is not ellipsis (Issues Resolved 2026-04-01).
+
 ## Key Recognition Patterns
 
 ### Relative Ellipsis (Most Common)

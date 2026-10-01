@@ -83,6 +83,8 @@ Use this issue when:
    | 3+ levels | Usually suggest converting some to indirect |
    | Pronoun confusion | Always write a note |
 
+When a nested quotation runs across several verses (the Rabshakeh's speech, ISA 36:4-20; Yahweh's message about Shemaiah, JER 29:24-28), editors write a note at the verse where the inner quotation opens and at each following verse while it continues, including a verse that only closes two layers. The note-writer can then use the continuation template ("If you have decided to translate all of this long quotation so that there are not quotations within quotations, you can continue doing that in this verse"). Editors added 11 such rows in ISA 36 (2026) and kept the first pass's rows at 36:14-15 after rewording them to this template.
+
 ---
 
 ## Strategies for Handling Nested Quotes

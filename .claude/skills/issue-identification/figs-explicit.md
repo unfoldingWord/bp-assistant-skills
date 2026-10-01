@@ -45,6 +45,8 @@ Reader needs background knowledge the original audience had:
 
 **Pattern**: "SPEAKER assumes that readers will know KNOWLEDGE. You could say that explicitly if that would be helpful to your readers."
 
+Terse clauses in prophetic oracles often name an action whose purpose, result, or participants the first audience supplied from shared history or custom, and the ULT leaves unstated: "with great terror" (the plagues and the Sea of Reeds, JER 32:21), "women ... will be kindling it" (dry branches gathered for fire, ISA 27:11), "their kings, being led" (as prisoners, ISA 60:11), "build houses ... plant gardens" (a long stay in exile, JER 29:5), "the one reproving at the gate" (where elders judged cases, ISA 29:21), "the document of the purchase ... sealed ... open" (the terms of a deed, JER 32:11, 16). Published prophets carry about four times the first pass's rate of figs-explicit (0.35 vs 0.09 per verse), and editors added 94 rows against 35 deletions in JER/ISA/EZK (2026), so these are worth a look. Information that is merely implicit and easily inferred does not need a note.
+
 ### 2. Implicit Meaning Notes
 The text implies something that can be stated:
 - Unstated referents ("the one having called you" = God)
@@ -104,6 +106,8 @@ START: Does the text contain information the reader might not understand?
 ### Making Actions Clear
 - "struck" -> "defeated" or "killed"
 - "judging impartially" -> "God, who judges impartially"
+
+Some Hebrew words are used in a sense inside their normal range that the ULT's literal gloss does not show, without being a live figure: פקד "visit" = punish or attend to (JER 9:9), בוא "come" = happen (ISA 48:3 "they came"), שׁמע "listen" = obey (EZK 2:5), לחשׁ "prayer" = a whispered prayer (ISA 26:16), כנען "merchant" = Canaan (ISA 23:11), נכה "struck" = defeated or killed. Editors relabeled 16 figs-idiom and 8 figs-metaphor rows to figs-explicit for cases like these in JER/ISA/EZK (2026), following Issues Resolved 2025-06-25 ("struck") and 2024-08-21 (שׁמע = obey).
 
 ### Clarifying Ambiguous Phrases
 Often presented as "this could mean" notes with multiple options:
