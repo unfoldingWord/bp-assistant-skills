@@ -75,12 +75,13 @@ files were written. Apply them within the scope stated below.
   (לא + verb) is its only hook. Keep a contrast between ideas even when one
   clause is negated, and keep indirect wording for death or sexual relations.
   A negated euphemism is still a euphemism. The G4 hold takes precedence for
-  contrast rows on clauses beginning with its listed connectors.
-- **G4 contrast on "but" (on hold).** Do not drop or relabel
+  contrast rows on clauses beginning with its listed connectors. Never drop
+  `figs-litotes` rows: litotes always gets a note (content team, 2026-10-01).
+- **G4 contrast on "but" (on hold); keep only.** Do not drop or relabel
   `grammar-connect-logic-contrast` rows on clauses that start with "but",
-  "yet", "though" or "however". This hold takes precedence over the contrast
-  type file's hard rule during this gate pass, pending a content-team ruling
-  on the conflicting editor practice (JER/EZK/ISA, 2026).
+  "yet", "though" or "however". Such clauses usually need no contrast note,
+  but write one when the contrast is easy to miss or surprising
+  (content team, 2026-10-01). This gate keeps existing rows on these clauses.
 - **G5 expected person.** First person for the speaker (including Yahweh's
   "my name", "my hand", "my people") and second person for the addressee are
   the expected persons: drop `figs-123person` rows for them. Keep only an
@@ -109,7 +110,7 @@ files were written. Apply them within the scope stated below.
 Rules G10-G18 apply to Old Testament prophetic books only (ISA through MAL,
 including LAM); their evidence comes from JER, EZK and ISA.
 
-- **G10 figs-ellipsis, drop.** Drop a figs-ellipsis row when nothing is actually omitted: the word the row would supply is already in the quoted ULT clause (as plain text, in {braces}, or as a pronoun such as 'it' or 'them'), or the clause already has its verb and the arguments that verb needs and the row only adds an understood referent or a generic noun ('all these' + 'things'; 'none fluttering a wing' + 'bird'). Keep a second line or clause that lacks a verb carried over from the first ('and your fingers, with iniquity') and keep a transitive verb left without its object.
+- **G10 figs-ellipsis, drop.** Drop a figs-ellipsis row when nothing is actually omitted: the word the row would supply is already in the quoted ULT clause (as plain text, in {braces}, or as a pronoun such as 'it' or 'them'), or the clause already has its verb and the arguments that verb needs and the row only adds an understood referent or a generic noun ('all these' + 'things'; 'none fluttering a wing' + 'bird'). Keep a second line or clause that lacks a verb carried over from the first ('and your fingers, with iniquity') and keep a transitive verb left without its object; when in doubt, keep (content team, 2026-10-01).
   (Editor-edit ledger, JER/EZK/ISA, 2026-09-30.)
 - **G11 figs-imperative, drop.** Drop a figs-imperative row when the imperative is a plain command, summons, or prohibition the hearer is simply expected to obey ('Hear', 'Listen', 'Lift up your eyes and see', 'Go out from Babylon', 'Speak to the heart of Jerusalem', 'Prepare the way', 'Do not listen to them', a sarcastic 'Stand with your spells') and the row's claim that it 'communicates a condition', 'urgency', or 'a polite request' has no support in the verse. Keep the functions the type defines: a request or plea to God or a superior ('Discipline me, Yahweh'), 'do X and Y will follow' ('serve him and his people, and live'; 'Call to me, and I will answer you'), a divine performative, reassurance ('do not fear' spoken to comfort), and an invitation ('sing about it').
   (Editor-edit ledger, JER/EZK/ISA, 2026-09-30.)

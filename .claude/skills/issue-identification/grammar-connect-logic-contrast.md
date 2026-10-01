@@ -10,7 +10,7 @@ A contrast relationship shows one event or item is in contrast or opposition to 
 
 ## Categories
 
-All categories below assume the English ULT does **not** already begin with "but" / "however" / "yet" / "nevertheless" / "instead" / "rather". If it does, the contrast is already explicit and no note is written (see "Hard rule" above). The examples below show implicit-contrast cases — usually clauses joined by "and" or by no connector at all.
+When the English ULT already begins with "but", "yet", "though" or "however", a contrast note is usually not needed; write one when the contrast is easy to miss or surprising (content team, 2026-10-01). The examples below show implicit-contrast cases — usually clauses joined by "and" or by no connector at all.
 
 ### 1. Contrast Between Behaviors or Beliefs
 Comparing how different groups think or act, where the ULT connector is "and" or absent.
@@ -36,11 +36,11 @@ What happened vs. what would normally be expected, where the ULT uses "and" rath
 
 ### 4. Contrast Between Sources/Authorities (when not already signaled)
 
-Only flag when the contrast between sources is not already carried by an explicit contrastive connective. If the ULT already reads "not I, but the Lord", the contrast is explicit and no note is needed.
+Flag when the contrast between sources is easy to miss or surprising, even with an explicit contrastive connective. If the ULT already reads "not I, but the Lord", usually no note is needed.
 
 ### 5. Contrast to Introduce a New Point (when implicit)
 
-Only flag when the introduction of the contrasting group is **not** already marked by "but"/"however". For example, a bare "the natural person…" following a description of "the spiritual person…" without any connector may need a note; "But the natural person…" does not.
+When the introduction of the contrasting group is already marked by "but"/"however", flag only if the contrast is easy to miss or surprising. For example, a bare "the natural person…" following a description of "the spiritual person…" without any connector may need a note; "But the natural person…" usually does not.
 
 ### 6. Contrast Between Actions (Do This, Not That)
 
@@ -48,7 +48,7 @@ Only flag when the introduction of the contrasting group is **not** already mark
 |------------|----------|
 | "He has brought down... **and** exalted the lowly" (Luke 1:52-53) | Opposite actions toward different groups, joined only by "and" |
 
-Do NOT flag the parallel "Don't make provision for the flesh, **but** put on the Lord Jesus Christ" (Rom 13:14) — the "but" already makes the contrast explicit.
+Usually no note is needed for the parallel "Don't make provision for the flesh, **but** put on the Lord Jesus Christ" (Rom 13:14) — the "but" already makes the contrast explicit.
 
 ### 7. "Neither...Nor" Contrast
 **Pattern**: "neither X if condition, nor Y if opposite condition"
@@ -88,16 +88,16 @@ but, yet, however, instead, rather, on the contrary, by contrast, nevertheless, 
 - Different languages need different words to make the contrast clear
 
 **Do NOT flag** if:
-- The English ULT clause already begins with **"but"** — "but" is itself an explicit contrast marker, so the relationship is already clear and no `grammar-connect-logic-contrast` note is needed
-- The clause begins with any other explicit contrast marker that already makes the relationship plain (e.g., "however", "yet", "nevertheless", "instead", "rather", "on the contrary")
-- The contrast is already EXPLICIT and CLEAR
+- The English ULT clause already begins with **"but"**, "yet", "though" or "however" and the contrast is clear and unsurprising
+- The clause begins with any other explicit contrast marker that already makes the relationship plain and unsurprising (e.g., "however", "yet", "nevertheless", "instead", "rather", "on the contrary")
+- The contrast is already explicit, clear and unsurprising
 - The only hook is ordinary grammatical negation ("not" / לא + verb: "will not prevail", "I was not able"). Negation alone is not a contrast issue; do not quote לא-phrases just because they contain "not"
 
-### Hard rule: do not write a `grammar-connect-logic-contrast` note for a clause that starts with "but"
+### Contrast notes when a clause starts with "but"
 
-The purpose of this note is to alert the translator that two ideas are in contrast when the English wording would not otherwise signal it. When the ULT already says "but", the signal is in the text. Writing a contrast note in that situation is redundant and is the bug this rule is designed to prevent.
+When a clause starts with "but", "yet", "though" or "however", a contrast note is usually not needed, but write one when the contrast is easy to miss or surprising (content team, 2026-10-01). Editors in JER/EZK/ISA added 14 of their 18 contrast notes on such clauses.
 
-If the only thing you would say is "**But** here marks a contrast between X and Y", drop the note. The note belongs on the "and"/asyndetic case, not on the "but" case.
+If the only thing you would say is "**But** here marks a contrast between X and Y" and that contrast is clear and unsurprising, no note is needed. Continue to consider notes for "and"/asyndetic clauses where the contrast needs explanation.
 
 If a clause beginning with "but" needs commentary for a *different* reason (e.g., "but" is functioning as a development marker rather than a contrast, or it introduces an exception), use the appropriate other issue type (see `grammar-connect-words-phrases` for non-contrastive "but", or `grammar-connect-exceptions` for exceptive "but").
 
@@ -137,21 +137,21 @@ If a clause beginning with "but" needs commentary for a *different* reason (e.g.
 ## Recognition Process
 
 1. **Check the English connector first**:
-   - Does the clause begin with **"but"**, "however", "yet", "nevertheless", "instead", "rather", or "on the contrary"? → **STOP. Do not write a `grammar-connect-logic-contrast` note.** The contrast is already explicit. Consider `grammar-connect-words-phrases` only if the connector is functioning non-contrastively, or `grammar-connect-exceptions` if it is functioning as "except".
+   - Does the clause begin with **"but"**, "however", "yet", "though", "nevertheless", "instead", "rather", or "on the contrary"? → Usually no contrast note is needed; write one when the contrast is easy to miss or surprising (content team, 2026-10-01). Consider `grammar-connect-words-phrases` only if the connector is functioning non-contrastively, or `grammar-connect-exceptions` if it is functioning as "except".
    - Does the clause begin with **"and"**, with no connector at all, or with a neutral marker like "now"? → Continue.
 2. **Identify what is being contrasted**: Two groups? Expectation vs. reality? Past vs. present?
 3. **Check if contrast is clear despite the neutral connector**: Would the translator/reader catch the contrast without help? If yes, no note. If no, write the note.
 
-**Key Test**: Two things are being compared as opposites or one is unexpected, **and** the English wording does not already say "but"/"however"/etc.
+**Key Test**: Two things are being compared as opposites or one is unexpected, and the contrast is easy to miss or surprising even if the English wording already signals it.
 
 ---
 
 ## Restraint Principle
 
-The hard rule above (no note when the clause already begins with "but"/"however"/"yet"/etc.) does most of the restraint work here. Beyond it, flag only where a neutral connector genuinely hides a contrast a translator could miss.
+Clauses beginning with "but"/"however"/"yet"/"though" usually need no note unless the contrast is easy to miss or surprising. With a neutral connector, flag only where it hides a contrast a translator could miss.
 
 Do not flag when:
-- The clause already carries an explicit contrastive marker (the hard rule)
+- The clause already carries an explicit contrastive marker and the contrast is clear and unsurprising
 - The contrast is obvious from context despite the neutral connector
 - The relation is really an exception (grammar-connect-exceptions) or parallelism (figs-parallelism)
 

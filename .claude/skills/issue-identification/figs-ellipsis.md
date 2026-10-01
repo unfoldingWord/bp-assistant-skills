@@ -3,6 +3,8 @@
 ## Purpose
 Identify when a speaker or writer intentionally leaves out words that would normally be needed for a grammatically complete sentence, expecting the reader to supply them from context.
 
+Lean toward notes for left-out words, since many editors and translators read English as a second language and find these harder to supply (content team, 2026-10-01).
+
 ## Definition
 An **ellipsis** occurs when words are omitted that the hearer/reader is expected to fill in mentally. Two types:
 1. **Relative Ellipsis**: Omitted words can be supplied from the immediate context (usually the preceding clause)

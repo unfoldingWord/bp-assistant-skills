@@ -27,6 +27,8 @@ Reduplication is the repetition of a word or related forms of a word for emphasi
 ### 1. Infinitive Absolute + Finite Verb (Hebrew)
 The most common pattern: an infinitive absolute immediately before its corresponding finite verb.
 
+Write a `figs-reduplication` note for infinitive absolute + finite verb pairs such as "dying you will die", including when the ULT says "surely"; the earlier practice of skipping those cases is retired (content team, 2026-10-01).
+
 | ULT Pattern | Meaning | Example AT |
 |-------------|---------|------------|
 | "dying, you shall die" | certainty of death | "you shall certainly die" |
