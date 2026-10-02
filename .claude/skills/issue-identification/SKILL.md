@@ -400,7 +400,7 @@ During verse-by-verse analysis, watch for passages where meaning is genuinely un
 - Multiple possible antecedents for he/she/it/they
 - Possessive pronouns with unclear referent
 - "This/that" pointing to multiple possibilities
-- **Be conservative**: only flag when a translator would genuinely struggle. If only one person is active, or the referent was just named, skip it. Target ~2–5 per chapter.
+- **Be conservative**: only flag when a translator would genuinely struggle. If only one person is active, or the referent was just named, skip it. See the count in `writing-pronouns.md`.
 
 **Lexical Polysemy** (tag: `figs-explicit` or existing figure type)
 - Words with established multiple meanings:
