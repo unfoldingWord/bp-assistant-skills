@@ -78,7 +78,7 @@ function main() {
   console.log('');
   console.log(`Notes: ${notes.length} over ${verses} verses = ${round(perVerse)} notes/verse`);
   console.log(`Published ${genre} band: ${band.chapterDensity.min}-${band.chapterDensity.max} per chapter (median ${band.chapterDensity.median}, book-level ${band.notesPerVerse})`);
-  console.log(`Ratio vs published median: ${round(perVerse / band.chapterDensity.median)}x   (target ceiling: 1.5x)`);
+  console.log(`Ratio vs published median: ${round(perVerse / band.chapterDensity.median)}x   (hard ceiling: 1.2x, merge-procedure.md)`);
   console.log('');
   console.log(`Discourse families (grammar-connect-* + writing-*): ${gc + wr} notes = ${discoursePct}% of output`);
   console.log(`Published ${genre} share: ${round(publishedShare, 1)}%`);

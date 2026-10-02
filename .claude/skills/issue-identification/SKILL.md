@@ -25,7 +25,7 @@ Identify translation issues in biblical text that require translation notes. Thi
 
 ## Selectivity
 
-An issue earns its place only if a competent translator would plausibly err on it without a note. Published note density is the calibration target: see `.claude/skills/golden-benchmark/golden/calibration.json` for per-genre bands (roughly 1.5 notes/verse in narrative, 3-4.5 in poetry and prophecy). Aim to stay within about 1.5x the published band for the chapter's genre. The discourse families (grammar-connect-*, writing-*) together account for under 12% of published notes; when the list runs over budget, trim those families first. When a formulaic marker repeats in a chapter, flag its first occurrence only. Do not flag later occurrences of the same Hebrew/Greek wording and do not count them against the budget — the pipeline adds "see how you translated" pointers and "this also occurs in verses …" lists deterministically after issue identification, so repeats are handled downstream, not by you. Where the note is about the construction rather than the wording (figs-rquestion, figs-declarative, figs-imperative, figs-imperative3p, figs-exclamations), flag each occurrence where the construction is actually present: the same words often recur as a plain statement or command, and the pipeline only carries a pointer forward to a verse you flagged. Foregrounding notes on "behold" (hinneh) are the exception on both counts: published notes carry one at each occurrence, so flag every occurrence and keep them when the discourse families are trimmed.
+An issue earns its place only if a competent translator would plausibly err on it without a note. Published note density is the calibration target: see `.claude/skills/golden-benchmark/golden/calibration.json` for per-genre bands (median about 2.6 notes/verse in narrative, 3.1 in poetry, 4.3 in prophecy). The merge enforces a hard ceiling of 1.2x the genre median (`merge-procedure.md`), so aim at the median, not the ceiling. The discourse families (grammar-connect-*, writing-*) together account for under 12% of published notes; when the list runs over budget, trim those families first. When a formulaic marker repeats in a chapter, flag its first occurrence only. Do not flag later occurrences of the same Hebrew/Greek wording and do not count them against the budget — the pipeline adds "see how you translated" pointers and "this also occurs in verses …" lists deterministically after issue identification, so repeats are handled downstream, not by you. Where the note is about the construction rather than the wording (figs-rquestion, figs-declarative, figs-imperative, figs-imperative3p, figs-exclamations), flag each occurrence where the construction is actually present: the same words often recur as a plain statement or command, and the pipeline only carries a pointer forward to a verse you flagged. Foregrounding notes on "behold" (hinneh) are the exception on both counts: published notes carry one at each occurrence, so flag every occurrence and keep them when the discourse families are trimmed.
 
 ## Arguments
 
@@ -295,7 +295,7 @@ Decision hierarchy for body-part and cultural expressions:
 2. Is it association-based (thing for related thing, organ for its function)? -> figs-metonymy
 3. Is it part-for-whole (can the whole person be substituted)? -> figs-synecdoche
 
-This hierarchy reflects content team decisions in `data/issues_resolved.txt`. Grammar-layer issues (figs-abstractnouns, figs-activepassive, figs-possession) remain independent and always coexist alongside a figurative tag on the same phrase.
+This hierarchy reflects content team decisions in `data/issues_resolved.txt`. figs-activepassive always coexists with a figurative tag on the same phrase. Other grammar-layer tags on a figure's phrase are settled at merge by the one-issue-per-phrase rule in `merge-procedure.md`.
 
 ### Biblical Imagery Classification
 
@@ -323,15 +323,11 @@ After completing all identification, review your output:
    figurative tags (e.g., figs-synecdoche + figs-metonymy + figs-idiom), keep only the
    single best fit using the decision hierarchy in "Competing Figurative Analyses" above.
 
-4. **Missing overlap check**: Are there phrases that genuinely need two tags? (e.g., a simile that also contains an abstract noun - both figs-simile AND figs-abstractnouns may apply)
-   Abstract nouns (script-detected) and passives (figs-abstractnouns,
-   figs-activepassive; passives identified during analysis) exist at a
-   different analytical layer than figures of speech. They always coexist --
-   a figurative issue on the same phrase does not replace a grammar issue. Other grammar-level
-   issues (figs-possession, figs-ellipsis, figs-nominaladj) should also generally not be
-   dropped or merged with figurative issues.
-   But multiple figurative issue types on the same phrase (figurative+figurative, not
-   grammar+figurative) represent competing analyses -- see "Competing Figurative Analyses."
+4. **Overlap check**: Editors usually give a phrase one note. A grammar tag (passive,
+   abstract noun, possession) beside a figure on the same words is a separate layer;
+   raise it when it is real, and the merge (`merge-procedure.md`, one issue per phrase)
+   decides which survive. Two figurative tags on the same phrase are competing
+   analyses -- see "Competing Figurative Analyses."
 
 5. **Keyword sweep**: Scan output for any keyword triggers above that you may have tagged incorrectly.
 
