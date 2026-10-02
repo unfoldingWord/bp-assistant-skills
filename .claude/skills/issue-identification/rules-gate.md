@@ -99,9 +99,10 @@ files were written. Apply them within the scope stated below.
   theophany, poetry) one clause can carry several independent figures, e.g.
   a metaphor whose vehicle is a metonymy, plus implied information. Keep each
   genuinely distinct figure. Drop only competing labels for the *same* figure
-  on the same words, keeping the best fit. Grammar-layer issues
-  (`figs-abstractnouns`, `figs-activepassive`, `figs-possession`) are independent
-  and can coexist with a figurative tag on the same words.
+  on the same words, keeping the best fit. Only `figs-activepassive` always
+  coexists with a figure (G9). A `figs-abstractnouns` or `figs-possession` row
+  whose quote is the same as, or overlaps, a figurative row's quote: drop the
+  grammar row and keep the figure (one issue per phrase, `merge-procedure.md`).
 - **G9 activepassive is protected.** `figs-activepassive` rows arrive
   `[protected]`. The every-instance rule stays: each passive in the ULT gets
   a note (confirmed by Benjamin, 2026-10-01). JER/EZK/ISA editors keep
