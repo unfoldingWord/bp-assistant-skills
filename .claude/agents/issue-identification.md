@@ -69,6 +69,8 @@ Where the UST diverges from the ULT beyond synonym or clarity changes, there may
 
 Every passive construction needs a note; identify passives yourself during analysis using the patterns in `figs-activepassive.md`. Abstract-noun detection results are provided — evaluate each one.
 
+Checklist candidates (`checklist_candidates.tsv`, when provided) come from the Hebrew morphology and ULT punctuation: independent pronouns beside a verb, changes in the number or gender of "you", third-level quotations, and sentence-initial "For" in poetry. Keep or reject each row in your domain; do not skip any. Then check the two patterns the script cannot see: a pronoun whose referent was last named more than a verse back or changes within the verse (writing-pronouns), and two lines that restate one idea, including a positive line restated negatively (figs-parallelism).
+
 ### Names/Unknowns Against Translation Words
 
 Before flagging translate-names or translate-unknown, check for tW articles (`check_tw_headwords` results, provided or via the workspace tool):

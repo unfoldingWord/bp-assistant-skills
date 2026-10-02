@@ -100,7 +100,7 @@ Do **NOT** flag when:
 - The UST already replaces the pronoun with the referent or otherwise makes the identity unmistakable
 - You already flagged the first occurrence of that same pronoun/referent pair in the verse and later occurrences add no new ambiguity
 
-**Target**: Aim for roughly 2–5 writing-pronouns notes per chapter for typical narrative/poetry. If you find yourself flagging 8+ per chapter, you are almost certainly over-flagging. Step back and ask: "Would a careful translator actually be confused here?"
+**Count**: Published chapters carry about 7–13 writing-pronouns notes (NAM 1: 11, JER 52: 7, ISA 38: 7, EZK 3: 13). Many are independent pronouns stated beside their verb (section 2; EZK 3 has seven) or a "you" whose addressee has changed; note each of those. Apply the restraint list above to the rest.
 
 ## Quote Selection
 

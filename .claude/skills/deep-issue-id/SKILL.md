@@ -78,6 +78,7 @@ CLI="node /app/src/workspace-tools-cli.js"
 $CLI read_usfm_chapter '{"file":"<fullBookUltPath>","chapter":<N>,"plain":true}' > $TMP/ult_plain.usfm
 $CLI read_usfm_chapter '{"file":"<fullBookUstPath>","chapter":<N>,"plain":true}' > $TMP/ust_plain.usfm
 $CLI read_usfm_chapter '{"file":"<hebrewPath>","chapter":<N>,"plain":true}' > $TMP/hebrew_plain.txt
+$CLI read_usfm_chapter '{"file":"<hebrewPath>","chapter":<N>}' > $TMP/hebrew_morph.usfm
 $CLI read_usfm_chapter '{"file":"<fullBookUltPath>","chapter":<N>}' > $TMP/ult_aligned.usfm
 $CLI extract_alignment_data '{"alignedUsfm":"'$TMP'/ult_aligned.usfm","output":"'$TMP'/alignments.json"}'
 for f in ult_plain.usfm ust_plain.usfm hebrew_plain.txt alignments.json; do
@@ -96,6 +97,15 @@ Use Glob to check if `data/editor-notes/<BOOK>.md` exists. If it does, read it w
 Use `mcp__workspace-tools__compare_ult_ust` with `ultFile="$TMP/ult_plain.usfm"`, `ustFile="$TMP/ust_plain.usfm"`, `chapter=<N>`, `output="$TMP/ult_ust_diff.tsv"`.
 
 Use `mcp__workspace-tools__detect_abstract_nouns` with the plain ULT text (read `$TMP/ult_plain.usfm` and pass as `text`), `format="tsv"`. Write the result to `$TMP/detected_issues.tsv` using the Write tool.
+
+Write checklist candidates for the types analysts under-note (emphatic and
+addressee-changing pronouns, singular/plural "you", third-level quotations,
+sentence-initial "For" in poetry). If this fails, continue without the file:
+
+```bash
+node .claude/skills/issue-identification/scripts/detection/checklist_candidates.mjs \
+  --hebrew $TMP/hebrew_morph.usfm --ult $TMP/ult_plain.usfm > $TMP/checklist_candidates.tsv
+```
 
 Use `mcp__workspace-tools__build_tn_index` (no parameters needed for default build).
 
@@ -130,6 +140,7 @@ assignments. Spawn both analysts in parallel. Each analyst receives:
   - ULT-to-Hebrew alignment JSON (`$TMP/alignments.json`)
   - ULT/UST divergence patterns (`$TMP/ult_ust_diff.tsv`)
   - Automated detections (`$TMP/detected_issues.tsv`)
+  - Checklist candidates (`$TMP/checklist_candidates.tsv`) if written
   - Editor notes (`data/editor-notes/<BOOK>.md`) if available
 
 Wait for both analysts to complete before proceeding.
@@ -247,6 +258,7 @@ Setup:    Fetch human ULT/UST from Door43 master (or use pipeline context)
           extract_alignment_data -> alignments.json
           compare_ult_ust -> divergence patterns
           detect_abstract_nouns -> detected_issues.tsv
+          checklist_candidates.mjs -> checklist_candidates.tsv
           build_tn_index
 
 Wave 2:   Task: Structure ──────┐  (2 parallel sub-agents,

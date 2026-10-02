@@ -7,7 +7,7 @@ Identify when "you" requires clarification of singular/plural number for transla
 Some languages have a **singular** form of "you" for when the word refers to just one person, and a **plural** form for when it refers to more than one person. The Bible was written in Hebrew, Aramaic, and Greek, which all have both forms. English has only one form ("you"), so translators need help knowing the original number.
 
 ## IMPORTANT: Name vs. Function
-**Despite its name "yousingular," this issue is used to mark when "you" is PLURAL**, not singular. The name refers to the TA article title "Forms of 'You' - Singular" which covers the singular/plural distinction.
+**Despite its name "yousingular," this issue marks whichever number a translator could miss**: most often a plural "you" addressing a group, and also a singular "you" where the address switches from a group to one person, city or nation (NAM 1:9 plural, then NAM 1:11 singular for Nineveh). The name refers to the TA article title "Forms of 'You' - Singular" which covers the singular/plural distinction.
 
 ## Categories
 

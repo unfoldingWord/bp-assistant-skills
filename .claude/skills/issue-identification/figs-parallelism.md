@@ -78,7 +78,7 @@ Numerical intensification common in Hebrew poetry:
 
 8. **First instance in a psalm**: For the first parallelism identified in a psalm (or chapter), add `t: first instance` to the explanation. This routes the note writer to a template that introduces parallelism as a pattern and asks translators to establish a team-wide approach for the rest of the psalm. Only mark one occurrence per psalm as `t: first instance`.
 
-9. **Unique exception marker (rare)**: By default, only one parallelism note per chapter is kept by the JS normalizer. If an additional parallelism note is genuinely required, include both:
+9. **Per-chapter limit and exception marker**: Still list every synonymous parallelism you find (NAM 1 has four published notes); the JS normalizer, not you, applies the per-chapter limit and keeps the first one by default. If an additional parallelism note is genuinely required, include both:
    - `q: unique-parallelism`
    - `reason: tricola|pivot|ellipsis-critical|structure-shift`
    Without both markers, additional parallelism notes are dropped automatically.

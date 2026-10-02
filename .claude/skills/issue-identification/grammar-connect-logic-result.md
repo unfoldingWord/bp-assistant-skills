@@ -193,4 +193,4 @@ Do not flag when:
 - An agent intends the outcome (use grammar-connect-logic-goal)
 - Every "for"/"so"/"because" appears -- most read naturally and need no note
 
-Target: reason-result is the most common connection type, but it is still bounded. Published narrative runs about 2 such notes per 20-verse chapter; poetry and prophecy fewer (roughly 1 or none per chapter). The grammar-connect family as a whole is a small share of published notes (narrative 5.7%, poetry 2.3%, prophecy 1.4%), and note-dense Nahum has zero grammar-connect notes across its 47 verses -- a useful ceiling check for prophecy.
+Target: reason-result is the most common connection type, but it is still bounded. Published narrative runs about 2 such notes per 20-verse chapter; in poetry and prophecy the count varies by book (EZK has one in the whole book; ISA 38 has four, three on a sentence-initial **For** that gives the reason for the preceding statement). The grammar-connect family as a whole is a small share of published notes (narrative 5.7%, poetry 2.3%, prophecy 1.4%), and note-dense Nahum has zero grammar-connect notes across its 47 verses -- a useful ceiling check for prophecy.
