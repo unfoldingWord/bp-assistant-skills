@@ -68,6 +68,8 @@ Result: Emphatic negative or positive depending on construction
 - "let injustice not be" (al-tehi 'awlah) = let there be justice
 - "not emptily" (lo reqam) = with many things/fully
 
+Prophetic books have more of these than the first pass tends to find (editors added 64 in JER/ISA/EZK, 2026, against 1 from the first pass). Consider a note when לֹא or אַל negates a verb, adjective, or noun whose own meaning expresses negation, absence, rejection or cessation, so that the clause states a positive idea a translator may need to put directly: "they will not thirst" (= will have enough to drink, ISA 49:10), "shame that will not be forgotten" (= will be remembered, JER 23:40), "do not break your covenant" (= keep it, JER 14:21). This is the negated-antonym use from the Oct 29, 2025 decision above; apply the litotes test below. An undesirable action alone does not qualify, and reassurance such as "do not fear" belongs under figs-imperative. Do not add a competing double-negative analysis for an idiom already covered on the same words. A negated neutral verb ("I will not remember him", "they did not go") is not a double negative.
+
 ## NOT This Issue
 
 ### Use figs-litotes instead when:

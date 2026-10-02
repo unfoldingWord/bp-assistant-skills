@@ -20,6 +20,8 @@ The note should remind translators that their language may have a comparable exp
 - **we'attah** ("and now") - common attention marker
 - Expressions of sudden notice or emphasis
 
+Editors added 48 foregrounding notes in JER/ISA/EZK (2026) against 28 from the first pass, so it helps to look at every הִנֵּה, הֵן, or suffixed form (הִנְנִי, הִנָּם, והנהו) rendered "behold" or "look" that a speaker or narrator uses to draw attention to what follows. That includes "and behold" inside a vision or perception report ("I saw the land, and behold, it was formless", JER 4:23; "and behold, he was doing work on the wheels", JER 18:3), "For behold" (ISA 60:2), and "Therefore, behold, days are coming" (JER 7:32). The exceptions in the "Behold me" section below still apply, and an "And behold" that opens a new narrative scene is writing-newevent.
+
 ### Greek Markers
 - **idou** ("behold/look") - common attention marker in narrative and discourse
 
@@ -53,8 +55,9 @@ The expression "behold me" has different interpretations based on context:
 | Context | Issue Type | Example |
 |---------|------------|---------|
 | Inferior expressing availability to superior | **writing-politeness** | Samuel responding to Eli (1 Sam. 3:4) |
-| Yahweh announcing action to punish/bless | **figs-idiom** | "Behold me rebuking" = "Now I am about to rebuke" |
+| Yahweh announcing action to punish/bless, with a following participle | **figs-idiom** | "Behold me rebuking" = "Now I am about to rebuke" |
 | Speaker calling attention to what follows | **writing-foreground** | "Behold" foregrounds information |
+| "Behold me against you" (hinneni-'alekha) | **writing-foreground** | The opposition formula draws attention to the announcement |
 
 ## Recognition Process
 

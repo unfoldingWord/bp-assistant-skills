@@ -29,7 +29,7 @@ These have been explicitly decided by the content team (Issues Resolved):
 | "the word of Yahweh was to X" | figs-idiom | = "Yahweh spoke a message to X" |
 | "a man to his tent" | figs-idiom | Soldiers ending campaign, going home |
 | "face" = "surface" | figs-idiom | NOT personification |
-| "behold me" (Yahweh announcing) | figs-idiom | = "Now I am about to..." |
+| "behold me" followed by a participle (Yahweh announcing) | figs-idiom | = "Now I am about to..." |
 | "day" (= occasion) | figs-idiom | e.g., "day of uncleanness" = on the occasion of |
 | Round numbers (10,000) | figs-idiom | When meaning "a large number" (context dependent) |
 | "hand" (power + possession) | figs-idiom | When suggesting both power and possession together |
@@ -62,7 +62,6 @@ These have been explicitly decided by the content team (Issues Resolved):
 | "days" (= time period) | Associated concept (time made of days) |
 | "hand" (= power alone) | Associated concept |
 | "word" (= message) | Associated concept |
-| "struck" = "defeated/killed" | Result by association with action |
 
 ### NOT requiring notes:
 | Expression | Reason |
@@ -150,11 +149,12 @@ These have been explicitly decided by the content team (Issues Resolved):
 | "set his face to" | determined to, resolved to |
 | "put words into ears" | listen carefully and remember |
 
+"Behold me" (הִנְנִי or הִנֵּנִי) followed by a participle, when Yahweh announces what he is about to do, is figs-idiom rather than writing-foreground: "behold me sending" (JER 25:9, 16:16), "behold me visiting punishment" (JER 29:32), "behold me bringing to this city" (JER 19:15), "behold me giving them into the hand" (JER 29:21), "behold me restoring" (JER 30:18), "behold me judging you" (JER 2:35), "Behold me, making return the shadow" (ISA 38:8). The expression means "I am about to ..." (Issues Resolved 2026-07-01, confirmed 2025-05-07). Editors added 9 of these and relabeled 9 writing-foreground rows to figs-idiom in JER/ISA/EZK (2026).
+
 ### Attention/Hearing Expressions
 | Expression | Meaning |
 |------------|---------|
 | "incline your ear" | listen carefully |
-| "listen to the voice of" | obey |
 | "give/lift your voice" | speak loudly |
 | "incline your heart" | fully commit oneself |
 | "enter into your heart" | fully understand/know |

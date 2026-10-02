@@ -18,6 +18,8 @@ Some languages have a **singular** form of "you" for when the word refers to jus
 | Number switches within a passage | Track who is being addressed | "The first **you** is plural, but the second is singular" |
 | Commands with implicit "you" | Plural/singular verb forms | "The commands **search** and **report** are plural" |
 
+Editors added 36 figs-yousingular notes in ISA (2026), against 40 first-pass rows in the reviewed books. Consider a note when the number of the addressee is unclear or surprising in context, especially at a switch of number within a verse or passage (singular "you" to an official and then plural "yourselves", ISA 36:7). English not showing number or gender is not by itself a reason for a note. Editors usually write one note at the first occurrence in a passage and name the verses it covers ("here and in verses 2-7"). They use figs-yousingular for these, and relabeled 17 of 20 figs-you rows to it.
+
 ## NOT This Issue (Use Instead)
 
 | Situation | Use Instead |

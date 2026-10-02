@@ -3,6 +3,8 @@
 ## Purpose
 Identify litotes - a rhetorical device where the speaker uses understatement (negating the opposite) to EMPHASIZE a strong positive meaning.
 
+Most plain "not" needs no note, but litotes—a negated understatement that means the opposite, such as "not a few" meaning many—always gets a `figs-litotes` note (content team, 2026-10-01).
+
 ## Definition
 Litotes expresses a strong positive meaning by negating a word that is the opposite of the intended meaning. The key distinction: litotes HEIGHTENS the positive meaning beyond what a plain positive statement would convey.
 
