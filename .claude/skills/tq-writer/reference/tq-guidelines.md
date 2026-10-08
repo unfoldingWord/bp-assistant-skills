@@ -116,8 +116,9 @@ Follow `../../reference/gl_guidelines.md` for shared style rules (formality, num
 ### Numbers
 Follow the ULT convention (Gateway Language Manual, Appendix A, "Numbers (general)") in every Question and Response:
 - **Spell out one through ten** ("two", "seven", "ten"). **Use numerals for 11 and higher** ("12", "99", "24,000").
-- **Mixed formats in the same question or response**: when the numbers in one passage fall on both sides of ten, use the format most of them take under the rule above for all of them. "two, five, and fifteen" is written "two, five, and fifteen" (most are words, so "fifteen" stays a word). "five, 25, and 35" is written "5, 25, and 35" (most are numerals, so "five" becomes a numeral). The manual's own example: "30 camels, 40 cows, and 10 bulls", not "ten bulls". On a tie, match how the ULT writes the numbers in that verse.
-- **Write out** a number used as an adjective or common noun ("a thousand pieces of silver", "a hundred times more"), a number that is a title ("the Twelve"), and a figurative or idiomatic number above ten that the ULT also writes out.
+- **Mixed formats in the same question or response**: when the numbers in one passage fall on both sides of ten, use the format most of them take under the rule above for all of them. Before and after: "2, 5, and 15" becomes "two, five, and fifteen" (two of the three are words); "five, 25, and 35" becomes "5, 25, and 35" (two of the three are numerals). The manual's own example: "30 camels, 40 cows, and 10 bulls", not "ten bulls". Count a question and its response together as one passage. On a tie, match how the ULT writes those numbers; if the ULT does not settle it, use the one-through-ten rule as written.
+- **Write out only these**: the round "a thousand" or "a hundred" forms ("a thousand pieces of silver", "a hundred times more"; "one hundred" is a numeral, "100"); a number that is a title ("the Twelve"); and a figurative or idiomatic number above ten that the ULT also writes out. A counted quantity such as "30 camels" or "24,000 men" is not an exception: it is a numeral.
+- Leave numbers inside references and names ("Psalm 7", "1 Kings") as they are.
 
 ### Voice
 - Use active voice where possible
