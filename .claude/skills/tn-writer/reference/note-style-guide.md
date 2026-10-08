@@ -132,7 +132,7 @@ Similarly, do not borrow wording from templates belonging to other issue types. 
 - **figs-imperative**: Do not add explanatory sentences about the specific imperative content or context
 - **grammar-connect-logic-result**: Do not identify specific phrases, keep to the template
 - **figs-ellipsis**: Do not explain the missing words/phrase.
-- **figs-abstractnouns**: Do not define the words. Keep the note scoped to the single abstract noun occurrence identified by the issue row. Do not broaden one figs-abstractnouns note to cover a matching abstract noun in a parallel line or adjacent clause unless the prepared item explicitly treats them as one fixed expression.
+- **figs-abstractnouns**: Bold the ULT's English abstract noun. Whether a note applies depends on that English word, not the Hebrew (see `issue-identification/figs-abstractnouns.md`). Do not define the words. Keep the note scoped to the single abstract noun occurrence identified by the issue row. Do not broaden one figs-abstractnouns note to cover a matching abstract noun in a parallel line or adjacent clause unless the prepared item explicitly treats them as one fixed expression.
 - **writing-poetry (cognate accusative)**: Use the cognate accusative template exactly. Do not describe the poetic effect, explain the figure, or substitute other wording
 
 ## Quotation Marks
