@@ -93,6 +93,7 @@ TQ answers should capture the *idea* of the content so that any translation deri
 - **Verse references**: If content moved between verses, update the Reference column
 - **Factual accuracy**: If the Q&A no longer matches what the verse says, correct it
 - **Spelling, grammar, and punctuation**: Proofread every row's Question and Response on every pass, including rows whose content needs no change. Correct misspellings, subject-verb and pronoun agreement errors, wrong or inconsistent tense, missing or doubled words, and punctuation, per `../../reference/gl_guidelines.md`. A row can be content-correct and still carry a typo; mechanical error correction is not a style preference and is never optional
+- **Number format**: Check every number in every row's Question and Response against the "Numbers" rule under Formatting, including rows whose content needs no change. Inherited rows often spell out numbers above ten ("twenty-four thousand"); convert them to numerals. Like spelling, this is a mechanical correction and is never optional
 
 ### Coverage: Aim for One Question Per Verse
 - After the existing rows are updated in place, fill the gaps: **for each verse that has no question, add one wherever you can write a plain, answerable what/who/where/when/how comprehension question** from the ULT/UST. The target is roughly one question per verse the chapter can support.
@@ -111,6 +112,13 @@ TQ answers should capture the *idea* of the content so that any translation deri
 ## Formatting
 
 Follow `../../reference/gl_guidelines.md` for shared style rules (formality, numbers, spelling, comparisons). TQ-specific rules below.
+
+### Numbers
+Follow the ULT convention (Gateway Language Manual, Appendix A, "Numbers (general)") in every Question and Response:
+- **Spell out one through ten** ("two", "seven", "ten"). **Use numerals for 11 and higher** ("12", "99", "24,000").
+- **Mixed formats in the same question or response**: when the numbers in one passage fall on both sides of ten, use the format most of them take under the rule above for all of them. Before and after: "2, 5, and 15" becomes "two, five, and fifteen" (two of the three are words); "five, 25, and 35" becomes "5, 25, and 35" (two of the three are numerals). The manual's own example: "30 camels, 40 cows, and 10 bulls", not "ten bulls". Count a question and its response together as one passage. On a tie, use the one-through-ten rule as written, number by number.
+- **Write out only these**: the round "a thousand" or "a hundred" forms ("a thousand pieces of silver", "a hundred times more"; "one hundred" is a numeral, "100"); a number that is a title ("the Twelve"); and a figurative or idiomatic number above ten that the ULT also writes out. A counted quantity such as "30 camels" or "24,000 men" is not an exception: it is a numeral.
+- Leave numbers inside references and names ("Psalm 7", "1 Kings") as they are.
 
 ### Voice
 - Use active voice where possible
