@@ -88,7 +88,9 @@ Never use "and" to join non-adjacent AT fragments.
 
 ## Restructuring Notes
 
-For issue types that suggest reordering text (figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result, grammar-connect-condition-fact, or any note suggesting putting one part of the verse before another), the gl_quote must cover the **entire area** being restructured, and the AT must show the full restructured result. For example, if the note says "put the second half of the verse before the first half," the gl_quote should be approximately the whole verse and the AT should be the whole verse reordered. Do not quote only one fragment of a reordering — the reader needs to see both the original order and the proposed new order.
+For notes that reorder text (figs-infostructure, or any note suggesting putting one part of the verse before another), the gl_quote must cover the **entire area** being restructured, and the AT must show the full restructured result. For example, if the note says "put the second half of the verse before the first half," the gl_quote should be approximately the whole verse and the AT should be the whole verse reordered. Do not quote only one fragment of a reordering — the reader needs to see both the original order and the proposed new order.
+
+A grammar-connect note that only asks for a clearer connector is not a restructuring note: anchor it on the connector itself, not the clause or verse it introduces (see the grammar-connect-logic row in `data/quick-ref/tn_decisions.csv`). The AT then replaces only the connector, e.g. [because] or [Because of all this].
 
 ## Parallelism Quote Scope
 
