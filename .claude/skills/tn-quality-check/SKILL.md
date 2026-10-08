@@ -161,9 +161,11 @@ Flag notes in the same verse that:
 
 The mechanical check (check 24) catches the most common violations. In semantic review, verify that notes flagged by check 24 are genuinely wrong (not false positives), and look for subtler cases the script may miss (e.g., "Here, **The** king..." where the bolded word starts with uppercase).
 
-#### 3i. Restructuring quote scope
+#### 3i. Restructuring and over-long quote scope
 
-For figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result, or any note suggesting text reordering: verify the gl_quote spans the entire area being restructured, and the AT shows the full restructured text. Flag notes where the quote captures only a fragment of the reordering.
+For figs-infostructure or any note suggesting text reordering: verify the gl_quote spans the entire area being restructured, and the AT shows the full restructured text. Flag notes where the quote captures only a fragment of the reordering. A grammar-connect note that only asks for a clearer connector is not a restructuring note: anchor it on the connector itself, not the clause or verse it introduces (see the grammar-connect-logic row in `data/quick-ref/tn_decisions.csv`).
+
+Also flag the opposite problem: a quote much longer than the issue. When the AT copies most of the gl_quote word for word (10 or more copied words making up about 80% or more of the AT), narrow the quote to the words the AT changes plus what it needs to read as a drop-in, and trim the AT to match. Parallelism (3j) and restructuring notes are exempt. In editor history (DAN, AMO, JER), this signature marked 6 of the 13 quotes editors cut back, including 5 of the 6 connector notes, and 3% of the notes they kept.
 
 #### 3j. Parallelism quote scope
 
@@ -200,7 +202,7 @@ Guardrails for this step:
       {"generatedJson":"<generatedJson>","id":"<id>","note":"<replacement note text>"}
       JSON
 
-**For quote boundary issues** (restructuring scope, parallelism scope, orphaned words):
+**For quote boundary issues** (restructuring scope, over-long quotes, parallelism scope, orphaned words). When you narrow a quote, trim the AT to match with `update_note_text`:
 - Run `update_prepared_quote` via STDIN heredoc (it carries quote slugs). Use `preparedJson` (= `runtime.preparedNotes`, or fallback `tmp/claude/prepared_notes.json`), the affected `id`, and the changed `glQuote` / `glQuoteRoundtripped` / `origQuote` fields. Do not hand-`Edit` the JSON.
 
       node /app/src/workspace-tools-cli.js update_prepared_quote - <<'JSON'

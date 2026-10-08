@@ -39,7 +39,7 @@ If there are slashes between words expressing similar or different ideas in a te
 AT authoring is handled by a separate pipeline stage; its rules live in `at-style-guide.md`. When writing notes, do not generate alternate translations (the pipeline appends them afterward). Two quote-scope rules still matter while writing notes:
 
 ### Restructuring Notes
-For issue types that suggest reordering text (figs-infostructure, grammar-connect-logic-goal, grammar-connect-logic-result, grammar-connect-condition-fact, or any note suggesting putting one part of the verse before another), the gl_quote must cover the **entire area** being restructured. Do not quote only one fragment of a reordering.
+For notes that reorder text (figs-infostructure, or any note suggesting putting one part of the verse before another), the gl_quote must cover the **entire area** being restructured. Do not quote only one fragment of a reordering. A grammar-connect note that only asks for a clearer connector is not a restructuring note: anchor it on the connector itself, not the clause or verse it introduces (see the grammar-connect-logic row in `data/quick-ref/tn_decisions.csv`).
 
 Do not write figs-infostructure notes about placing the object after the verb. Hebrew commonly puts the object before the verb, and many languages do too. Suggesting translators move the object after the verb is not a useful note. If an issue row only concerns object-before-verb order, skip it.
 
@@ -60,6 +60,8 @@ Only use "the author" as a fallback when the author is genuinely unknown. Never 
 ## Quote Width
 
 Prefer continuous Hebrew quotes when practical. Per Issues Resolved: "It is best to avoid discontinuous text in the Quote field. It is helpful to expand the Quote in order to avoid having ampersands in it." However, an `&` separator is acceptable when expanding the quote would force an awkward `...` ellipsis in the AT. Use judgment — expand when it makes both quote and AT cleaner, keep the `&` when it does.
+
+Outside parallelism and restructuring notes, the quote covers only the words the alternate translation must change, plus what the AT needs to read as a drop-in replacement. Words the AT would copy unchanged at the start or end of the quote do not belong in it. For example, for the passive in Daniel 8:12, quote **an army will be given over** (the words an active AT such as [God will hand an army over] must rework), not **And because of transgression an army will be given over**.
 
 ## "Here" Rule
 Only start a note with "Here, " if it is immediately followed by a **bolded quote from the verse** that starts with a lowercase letter. For example: `Here, **admonish** means...` Do not use "Here" before author names, descriptions, or other non-quoted text. Do not do: `Here David is saying...` or `Here the author is speaking...`
