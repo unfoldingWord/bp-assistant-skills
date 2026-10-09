@@ -127,6 +127,7 @@ As you work through items, keep a mental map of interpretive commitments you hav
    - `not_needed` -- do not add an alternate translation
 
 4. For items where `writer_packet.programmatic_note` is non-empty, write that note text exactly and move on. Do not reinterpret the row.
+   - When `writer_packet.skip_allowed` is true (a `parallelism-repeat` row), follow `writer_packet.skip_instruction`: write the note only if the two clauses really mean basically the same thing. Otherwise record `"SKIP_NOTE: <short reason>"` as that item's value in generated_notes.json (never in a TSV) and continue; assembly drops the row and the pipeline reports it. Never use `SKIP_NOTE` for an item without `skip_allowed`, or anywhere else.
 
 5. Do not generate alternate translations. The pipeline handles AT generation as a separate step after note writing. For all items with `at_policy: required`, write only the explanatory note text. The pipeline will programmatically append `Alternate translation: [text]` after generating ATs with a focused, validated process.
 
