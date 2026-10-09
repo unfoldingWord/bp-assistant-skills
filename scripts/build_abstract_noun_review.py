@@ -177,7 +177,12 @@ def english_words(note):
     return out
 
 
+NOT_PLURAL = {"does", "news", "gracious", "glorious", "righteous"}
+
+
 def singular(w):
+    if w in NOT_PLURAL or w.endswith(("ous", "us", "is")):
+        return w
     for suf, rep in (("ies", "y"), ("sses", "ss"), ("ches", "ch"), ("shes", "sh"), ("s", "")):
         if w.endswith(suf) and len(w) > len(suf) + 2 and not w.endswith("ss") and not w.endswith("ness"):
             return w[: -len(suf)] + rep
@@ -240,6 +245,8 @@ def main():
                     if not lem and len(ws) == 1:
                         lem = quote_lemmas(src, ref, quote)
                     for lemma, strong in set(lem):
+                        if not lemma:
+                            continue
                         s["lemmas"][f"{lemma} {strong.split(':')[-1]}"] += 1
 
     seen = set()
