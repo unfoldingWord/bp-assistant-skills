@@ -388,7 +388,7 @@ Invoke each via `node /app/src/workspace-tools-cli.js <tool> '<json-args>'` (see
 | `fetch_door43` | Fetch USFM from Door43 (supports `type="ust"` for UST) |
 | `parse_usfm.js` (node) | Parse USFM, extract alignments and plain text (usfm-js) |
 | `compare_ult_ust` | Compare ULT/UST plain text to identify divergences suggesting issues |
-| `detect_abstract_nouns` | Find abstract nouns (612 word list). Use `text="..."` for plain English |
+| `detect_abstract_nouns` | Find abstract-noun candidates by English suffix only (-ness, -tion, -ment, ...); it does not read the 612-word list (bp-assistant#465). Use `text="..."` for plain English |
 | `check_tw_headwords` | Check names/unknowns against tW headwords - filters translate-names/translate-unknown |
 | `build_tn_index` | Published TN index lookup. `lookup="hand"` for keyword, `issue="figs-metaphor"` for issue type |
 

@@ -177,7 +177,7 @@ def english_words(note):
     return out
 
 
-NOT_PLURAL = {"does", "news", "gracious", "glorious", "righteous"}
+NOT_PLURAL = {"does", "news", "gracious", "glorious", "righteous", "riches"}
 
 
 def singular(w):
