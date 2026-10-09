@@ -96,7 +96,7 @@ Use Glob to check if `data/editor-notes/<BOOK>.md` exists. If it does, read it w
 
 Use `mcp__workspace-tools__compare_ult_ust` with `ultFile="$TMP/ult_plain.usfm"`, `ustFile="$TMP/ust_plain.usfm"`, `chapter=<N>`, `output="$TMP/ult_ust_diff.tsv"`.
 
-Use `mcp__workspace-tools__detect_abstract_nouns` with the plain ULT text (read `$TMP/ult_plain.usfm` and pass as `text`), `format="tsv"`. Write the result to `$TMP/detected_issues.tsv` using the Write tool.
+Use `mcp__workspace-tools__detect_abstract_nouns` with the plain ULT text (read `$TMP/ult_plain.usfm` and pass as `text`), `format="tsv"`. Write the result to `$TMP/detected_issues.tsv` using the Write tool. The tool matches suffixes only; analysts also check `data/abstract_nouns.txt` (see `figs-abstractnouns.md`).
 
 Write checklist candidates for the types analysts under-note (emphatic and
 addressee-changing pronouns, singular/plural "you", third-level quotations,

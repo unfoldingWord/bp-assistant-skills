@@ -8,36 +8,20 @@ Abstract nouns refer to attitudes, qualities, events, or situations that cannot 
 
 Some languages use abstract nouns extensively (Greek, English). Others express these concepts with verb phrases: "forgiveness of sin" -> "God is willing to forgive people after they have sinned."
 
-## Automated Detection
+## Base the Decision on the ULT's English
 
-Detection script finds potential abstract nouns by word list matching and morphology verification.
+Whether a note is needed depends on the ULT's English word, not on the Hebrew. If the ULT uses an English abstract noun, it can get a note even when the Hebrew is an adjective, verb, or concrete noun. If the ULT already uses a verb, adjective, or concrete noun, there is no abstract-noun note even when the Hebrew noun is abstract.
 
-```bash
-# Full pipeline
-python3 fetch_door43.py 1JN | \
-  node parse_usfm.js --stdin | \
-  python3 detect_abstract_nouns.py --stdin
-```
+- JER 12:4 "the **wickedness** of those who dwell in it" (רָעָה): the ULT's English is abstract, so the note stands.
+- JER 30:5 "**dread**" (פַּחַד) and JER 30:3 "**captivity**" (שְׁבוּת): editors kept these bot notes and only reworded them.
 
-**Script**: `.claude/skills/issue-identification/scripts/detection/detect_abstract_nouns.py`
-**Word list**: `.claude/skills/issue-identification/scripts/detection/abstract_nouns.txt` (577 words)
+## Detection
 
-### Detection signals:
-- English word matches abstract noun list
-- Source morphology confirms noun (Gr,N... or He,N...)
-- Source adjective translated as English noun (higher confidence)
+- **Word list**: `data/abstract_nouns.txt` is the team's list. Check the ULT's nouns against it during verse-by-verse analysis.
+- **Review table**: `data/abstract_nouns_review.csv` shows, for each English word, how often en_tn tags it, the Hebrew/Greek lemma behind it, and what editors did with bot notes. Rows marked `borderline`, `hold`, or `conflict` are waiting on a team ruling (`team_decision` column). Don't flag or drop those words on your own authority; follow the published notes for the book.
+- **`detect_abstract_nouns` tool**: it currently matches English suffixes only (-ness, -tion/-sion, -ment, -ity, -ance/-ence, -dom, -ship, -hood, -ure, -ism) and does not read the word list (bp-assistant#465). Treat its output as candidates. It misses list words without those suffixes (fear, anger, pride, evil, wrath) and flags concrete -ure/-ment words (treasure, garment).
 
-### Supplementary: Catching Abstract Nouns Not in the Word List
-
-The 591-word list provides a deterministic baseline but cannot be exhaustive. During your verse-by-verse analysis, also watch for words with these common abstract noun suffixes that may not be in the list:
-
-- **-ness** (righteousness, faithfulness, kindness, wickedness)
-- **-tion / -sion** (salvation, redemption, sanctification, justification, destruction)
-- **-ment** (judgment, amazement, resentment, atonement)
-- **-ity / -ety** (integrity, purity, prosperity, anxiety)
-- **-ance / -ence** (obedience, endurance, repentance, reverence)
-
-If you encounter a word with one of these suffixes that expresses an attitude, quality, event, or situation (not a concrete thing), flag it as a potential abstract noun even if the detection script didn't catch it.
+If you find a word with one of these suffixes, or a word on the list, and it names an attitude, quality, event, or situation rather than a concrete thing, flag it.
 
 ---
 
