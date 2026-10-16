@@ -15,7 +15,7 @@ The deterministic steps live in bp-assistant (`scripts/tn-modernize/`). This fol
 | `claims-prompt.md` | `claims.js`, Haiku | List the separate pieces of information in each old note |
 | `judge-prompt.md` | `claims.js`, Haiku | For each claim, the probability the new note still makes it |
 
-jev (TypeSafe's typed-decision model) can judge the same claims; it takes the claims as yes/no questions and needs no prompt file.
+jev (TypeSafe's typed-decision model) is the primary claim judge. It takes the claims as yes/no questions and needs no prompt file. On the October 2026 pilot it caught 79% of seeded information losses at the 0.8 threshold, against 49% for the Haiku judge, so Haiku runs only as a second opinion (`--judge both`). Its key is `TYPESAFE_API_KEY_TN_MODERNIZE` in `~/.config/ai-keys.env`.
 
 ## What is never touched
 
