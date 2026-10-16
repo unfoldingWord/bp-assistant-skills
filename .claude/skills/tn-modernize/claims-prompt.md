@@ -18,10 +18,10 @@ Leave out:
 - the statement that the expression is the kind named by `issue` ("pride is an abstract noun" in a figs-abstractnouns note, "this is a metaphor" in a figs-metaphor note): the issue label already records it;
 - links and "See also" references (a pointer such as "see how you translated this in 1:9" is kept by a separate check).
 
-Write each claim in plain words, without quoting the note's whole sentence, and without bold or markdown. Use as many claims as the note has, usually one to five. A note with no specific information gets an empty list.
+Write one fact per claim; split "X means A and refers to B" into two. Keep the note's certainty in the claim: "The word may mean A" when the note says may, probably or possibly, so a rewrite that drops the hedge does not match. Write each claim in plain words, without quoting the note's whole sentence, and without bold or markdown. Use as many claims as the note has, usually one to five. A note with no specific information gets an empty list.
 
 Return only one JSON object, no other text:
 
 ```json
-{"claims": {"xm1w": ["The word vision means a message from Yahweh.", "..."], "jdr3": []}}
+{"claims": {"ab12": ["The word vision means a message from Yahweh.", "..."], "cd34": []}}
 ```

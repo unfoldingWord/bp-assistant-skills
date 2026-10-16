@@ -19,8 +19,8 @@ Return only one JSON object, no other text:
 
 ```json
 {"results": [
-  {"ID": "xm1w", "action": "rewrite", "template_id": "figs-metaphor-01", "note": "..."},
-  {"ID": "jdr3", "action": "decline", "reason": "one short sentence"}
+  {"ID": "ab12", "action": "rewrite", "template_id": "figs-metaphor-01", "note": "..."},
+  {"ID": "cd34", "action": "decline", "reason": "one short sentence"}
 ]}
 ```
 
@@ -28,15 +28,16 @@ One result per row, in input order. `template_id` is the `id` of the variant you
 
 ## How to rewrite
 
-1. Pick the template variant whose `type` fits this note. Specialized variants (heart, hand, house = descendants, fathers, ...) win over `generic` when the old note is about that word. For figs-metaphor, use `poetry` only for a sustained image that the note wants kept (God as a rock or shield); otherwise `generic`.
-2. Fill the template. Replace each ALL-CAPS placeholder (SPEAKER, THING, PERSON, IMAGE, POINT OF COMPARISON, ...) with the information the old note gives. Where a template offers choices in parentheses or with slashes ("(man, people group, city)", "thoughts/feelings"), keep only the choice that applies, written as normal prose. Keep every other word of the template exactly as written, including the words around a placeholder: "SPEAKER is using the question form for PURPOSE" becomes "Yahweh is using the question form for emphasis", not "... to emphasize".
-3. Keep every piece of information from the old note. The meaning it gives, who is speaking, what a word refers to, a reason, a cultural fact, a second possible meaning: all of it must be in the new note. If something does not fit the template's sentences, add it as an extra sentence right after the template sentence it belongs with. Never drop a fact to make the note shorter.
-4. Never invent. Use only what the old note says. If the template has an "Alternate translation: [text]" and the old note has no alternate translation, leave the alternate translation out entirely. Do not write a new one, and do not leave the placeholder.
-5. Alternate translations: copy each one from the old note character for character, including its punctuation and any quotation marks inside it, into `Alternate translation: [ ]` brackets. Keep their order. Several alternate translations stay joined by " or " after a single "Alternate translation:". A label before the bracket, such as `(1)` in a "This could mean" note, stays as it is.
-6. Bold: put in `**bold**` only words copied exactly, with the same capitalization and form, from the `ult` text. Where the old note puts current-verse words in curly quotes (“heads”), and those exact words are in `ult`, make them bold instead. Words from other verses stay in curly quotes. If the old note bolds words that are not exactly in `ult`, either bold the exact `ult` wording for that same phrase or drop the bold and keep the words as plain text. Nothing inside the alternate-translation brackets is bold.
-7. Keep every name (people, places, God's names and titles) and every scripture reference such as `[3:3](../03/03.md)` exactly as written.
-8. Follow the house style: say "the original language", never "Hebrew" or "Greek"; start with "Here, " only when a bold lowercase ULT quote follows immediately; use the author's name (Obadiah, Moses), not "the author" or "the writer"; no technical grammar terms the template does not use; do not use "could mean" unless the template is a "This could mean" template.
-9. Format: one line. Where the old note has a paragraph break it is written as the two characters `\n`; keep it as those two characters. Never output a real line break or tab inside a note. No links of any kind (no `rc://`, no `[[...]]`).
+1. Pick the template variant whose `type` fits this note. A variant with an empty `type` is the issue's default. Specialized variants (heart, hand, house = descendants, fathers, ...) win over the default or `generic` when the old note is about that word and gives it the meaning the variant states. For figs-metaphor, use `poetry` only for a sustained image that the note wants kept; otherwise `generic`.
+2. Fill the template from the old note and the `ult` text only. Placeholders are the ALL-CAPS words (SPEAKER, THING, PERSON, IMAGE, POINT OF COMPARISON, ACTION_DESCRIPTION_NOT_QUOTE, ...), `X` and `Y`, `[text]`, and also the example content some templates carry: names and words such as David, Yahweh, the Israelites, Ehud, the Messiah, Person, **rock** or **brothers** that only show how a filled note looks. Replace each placeholder with what the old note or the `ult` says. Where a template offers choices in parentheses or with slashes ("(man, people group, city)", "thoughts/feelings"), keep the choice or choices that apply, joined with "and" or "or" as normal prose. Keep every other word of the template exactly as written, including the words around a placeholder: "SPEAKER is using the question form for PURPOSE" becomes "the speaker is using the question form for emphasis" or "Ruth is using ...", not "... to emphasize".
+3. Who is speaking. Name a speaker, author or addressee only when the old note or the `ult` text names them. Otherwise use the old note's own wording ("the speaker", "the author", "the people") in the placeholder. Do not work out the speaker from your own knowledge of the book.
+4. Keep every piece of information from the old note. The meaning it gives, who is speaking, what a word refers to, a reason, a cultural fact, a second possible meaning, how certain the note is ("may", "probably", "could"): all of it must be in the new note, with the same certainty. If something does not fit the template's sentences, add it as an extra sentence right after the template sentence it belongs with. Never drop a fact to make the note shorter.
+5. Never invent. Add nothing the old note and the `ult` do not say: no new meaning, reason, contrast, speaker or alternate translation. If the template has an "Alternate translation:" and the old note has none, leave the alternate translation out entirely. Alternate-translation text written into a template (`[power]`, `[ancestors]`, `[other_metaphor] or [non-metaphor]`) is a placeholder too: use only the old note's alternate translations, as many as it has.
+6. Alternate translations: copy each one from the old note character for character, including its punctuation and any quotation marks inside it, into `Alternate translation: [ ]` brackets. Keep their order. Several alternate translations stay joined by " or " after a single "Alternate translation:". A label before the bracket, such as `(1)` in a "This could mean" note, stays as it is.
+7. Bold: put in `**bold**` only words copied exactly, with the same capitalization and form, from the `ult` text. Where the old note puts current-verse words in curly quotes (“heads”), and those exact words are in `ult`, make them bold instead. Words from other verses stay in curly quotes. If the old note bolds words that are not exactly in `ult`, either bold the exact `ult` wording for that same phrase or drop the bold and keep the words as plain text. Nothing inside the alternate-translation brackets is bold.
+8. Keep every name (people, places, God's names and titles) and every scripture link such as `[3:3](../03/03.md)` or `[verse 16](../01/16.md)` exactly as written, and every pointer such as "See how you translated this in the previous verse".
+9. House style: say "the original language" instead of "Hebrew" or "Greek", unless the old note is contrasting Hebrew with Aramaic or uses the word for a people ("a Hebrew slave"); no technical grammar terms beyond what the template or the old note uses; do not add "could mean" wording unless the old note already gives more than one meaning.
+10. Format: one line, no real line breaks or tabs. Where the old note has a paragraph break it shows as the two characters `\n`. Your reply is JSON, so inside the JSON string write that break as `\\n` (backslash, backslash, n); it then reads back as the two characters `\n`. No `rc://` links and no `[[...]]` links; scripture links of the form `[3:3](../03/03.md)` stay.
 
 ## When to decline
 
@@ -45,7 +46,11 @@ Decline (`"action": "decline"`) instead of rewriting when:
 - the old note explains two separate translation issues, so it cannot fit one template without losing one of them;
 - none of the template variants describes what the old note is about (the issue label looks wrong for this note);
 - keeping all the old note's information would bury the template, so the result would not really follow it;
-- you are not sure what the old note means.
+- you are not sure what the old note means;
+- a placeholder needs information (a speaker, a meaning, a purpose) that neither the old note nor the `ult` gives;
+- the template's fixed wording states a meaning, referent or kind of expression that differs from what the old note says (a "house = household" template for a note where house means descendants);
+- the old note gives several possible meanings and no variant has room for them;
+- no choice in a template's choice list fits (the translate-names list has no "woman" or "region").
 
 A declined row stays exactly as it is and goes to a human editor. Declining is always better than losing or inventing information.
 
@@ -59,4 +64,4 @@ Template figs-metonymy-01: `Here, **text** represents “WORD.” If it would be
 
 Rewrite:
 
-> Here, **Edom** represents the people who live in the land of Edom. This message is about the people, not the land. If it would be helpful in your language, you could use an equivalent expression or plain language. Alternate translation: [concerning the people of Edom.]
+> Here, **Edom** represents “the people who live in the land of Edom.” If it would be helpful in your language, you could use an equivalent expression or plain language. You could say clearly that this message is about the people. Alternate translation: [concerning the people of Edom.]
