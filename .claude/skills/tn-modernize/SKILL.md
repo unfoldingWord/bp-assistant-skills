@@ -19,7 +19,8 @@ jev (TypeSafe's typed-decision model) is the primary claim judge. It takes the c
 
 ## What is never touched
 
-- Every column except Note.
+- Every column except Note and Tags. Tags changes only by adding `human review` (the model or a rule wants a person to look; see-how notes that carry information of their own get it with their Note unchanged) or `needs alternate translation` (the template has an alternate translation the old note never had; none is invented).
+- "See how you translated ..." notes, which are never rewritten.
 - Rows whose note already contains the first fixed phrase of one of its templates (this protects the 2024-2025 human work).
 - Intro rows, rows without a translate SupportReference, rows whose SupportReference has no template.
 - Rows the model declines (two issues in one note, no fitting template, unclear meaning).
