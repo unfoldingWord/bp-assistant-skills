@@ -293,6 +293,8 @@ The script runs these checks:
 25  template_phrase_missing         warning     figs-abstractnouns/rquestion/metaphor notes include expected fixed template phrase
 25c self_talk_leak                  warning     Note may contain model deliberation instead of note text ("wait, actually...", first person, template sub-type names)
 25c preamble_paragraph              warning     Multi-paragraph note whose first paragraph lacks the template phrase — possible preamble before the real note
+25d template_quotes_extra           warning     Note puts quote marks around a slot the template leaves unquoted (figs-explicit "means EXPLANATION") — remove them
+25d template_quotes_missing         warning     Note drops quote marks the template puts around a slot (figs-idiom "to mean “MEANING.”") — add them; a "that" clause is exempt
 ```
 
 **Note on `self_talk_leak` / `preamble_paragraph`**: these catch the model reasoning out loud inside the Note column (MIC 5:7, 2026-08-03). They are warnings by design — an editor rewriting one leaked note is far cheaper than a blocked push losing a chapter of notes. The pattern set was tuned to zero false positives across 368 published notes (JOS 1/3, MAL 1, NAM 1, and tn_OBA).
