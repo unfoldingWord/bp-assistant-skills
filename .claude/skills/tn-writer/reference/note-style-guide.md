@@ -139,6 +139,8 @@ Similarly, do not borrow wording from templates belonging to other issue types. 
 
 Use double curly quotes for all quoted meanings, glosses, and cited text within notes. Single apostrophes may only appear in possessives (e.g., "David’s"). We do not use contractions, so there is no other legitimate use of single quotes or apostrophes in note text. Follow the templates exactly: idiom meanings use double quotes (e.g., `to mean “they misuse your name.”`), not single quotes.
 
+Put quote marks around a placeholder's text only when the template has them there. figs-explicit's `By **PHRASE**, SPEAKER means EXPLANATION.` has none, so write `By **in the land**, the author means the land of Israel.`, not `the author means “in the land of Israel.”` The reverse also holds: when the template quotes the slot (figs-idiom `to mean “MEANING.”`, figs-go `might say “went”`), keep the quotes, unless what fills the slot is a "that" clause (`to mean that Yahweh will punish him`). The quality check flags both mismatches (`template_quotes_extra`, `template_quotes_missing`).
+
 ## Terminology
 
 When writing notes, use the same terms that appear in the ULT and UST for the verse. Never substitute common English terms that differ from the project's chosen renderings. For example:
