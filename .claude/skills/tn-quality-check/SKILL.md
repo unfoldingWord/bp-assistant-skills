@@ -125,6 +125,12 @@ For each issue type, check that the note follows the template pattern. The note 
 
 Specifically check that fixed template phrases are preserved verbatim. For example, figs-abstractnouns uses "you could express the same idea in another way" -- flag any note that changes this to "with a verb," "using a verbal form," or other variations. Also watch for drift where one note introduces non-template wording and subsequent notes of the same type repeat that drift.
 
+Check quotation marks against the template in both directions:
+- If the template has no quotation marks around a placeholder, the filled-in text should not have them either. This shows up most in figs-explicit: `By **in the land**, the author means “in the land of Israel.”` should read `By **the land**, the author means the land of Israel.`
+- If the template puts quotation marks around a placeholder (for example an idiom meaning, `to mean “...”`), the filled-in text should keep them.
+
+Bold quotes from the ULT are not affected; this applies to the explanatory meaning that fills a template placeholder.
+
 #### 3c. AT naturalness (full substitution review)
 
 For each note with an AT: mentally substitute the AT for the gl_quote in the ULT verse. Read the full sentence. Flag any that:

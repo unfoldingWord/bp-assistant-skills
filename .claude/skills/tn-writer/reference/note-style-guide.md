@@ -137,7 +137,9 @@ Similarly, do not borrow wording from templates belonging to other issue types. 
 
 ## Quotation Marks
 
-Use double curly quotes for all quoted meanings, glosses, and cited text within notes. Single apostrophes may only appear in possessives (e.g., "David’s"). We do not use contractions, so there is no other legitimate use of single quotes or apostrophes in note text. Follow the templates exactly: idiom meanings use double quotes (e.g., `to mean “they misuse your name.”`), not single quotes.
+When a note quotes something, use double curly quotes. Single apostrophes may only appear in possessives (e.g., "David’s"). We do not use contractions, so there is no other legitimate use of single quotes or apostrophes in note text. Follow the templates exactly: idiom meanings use double quotes (e.g., `to mean “they misuse your name.”`), not single quotes.
+
+Let the template decide whether the filled-in meaning takes quotation marks. Where the template puts quotes around a placeholder, keep them in the note. Where it does not, do not add them. For example, a figs-explicit note whose template has no quotes reads `By **the land**, the author means the land of Israel.`, not `the author means “in the land of Israel.”`
 
 ## Terminology
 
