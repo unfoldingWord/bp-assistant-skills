@@ -61,6 +61,8 @@ Only use "the author" as a fallback when the author is genuinely unknown. Never 
 
 Prefer continuous Hebrew quotes when practical. Per Issues Resolved: "It is best to avoid discontinuous text in the Quote field. It is helpful to expand the Quote in order to avoid having ampersands in it." However, an `&` separator is acceptable when expanding the quote would force an awkward `...` ellipsis in the AT. Use judgment — expand when it makes both quote and AT cleaner, keep the `&` when it does.
 
+When the same expression occurs twice in one verse, one note with an `&` quote covering both occurrences is preferred over a note on the first occurrence alone.
+
 Outside parallelism and restructuring notes, the quote covers only the words the alternate translation must change, plus what the AT needs to read as a drop-in replacement. Words the AT would copy unchanged at the start or end of the quote do not belong in it. For example, for the passive in Daniel 8:12, quote **an army will be given over** (the words an active AT such as [God will hand an army over] must rework), not **And because of transgression an army will be given over**.
 
 ## "Here" Rule

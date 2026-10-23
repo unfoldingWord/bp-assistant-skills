@@ -195,7 +195,7 @@ Read the assembled TSV alongside the aligned ULT. For each row, verify:
 
 1. **Quote column** is non-empty and contains Hebrew text
 2. **Single-verse quotes** -- the Quote must contain material from one verse only (exception: `translate-versebridge`). If the issue relates to surrounding verses, discuss them in the Note text, not the Quote.
-3. **Continuous text** -- avoid discontinuous quotes with ampersands (`&`). Expand the quote to include intervening text rather than breaking it.
+3. **Continuous text** -- avoid discontinuous quotes with ampersands (`&`). Expand the quote to include intervening text rather than breaking it. The exception is a quote that joins two occurrences of the same expression in one verse (for example, **I will visit upon** … **I visited upon**): keep the `&` so the one note covers both, and give the AT both parts (see "Discontinuous ATs" in `reference/at-style-guide.md`).
 4. **Note text** addresses the issue type indicated by SupportReference
 5. **AT fit** -- if an Alternate Translation is present, mentally substitute it for the GLQuote in the ULT verse and confirm it reads naturally
 6. **Quote scope** -- the Hebrew quote covers the right range (not too narrow or too wide for the issue)
