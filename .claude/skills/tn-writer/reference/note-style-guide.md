@@ -36,7 +36,7 @@ If there are slashes between words expressing similar or different ideas in a te
 
 ## Alternate Translations
 
-AT authoring is handled by a separate pipeline stage; its rules live in `at-style-guide.md`. When writing notes, do not generate alternate translations (the pipeline appends them afterward). Two quote-scope rules still matter while writing notes:
+AT authoring is handled by a separate pipeline stage; its rules live in `at-style-guide.md`. When writing notes, do not generate alternate translations (the pipeline appends them afterward). The one exception is a TCM note: write one AT per option, at the end of its own option, because the pipeline cannot interleave them. Two quote-scope rules still matter while writing notes:
 
 ### Restructuring Notes
 For notes that reorder text (figs-infostructure, or any note suggesting putting one part of the verse before another), the gl_quote must cover the **entire area** being restructured. Do not quote only one fragment of a reordering. A grammar-connect note that only asks for a clearer connector is not a restructuring note: anchor it on the connector itself, not the clause or verse it introduces (see the grammar-connect-logic row in `data/quick-ref/tn_decisions.csv`).
@@ -111,7 +111,7 @@ If the explanation contains a `t:` prefix hinting at the template type, follow t
 
 ## "Could mean" Restriction
 
-Do not use the phrase "could mean" in notes. This phrasing is reserved exclusively for TCM (This Could Mean) mode, which presents multiple interpretations for genuinely ambiguous passages. In regular notes, state the meaning with confidence: "SPEAKER is using this possessive form to mean..." not "this could mean..."
+Do not use the phrase "could mean" in notes. This phrasing is reserved exclusively for TCM (This Could Mean) mode, which presents multiple interpretations for genuinely ambiguous passages, each followed by its own alternate translation. In regular notes, state the meaning with confidence: "SPEAKER is using this possessive form to mean..." not "this could mean..."
 
 ## Source Language Reference
 Do not use the word "Hebrew" (or "Greek," "Aramaic") in note text. If you need to refer to the source language, say "the original language" or "the original." For example, write "this expression in the original language means..." not "this Hebrew expression means..."
