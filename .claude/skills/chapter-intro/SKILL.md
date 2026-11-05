@@ -75,7 +75,7 @@ Write the intro using the template below. Let the chapter's structure set the le
 
 When a high parallelism hint is present, keep the note brief (one short sentence) and chapter-level (for example, recurring synonymous parallel lines), without listing individual verses.
 
-Use `[[rc://*/tw/dict/bible/kt/<term>]]` or `[[rc://*/tw/dict/bible/other/<term>]]` for Translation Word links. Use `[Book Chapter](../book/chapter/verse.md)` for cross-references.
+Do not put Translation Word or Translation Academy links in the intro: no `[[rc://*/tw/...]]` or `[[rc://*/ta/...]]` links and no “(See: ...)” references. Published intros often have them, but new intros leave them out. Verse cross-references such as `[7:9–10](../07/09.md)` are still used.
 
 #### Template
 
@@ -84,7 +84,7 @@ Use `[[rc://*/tw/dict/bible/kt/<term>]]` or `[[rc://*/tw/dict/bible/other/<term>
 
 ## Structure and Formatting
 
-[A numbered outline of the chapter's sections with verse ranges, normally 3-5 top-level entries. Indent sub-sections under their parent. A one-sentence characterization of the chapter's function or literary movement may precede or follow the outline, but never replaces it. Include a tW or tA link when it materially helps translators.]
+[A numbered outline of the chapter's sections with verse ranges, normally 3-5 top-level entries. Indent sub-sections under their parent. A one-sentence characterization of the chapter's function or literary movement may precede or follow the outline, but never replaces it.]
 
   1. [What happens in this section] (1–6)
   2. [What happens in this section] (7–12)
@@ -114,7 +114,7 @@ Use `[[rc://*/tw/dict/bible/kt/<term>]]` or `[[rc://*/tw/dict/bible/other/<term>
 
 - Introduction matches the chapter's actual content and literary function
 - Structure and Formatting contains a numbered outline whose verse ranges cover the chapter without gaps or overlaps, and stop at the chapter's last verse
-- tW links use correct `[[rc://...]]` format
+- No tW or tA links (`[[rc://...]]` or “(See: ...)”) anywhere in the intro
 - Content is translator-oriented, not devotional
 - No verse-level detail that belongs in translation notes
 - Cultural and theological background sits under its own heading after the outline, not inside it
