@@ -22,7 +22,7 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | קָשַׁב (hiphil) | H7181 | listen | attend | "listen to" with לְ preposition |
 | עֵדָה | H5713b | testimonies | decrees | Psa 119 master uses "testimonies" consistently; distinct from edut H5715 |
 | עָנִי | H6041 | poor / weak | afflicted | adjective, not passive participle; "poor" editor PSA 69:29,32; "weak" editor PSA 88:15 (context: physical frailty) |
-| עָנָו | H6035 | poor | afflicted | adjective, not passive participle; editor PSA 69:32; same as H6041 |
+| עָנָו | H6035 | poor / humble | afflicted | adjective, not passive participle. "poor" in need/oppression contexts (editor PSA 69:32; same as H6041); "humble" for disposition before God (taught/guided by him, contrasted with the proud), e.g. PSA 25:9 |
 | בּוּשׁ | H0954 | have shame | be ashamed | per issues_resolved Feb 18: focus on standing in honor/shame culture, not subjective feeling. Not passive "be ashamed." PSA 69:6, 70:2. Note: PSA 71 editor uses "put to shame" (passive) -- may reflect different editorial pass |
 | שֵׁכָר | H7941 | beer | strong drink | editor PSA 69:12 |
 | אַף / אַפַּיִם | H0639 | nose / nostrils | anger / faces | preserve body-part idiom literally; dual אַפַּיִם = "nostrils," not "faces"; editor PSA 69:24, ISA 49:12 |
@@ -31,7 +31,7 @@ Editorial decisions from human review. Check this AFTER Issues Resolved, BEFORE 
 | רַע (noun) | H7451c | hurt | harm | as noun for enemy intent; editor PSA 71:13,24 |
 | זָמַר | H2167 | make music | sing praises | preserves distinction from singing when used in parallel with vocal praise |
 | סֶלַע | H5553 | rock | cliff | editor PSA 71:3 |
-| תִּפְאָרָה | H8597 | honor | splendor | editor PSA 71:8 |
+| תִּפְאָרָה | H8597 | honor / splendor | — | "honor" when it is praise/renown spoken or ascribed, paired with praise or name (editor PSA 71:8, not "splendor" there); "splendor" for visible glory/adornment or pride of strength, but "beauty" if H1926 hadar ("splendor") is in the same verse |
 | חִישׁ | H2363 | hurry | hasten | editor PSA 71:12 |
 | אֶמֶת | H0571 | trustworthiness | faithfulness | editor PSA 71:22 |
 | גְּדוּלָה | H1420 | honor | greatness | editor PSA 71:21 |

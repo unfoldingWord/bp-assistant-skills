@@ -1,7 +1,7 @@
 Strong,Hebrew,Rendering,Book,Context,Notes,Date,Source
 H727,אֲרוֹן,Box,ALL,Ark of the Covenant context,Capitalize 'Box'. Use 'Box of the Testimony' (Exodus) or 'Box of the Covenant' (Joshua+). Never 'ark'. See hebrew_ot_glossary.,2025-02-09,AI
 H6041,עָנִי,poor,ALL,69:29 poor and in pain,"Form-based: adjective, not passive participle. Not 'afflicted'.",2025-02-10,AI
-H6035,עָנָו,poor,ALL,69:32 The poor will see,"Form-based: adjective, not passive participle. Same as H6041.",2025-02-10,AI
+H6035,עָנָו,poor,ALL,"Need/oppression context: the lowly whom God rescues, paired with needy/suffering (e.g. PSA 69:32 The poor will see)","Form-based: adjective, not passive participle. Same as H6041. Editor PSA 69:32. Use 'humble' when the context is disposition before God.",2025-02-10,human
 H0954,בּוּשׁ,have shame,ALL,69:6 may...not have shame; 70:2 have shame,Per issues_resolved Feb 18: focus on standing not feeling. Not 'be ashamed' or 'feel shame'.,2025-02-10,human
 H7941,שֵׁכָר,beer,ALL,69:12 drinkers of beer,Not 'strong drink'. More specific.,2025-02-10,AI
 H0639,אַף / אַפַּיִם,nose / nostrils,ALL,"body-part idiom and lexical body-part sense; singular אַף = ""nose"", dual אַפַּיִם = ""nostrils"" (e.g. ISA 49:12)","Preserve the body-part rendering literally. Not ""anger"" and never ""face/faces"".",2026-04-21,human
@@ -22,7 +22,7 @@ H2964,טֶרֶף,prey,ALL,124:6 prey to their teeth,22% prey in index. Animal me
 H7451c,רַע,hurt,ALL,"71:13,24 those who seek my hurt",Not 'harm'. Noun form for enemy intent.,2026-02-10,AI
 H2167,זָמַר,make music,ALL,"71:22,23 with harp/lyre context",Preserves distinction from singing when parallel with vocal praise.,2026-02-10,AI
 H5553,סֶלַע,rock,ALL,71:3 you are my rock,Not 'cliff'. Editor PSA 71.,2026-02-10,human
-H8597,תִּפְאָרָה,honor,ALL,71:8 all the day with your honor,Not 'splendor'. Editor PSA 71.,2026-02-10,human
+H8597,תִּפְאָרָה,honor,ALL,"Praise/renown context: honor spoken, ascribed or given, paired with praise or name (e.g. PSA 71:8 my mouth filled with your praise, all the day with your honor)",Not 'splendor' here. Editor PSA 71.,2026-02-10,human
 H2363,חִישׁ,hurry,ALL,71:12 hurry to help me,Not 'hasten'. Editor PSA 71.,2026-02-10,human
 H0571,אֶמֶת,trustworthiness,ALL,71:22 for your trustworthiness,Not 'faithfulness'. Editor PSA 71.,2026-02-10,human
 H1420,גְּדוּלָה,honor,ALL,71:21 increase my honor,Not 'greatness'. Editor PSA 71.,2026-02-10,human
@@ -71,7 +71,7 @@ H6918,qadosh,holy ones,ALL,assembly of the holy ones / council of the holy ones,
 H6635b,tsaba,Armies,ALL,God of Armies,dominant rendering 57% of 60 occ,2026-02-16,AI
 H7834,shachaq,skies,ALL,in the skies,16.7% but fits context of divine council setting,2026-02-16,AI
 H4349,makon,foundation,ALL,foundation of your throne,12.5% - PSA 97:2 precedent,2026-02-16,AI
-H8597,tipharah,splendor,ALL,the splendor of their strength,dominant rendering 21% of 14 occ,2026-02-16,AI
+H8597,תִּפְאָרָה,splendor,ALL,"Visible glory/adornment context: beauty or majesty that is seen or worn, or the pride of strength (e.g. the splendor of their strength)",Dominant rendering 21% of 14 occ. Use 'honor' when the context is praise/renown. If H1926 hadar is in the same verse it keeps 'splendor'; use 'beauty' here.,2026-02-16,AI
 H2623,chasid,faithful ones,ALL,your faithful ones,13.3% - matches published pattern,2026-02-16,AI
 H6119,aqeb,footsteps,ALL,the footsteps of your anointed one,contextual - not literal heels,2026-02-16,AI
 H2465,cheled,life,ALL,how short my life is,25% - fits rhetorical question context,2026-02-16,AI
@@ -234,7 +234,7 @@ H1503,גֶּזַע,stump,ALL,100% 'stump' in published ULT (JOB 14:8),,2026-03-0
 H5342,נֵצֶר,branch,ALL,no published data; branch/shoot from roots,,2026-03-06,AI
 H5251,נֵס,banner,ALL,published ULT uses 'banner' (EXO 17:15 PSA 20:5 SNG 2:4),,2026-03-06,AI
 H4334,מִישׁוֹר,uprightness,ALL,ISA 11:4 context = fairness/equity; PSA 45:6 'justice' MAL 2:6 'uprightness',,2026-03-06,AI
-H6035,עָנָו,humble,ALL,PSA 25:9 'the humble' dominant rendering,,2026-03-06,AI
+H6035,עָנָו,humble,ALL,"Disposition context: meek/teachable before God, guided or taught by him, contrasted with the proud or scoffers (e.g. PSA 25:9 the humble)",Dominant rendering. Use 'poor' when the context is need or oppression.,2026-03-06,AI
 H4926,מִשְׁמָע,hearing,ALL,no published data; literal 'hearing of his ears',,2026-03-06,AI
 H6620,פֶּתֶן,cobra,ALL,published split: 'asps' 'vipers' 'adder'; 'cobra' for clarity,,2026-03-06,AI
 H6848b,צֶפַע,viper,ALL,PRO 23:32 'viper',,2026-03-06,AI
